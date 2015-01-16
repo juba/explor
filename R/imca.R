@@ -44,6 +44,11 @@ imca <- function(acm) {
     tmp})
   names(vardata) <- comps
   
+  vareta2 <- data.frame(acm$var$eta2)
+  vareta2 <- format(vareta2,scientific=FALSE, nsmall=3, digits=0)
+  vareta2$Var <- rownames(vareta2)
+  vareta2 <- vareta2 %>% select(Var, starts_with("Dim"))
+  
   inddata <- list()
   inddata <- lapply(1:length(comps), function(i) {
     tmp <- data.frame(Ind=rownames(ind),
@@ -104,7 +109,9 @@ imca <- function(acm) {
                            h3("Positive coordinates"),
                            dataTableOutput("vartablepos"),
                            h3("Negative coordinates"),                   
-                           dataTableOutput("vartableneg")
+                           dataTableOutput("vartableneg"),
+                           h3("Variables eta2"),                   
+                           dataTableOutput("vartableeta2")
                   ),
                   
                   tabPanel("Individuals plot",
@@ -214,10 +221,20 @@ imca <- function(acm) {
       varTableNeg <- reactive({
         vardata[[input$vardim]] %>% filter(Coord<0 & P.value<=as.numeric(input$varpvalue))
       })
+      varTableEta2 <- reactive({
+        tmp <- vareta2
+        dimcols <- grep("^Dim", names(tmp))
+        for(col in dimcols) {
+          tmp[tmp[,col]>=as.numeric(input$varpvalue),col] <- "-"
+        }
+        tmp
+      })
       tableOptions <- list(lengthMenu=c(10,20,50,100), pageLength=10, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE)
       output$vartablepos = renderDataTable({varTablePos()}, options=c(tableOptions,list(order=list(list(2,'desc')))))
       output$vartableneg = renderDataTable({varTableNeg()}, options=c(tableOptions,list(order=list(list(2,'asc')))))
-
+      output$vartableeta2 = renderDataTable({varTableEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE))
+      
+      
       ## Ind table
       indTablePos <- reactive({
         inddata[[input$inddim]] %>% filter(Coord>=0)

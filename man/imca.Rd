@@ -16,11 +16,6 @@ The function launches a shiny app in the system web browser.
 This function launches a shiny app in a web browser in order to do
 interactive visualisation and exploration of a multiple correspondence analysis.
 }
-\examples{
-\dontrun{data(hdv2003)
-irec(hdv2003, "qualif")
-irec(hdv2003, sexe) ## this also works}
-}
 \author{
 Julien Barnier <julien.barnier@ens-lyon.fr>
 }
