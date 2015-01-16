@@ -1,0 +1,17 @@
+Package: imva
+Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
+Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
+    role=c("aut","cre")))
+Version: 0.0.1
+Date: 2015-01-16
+License: GPL (>= 2)
+Encoding: UTF-8
+Title: Interfaces for Multivariate Analysis.
+Description: Shiny interfaces and graphical functions for principal components and correspondence analyses.
+Imports:
+    shiny (>= 0.10),
+    ggplot2,
+    ggvis,
+    dplyr,
+    FactoMineR
+URL: https://github.com/juba/imva
