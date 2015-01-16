@@ -68,8 +68,11 @@ imca <- function(acm) {
   .well *,
   input, label, select, option {
       font-size: 11px !important;
-      padding: 2px !important; 
+      padding: 2px !important;
+      line-height: 15px !important;
   }
+  .row-fluid {margin-top: 15px !important;}
+  .well {padding: 5px !important;}
   .table th, 
   .table td {
       font-size: 11px !important;
@@ -83,55 +86,63 @@ imca <- function(acm) {
   shiny::shinyApp(
     ui=navbarPage("iMCA",
                   header=tags$head(
-                    tags$style(HTML(css_string))),
+                  tags$style(HTML(css_string))),
                   tabPanel("Eigenvalues",
-                           wellPanel(fluidRow(
-                             column(4,
-                                    numericInput("eigNb", "Dimensions to plot", min=2, max=max.eig, value=max.eig, step=1)))),
-                           ggvisOutput("eigplot")),
+                           fluidRow(
+                             column(2,
+                                    wellPanel(numericInput("eigNb", "Dimensions to plot", 
+                                                 min=2, max=max.eig, value=max.eig, 
+                                                 step=1))),
+                            column(10,
+                                    ggvisOutput("eigplot"))
+                             
+                             )),
                   
                   tabPanel("Variables plot",
-                           wellPanel(fluidRow(
-                             column(4,
-                                    selectInput("xVar", "X axis", choices=comps, selected="Dim.1"),
-                                    selectInput("yVar", "Y axis", choices=comps, selected="Dim.2")),
-                             column(4,
-                                    sliderInput("size", "Size", 4, 20, 10)))),
-                           ggvisOutput("varplot")
-                  ),
+                           fluidRow(
+                             column(2,
+                                    wellPanel(
+                                      selectInput("xVar", "X axis", choices=comps, selected="Dim.1"),
+                                      selectInput("yVar", "Y axis", choices=comps, selected="Dim.2"),
+                                      sliderInput("size", "Size", 4, 20, 10))),
+                             column(10,
+                                    ggvisOutput("varplot"))
+                  )),
                   
                   tabPanel("Variables data",
-                           wellPanel(fluidRow(
-                             column(4, 
-                                    selectInput("vardim", "Dimension", choices=comps, selected="Dim.1")),
-                             column(4, 
-                                    textInput("varpvalue", "Max p-value", 1)))),
-                           h3("Positive coordinates"),
-                           dataTableOutput("vartablepos"),
-                           h3("Negative coordinates"),                   
-                           dataTableOutput("vartableneg"),
-                           h3("Variables eta2"),                   
-                           dataTableOutput("vartableeta2")
-                  ),
+                           fluidRow(
+                             column(2,
+                                    wellPanel(
+                                    selectInput("vardim", "Dimension", choices=comps, selected="Dim.1"),
+                                    textInput("varpvalue", "Max p-value", 1))),
+                             column(10,
+                                    h3("Positive coordinates"),
+                                    dataTableOutput("vartablepos"),
+                                    h3("Negative coordinates"),                   
+                                    dataTableOutput("vartableneg"),
+                                    h3("Variables eta2"),                   
+                                    dataTableOutput("vartableeta2")))),
                   
                   tabPanel("Individuals plot",
-                           wellPanel(fluidRow(
-                             column(4,
+                           fluidRow(
+                             column(2,
+                                    wellPanel(
                                     selectInput("xInd", "X axis", choices=comps, selected="Dim.1"),
                                     selectInput("yInd", "Y axis", choices=comps, selected="Dim.2")),
-                             column(4,
-                                    sliderInput("indOpacity", "Opacity", 0, 1, 0.8)))),
-                           ggvisOutput("indplot")),
+                                    sliderInput("indOpacity", "Opacity", 0, 1, 0.8)),
+                             column(10,
+                                    ggvisOutput("indplot")))),
                   
                   tabPanel("Individuals data",
-                           wellPanel(fluidRow(
-                             column(4, 
-                                    selectInput("inddim", "Dimension", choices=comps, selected="Dim.1")))),
-                           h3("Positive coordinates"),
-                           dataTableOutput("indtablepos"),
-                           h3("Negative coordinates"),                   
-                           dataTableOutput("indtableneg")
-                  )
+                           fluidRow(
+                             column(2,
+                                    wellPanel(
+                                    selectInput("inddim", "Dimension", choices=comps, selected="Dim.1"))),
+                             column(10,
+                                    h3("Positive coordinates"),
+                                    dataTableOutput("indtablepos"),
+                                    h3("Negative coordinates"),                   
+                                    dataTableOutput("indtableneg"))))
                   
                   
     ),
