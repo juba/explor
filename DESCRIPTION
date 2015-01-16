@@ -11,7 +11,5 @@ Description: Shiny interfaces and graphical functions for principal components a
 Imports:
     shiny (>= 0.10),
     ggplot2,
-    ggvis,
-    dplyr,
-    FactoMineR
+    ggvis
 URL: https://github.com/juba/imva

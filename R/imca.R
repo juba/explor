@@ -129,7 +129,7 @@ imca <- function(acm) {
                                     wellPanel(
                                     selectInput("xInd", "X axis", choices=comps, selected="Dim.1"),
                                     selectInput("yInd", "Y axis", choices=comps, selected="Dim.2")),
-                                    sliderInput("indOpacity", "Opacity", 0, 1, 0.8)),
+                                    sliderInput("indOpacity", "Opacity", 0, 1, 0.5)),
                              column(10,
                                     ggvisOutput("indplot")))),
                   
