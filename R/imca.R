@@ -8,10 +8,6 @@
 ##' The function launches a shiny app in the system web browser.
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[FactoMineR]{MCA}}
-##' @examples
-##' \dontrun{data(hdv2003)
-##' irec(hdv2003, "qualif")
-##' irec(hdv2003, sexe) ## this also works}
 ##' @import shiny
 ##' @import ggvis
 ##' @export imca
