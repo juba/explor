@@ -29,7 +29,7 @@ ggind <-
 ##' @export
 
 
-ggind.MCA <- function(obj, xax, yax, fac=NA, label=NULL, alpha=0.5, palette="Set1", ...) {
+ggind.MCA <- function(obj, xax=1, yax=2, fac=NA, label=NULL, alpha=0.5, palette="Set1", ...) {
   .tmp <- data.frame(x=obj$ind$coord[,xax],
                      y=obj$ind$coord[,yax],
                      fac=fac)
@@ -37,8 +37,8 @@ ggind.MCA <- function(obj, xax, yax, fac=NA, label=NULL, alpha=0.5, palette="Set
     geom_vline(xintercept=0) +
     geom_hline(yintercept=0) +
     coord_fixed(ratio=1) +
-    scale_x_continuous(paste0("Axis ",xax)) +
-    scale_y_continuous(paste0("Axis ",yax))
+    scale_x_continuous(paste0("Dim.",xax)) +
+    scale_y_continuous(paste0("Dim.",yax))
   if(all(is.na(fac))) {
     g <- g +  geom_point(alpha=alpha)
   }
@@ -88,8 +88,8 @@ ggvar.MCA <- function(obj, xax=1, yax=2, size=4, alpha=0.5, palette="Set1", ...)
   varnames <- sapply(obj$call$X[,obj$call$quali], nlevels)
   vars$varnames <- rep(names(varnames),varnames)
   vars$modnames <- rownames(vars)
-  x <- paste0("Axis ",xax)
-  y <- paste0("Axis ",yax)  
+  x <- paste0("Dim.",xax)
+  y <- paste0("Dim.",yax)  
   
   g <- ggplot(data=vars) +
     geom_vline(xintercept=0) +
