@@ -83,7 +83,7 @@ ggvar <-
 ##' @param palette palette for variables coloring
 ##' @export 
 
-ggvar.MCA <- function(obj, xax, yax, size=4, alpha=0.5, palette="Set1", ...) {
+ggvar.MCA <- function(obj, xax=1, yax=2, size=4, alpha=0.5, palette="Set1", ...) {
   vars <- data.frame(obj$var$coord)
   varnames <- sapply(obj$call$X[,obj$call$quali], nlevels)
   vars$varnames <- rep(names(varnames),varnames)
