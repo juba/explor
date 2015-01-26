@@ -9,6 +9,7 @@
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import shiny
+##' @import dplyr
 ##' @import ggvis
 ##' @export imca
 
@@ -65,13 +66,12 @@ imca <- function(acm) {
   .well input, 
   .well select, 
   .well option,
-  .well *,
-  input, label, select, option {
+  input, label, select, option, .selectize-input {
       font-size: 11px !important;
-      padding: 2px !important;
-      line-height: 15px !important;
+      padding: 3px 5px !important; 
+      height: auto !important;
   }
-  .row-fluid {margin-top: 15px !important;}
+  .row {margin-top: 15px !important;}
   .well {padding: 5px !important;}
   .table th, 
   .table td {
@@ -81,7 +81,8 @@ imca <- function(acm) {
   .dataTables_info, .dataTables_length, 
   .datatables_filter, .dataTables_paginate {
       font-size: 11px !important;
-  }"
+  }
+  .dataTables_wrapper "
   
   shiny::shinyApp(
     ui=navbarPage("iMCA",
