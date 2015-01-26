@@ -7,7 +7,7 @@
 \usage{
 ggvar(obj, ...)
 
-\method{ggvar}{MCA}(obj, xax, yax, size = 4, alpha = 0.5,
+\method{ggvar}{MCA}(obj, xax = 1, yax = 2, size = 4, alpha = 0.5,
   palette = "Set1", ...)
 }
 \arguments{
