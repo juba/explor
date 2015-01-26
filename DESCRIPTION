@@ -9,7 +9,7 @@ Encoding: UTF-8
 Title: Interfaces for Multivariate Analysis.
 Description: Shiny interfaces and graphical functions for principal components and correspondence analyses.
 Imports:
-    shiny (>= 0.10),
+    shiny (>= 0.11),
     ggplot2,
     ggvis
 URL: https://github.com/juba/imva
