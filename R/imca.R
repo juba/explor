@@ -18,10 +18,15 @@ imca <- function(acm) {
   if (!inherits(acm, "MCA")) stop("acm must be of class MCA")
   
   vars <- data.frame(acm$var$coord)
-  varnames <- sapply(acm$call$X[,acm$call$quali], nlevels)
+  varnames <- sapply(acm$call$X[,acm$call$quali,drop=FALSE], nlevels)
   vars$varnames <- rep(names(varnames),varnames)
   vars$modnames <- rownames(vars)
-  
+
+  vars.quali.sup <- data.frame(acm$quali.sup$coord)
+  varnames <- sapply(acm$call$X[,acm$call$quali.sup,drop=FALSE], nlevels)
+  vars.quali.sup$varnames <- rep(names(varnames),varnames)
+  vars.quali.sup$modnames <- rownames(vars.quali.sup)
+
   ind <- data.frame(acm$ind$coord)
   ind$name <- rownames(ind)
   
@@ -44,11 +49,29 @@ imca <- function(acm) {
     tmp$P.value <- signif(tmp$P.value, 3)
     tmp})
   names(vardata) <- comps
-  
+
   vareta2 <- data.frame(acm$var$eta2)
   vareta2 <- format(vareta2,scientific=FALSE, nsmall=3, digits=0)
   vareta2$Var <- rownames(vareta2)
   vareta2 <- vareta2 %>% select(Var, starts_with("Dim"))
+  
+  varsupdata <- list()
+  varsupdata <- lapply(1:length(comps), function(i) {
+    tmp <- data.frame(Var=vars.quali.sup$varnames,
+                      Mod=vars.quali.sup$modnames,
+                      Coord=signif(acm$quali.sup$coord[,i],3),
+                      Cos2=signif(acm$quali.sup$cos2[,i],2),
+                      V.test=acm$quali.sup$v.test[,i])
+    tmp$P.value <- ifelse(tmp$V.test>=0, 2*(1-pnorm(tmp$V.test)), 2*(pnorm(tmp$V.test)))
+    tmp$V.test <- signif(tmp$V.test, 3)
+    tmp$P.value <- signif(tmp$P.value, 3)
+    tmp})
+  names(varsupdata) <- comps
+  
+  varsupeta2 <- data.frame(acm$quali.sup$eta2)
+  varsupeta2 <- format(varsupeta2,scientific=FALSE, nsmall=3, digits=0)
+  varsupeta2$Var <- rownames(varsupeta2)
+  varsupeta2 <- varsupeta2 %>% select(Var, starts_with("Dim"))
   
   inddata <- list()
   inddata <- lapply(1:length(comps), function(i) {
@@ -71,6 +94,7 @@ imca <- function(acm) {
       padding: 3px 5px !important; 
       height: auto !important;
   }
+  .well .checkbox { margin-left: 20px !important; }
   .row {margin-top: 15px !important;}
   .well {padding: 5px !important;}
   .table th, 
@@ -105,7 +129,8 @@ imca <- function(acm) {
                                     wellPanel(
                                       selectInput("xVar", "X axis", choices=comps, selected="Dim.1"),
                                       selectInput("yVar", "Y axis", choices=comps, selected="Dim.2"),
-                                      sliderInput("size", "Size", 4, 20, 10))),
+                                      sliderInput("size", "Size", 4, 20, 10),
+                                      checkboxInput("supvar", HTML("Supplementary variables"), value=TRUE))),
                              column(10,
                                     ggvisOutput("varplot"))
                   )),
@@ -122,7 +147,12 @@ imca <- function(acm) {
                                     h3("Negative coordinates"),                   
                                     dataTableOutput("vartableneg"),
                                     h3("Variables eta2"),                   
-                                    dataTableOutput("vartableeta2")))),
+                                    dataTableOutput("vartableeta2"),
+                                    h3("Supplementary variables"),                   
+                                    dataTableOutput("vartablesup"),
+                                    h3("Supplementary variables eta2"),                   
+                                    dataTableOutput("vartablesupeta2")
+                                    ))),
                   
                   tabPanel("Individuals plot",
                            fluidRow(
@@ -182,20 +212,31 @@ imca <- function(acm) {
       
       ## Var plot
       reactive({ 
-        vars %>%
+        g <- vars %>%
           ggvis(x=as.name(input$xVar),y=as.name(input$yVar)) %>%
-            add_axis("x") %>%
-            add_axis("x", values=c(0,0), properties = axis_props(
-              axis=NULL, ticks=NULL, grid = list(stroke = "#999"))) %>%
-            add_axis("y") %>%
-            add_axis("y", values=c(0,0), properties = axis_props(
-              axis=NULL, ticks=NULL, grid = list(stroke = "#999"))) %>%
-            layer_points(fill= ~factor(varnames)) %>%
-            add_tooltip(show_namev, "hover") %>%
-            layer_text(text:=~modnames, fill= ~factor(varnames), 
+          add_axis("x") %>%
+          add_axis("x", values=c(0,0), properties = axis_props(
+            axis=NULL, ticks=NULL, grid = list(stroke = "#999"))) %>%
+          add_axis("y") %>%
+          add_axis("y", values=c(0,0), properties = axis_props(
+            axis=NULL, ticks=NULL, grid = list(stroke = "#999"))) %>%
+          layer_points(fill= ~factor(varnames)) %>%
+          add_tooltip(show_namev, "hover") %>%
+          layer_text(text:=~modnames, fill= ~factor(varnames), 
+                     align:="center", baseline:="bottom", dy:=-5,
+                     fontSize:=input$size) %>%
+          add_legend("fill", title="Variable")
+        ## Supplementary variables
+        if(input$supvar) 
+          g <- g %>% 
+            layer_points(data=vars.quali.sup,
+                         shape:="cross", fill= ~factor(varnames),
+                         x=as.name(input$xVar),y=as.name(input$yVar)) %>%
+            layer_text(data=vars.quali.sup, text:=~modnames, fill= ~factor(varnames), 
                        align:="center", baseline:="bottom", dy:=-5,
                        fontSize:=input$size) %>%
-            add_legend("fill", title="Variable")                   
+            add_tooltip(show_namev, "hover")
+        g
       }) %>%  bind_shiny("varplot")
       
       
@@ -245,6 +286,23 @@ imca <- function(acm) {
       output$vartablepos = renderDataTable({varTablePos()}, options=c(tableOptions,list(order=list(list(2,'desc')))))
       output$vartableneg = renderDataTable({varTableNeg()}, options=c(tableOptions,list(order=list(list(2,'asc')))))
       output$vartableeta2 = renderDataTable({varTableEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE))
+      
+      ## Supplementary var table
+      varTableSup <- reactive({
+        varsupdata[[input$vardim]] %>% filter(P.value<=as.numeric(input$varpvalue))
+      })
+      varTableSupEta2 <- reactive({
+        tmp <- varsupeta2
+        dimcols <- grep("^Dim", names(tmp))
+        for(col in dimcols) {
+          tmp[tmp[,col]>=as.numeric(input$varpvalue),col] <- "-"
+        }
+        tmp
+      })
+      tableOptions <- list(lengthMenu=c(10,20,50,100), pageLength=10, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE)
+      output$vartablesup = renderDataTable({varTableSup()}, options=c(tableOptions,list(order=list(list(2,'desc')))))
+      output$vartablesupeta2 = renderDataTable({varTableSupEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE))
+      
       
       
       ## Ind table
