@@ -55,23 +55,32 @@ imca <- function(acm) {
   vareta2$Var <- rownames(vareta2)
   vareta2 <- vareta2 %>% select(Var, starts_with("Dim"))
   
-  varsupdata <- list()
-  varsupdata <- lapply(1:length(comps), function(i) {
-    tmp <- data.frame(Var=vars.quali.sup$varnames,
-                      Mod=vars.quali.sup$modnames,
-                      Coord=signif(acm$quali.sup$coord[,i],3),
-                      Cos2=signif(acm$quali.sup$cos2[,i],2),
-                      V.test=acm$quali.sup$v.test[,i])
-    tmp$P.value <- ifelse(tmp$V.test>=0, 2*(1-pnorm(tmp$V.test)), 2*(pnorm(tmp$V.test)))
-    tmp$V.test <- signif(tmp$V.test, 3)
-    tmp$P.value <- signif(tmp$P.value, 3)
-    tmp})
-  names(varsupdata) <- comps
-  
-  varsupeta2 <- data.frame(acm$quali.sup$eta2)
-  varsupeta2 <- format(varsupeta2,scientific=FALSE, nsmall=3, digits=0)
-  varsupeta2$Var <- rownames(varsupeta2)
-  varsupeta2 <- varsupeta2 %>% select(Var, starts_with("Dim"))
+  if (!is.null(acm$quali.sup)) {
+    varsupdata <- list()
+    varsupdata <- lapply(1:length(comps), function(i) {
+      tmp <- data.frame(
+        Var = vars.quali.sup$varnames,
+        Mod = vars.quali.sup$modnames,
+        Coord = signif(acm$quali.sup$coord[,i],3),
+        Cos2 = signif(acm$quali.sup$cos2[,i],2),
+        V.test = acm$quali.sup$v.test[,i]
+      )
+      tmp$P.value <-
+        ifelse(tmp$V.test >= 0, 2 * (1 - pnorm(tmp$V.test)), 2 * (pnorm(tmp$V.test)))
+      tmp$V.test <- signif(tmp$V.test, 3)
+      tmp$P.value <- signif(tmp$P.value, 3)
+      tmp
+    })
+    names(varsupdata) <- comps
+    
+    varsupeta2 <- data.frame(acm$quali.sup$eta2)
+    varsupeta2 <-
+      format(
+        varsupeta2,scientific = FALSE, nsmall = 3, digits = 0
+      )
+    varsupeta2$Var <- rownames(varsupeta2)
+    varsupeta2 <- varsupeta2 %>% select(Var, starts_with("Dim"))
+  }
   
   inddata <- list()
   inddata <- lapply(1:length(comps), function(i) {
