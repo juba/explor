@@ -9,6 +9,7 @@
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import shiny
+##' @import DT
 ##' @import dplyr
 ##' @import ggvis
 ##' @export imca
@@ -112,7 +113,7 @@ imca <- function(acm) {
       padding: 2px !important; 
   }
   .dataTables_info, .dataTables_length, 
-  .datatables_filter, .dataTables_paginate {
+  .dataTables_filter, .dataTables_paginate {
       font-size: 11px !important;
   }
   .dataTables_wrapper "
@@ -152,15 +153,15 @@ imca <- function(acm) {
                                     textInput("varpvalue", "Max p-value", 1))),
                              column(10,
                                     h3("Positive coordinates"),
-                                    dataTableOutput("vartablepos"),
+                                    DT::dataTableOutput("vartablepos"),
                                     h3("Negative coordinates"),                   
-                                    dataTableOutput("vartableneg"),
+                                    DT::dataTableOutput("vartableneg"),
                                     h3("Variables eta2"),                   
-                                    dataTableOutput("vartableeta2"),
+                                    DT::dataTableOutput("vartableeta2"),
                                     h3("Supplementary variables"),                   
-                                    dataTableOutput("vartablesup"),
+                                    DT::dataTableOutput("vartablesup"),
                                     h3("Supplementary variables eta2"),                   
-                                    dataTableOutput("vartablesupeta2")
+                                    DT::dataTableOutput("vartablesupeta2")
                                     ))),
                   
                   tabPanel("Individuals plot",
@@ -180,9 +181,9 @@ imca <- function(acm) {
                                     selectInput("inddim", "Dimension", choices=comps, selected="Dim.1"))),
                              column(10,
                                     h3("Positive coordinates"),
-                                    dataTableOutput("indtablepos"),
+                                    DT::dataTableOutput("indtablepos"),
                                     h3("Negative coordinates"),                   
-                                    dataTableOutput("indtableneg"))))
+                                    DT::dataTableOutput("indtableneg"))))
                   
                   
     ),
@@ -292,9 +293,9 @@ imca <- function(acm) {
         tmp
       })
       tableOptions <- list(lengthMenu=c(10,20,50,100), pageLength=10, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE)
-      output$vartablepos = renderDataTable({varTablePos()}, options=c(tableOptions,list(order=list(list(2,'desc')))))
-      output$vartableneg = renderDataTable({varTableNeg()}, options=c(tableOptions,list(order=list(list(2,'asc')))))
-      output$vartableeta2 = renderDataTable({varTableEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE))
+      output$vartablepos = DT::renderDataTable(DT::datatable({varTablePos()}, options=c(tableOptions,list(order=list(list(2,'desc')))),rownames=FALSE))
+      output$vartableneg = DT::renderDataTable(DT::datatable({varTableNeg()}, options=c(tableOptions,list(order=list(list(2,'asc')))),rownames=FALSE))
+      output$vartableeta2 = DT::renderDataTable(DT::datatable({varTableEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE),rownames=FALSE))
       
       ## Supplementary var table
       varTableSup <- reactive({
@@ -309,8 +310,8 @@ imca <- function(acm) {
         tmp
       })
       tableOptions <- list(lengthMenu=c(10,20,50,100), pageLength=10, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE)
-      output$vartablesup = renderDataTable({varTableSup()}, options=c(tableOptions,list(order=list(list(2,'desc')))))
-      output$vartablesupeta2 = renderDataTable({varTableSupEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE))
+      output$vartablesup = DT::renderDataTable(DT::datatable({varTableSup()}, options=c(tableOptions,list(order=list(list(2,'desc')))),rownames=FALSE))
+      output$vartablesupeta2 = DT::renderDataTable(DT::datatable({varTableSupEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE),rownames=FALSE))
       
       
       
@@ -322,8 +323,8 @@ imca <- function(acm) {
         inddata[[input$inddim]] %>% filter(Coord<0)
       })
       tableOptions <- list(lengthMenu=c(10,20,50,100), pageLength=10, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE)
-      output$indtablepos = renderDataTable({indTablePos()}, options=c(tableOptions,list(order=list(list(1,'desc')))))
-      output$indtableneg = renderDataTable({indTableNeg()}, options=c(tableOptions,list(order=list(list(1,'asc')))))
+      output$indtablepos = DT::renderDataTable(DT::datatable({indTablePos()}, options=c(tableOptions,list(order=list(list(1,'desc')))),rownames=FALSE))
+      output$indtableneg = DT::renderDataTable(DT::datatable({indTableNeg()}, options=c(tableOptions,list(order=list(list(1,'asc')))),rownames=FALSE))
     
     }
   )
