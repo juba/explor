@@ -131,8 +131,8 @@ imca <- function(mca) {
                                       selectInput("ind_y", "Y axis", choices = res$axes, selected = "2"),
                                       sliderInput("ind_point_size", "Points size", 10, 100, 64),
                                       sliderInput("ind_opacity", "Points opacity", 0, 1, 0.5),
-                                      checkboxInput("ind_labels_show", HTML("Show labels"), value = TRUE),                                                                       conditionalPanel(
-                                        condition = 'input.ind_labels == true',
+                                      checkboxInput("ind_labels_show", HTML("Show labels"), value = TRUE),                                                                  conditionalPanel(
+                                        condition = 'input.ind_labels_show == true',
                                         sliderInput("ind_labels_size", "Labels size", 5, 20, 9)
                                       ),
                                       selectInput("ind_col", "Points color :",
@@ -215,6 +215,7 @@ imca <- function(mca) {
           ylab = names(res$axes)[res$axes == input$var_y],
           lab = var_data()[, "Level"],
           labels_size = input$var_lab_size,
+          point_opacity = 1,
           col_var = col_var,
           col_lab = input$var_col,
           symbol_var = symbol_var,
