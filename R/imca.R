@@ -11,94 +11,26 @@
 ##' @import shiny
 ##' @import DT
 ##' @import dplyr
+##' @import tidyr
+##' @import scatterD3
 ##' @import ggvis
 ##' @export imca
 
-imca <- function(acm) {
+imca <- function(mca) {
   
-  if (!inherits(acm, "MCA")) stop("acm must be of class MCA")
+  if (!inherits(mca, "MCA")) stop("acm must be of class MCA")
   
-  vars <- data.frame(acm$var$coord)
-  varnames <- sapply(acm$call$X[,acm$call$quali,drop=FALSE], nlevels)
-  vars$varnames <- rep(names(varnames),varnames)
-  vars$modnames <- rownames(vars)
+  res <- mca_prepare.MCA(mca)
+  has_sup_vars <- "Supplementary" %in% res$vars$Type
+  has_sup_ind <- "Supplementary" %in% res$ind$Type
 
-  vars.quali.sup <- data.frame(acm$quali.sup$coord)
-  varnames <- sapply(acm$call$X[,acm$call$quali.sup,drop=FALSE], nlevels)
-  vars.quali.sup$varnames <- rep(names(varnames),varnames)
-  vars.quali.sup$modnames <- rownames(vars.quali.sup)
-
-  ind <- data.frame(acm$ind$coord)
-  ind$name <- rownames(ind)
-  
-  eig <- data.frame(dim=1:nrow(acm$eig),percent=acm$eig[,2])
-  max.eig <- max(eig$dim)  
-  
-  comps <- grep("^Dim\\.\\d+$", names(vars), value=TRUE)
-  names(comps) <- paste(comps, paste0("(",head(round(acm$eig[,2],2), length(comps)),"%)"))
-  
-  vardata <- list()
-  vardata <- lapply(1:length(comps), function(i) {
-    tmp <- data.frame(Var=vars$varnames,
-                      Mod=vars$modnames,
-                      Coord=signif(acm$var$coord[,i],3),
-                      Contrib=signif(acm$var$contrib[,i],3),
-                      Cos2=signif(acm$var$cos2[,i],2),
-                      V.test=acm$var$v.test[,i])
-    tmp$P.value <- ifelse(tmp$V.test>=0, 2*(1-pnorm(tmp$V.test)), 2*(pnorm(tmp$V.test)))
-    tmp$V.test <- signif(tmp$V.test, 3)
-    tmp$P.value <- signif(tmp$P.value, 3)
-    tmp})
-  names(vardata) <- comps
-
-  vareta2 <- data.frame(acm$var$eta2)
-  vareta2 <- format(vareta2,scientific=FALSE, nsmall=3, digits=0)
-  vareta2$Var <- rownames(vareta2)
-  vareta2 <- vareta2 %>% select(Var, starts_with("Dim"))
-  
-  if (!is.null(acm$quali.sup)) {
-    varsupdata <- list()
-    varsupdata <- lapply(1:length(comps), function(i) {
-      tmp <- data.frame(
-        Var = vars.quali.sup$varnames,
-        Mod = vars.quali.sup$modnames,
-        Coord = signif(acm$quali.sup$coord[,i],3),
-        Cos2 = signif(acm$quali.sup$cos2[,i],2),
-        V.test = acm$quali.sup$v.test[,i]
-      )
-      tmp$P.value <-
-        ifelse(tmp$V.test >= 0, 2 * (1 - pnorm(tmp$V.test)), 2 * (pnorm(tmp$V.test)))
-      tmp$V.test <- signif(tmp$V.test, 3)
-      tmp$P.value <- signif(tmp$P.value, 3)
-      tmp
-    })
-    names(varsupdata) <- comps
-    
-    varsupeta2 <- data.frame(acm$quali.sup$eta2)
-    varsupeta2 <-
-      format(
-        varsupeta2,scientific = FALSE, nsmall = 3, digits = 0
-      )
-    varsupeta2$Var <- rownames(varsupeta2)
-    varsupeta2 <- varsupeta2 %>% select(Var, starts_with("Dim"))
-  }
-  
-  inddata <- list()
-  inddata <- lapply(1:length(comps), function(i) {
-    tmp <- data.frame(Ind=rownames(ind),
-                      Coord=signif(acm$ind$coord[,i],3),
-                      Contrib=signif(acm$ind$contrib[,i],3),
-                      Cos2=signif(acm$ind$cos2[,i],2))
-    tmp})
-  names(inddata) <- comps
-  
-  
-  
   css_string <- "
   .well label, 
   .well input, 
   .well select, 
   .well option,
+  .well button,
+  .well a,
   input, label, select, option, .selectize-input {
       font-size: 11px !important;
       padding: 3px 5px !important; 
@@ -119,15 +51,15 @@ imca <- function(acm) {
   .dataTables_wrapper "
   
   shiny::shinyApp(
-    ui=navbarPage("iMCA",
-                  header=tags$head(
+    ui = navbarPage("iMCA",
+                  header = tags$head(
                   tags$style(HTML(css_string))),
                   tabPanel("Eigenvalues",
                            fluidRow(
                              column(2,
                                     wellPanel(numericInput("eigNb", "Dimensions to plot", 
-                                                 min=2, max=max.eig, value=max.eig, 
-                                                 step=1))),
+                                                 min = 2, max = max(res$eig$dim), value = max(res$eig$dim), 
+                                                 step = 1))),
                             column(10,
                                     ggvisOutput("eigplot"))
                              
@@ -137,64 +69,110 @@ imca <- function(acm) {
                            fluidRow(
                              column(2,
                                     wellPanel(
-                                      selectInput("xVar", "X axis", choices=comps, selected="Dim.1"),
-                                      selectInput("yVar", "Y axis", choices=comps, selected="Dim.2"),
-                                      sliderInput("size", "Size", 4, 20, 10),
-                                      checkboxInput("supvar", HTML("Supplementary variables"), value=TRUE))),
+                                      selectInput("var_x", "X axis", choices = res$axes, selected = "1"),
+                                      selectInput("var_y", "Y axis", choices = res$axes, selected = "2"),
+                                      sliderInput("var_lab_size", "Labels size", 4, 20, 10),
+                                      selectInput("var_col", "Points color :",
+                                                  choices = c("None" = "None",
+                                                              "Variable name" = "Variable",
+                                                              "Variable type" = "Type"),
+                                                  selected = "Variable"),
+                                      selectInput("var_symbol", "Points symbol :",
+                                                  choices = c("None" = "None",
+                                                              "Variable name" = "Variable",
+                                                              "Variable type" = "Type"),
+                                                  selected = "Type"),
+                                      selectInput("var_size", "Points size :",
+                                                  choices = c("None" = "None",
+                                                              "Contribution" = "Contrib",
+                                                              "Cos2" = "Cos2"),
+                                                  selected = "None"),
+                                      checkboxInput("var_sup", HTML("Supplementary variables"), value = TRUE),
+                                      tags$p(actionButton("imca-var-reset-zoom", 
+                                                          title = "Reset zoom",
+                                                          HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
+                                             tags$a(id = "imca-var-svg-export", href = "#",
+                                                    class = "btn btn-default", 
+                                                    title = "Export as SVG",
+                                                    HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),
                              column(10,
-                                    ggvisOutput("varplot"))
+                                    scatterD3Output("varplot"))
                   )),
                   
                   tabPanel("Variables data",
                            fluidRow(
                              column(2,
                                     wellPanel(
-                                    selectInput("vardim", "Dimension", choices=comps, selected="Dim.1"),
+                                    selectInput("vardim", "Dimension", choices = res$axes, selected = "1"),
                                     textInput("varpvalue", "Max p-value", 1))),
                              column(10,
                                     h3("Positive coordinates"),
                                     DT::dataTableOutput("vartablepos"),
                                     h3("Negative coordinates"),                   
                                     DT::dataTableOutput("vartableneg"),
+                                    if (has_sup_vars) {
+                                      list(h3("Supplementary variables"),                   
+                                           DT::dataTableOutput("vartablesup"))
+                                    },
                                     h3("Variables eta2"),                   
                                     DT::dataTableOutput("vartableeta2"),
-                                    h3("Supplementary variables"),                   
-                                    DT::dataTableOutput("vartablesup"),
-                                    h3("Supplementary variables eta2"),                   
-                                    DT::dataTableOutput("vartablesupeta2")
-                                    ))),
+                                    if (has_sup_vars) {
+                                      list(h3("Supplementary variables eta2"),                   
+                                           DT::dataTableOutput("vartablesupeta2"))
+                                    }
+                             ))),
                   
                   tabPanel("Individuals plot",
                            fluidRow(
                              column(2,
                                     wellPanel(
-                                    selectInput("xInd", "X axis", choices=comps, selected="Dim.1"),
-                                    selectInput("yInd", "Y axis", choices=comps, selected="Dim.2"),
-                                    sliderInput("indOpacity", "Opacity", 0, 1, 0.5))),
-                             column(10,
-                                    ggvisOutput("indplot")))),
+                                      selectInput("ind_x", "X axis", choices = res$axes, selected = "1"),
+                                      selectInput("ind_y", "Y axis", choices = res$axes, selected = "2"),
+                                      sliderInput("ind_point_size", "Points size", 10, 100, 64),
+                                      sliderInput("ind_opacity", "Points opacity", 0, 1, 0.5),
+                                      checkboxInput("ind_labels_show", HTML("Show labels"), value = TRUE),                                                                       conditionalPanel(
+                                        condition = 'input.ind_labels == true',
+                                        sliderInput("ind_labels_size", "Labels size", 5, 20, 9)
+                                      ),
+                                      selectInput("ind_col", "Points color :",
+                                                  choices = c("None" = "None",
+                                                              "Individual type" = "Type"),
+                                                  selected = "Type"),
+                                      checkboxInput("ind_sup", HTML("Supplementary individuals"), value = TRUE),
+                                      tags$p(actionButton("imca-ind-reset-zoom", 
+                                                          title = "Reset zoom",
+                                                          HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
+                                             tags$a(id = "imca-ind-svg-export", href = "#",
+                                                    class = "btn btn-default", 
+                                                    title = "Export as SVG",
+                                                    HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),                                 column(10,
+                                    scatterD3Output("indplot")))),
                   
                   tabPanel("Individuals data",
                            fluidRow(
                              column(2,
                                     wellPanel(
-                                    selectInput("inddim", "Dimension", choices=comps, selected="Dim.1"))),
+                                    selectInput("inddim", "Dimension", choices = res$axes, selected = "Axis 1"))),
                              column(10,
                                     h3("Positive coordinates"),
                                     DT::dataTableOutput("indtablepos"),
                                     h3("Negative coordinates"),                   
-                                    DT::dataTableOutput("indtableneg"))))
-                  
+                                    DT::dataTableOutput("indtableneg"),
+                                    if (has_sup_ind) {
+                                      list(h3("Supplementary individuals"),                   
+                                      DT::dataTableOutput("indtablesup"))
+                                    }
+                             )))
                   
     ),
     
-    server=function(input, output) {
+    server = function(input, output) {
       
       
       ## Eig plot tooltip function
       show_nameeig <- function(x) {
         if(is.null(x)) return(NULL)
-        name <- paste0("Dim: ",x$x_)
+        name <- paste0("Axis: ",x$x_)
         percent <- paste0("Var: ",round(x$stack_upr_,2), "%")
         out <- paste0(c(name, percent), collapse="<br />\n")  
         out
@@ -202,130 +180,208 @@ imca <- function(acm) {
       
       ## Eig plot
       reactive({
-        eig[1:input$eigNb,] %>%
+        res$eig[1:input$eigNb,] %>%
           ggvis(~factor(dim), ~percent, fill:="#999") %>%
           layer_bars() %>%
           add_tooltip(show_nameeig, "hover")
       }) %>% bind_shiny("eigplot")
       
       
-      ## Var plot tooltip function
-      show_namev <- function(x) {
-        if(is.null(x)) return(NULL)
-        name <- paste0("id: ",x$modnames)
-        comps <- grep("^Dim\\.\\d+$", names(x), value=TRUE)
-        tmp <- character()
-        for (comp in comps) tmp <- append(tmp, paste0(comp, ": ", round(x[,comp],2)))
-        out <- paste0(c(name, tmp), collapse="<br />\n")  
-        out
-      }
+      ## Variables plot reactive data
+      var_data <- reactive({
+        tmp_x <- res$vars %>% 
+          filter(Axis == input$var_x) %>%
+          select(Variable, Level, Type, Coord, Contrib, Cos2)
+        if (!input$var_sup)
+          tmp_x <- tmp_x %>% filter(Type == "Primary")
+        tmp_y <- res$vars %>% 
+          filter(Axis == input$var_y) %>%
+          select(Variable, Level, Type, Coord, Contrib, Cos2)
+        if (!input$var_sup)
+          tmp_y <- tmp_y %>% filter(Type == "Primary")
+        tmp <- tmp_x %>% 
+          left_join(tmp_y, by = c("Variable", "Level", "Type")) %>%
+          mutate(Contrib = Contrib.x + Contrib.y,
+                 Cos2 = Cos2.x + Cos2.y,
+                 tooltip = paste(paste0("<strong>", Level, "</strong>"),
+                                 paste0("<strong>Variable:</strong>", Variable),
+                                 paste0("<strong>x:</strong> ", Coord.x),
+                                 paste0("<strong>y:</strong> ", Coord.y),
+                                 paste0("<strong>Cos2:</strong> ", Cos2),
+                                 paste0("<strong>Contribution:</strong> ", Contrib),
+                                 sep = "<br />"))
+        data.frame(tmp)
+      })
       
-      ## Var plot
-      reactive({ 
-        g <- vars %>%
-          ggvis(x=as.name(input$xVar),y=as.name(input$yVar)) %>%
-          add_axis("x") %>%
-          add_axis("x", values=c(0,0), properties = axis_props(
-            axis=NULL, ticks=NULL, grid = list(stroke = "#999"))) %>%
-          add_axis("y") %>%
-          add_axis("y", values=c(0,0), properties = axis_props(
-            axis=NULL, ticks=NULL, grid = list(stroke = "#999"))) %>%
-          layer_points(fill= ~factor(varnames)) %>%
-          add_tooltip(show_namev, "hover") %>%
-          layer_text(text:=~modnames, fill= ~factor(varnames), 
-                     align:="center", baseline:="bottom", dy:=-5,
-                     fontSize:=input$size) %>%
-          add_legend("fill", title="Variable")
-        ## Supplementary variables
-        if(input$supvar) 
-          g <- g %>% 
-            layer_points(data=vars.quali.sup,
-                         shape:="cross", fill= ~factor(varnames),
-                         x=as.name(input$xVar),y=as.name(input$yVar)) %>%
-            layer_text(data=vars.quali.sup, text:=~modnames, fill= ~factor(varnames), 
-                       align:="center", baseline:="bottom", dy:=-5,
-                       fontSize:=input$size) %>%
-            add_tooltip(show_namev, "hover")
-        g
-      }) %>%  bind_shiny("varplot")
+      ## Variables plot
+      output$varplot <- scatterD3::renderScatterD3({
+        col_var <- if (input$var_col == "None") NULL else var_data()[, input$var_col]
+        symbol_var <- if (input$var_symbol == "None") NULL else var_data()[, input$var_symbol]
+        size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
+        scatterD3::scatterD3(
+          x = var_data()[, "Coord.x"],
+          y = var_data()[, "Coord.y"],
+          xlab = names(res$axes)[res$axes == input$var_x],
+          ylab = names(res$axes)[res$axes == input$var_y],
+          lab = var_data()[, "Level"],
+          labels_size = input$var_lab_size,
+          col_var = col_var,
+          col_lab = input$var_col,
+          symbol_var = symbol_var,
+          symbol_lab = input$var_symbol,
+          size_var = size_var,
+          size_lab = input$var_size,
+          tooltip_text = var_data()[, "tooltip"],
+          key_var = var_data()[, "Level"],
+          fixed = TRUE,
+          transitions = TRUE,
+          html_id = "imca_var",
+          dom_id_reset_zoom = "imca-var-reset-zoom",
+          dom_id_svg_export = "imca-var-svg-export"
+        )
+      })
       
+
       
-      ## Ind plot tooltip function
-      show_namei <- function(x) {
-        if(is.null(x)) return(NULL)
-        name <- paste0("id: ",x$name)
-        comps <- grep("^Dim\\.\\d+$", names(x), value=TRUE)
-        tmp <- character()
-        for (comp in comps) tmp <- append(tmp, paste0(comp, ": ", round(x[,comp],2)))
-        out <- paste0(c(name, tmp), collapse="<br />\n")  
-        out
-      }
+      ## Individuals plot reactive data
+      ind_data <- reactive({
+        tmp_x <- res$ind %>% 
+          filter(Axis == input$ind_x) %>%
+          select(Name, Type, Coord, Contrib, Cos2)
+        if (!input$ind_sup)
+          tmp_x <- tmp_x %>% filter(Type == "Primary")
+        tmp_y <- res$ind %>% 
+          filter(Axis == input$ind_y) %>%
+          select(Name, Type, Coord, Contrib, Cos2)
+        if (!input$ind_sup)
+          tmp_y <- tmp_y %>% filter(Type == "Primary")
+        tmp <- tmp_x %>% 
+          left_join(tmp_y, by = c("Name", "Type")) %>%
+          mutate(Contrib = Contrib.x + Contrib.y,
+                 Cos2 = Cos2.x + Cos2.y,
+                 tooltip = paste(paste0("<strong>", Name, "</strong>"),
+                                 paste0("<strong>x:</strong> ", Coord.x),
+                                 paste0("<strong>y:</strong> ", Coord.y),
+                                 paste0("<strong>Cos2:</strong> ", Cos2),
+                                 paste0("<strong>Contribution:</strong> ", Contrib),
+                                 sep = "<br />"))
+        data.frame(tmp)
+      })
       
-      ## Ind plot
-      reactive({ 
-        ind %>%
-          ggvis(x=as.name(input$xInd),y=as.name(input$yInd)) %>%
-            add_axis("x") %>%
-            add_axis("x", values=c(0,0), properties = axis_props(
-              axis=NULL, ticks=NULL, grid = list(stroke = "#999"))) %>%
-            add_axis("y") %>%
-            add_axis("y", values=c(0,0), properties = axis_props(
-              axis=NULL, ticks=NULL, grid = list(stroke = "#999"))) %>%
-            layer_points(fill:="#0000AA", opacity:=input$indOpacity,
-                         stroke:=~name, strokeWidth:=0, strokeOpacity:=0) %>%
-            #layer_text(text:=~name, fontSize:=0) %>%
-            add_tooltip(show_namei, "hover")
-      }) %>%  bind_shiny("indplot")      
+      ## Individuals plot
+      output$indplot <- scatterD3::renderScatterD3({
+        col_var <- if (input$ind_col == "None") NULL else ind_data()[, input$ind_col]
+        lab_var <- if (input$ind_labels_show) ind_data()[, "Name"] else NULL
+        scatterD3::scatterD3(
+          x = ind_data()[, "Coord.x"],
+          y = ind_data()[, "Coord.y"],
+          xlab = names(res$axes)[res$axes == input$ind_x],
+          ylab = names(res$axes)[res$axes == input$ind_y],
+          point_size = input$ind_point_size,
+          point_opacity = input$ind_opacity,
+          lab = lab_var,
+          labels_size = input$ind_labels_size,
+          col_var = col_var,
+          col_lab = input$ind_col,
+          tooltip_text = ind_data()[, "tooltip"],
+          key_var = ind_data()[, "Name"],
+          fixed = TRUE,
+          transitions = TRUE,
+          html_id = "imca_ind",
+          dom_id_reset_zoom = "imca-ind-reset-zoom",
+          dom_id_svg_export = "imca-ind-svg-export"
+        )
+      })
       
-      ## Var table
+      tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = FALSE)
+      tableOptions_ind <- list(lengthMenu = c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
+      tableOptions_eta2 <- list(lengthMenu = c(10,20,50), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = FALSE)
+      
+      ## Variables, positive coordinates
       varTablePos <- reactive({
-        vardata[[input$vardim]] %>% filter(Coord>=0 & P.value<=as.numeric(input$varpvalue))
+        res$vars %>% 
+          filter(Type == "Primary", Axis == input$vardim, 
+                 Coord >= 0, P.value <= as.numeric(input$varpvalue)) %>%
+          select(-Type, -Axis)
       })
+      output$vartablepos <- DT::renderDataTable(
+        DT::datatable({varTablePos()}, 
+                      options=c(tableOptions_var,list(order=list(list(2,'desc')))),rownames=FALSE))
+      
+      ## Variables, negative coordinates
       varTableNeg <- reactive({
-        vardata[[input$vardim]] %>% filter(Coord<0 & P.value<=as.numeric(input$varpvalue))
+        res$vars %>% 
+          filter(Type == "Primary", Axis == input$vardim, 
+                 Coord < 0, P.value <= as.numeric(input$varpvalue)) %>%
+          select(-Type, -Axis)
       })
-      varTableEta2 <- reactive({
-        tmp <- vareta2
-        dimcols <- grep("^Dim", names(tmp))
-        for(col in dimcols) {
-          tmp[tmp[,col]>=as.numeric(input$varpvalue),col] <- "-"
-        }
-        tmp
-      })
-      tableOptions <- list(lengthMenu=c(10,20,50,100), pageLength=10, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE)
-      output$vartablepos = DT::renderDataTable(DT::datatable({varTablePos()}, options=c(tableOptions,list(order=list(list(2,'desc')))),rownames=FALSE))
-      output$vartableneg = DT::renderDataTable(DT::datatable({varTableNeg()}, options=c(tableOptions,list(order=list(list(2,'asc')))),rownames=FALSE))
-      output$vartableeta2 = DT::renderDataTable(DT::datatable({varTableEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE),rownames=FALSE))
-      
-      ## Supplementary var table
+      output$vartableneg <- DT::renderDataTable(
+        DT::datatable({varTableNeg()}, 
+                      options=c(tableOptions_var,list(order=list(list(2,'asc')))),rownames=FALSE))      
+
+      ## Supplementary variables
       varTableSup <- reactive({
-        varsupdata[[input$vardim]] %>% filter(P.value<=as.numeric(input$varpvalue))
+        res$vars %>% 
+          filter(Type == "Supplementary", Axis == input$vardim, 
+                 P.value <= as.numeric(input$varpvalue)) %>%
+          select(-Type, -Axis)
       })
+      output$vartablesup <- DT::renderDataTable(
+        DT::datatable({varTableSup()}, 
+                      options = c(tableOptions_var,list(order = list(list(2,'desc')))),rownames = FALSE))
+      
+                  
+      ## Variables eta2
+      varTableEta2 <- reactive({
+        tmp <- res$vareta2 %>% filter(Type == "Primary", Axis == input$vardim) %>%
+          select(-Type, -Axis) %>% arrange(eta2)
+      })
+      output$vartableeta2 <- DT::renderDataTable(
+        DT::datatable({varTableEta2()}, 
+                      options=tableOptions_eta2,rownames=FALSE))
+      
+      ## Supplementary variables eta2
       varTableSupEta2 <- reactive({
-        tmp <- varsupeta2
-        dimcols <- grep("^Dim", names(tmp))
-        for(col in dimcols) {
-          tmp[tmp[,col]>=as.numeric(input$varpvalue),col] <- "-"
-        }
-        tmp
+        tmp <- res$vareta2 %>% filter(Type == "Supplementary", Axis == input$vardim) %>%
+          select(-Type, -Axis) %>% arrange(eta2)
       })
-      tableOptions <- list(lengthMenu=c(10,20,50,100), pageLength=10, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE)
-      output$vartablesup = DT::renderDataTable(DT::datatable({varTableSup()}, options=c(tableOptions,list(order=list(list(2,'desc')))),rownames=FALSE))
-      output$vartablesupeta2 = DT::renderDataTable(DT::datatable({varTableSupEta2()}, options=list(lengthMenu=c(10,20,50,100), pageLength=100, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE),rownames=FALSE))
+      output$vartablesupeta2 <- DT::renderDataTable(
+        DT::datatable({varTableSupEta2()}, 
+                      options=tableOptions_eta2,rownames=FALSE))
       
-      
-      
-      ## Ind table
+      ## Individuals, positive coordinates
       indTablePos <- reactive({
-        inddata[[input$inddim]] %>% filter(Coord>=0)
+        res$ind %>% 
+          filter(Type == "Primary", Axis == input$inddim, 
+                 Coord >= 0) %>%
+          select(-Type, -Axis)
       })
+      output$indtablepos = DT::renderDataTable(
+        DT::datatable({indTablePos()}, 
+                      options=c(tableOptions_ind,list(order=list(list(1,'desc')))),rownames=FALSE))
+
+      ## Individuals, negative coordinates
       indTableNeg <- reactive({
-        inddata[[input$inddim]] %>% filter(Coord<0)
+        res$ind %>% 
+          filter(Type == "Primary", Axis == input$inddim, 
+                 Coord < 0) %>%
+          select(-Type, -Axis)
       })
-      tableOptions <- list(lengthMenu=c(10,20,50,100), pageLength=10, orderClasses=TRUE, autoWidth=TRUE, searching=FALSE)
-      output$indtablepos = DT::renderDataTable(DT::datatable({indTablePos()}, options=c(tableOptions,list(order=list(list(1,'desc')))),rownames=FALSE))
-      output$indtableneg = DT::renderDataTable(DT::datatable({indTableNeg()}, options=c(tableOptions,list(order=list(list(1,'asc')))),rownames=FALSE))
-    
+      output$indtableneg = DT::renderDataTable(
+        DT::datatable({indTableNeg()}, 
+                      options=c(tableOptions_ind,list(order=list(list(1,'asc')))),rownames=FALSE))
+
+      ## Supplementary individuals
+      indTableSup <- reactive({
+        res$ind %>% 
+          filter(Type == "Supplementary", Axis == input$inddim) %>%
+          select(-Type, -Axis)
+      })
+      output$indtablesup = DT::renderDataTable(
+        DT::datatable({indTableSup()}, 
+                      options = c(tableOptions_ind, list(order = list(list(1,'asc')))), rownames = FALSE))
+      
+          
     }
   )
 }
