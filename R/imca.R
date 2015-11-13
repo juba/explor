@@ -13,7 +13,7 @@
 ##' @import dplyr
 ##' @import tidyr
 ##' @import scatterD3
-##' @import ggvis
+##' @import ggplot2
 ##' @export imca
 
 imca <- function(mca) {
@@ -57,11 +57,11 @@ imca <- function(mca) {
                   tabPanel("Eigenvalues",
                            fluidRow(
                              column(2,
-                                    wellPanel(numericInput("eigNb", "Dimensions to plot", 
+                                    wellPanel(numericInput("eig_nb", "Dimensions to plot", 
                                                  min = 2, max = max(res$eig$dim), value = max(res$eig$dim), 
                                                  step = 1))),
                             column(10,
-                                    ggvisOutput("eigplot"))
+                                    plotOutput("eigplot"))
                              
                              )),
                   
@@ -88,6 +88,7 @@ imca <- function(mca) {
                                                               "Cos2" = "Cos2"),
                                                   selected = "None"),
                                       checkboxInput("var_sup", HTML("Supplementary variables"), value = TRUE),
+                                      checkboxInput("var_transitions", HTML("Animations"), value = TRUE),
                                       tags$p(actionButton("imca-var-reset-zoom", 
                                                           title = "Reset zoom",
                                                           HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
@@ -139,6 +140,7 @@ imca <- function(mca) {
                                                               "Individual type" = "Type"),
                                                   selected = "Type"),
                                       checkboxInput("ind_sup", HTML("Supplementary individuals"), value = TRUE),
+                                      checkboxInput("ind_transitions", HTML("Animations"), value = TRUE),          
                                       tags$p(actionButton("imca-ind-reset-zoom", 
                                                           title = "Reset zoom",
                                                           HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
@@ -168,25 +170,13 @@ imca <- function(mca) {
     
     server = function(input, output) {
       
-      
-      ## Eig plot tooltip function
-      show_nameeig <- function(x) {
-        if(is.null(x)) return(NULL)
-        name <- paste0("Axis: ",x$x_)
-        percent <- paste0("Var: ",round(x$stack_upr_,2), "%")
-        out <- paste0(c(name, percent), collapse="<br />\n")  
-        out
-      }
-      
-      ## Eig plot
-      reactive({
-        res$eig[1:input$eigNb,] %>%
-          ggvis(~factor(dim), ~percent, fill:="#999") %>%
-          layer_bars() %>%
-          add_tooltip(show_nameeig, "hover")
-      }) %>% bind_shiny("eigplot")
-      
-      
+      output$eigplot <- renderPlot({
+        tmp <- res$eig[1:input$eig_nb,]
+        ggplot(data=tmp) +
+          geom_bar(aes(x=factor(dim), y=percent), stat="identity") +
+          scale_x_discrete("Axis")
+      })
+
       ## Variables plot reactive data
       var_data <- reactive({
         tmp_x <- res$vars %>% 
@@ -234,7 +224,7 @@ imca <- function(mca) {
           tooltip_text = var_data()[, "tooltip"],
           key_var = var_data()[, "Level"],
           fixed = TRUE,
-          transitions = TRUE,
+          transitions = input$var_transitions,
           html_id = "imca_var",
           dom_id_reset_zoom = "imca-var-reset-zoom",
           dom_id_svg_export = "imca-var-svg-export"
@@ -286,7 +276,7 @@ imca <- function(mca) {
           tooltip_text = ind_data()[, "tooltip"],
           key_var = ind_data()[, "Name"],
           fixed = TRUE,
-          transitions = TRUE,
+          transitions = input$ind_transitions,
           html_id = "imca_ind",
           dom_id_reset_zoom = "imca-ind-reset-zoom",
           dom_id_svg_export = "imca-ind-svg-export"

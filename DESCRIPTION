@@ -14,7 +14,6 @@ Imports:
     dplyr,
     tidyr,
     ggplot2,
-    ggvis,
     scatterD3
 URL: https://github.com/juba/imva
 RoxygenNote: 4.1.1.9000
