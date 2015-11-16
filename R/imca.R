@@ -135,9 +135,9 @@ imca <- function(mca) {
                                     wellPanel(
                                       selectInput("ind_x", "X axis", choices = res$axes, selected = "1"),
                                       selectInput("ind_y", "Y axis", choices = res$axes, selected = "2"),
-                                      sliderInput("ind_point_size", "Points size", 10, 100, 64),
+                                      sliderInput("ind_point_size", "Points size", 8, 128, 64),
                                       sliderInput("ind_opacity", "Points opacity", 0, 1, 0.5),
-                                      checkboxInput("ind_labels_show", HTML("Show labels"), value = TRUE),                                                                  conditionalPanel(
+                                      checkboxInput("ind_labels_show", HTML("Show labels"), value = FALSE),                                                                  conditionalPanel(
                                         condition = 'input.ind_labels_show == true',
                                         sliderInput("ind_labels_size", "Labels size", 5, 20, 9)
                                       ),
