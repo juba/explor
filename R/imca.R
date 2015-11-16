@@ -33,22 +33,28 @@ imca <- function(mca) {
   .well a,
   input, label, select, option, .selectize-input {
       font-size: 11px !important;
-      padding: 3px 5px !important; 
       height: auto !important;
   }
-  .well .checkbox { margin-left: 20px !important; }
-  .row {margin-top: 15px !important;}
+  .well .checkbox { margin-left: 5px !important; }
   .well {padding: 5px !important;}
-  .table th, 
-  .table td {
+  .dataTable th, 
+  .dataTable td {
       font-size: 11px !important;
-      padding: 2px !important; 
+      padding: 3px 5px !important; 
+  }
+  .dataTable th { padding-right: 18px !important }
+  .dataTables_wrapper {
+    max-width: 850px;
+    margin-bottom: 2em;
   }
   .dataTables_info, .dataTables_length, 
   .dataTables_filter, .dataTables_paginate {
       font-size: 11px !important;
   }
-  .dataTables_wrapper "
+  #varplot, #indplot { height: 90vh !important}
+  #eigplot { max-width: 850px; }
+  .legend .label { font-weight: normal !important; font-size: 10px !important;}
+  "
   
   shiny::shinyApp(
     ui = navbarPage("iMCA",
@@ -61,7 +67,7 @@ imca <- function(mca) {
                                                  min = 2, max = max(res$eig$dim), value = max(res$eig$dim), 
                                                  step = 1))),
                             column(10,
-                                    plotOutput("eigplot"))
+                                    plotOutput("eigplot", height="600px"))
                              
                              )),
                   
@@ -97,7 +103,7 @@ imca <- function(mca) {
                                                     title = "Export as SVG",
                                                     HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),
                              column(10,
-                                    scatterD3Output("varplot"))
+                                    scatterD3Output("varplot", height="auto"))
                   )),
                   
                   tabPanel("Variables data",
@@ -107,18 +113,18 @@ imca <- function(mca) {
                                     selectInput("vardim", "Dimension", choices = res$axes, selected = "1"),
                                     textInput("varpvalue", "Max p-value", 1))),
                              column(10,
-                                    h3("Positive coordinates"),
+                                    h4("Positive coordinates"),
                                     DT::dataTableOutput("vartablepos"),
-                                    h3("Negative coordinates"),                   
+                                    h4("Negative coordinates"),                   
                                     DT::dataTableOutput("vartableneg"),
                                     if (has_sup_vars) {
-                                      list(h3("Supplementary variables"),                   
+                                      list(h4("Supplementary variables"),                   
                                            DT::dataTableOutput("vartablesup"))
                                     },
-                                    h3("Variables eta2"),                   
+                                    h4("Variables eta2"),                   
                                     DT::dataTableOutput("vartableeta2"),
                                     if (has_sup_vars) {
-                                      list(h3("Supplementary variables eta2"),                   
+                                      list(h4("Supplementary variables eta2"),                   
                                            DT::dataTableOutput("vartablesupeta2"))
                                     }
                              ))),
@@ -156,12 +162,12 @@ imca <- function(mca) {
                                     wellPanel(
                                     selectInput("inddim", "Dimension", choices = res$axes, selected = "Axis 1"))),
                              column(10,
-                                    h3("Positive coordinates"),
+                                    h4("Positive coordinates"),
                                     DT::dataTableOutput("indtablepos"),
-                                    h3("Negative coordinates"),                   
+                                    h4("Negative coordinates"),                   
                                     DT::dataTableOutput("indtableneg"),
                                     if (has_sup_ind) {
-                                      list(h3("Supplementary individuals"),                   
+                                      list(h4("Supplementary individuals"),                   
                                       DT::dataTableOutput("indtablesup"))
                                     }
                              )))
