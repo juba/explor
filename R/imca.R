@@ -67,7 +67,7 @@ imca <- function(mca) {
                                                  min = 2, max = max(res$eig$dim), value = max(res$eig$dim), 
                                                  step = 1))),
                             column(10,
-                                    plotOutput("eigplot", height="600px"))
+                                    plotOutput("eigplot", height = "600px"))
                              
                              )),
                   
@@ -103,7 +103,7 @@ imca <- function(mca) {
                                                     title = "Export as SVG",
                                                     HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),
                              column(10,
-                                    scatterD3Output("varplot", height="auto"))
+                                    scatterD3Output("varplot", height = "auto"))
                   )),
                   
                   tabPanel("Variables data",
@@ -178,9 +178,10 @@ imca <- function(mca) {
       
       output$eigplot <- renderPlot({
         tmp <- res$eig[1:input$eig_nb,]
-        ggplot(data=tmp) +
-          geom_bar(aes(x=factor(dim), y=percent), stat="identity") +
-          scale_x_discrete("Axis")
+        ggplot(data = tmp) +
+          geom_bar(aes(x = factor(dim), y = percent), stat = "identity") +
+          scale_x_discrete("Axis") +
+          scale_y_discrete("Percentage of inertia")
       })
 
       ## Variables plot reactive data
