@@ -1,6 +1,6 @@
 # explor
 
-Interactive interfaces for Multivariate Analysis in R (early pre-alpha beginning work in progress).
+Interactive interfaces for multivariate analysis results exploration in R (early pre-alpha beginning work in progress).
 
 
 ## Installation
