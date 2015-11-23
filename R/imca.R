@@ -111,7 +111,7 @@ imca <- function(mca) {
                              column(2,
                                     wellPanel(
                                     selectInput("vardim", "Dimension", choices = res$axes, selected = "1"),
-                                    textInput("varpvalue", "Max p-value", 1))),
+                                    textInput("varpvalue", "Max p-value", 0.1))),
                              column(10,
                                     h4("Positive coordinates"),
                                     DT::dataTableOutput("vartablepos"),
@@ -304,7 +304,7 @@ imca <- function(mca) {
       })
       output$vartablepos <- DT::renderDataTable(
         DT::datatable({varTablePos()}, 
-                      options=c(tableOptions_var,list(order=list(list(2,'desc')))),rownames=FALSE))
+                      options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))
       
       ## Variables, negative coordinates
       varTableNeg <- reactive({
@@ -315,14 +315,14 @@ imca <- function(mca) {
       })
       output$vartableneg <- DT::renderDataTable(
         DT::datatable({varTableNeg()}, 
-                      options=c(tableOptions_var,list(order=list(list(2,'asc')))),rownames=FALSE))      
+                      options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))      
 
       ## Supplementary variables
       varTableSup <- reactive({
         res$vars %>% 
           filter(Type == "Supplementary", Axis == input$vardim, 
                  P.value <= as.numeric(input$varpvalue)) %>%
-          select(-Type, -Axis)
+          select(-Type, -Axis, -Contrib)
       })
       output$vartablesup <- DT::renderDataTable(
         DT::datatable({varTableSup()}, 
@@ -373,7 +373,7 @@ imca <- function(mca) {
       indTableSup <- reactive({
         res$ind %>% 
           filter(Type == "Supplementary", Axis == input$inddim) %>%
-          select(-Type, -Axis)
+          select(-Type, -Axis, -Contrib)
       })
       output$indtablesup = DT::renderDataTable(
         DT::datatable({indTableSup()}, 
