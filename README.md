@@ -1,4 +1,5 @@
-# imva
+# explor
+
 Interactive interfaces for Multivariate Analysis in R (early pre-alpha beginning work in progress).
 
 
@@ -7,7 +8,7 @@ Interactive interfaces for Multivariate Analysis in R (early pre-alpha beginning
 Obviously not on CRAN yet :
 
 ```r
-devtools::install_github("juba/imva")
+devtools::install_github("juba/explor")
 ```
     
 ## Usage
@@ -18,7 +19,7 @@ Small example :
 
 ```r
 library(FactoMineR)
-library(imva)
+library(explor)
 library(MASS)
 mca <- MCA(farms, quali.sup=4, graph=FALSE)
 imca(mca)

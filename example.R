@@ -1,7 +1,7 @@
 library(questionr)
 library(FactoMineR)
 library(dplyr)
-library(imva)
+library(explor)
 
 data(hdv2003)
 
