@@ -2,13 +2,12 @@ Package: explor
 Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
 Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
     role=c("aut","cre")))
-Version: 0.0.1
-Date: 2015-01-16
+Version: 0.1
+Date: 2015-11-24
 License: GPL (>= 2)
 Encoding: UTF-8
-Title: Interfaces for Multivariate Analysis.
-Description: Shiny interfaces and graphical functions for principal components
-    and correspondence analyses.
+Title: Interactive Interfaces for Analysis Results Exploration.
+Description: Shiny interfaces and graphical functions for multivariate analysis results exploration.
 Imports:
     shiny (>= 0.11),
     dplyr,
