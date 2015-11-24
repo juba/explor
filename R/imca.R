@@ -21,7 +21,7 @@ imca <- function(mca) {
   if (!inherits(mca, "MCA")) stop("acm must be of class MCA")
   
   res <- mca_prepare.MCA(mca)
-  has_sup_vars <- "Supplementary" %in% res$vars$Type
+  has_sup_vars <- "Supplementary" %in% res$vars$Type 
   has_sup_ind <- "Supplementary" %in% res$ind$Type
 
   css_string <- "
@@ -188,16 +188,16 @@ imca <- function(mca) {
       var_data <- reactive({
         tmp_x <- res$vars %>% 
           filter(Axis == input$var_x) %>%
-          select(Variable, Level, Type, Coord, Contrib, Cos2)
+          select(Variable, Level, Type, Class, Coord, Contrib, Cos2)
         if (!input$var_sup)
           tmp_x <- tmp_x %>% filter(Type == "Primary")
         tmp_y <- res$vars %>% 
           filter(Axis == input$var_y) %>%
-          select(Variable, Level, Type, Coord, Contrib, Cos2)
+          select(Variable, Level, Type, Class, Coord, Contrib, Cos2)
         if (!input$var_sup)
           tmp_y <- tmp_y %>% filter(Type == "Primary")
         tmp <- tmp_x %>% 
-          left_join(tmp_y, by = c("Variable", "Level", "Type")) %>%
+          left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,
                  Cos2 = Cos2.x + Cos2.y,
                  tooltip = paste(paste0("<strong>", Level, "</strong>"),
@@ -215,6 +215,7 @@ imca <- function(mca) {
         col_var <- if (input$var_col == "None") NULL else var_data()[, input$var_col]
         symbol_var <- if (input$var_symbol == "None") NULL else var_data()[, input$var_symbol]
         size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
+        type_var <- ifelse(var_data()[,"Class"] == "Quantitative", "arrow", "point")
         scatterD3::scatterD3(
           x = var_data()[, "Coord.x"],
           y = var_data()[, "Coord.y"],
@@ -230,6 +231,7 @@ imca <- function(mca) {
           size_var = size_var,
           size_lab = input$var_size,
           tooltip_text = var_data()[, "tooltip"],
+          type_var = type_var,
           key_var = var_data()[, "Level"],
           fixed = TRUE,
           transitions = input$var_transitions,
@@ -300,7 +302,7 @@ imca <- function(mca) {
         res$vars %>% 
           filter(Type == "Primary", Axis == input$vardim, 
                  Coord >= 0, P.value <= as.numeric(input$varpvalue)) %>%
-          select(-Type, -Axis)
+          select(-Type, -Class, -Axis)
       })
       output$vartablepos <- DT::renderDataTable(
         DT::datatable({varTablePos()}, 
@@ -311,7 +313,7 @@ imca <- function(mca) {
         res$vars %>% 
           filter(Type == "Primary", Axis == input$vardim, 
                  Coord < 0, P.value <= as.numeric(input$varpvalue)) %>%
-          select(-Type, -Axis)
+          select(-Type, -Class, -Axis)
       })
       output$vartableneg <- DT::renderDataTable(
         DT::datatable({varTableNeg()}, 
@@ -321,7 +323,8 @@ imca <- function(mca) {
       varTableSup <- reactive({
         res$vars %>% 
           filter(Type == "Supplementary", Axis == input$vardim, 
-                 P.value <= as.numeric(input$varpvalue)) %>%
+                 P.value <= as.numeric(input$varpvalue) | Class == "Quantitative") %>%
+          mutate(Level=ifelse(Class=="Quantitative", "-", Level)) %>%
           select(-Type, -Axis, -Contrib)
       })
       output$vartablesup <- DT::renderDataTable(
@@ -332,7 +335,7 @@ imca <- function(mca) {
       ## Variables eta2
       varTableEta2 <- reactive({
         tmp <- res$vareta2 %>% filter(Type == "Primary", Axis == input$vardim) %>%
-          select(-Type, -Axis) %>% arrange(eta2)
+          select(-Type, -Class, -Axis) %>% arrange(eta2)
       })
       output$vartableeta2 <- DT::renderDataTable(
         DT::datatable({varTableEta2()}, 
@@ -340,7 +343,9 @@ imca <- function(mca) {
       
       ## Supplementary variables eta2
       varTableSupEta2 <- reactive({
-        tmp <- res$vareta2 %>% filter(Type == "Supplementary", Axis == input$vardim) %>%
+        tmp <- res$vareta2 %>% filter(Type == "Supplementary", 
+                                      Class == "Qualitative", 
+                                      Axis == input$vardim) %>%
           select(-Type, -Axis) %>% arrange(eta2)
       })
       output$vartablesupeta2 <- DT::renderDataTable(

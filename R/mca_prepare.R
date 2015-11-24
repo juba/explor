@@ -22,6 +22,7 @@ mca_prepare.MCA <- function(mca) {
   vars$varname <- rep(names(varnames),varnames)
   vars$modname <- rownames(vars)
   vars$Type <- "Primary"
+  vars$Class <- "Qualitative"
   
   ## Supplementary variables coordinates
   if (!is.null(mca$quali.sup)) {
@@ -30,7 +31,18 @@ mca_prepare.MCA <- function(mca) {
     vars.quali.sup$varname <- rep(names(varnames),varnames)
     vars.quali.sup$modname <- rownames(vars.quali.sup)
     vars.quali.sup$Type <- "Supplementary"
+    vars.quali.sup$Class <- "Qualitative"    
     vars <- rbind(vars, vars.quali.sup)
+  }
+
+  ## Quantitative supplementary variables coordinates
+  if (!is.null(mca$quanti.sup)) {
+    vars.quanti.sup <- data.frame(mca$quanti.sup$coord)
+    vars.quanti.sup$varname <- rownames(mca$quanti.sup$coord)
+    vars.quanti.sup$modname <- rownames(mca$quanti.sup$coord)
+    vars.quanti.sup$Type <- "Supplementary"
+    vars.quanti.sup$Class <- "Quantitative"
+    vars <- rbind(vars, vars.quanti.sup)
   }
 
   vars <- vars %>% gather(Axis, Coord, starts_with("Dim.")) %>%
@@ -39,37 +51,41 @@ mca_prepare.MCA <- function(mca) {
 
   ## Contributions
   tmp <- data.frame(mca$var$contrib)
-  tmp <- tmp %>% mutate(modname = rownames(tmp), Type = "Primary") %>%
+  tmp <- tmp %>% mutate(modname = rownames(tmp), Type = "Primary", Class = "Qualitative") %>%
     gather(Axis, Contrib, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
            Contrib = signif(Contrib, 3))
     
-  vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Axis"))
+  vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
   
   ## Cos2
   tmp <- data.frame(mca$var$cos2)
   tmp$modname <- rownames(tmp)
   tmp$Type <- "Primary"
+  tmp$Class <- "Qualitative"
   if (!is.null(mca$quali.sup)) {
     tmp_sup <- data.frame(mca$quali.sup$cos2)
     tmp_sup$modname <- rownames(tmp_sup)
     tmp_sup$Type <- "Supplementary"
+    tmp_sup$Class <- "Qualitative"
     tmp <- tmp %>% bind_rows(tmp_sup)
   }
   tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
            Cos2 = signif(Cos2, 2))
   
-  vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Axis"))
+  vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
 
   ## V.test  
   tmp <- data.frame(mca$var$v.test)
   tmp$modname <- rownames(tmp)
   tmp$Type <- "Primary"
+  tmp$Class <- "Qualitative"  
   if (!is.null(mca$quali.sup)) {
     tmp_sup <- data.frame(mca$quali.sup$v.test)
     tmp_sup$modname <- rownames(tmp_sup)
     tmp_sup$Type <- "Supplementary"
+    tmp_sup$Class <- "Qualitative"    
     tmp <- tmp %>% bind_rows(tmp_sup)
   }
   tmp <- tmp %>% gather(Axis, V.test, starts_with("Dim.")) %>%
@@ -77,17 +93,19 @@ mca_prepare.MCA <- function(mca) {
            P.value = signif(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
            V.test = signif(V.test, 2))
   
-  vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Axis")) %>%
+  vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis")) %>% 
     rename(Variable = varname, Level = modname)
 
   ## Variables eta2
   vareta2 <- data.frame(mca$var$eta2)
   vareta2$Variable <- rownames(vareta2)
   vareta2$Type <- "Primary"
+  vareta2$Class <- "Qualitative"
   if (!is.null(mca$quali.sup)) {
     vareta2_sup <- data.frame(mca$quali.sup$eta2)
     vareta2_sup$Variable <- rownames(vareta2_sup)
     vareta2_sup$Type <- "Supplementary"
+    vareta2_sup$Class <- "Qualitative"
     vareta2 <- vareta2 %>% bind_rows(vareta2_sup)
   }
   vareta2 <- vareta2 %>% gather(Axis, eta2, starts_with("Dim.")) %>%
