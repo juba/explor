@@ -113,10 +113,12 @@ imca <- function(mca) {
                                     selectInput("vardim", "Dimension", choices = res$axes, selected = "1"),
                                     textInput("varpvalue", "Max p-value", 0.1))),
                              column(10,
-                                    h4("Positive coordinates"),
-                                    DT::dataTableOutput("vartablepos"),
-                                    h4("Negative coordinates"),                   
-                                    DT::dataTableOutput("vartableneg"),
+                                    # h4("Positive coordinates"),
+                                    # DT::dataTableOutput("vartablepos"),
+                                    # h4("Negative coordinates"),                   
+                                    # DT::dataTableOutput("vartableneg"),
+                                    h4("Primary variables"),                   
+                                    DT::dataTableOutput("vartable"),
                                     if (has_sup_vars) {
                                       list(h4("Supplementary variables"),                   
                                            DT::dataTableOutput("vartablesup"))
@@ -162,10 +164,12 @@ imca <- function(mca) {
                                     wellPanel(
                                     selectInput("inddim", "Dimension", choices = res$axes, selected = "Axis 1"))),
                              column(10,
-                                    h4("Positive coordinates"),
-                                    DT::dataTableOutput("indtablepos"),
-                                    h4("Negative coordinates"),                   
-                                    DT::dataTableOutput("indtableneg"),
+                                    # h4("Positive coordinates"),
+                                    # DT::dataTableOutput("indtablepos"),
+                                    # h4("Negative coordinates"),                   
+                                    # DT::dataTableOutput("indtableneg"),
+                                    h4("Primary individuals"),
+                                    DT::dataTableOutput("indtable"),
                                     if (has_sup_ind) {
                                       list(h4("Supplementary individuals"),                   
                                       DT::dataTableOutput("indtablesup"))
@@ -297,28 +301,38 @@ imca <- function(mca) {
       tableOptions_ind <- list(lengthMenu = c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
       tableOptions_eta2 <- list(lengthMenu = c(10,20,50), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = FALSE)
       
-      ## Variables, positive coordinates
-      varTablePos <- reactive({
+      # ## Variables, positive coordinates
+      # varTablePos <- reactive({
+      #   res$vars %>% 
+      #     filter(Type == "Primary", Axis == input$vardim, 
+      #            Coord >= 0, P.value <= as.numeric(input$varpvalue)) %>%
+      #     select(-Type, -Class, -Axis)
+      # })
+      # output$vartablepos <- DT::renderDataTable(
+      #   DT::datatable({varTablePos()}, 
+      #                 options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))
+      # 
+      # ## Variables, negative coordinates
+      # varTableNeg <- reactive({
+      #   res$vars %>% 
+      #     filter(Type == "Primary", Axis == input$vardim, 
+      #            Coord < 0, P.value <= as.numeric(input$varpvalue)) %>%
+      #     select(-Type, -Class, -Axis)
+      # })
+      # output$vartableneg <- DT::renderDataTable(
+      #   DT::datatable({varTableNeg()}, 
+      #                 options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))      
+      ## Primary variables
+      varTable <- reactive({
         res$vars %>% 
           filter(Type == "Primary", Axis == input$vardim, 
-                 Coord >= 0, P.value <= as.numeric(input$varpvalue)) %>%
+                 P.value <= as.numeric(input$varpvalue)) %>%
           select(-Type, -Class, -Axis)
       })
-      output$vartablepos <- DT::renderDataTable(
-        DT::datatable({varTablePos()}, 
+      output$vartable <- DT::renderDataTable(
+        DT::datatable({varTable()}, 
                       options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))
       
-      ## Variables, negative coordinates
-      varTableNeg <- reactive({
-        res$vars %>% 
-          filter(Type == "Primary", Axis == input$vardim, 
-                 Coord < 0, P.value <= as.numeric(input$varpvalue)) %>%
-          select(-Type, -Class, -Axis)
-      })
-      output$vartableneg <- DT::renderDataTable(
-        DT::datatable({varTableNeg()}, 
-                      options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))      
-
       ## Supplementary variables
       varTableSup <- reactive({
         res$vars %>% 
@@ -352,28 +366,39 @@ imca <- function(mca) {
         DT::datatable({varTableSupEta2()}, 
                       options=tableOptions_eta2,rownames=FALSE))
       
-      ## Individuals, positive coordinates
-      indTablePos <- reactive({
+      # ## Individuals, positive coordinates
+      # indTablePos <- reactive({
+      #   res$ind %>% 
+      #     filter(Type == "Primary", Axis == input$inddim, 
+      #            Coord >= 0) %>%
+      #     select(-Type, -Axis)
+      # })
+      # output$indtablepos = DT::renderDataTable(
+      #   DT::datatable({indTablePos()}, 
+      #                 options=c(tableOptions_ind,list(order=list(list(1,'desc')))),rownames=FALSE))
+      # 
+      # ## Individuals, negative coordinates
+      # indTableNeg <- reactive({
+      #   res$ind %>% 
+      #     filter(Type == "Primary", Axis == input$inddim, 
+      #            Coord < 0) %>%
+      #     select(-Type, -Axis)
+      # })
+      # output$indtableneg = DT::renderDataTable(
+      #   DT::datatable({indTableNeg()}, 
+      #                 options=c(tableOptions_ind,list(order=list(list(1,'asc')))),rownames=FALSE))
+
+      ## Primary individuals
+      indTable <- reactive({
         res$ind %>% 
-          filter(Type == "Primary", Axis == input$inddim, 
-                 Coord >= 0) %>%
+          filter(Type == "Primary", Axis == input$inddim) %>%
           select(-Type, -Axis)
       })
-      output$indtablepos = DT::renderDataTable(
-        DT::datatable({indTablePos()}, 
-                      options=c(tableOptions_ind,list(order=list(list(1,'desc')))),rownames=FALSE))
+      output$indtable = DT::renderDataTable(
+        DT::datatable({indTable()}, 
+                      options=c(tableOptions_ind,list(order=list(list(2,'desc')))),rownames=FALSE))
 
-      ## Individuals, negative coordinates
-      indTableNeg <- reactive({
-        res$ind %>% 
-          filter(Type == "Primary", Axis == input$inddim, 
-                 Coord < 0) %>%
-          select(-Type, -Axis)
-      })
-      output$indtableneg = DT::renderDataTable(
-        DT::datatable({indTableNeg()}, 
-                      options=c(tableOptions_ind,list(order=list(list(1,'asc')))),rownames=FALSE))
-
+      
       ## Supplementary individuals
       indTableSup <- reactive({
         res$ind %>% 
