@@ -12,7 +12,7 @@ prepare_results(...)
 \arguments{
 \item{...}{arguments passed to other methods}
 
-\item{acm}{an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.}
+\item{mca}{an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.}
 }
 \description{
 This function prepares MCA results to be used by \code{explor}. Not to be used directly.

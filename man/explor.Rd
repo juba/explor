@@ -5,14 +5,12 @@
 \alias{explor.MCA}
 \title{Interface for analysis results exploration}
 \usage{
-explor(...)
+explor(obj)
 
-\method{explor}{MCA}(mca)
+\method{explor}{MCA}(obj)
 }
 \arguments{
-\item{...}{arguments passed to other methods}
-
-\item{acm}{an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.}
+\item{obj}{object containing analysis results}
 }
 \value{
 The function launches a shiny app in the system web browser.

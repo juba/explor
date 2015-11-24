@@ -1,6 +1,5 @@
 ##' @rdname explor
 ##' @aliases explor.MCA
-##' @param acm an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.
 ##' @details 
 ##' Interface for multiple correspondence analysis
 ##'
@@ -11,18 +10,16 @@
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import shiny
-##' @import DT
 ##' @import dplyr
-##' @import tidyr
 ##' @import scatterD3
 ##' @import ggplot2
 ##' @export
 
-explor.MCA <- function(mca) {
+explor.MCA <- function(obj) {
   
-  if (!inherits(mca, "MCA")) stop("acm must be of class MCA")
+  if (!inherits(obj, "MCA")) stop("obj must be of class MCA")
   
-  res <- prepare_results(mca)
+  res <- prepare_results(obj)
   has_sup_vars <- "Supplementary" %in% res$vars$Type 
   has_sup_ind <- "Supplementary" %in% res$ind$Type
 
@@ -184,8 +181,9 @@ explor.MCA <- function(mca) {
       
       output$eigplot <- renderPlot({
         tmp <- res$eig[1:input$eig_nb,]
+        tmp$dim <- factor(tmp$dim)
         ggplot(data = tmp) +
-          geom_bar(aes(x = factor(dim), y = percent), stat = "identity") +
+          geom_bar(aes_string(x = "dim", y = "percent"), stat = "identity") +
           scale_x_discrete("Axis") +
           scale_y_discrete("Percentage of inertia")
       })
@@ -194,14 +192,14 @@ explor.MCA <- function(mca) {
       var_data <- reactive({
         tmp_x <- res$vars %>% 
           filter(Axis == input$var_x) %>%
-          select(Variable, Level, Type, Class, Coord, Contrib, Cos2)
+          select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
         if (!input$var_sup)
-          tmp_x <- tmp_x %>% filter(Type == "Active")
+          tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- res$vars %>% 
           filter(Axis == input$var_y) %>%
-          select(Variable, Level, Type, Class, Coord, Contrib, Cos2)
+          select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
         if (!input$var_sup)
-          tmp_y <- tmp_y %>% filter(Type == "Active")
+          tmp_y <- tmp_y %>% filter(Type == 'Active')
         tmp <- tmp_x %>% 
           left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,

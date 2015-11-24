@@ -1,10 +1,10 @@
 ##' @rdname prepare_results
 ##' @aliases prepare_results.MCA
-##' @param acm an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.
+##' @param mca an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import dplyr
-##' @import tidyr
+##' @importFrom tidyr gather
 
 prepare_results.MCA <- function(mca) {
 
