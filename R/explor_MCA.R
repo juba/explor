@@ -119,7 +119,7 @@ explor.MCA <- function(mca) {
                                     # DT::dataTableOutput("vartablepos"),
                                     # h4("Negative coordinates"),                   
                                     # DT::dataTableOutput("vartableneg"),
-                                    h4("Primary variables"),                   
+                                    h4("Active variables"),                   
                                     DT::dataTableOutput("vartable"),
                                     if (has_sup_vars) {
                                       list(h4("Supplementary variables"),                   
@@ -170,7 +170,7 @@ explor.MCA <- function(mca) {
                                     # DT::dataTableOutput("indtablepos"),
                                     # h4("Negative coordinates"),                   
                                     # DT::dataTableOutput("indtableneg"),
-                                    h4("Primary individuals"),
+                                    h4("Active individuals"),
                                     DT::dataTableOutput("indtable"),
                                     if (has_sup_ind) {
                                       list(h4("Supplementary individuals"),                   
@@ -196,12 +196,12 @@ explor.MCA <- function(mca) {
           filter(Axis == input$var_x) %>%
           select(Variable, Level, Type, Class, Coord, Contrib, Cos2)
         if (!input$var_sup)
-          tmp_x <- tmp_x %>% filter(Type == "Primary")
+          tmp_x <- tmp_x %>% filter(Type == "Active")
         tmp_y <- res$vars %>% 
           filter(Axis == input$var_y) %>%
           select(Variable, Level, Type, Class, Coord, Contrib, Cos2)
         if (!input$var_sup)
-          tmp_y <- tmp_y %>% filter(Type == "Primary")
+          tmp_y <- tmp_y %>% filter(Type == "Active")
         tmp <- tmp_x %>% 
           left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,
@@ -255,12 +255,12 @@ explor.MCA <- function(mca) {
           filter(Axis == input$ind_x) %>%
           select(Name, Type, Coord, Contrib, Cos2)
         if (!input$ind_sup)
-          tmp_x <- tmp_x %>% filter(Type == "Primary")
+          tmp_x <- tmp_x %>% filter(Type == "Active")
         tmp_y <- res$ind %>% 
           filter(Axis == input$ind_y) %>%
           select(Name, Type, Coord, Contrib, Cos2)
         if (!input$ind_sup)
-          tmp_y <- tmp_y %>% filter(Type == "Primary")
+          tmp_y <- tmp_y %>% filter(Type == "Active")
         tmp <- tmp_x %>% 
           left_join(tmp_y, by = c("Name", "Type")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,
@@ -306,7 +306,7 @@ explor.MCA <- function(mca) {
       # ## Variables, positive coordinates
       # varTablePos <- reactive({
       #   res$vars %>% 
-      #     filter(Type == "Primary", Axis == input$vardim, 
+      #     filter(Type == "Active", Axis == input$vardim, 
       #            Coord >= 0, P.value <= as.numeric(input$varpvalue)) %>%
       #     select(-Type, -Class, -Axis)
       # })
@@ -317,17 +317,17 @@ explor.MCA <- function(mca) {
       # ## Variables, negative coordinates
       # varTableNeg <- reactive({
       #   res$vars %>% 
-      #     filter(Type == "Primary", Axis == input$vardim, 
+      #     filter(Type == "Active", Axis == input$vardim, 
       #            Coord < 0, P.value <= as.numeric(input$varpvalue)) %>%
       #     select(-Type, -Class, -Axis)
       # })
       # output$vartableneg <- DT::renderDataTable(
       #   DT::datatable({varTableNeg()}, 
       #                 options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))      
-      ## Primary variables
+      ## Active variables
       varTable <- reactive({
         res$vars %>% 
-          filter(Type == "Primary", Axis == input$vardim, 
+          filter(Type == "Active", Axis == input$vardim, 
                  P.value <= as.numeric(input$varpvalue)) %>%
           select(-Type, -Class, -Axis)
       })
@@ -350,7 +350,7 @@ explor.MCA <- function(mca) {
                   
       ## Variables eta2
       varTableEta2 <- reactive({
-        tmp <- res$vareta2 %>% filter(Type == "Primary", Axis == input$vardim) %>%
+        tmp <- res$vareta2 %>% filter(Type == "Active", Axis == input$vardim) %>%
           select(-Type, -Class, -Axis) %>% arrange(eta2)
       })
       output$vartableeta2 <- DT::renderDataTable(
@@ -371,7 +371,7 @@ explor.MCA <- function(mca) {
       # ## Individuals, positive coordinates
       # indTablePos <- reactive({
       #   res$ind %>% 
-      #     filter(Type == "Primary", Axis == input$inddim, 
+      #     filter(Type == "Active", Axis == input$inddim, 
       #            Coord >= 0) %>%
       #     select(-Type, -Axis)
       # })
@@ -382,7 +382,7 @@ explor.MCA <- function(mca) {
       # ## Individuals, negative coordinates
       # indTableNeg <- reactive({
       #   res$ind %>% 
-      #     filter(Type == "Primary", Axis == input$inddim, 
+      #     filter(Type == "Active", Axis == input$inddim, 
       #            Coord < 0) %>%
       #     select(-Type, -Axis)
       # })
@@ -390,10 +390,10 @@ explor.MCA <- function(mca) {
       #   DT::datatable({indTableNeg()}, 
       #                 options=c(tableOptions_ind,list(order=list(list(1,'asc')))),rownames=FALSE))
 
-      ## Primary individuals
+      ## Active individuals
       indTable <- reactive({
         res$ind %>% 
-          filter(Type == "Primary", Axis == input$inddim) %>%
+          filter(Type == "Active", Axis == input$inddim) %>%
           select(-Type, -Axis)
       })
       output$indtable = DT::renderDataTable(

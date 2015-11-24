@@ -21,7 +21,7 @@ prepare_results.MCA <- function(mca) {
   varnames <- sapply(mca$call$X[,mca$call$quali, drop = FALSE], nlevels)
   vars$varname <- rep(names(varnames),varnames)
   vars$modname <- rownames(vars)
-  vars$Type <- "Primary"
+  vars$Type <- "Active"
   vars$Class <- "Qualitative"
   
   ## Supplementary variables coordinates
@@ -51,7 +51,7 @@ prepare_results.MCA <- function(mca) {
 
   ## Contributions
   tmp <- data.frame(mca$var$contrib)
-  tmp <- tmp %>% mutate(modname = rownames(tmp), Type = "Primary", Class = "Qualitative") %>%
+  tmp <- tmp %>% mutate(modname = rownames(tmp), Type = "Active", Class = "Qualitative") %>%
     gather(Axis, Contrib, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
            Contrib = signif(Contrib, 3))
@@ -61,7 +61,7 @@ prepare_results.MCA <- function(mca) {
   ## Cos2
   tmp <- data.frame(mca$var$cos2)
   tmp$modname <- rownames(tmp)
-  tmp$Type <- "Primary"
+  tmp$Type <- "Active"
   tmp$Class <- "Qualitative"
   if (!is.null(mca$quali.sup)) {
     tmp_sup <- data.frame(mca$quali.sup$cos2)
@@ -79,7 +79,7 @@ prepare_results.MCA <- function(mca) {
   ## V.test  
   tmp <- data.frame(mca$var$v.test)
   tmp$modname <- rownames(tmp)
-  tmp$Type <- "Primary"
+  tmp$Type <- "Active"
   tmp$Class <- "Qualitative"  
   if (!is.null(mca$quali.sup)) {
     tmp_sup <- data.frame(mca$quali.sup$v.test)
@@ -99,7 +99,7 @@ prepare_results.MCA <- function(mca) {
   ## Variables eta2
   vareta2 <- data.frame(mca$var$eta2)
   vareta2$Variable <- rownames(vareta2)
-  vareta2$Type <- "Primary"
+  vareta2$Type <- "Active"
   vareta2$Class <- "Qualitative"
   if (!is.null(mca$quali.sup)) {
     vareta2_sup <- data.frame(mca$quali.sup$eta2)
@@ -115,7 +115,7 @@ prepare_results.MCA <- function(mca) {
   ## Individuals coordinates
   ind <- data.frame(mca$ind$coord)
   ind$Name <- rownames(ind)
-  ind$Type <- "Primary"
+  ind$Type <- "Active"
   if (!is.null(mca$ind.sup)) {
     tmp_sup <- data.frame(mca$ind.sup$coord)
     tmp_sup$Name <- rownames(tmp_sup)
@@ -128,7 +128,7 @@ prepare_results.MCA <- function(mca) {
 
   ## Individuals contrib
   tmp <- data.frame(mca$ind$contrib)
-  tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Primary") %>%
+  tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
     gather(Axis, Contrib, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
            Contrib = signif(Contrib, 3))
@@ -138,7 +138,7 @@ prepare_results.MCA <- function(mca) {
   ## Individuals Cos2
   tmp <- data.frame(mca$ind$cos2)
   tmp$Name <- rownames(tmp)
-  tmp$Type <- "Primary"
+  tmp$Type <- "Active"
   if (!is.null(mca$ind.sup)) {
     tmp_sup <- data.frame(mca$ind.sup$cos2)
     tmp_sup$Name <- rownames(tmp_sup)
