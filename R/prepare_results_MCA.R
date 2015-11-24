@@ -1,15 +1,15 @@
-##' Results preparation for a FactoMineR MCA analysis
-##'
-##' This function prepares MCA results to be used by \code{imca}. Not to be used directly.
-##'
+##' @rdname prepare_results
+##' @aliases prepare_results.MCA
 ##' @param acm an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import dplyr
 ##' @import tidyr
 
-mca_prepare.MCA <- function(mca) {
+prepare_results.MCA <- function(mca) {
 
+  if (!inherits(mca, "MCA")) stop("acm must be of class MCA")
+  
   vars <- data.frame(mca$var$coord)
   ## Axes names and inertia
   axes <- seq_len(ncol(acm$var$coord))

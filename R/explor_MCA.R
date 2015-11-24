@@ -1,9 +1,11 @@
+##' @rdname explor
+##' @aliases explor.MCA
+##' @param acm an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.
+##' @details 
 ##' Interface for multiple correspondence analysis
 ##'
 ##' This function launches a shiny app in a web browser in order to do
 ##' interactive visualisation and exploration of a multiple correspondence analysis.
-##'
-##' @param acm an object of class MCA, result of the \code{MCA()} function from the \code{FactoMineR} package.
 ##' @return
 ##' The function launches a shiny app in the system web browser.
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
@@ -14,13 +16,13 @@
 ##' @import tidyr
 ##' @import scatterD3
 ##' @import ggplot2
-##' @export imca
+##' @export
 
-imca <- function(mca) {
+explor.MCA <- function(mca) {
   
   if (!inherits(mca, "MCA")) stop("acm must be of class MCA")
   
-  res <- mca_prepare.MCA(mca)
+  res <- prepare_results(mca)
   has_sup_vars <- "Supplementary" %in% res$vars$Type 
   has_sup_ind <- "Supplementary" %in% res$ind$Type
 

@@ -16,4 +16,4 @@ Imports:
     ggplot2,
     scatterD3
 URL: https://github.com/juba/explor
-RoxygenNote: 4.1.1.9000
+RoxygenNote: 5.0.1

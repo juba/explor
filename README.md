@@ -13,7 +13,7 @@ devtools::install_github("juba/explor")
     
 ## Usage
 
-For the moment there is little you can do, but you can test the interactive interface for visualizing Multiple Correspondance Analysis from the `FactoMineR` package by using the `imca())` function.
+For the moment there is little you can do, but you can test the interactive interface for visualizing Multiple Correspondance Analysis from the `FactoMineR` package :
 
 Small example :
 
@@ -22,5 +22,5 @@ library(FactoMineR)
 library(explor)
 library(MASS)
 mca <- MCA(farms, quali.sup=4, graph=FALSE)
-imca(mca)
+explor(mca)
 ```
