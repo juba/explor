@@ -1,5 +1,7 @@
 # explor
 
+[![Travis-CI Build Status](https://travis-ci.org/juba/explor.svg?branch=master)](https://travis-ci.org/juba/explor)
+
 `explor` is an R package to allow interactive exploration of multivariate analysis results.
 
 For the moment, it is usable on two types of analyses :
