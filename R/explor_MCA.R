@@ -194,10 +194,12 @@ explor.MCA <- function(obj) {
                                                     value = FALSE),
                                       conditionalPanel(
                                         condition = 'input.ind_labels_show == true',
-                                        sliderInput("ind_labels_size", "Labels size", 5, 20, 9)
+                                        sliderInput("ind_labels_size", 
+                                                    gettext("Labels size", domain = "R-explor"),
+                                                    5, 20, 9)
                                       ),
-                                      if(has_sup_ind) ind_col_input,
-                                      if(has_sup_ind)
+                                      if (has_sup_ind) ind_col_input,
+                                      if (has_sup_ind)
                                         checkboxInput("ind_sup", 
                                                       HTML(gettext("Supplementary individuals", domain = "R-explor")),
                                                       value = TRUE),
