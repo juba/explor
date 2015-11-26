@@ -11,10 +11,10 @@ prepare_results.MCA <- function(obj) {
   
   vars <- data.frame(obj$var$coord)
   ## Axes names and inertia
-  axes <- seq_len(ncol(acm$var$coord))
+  axes <- seq_len(ncol(obj$var$coord))
   names(axes) <- paste("Axis", axes, paste0("(", head(round(obj$eig[, 2], 2), length(axes)),"%)"))
   ## Eigenvalues
-  eig <- data.frame(dim = 1:nrow(acm$eig), percent = acm$eig[,2])
+  eig <- data.frame(dim = 1:nrow(obj$eig), percent = obj$eig[,2])
   
   ## Variables data coordinates
   varnames <- sapply(obj$call$X[,obj$call$quali, drop = FALSE], nlevels)
