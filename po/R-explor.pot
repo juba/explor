@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2015-11-26 13:59\n"
+"POT-Creation-Date: 2015-11-26 15:16\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,5 +118,20 @@ msgstr ""
 msgid "Percentage of inertia"
 msgstr ""
 
+msgid "Variable"
+msgstr ""
+
+msgid "Cos2"
+msgstr ""
+
 msgid "Contribution:"
+msgstr ""
+
+msgid "obj must be of class PCA"
+msgstr ""
+
+msgid "PCA"
+msgstr ""
+
+msgid "Correlation:"
 msgstr ""

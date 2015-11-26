@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2015-11-26 13:59\n"
-"PO-Revision-Date: 2015-11-26 14:01+0100\n"
+"POT-Creation-Date: 2015-11-26 15:16+0100\n"
+"PO-Revision-Date: 2015-11-26 15:16+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -121,14 +121,23 @@ msgstr "Axe"
 msgid "Percentage of inertia"
 msgstr "Pourcentage d'inertie"
 
+msgid "Variable"
+msgstr "Variable"
+
+msgid "Cos2"
+msgstr "Cosinus carré"
+
 msgid "Contribution:"
 msgstr "Contribution :"
 
-#~ msgid "Variable"
-#~ msgstr "Variable"
+msgid "obj must be of class PCA"
+msgstr "obj doit être de classe PCA"
 
-#~ msgid "Cos2"
-#~ msgstr "Cosinus carré"
+msgid "PCA"
+msgstr "ACP"
+
+msgid "Correlation:"
+msgstr "Corrélation :"
 
 #~ msgid "explor - MCA"
 #~ msgstr "explor - ACM"
