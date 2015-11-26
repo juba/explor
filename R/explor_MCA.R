@@ -92,7 +92,8 @@ explor.MCA <- function(obj) {
                                                               "Contribution" = "Contrib",
                                                               "Cos2" = "Cos2"),
                                                   selected = "None"),
-                                      checkboxInput("var_sup", HTML("Supplementary variables"), value = TRUE),
+                                      if(has_sup_vars)
+                                        checkboxInput("var_sup", HTML("Supplementary variables"), value = TRUE),
                                       checkboxInput("var_transitions", HTML("Animations"), value = TRUE),
                                       tags$p(actionButton("imca-var-reset-zoom", 
                                                           title = "Reset zoom",
@@ -138,7 +139,7 @@ explor.MCA <- function(obj) {
                                       selectInput("ind_y", "Y axis", choices = res$axes, selected = "2"),
                                       sliderInput("ind_point_size", "Points size", 8, 128, 64),
                                       sliderInput("ind_opacity", "Points opacity", 0, 1, 0.5),
-                                      checkboxInput("ind_labels_show", HTML("Show labels"), value = FALSE),                                                                  conditionalPanel(
+                                      checkboxInput("ind_labels_show", HTML("Show labels"), value = FALSE),                                              conditionalPanel(
                                         condition = 'input.ind_labels_show == true',
                                         sliderInput("ind_labels_size", "Labels size", 5, 20, 9)
                                       ),
@@ -146,7 +147,8 @@ explor.MCA <- function(obj) {
                                                   choices = c("None" = "None",
                                                               "Individual type" = "Type"),
                                                   selected = "Type"),
-                                      checkboxInput("ind_sup", HTML("Supplementary individuals"), value = TRUE),
+                                      if(has_sup_ind)
+                                        checkboxInput("ind_sup", HTML("Supplementary individuals"), value = TRUE),
                                       checkboxInput("ind_transitions", HTML("Animations"), value = TRUE),          
                                       tags$p(actionButton("imca-ind-reset-zoom", 
                                                           title = "Reset zoom",
@@ -193,12 +195,12 @@ explor.MCA <- function(obj) {
         tmp_x <- res$vars %>% 
           filter(Axis == input$var_x) %>%
           select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (!input$var_sup)
+        if (is.null(input$var_sup) || !input$var_sup)
           tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- res$vars %>% 
           filter(Axis == input$var_y) %>%
           select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (!input$var_sup)
+        if (is.null(input$var_sup) || !input$var_sup)
           tmp_y <- tmp_y %>% filter(Type == 'Active')
         tmp <- tmp_x %>% 
           left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
@@ -252,12 +254,12 @@ explor.MCA <- function(obj) {
         tmp_x <- res$ind %>% 
           filter(Axis == input$ind_x) %>%
           select(Name, Type, Coord, Contrib, Cos2)
-        if (!input$ind_sup)
+        if (is.null(input$ind_sup) || !input$ind_sup)
           tmp_x <- tmp_x %>% filter(Type == "Active")
         tmp_y <- res$ind %>% 
           filter(Axis == input$ind_y) %>%
           select(Name, Type, Coord, Contrib, Cos2)
-        if (!input$ind_sup)
+        if (is.null(input$ind_sup) || !input$ind_sup)
           tmp_y <- tmp_y %>% filter(Type == "Active")
         tmp <- tmp_x %>% 
           left_join(tmp_y, by = c("Name", "Type")) %>%

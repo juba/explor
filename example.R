@@ -10,5 +10,7 @@ d <- hdv2003 %>%
 acm <- MCA(d, quali.sup = 8:9, ind.sup = 1:50, quanti.sup = 10:11, graph = FALSE)
 explor(acm)
 
-acm <- MCA(d, ind.sup = 1:50)
-imca(acm)
+d <- hdv2003 %>% 
+  select(sexe, nivetud, qualif, clso, relig, cuisine, bricol)
+acm <- MCA(d)
+explor(acm)
