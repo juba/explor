@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: explor 0.1\n"
+"POT-Creation-Date: 2015-11-26 12:41+0100\n"
+"PO-Revision-Date: 2015-11-26 14:01+0100\n"
+"Last-Translator: Julien Barnier <julien@nozav.org>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "obj must be of class MCA"
+msgstr "obj doit être de classe MCA"
+
+msgid "None"
+msgstr "Aucun"
+
+msgid "Variable name"
+msgstr "Nom de variable"
+
+msgid "Variable type"
+msgstr "Type de variable"
+
+msgid "Points color :"
+msgstr "Couleur :"
+
+msgid "Points symbol :"
+msgstr "Symboles :"
+
+msgid "Contribution"
+msgstr "Contribution"
+
+msgid "Squared cosinus"
+msgstr "Cosinus carré"
+
+msgid "Points size :"
+msgstr "Taille :"
+
+msgid "Individual type"
+msgstr "Type d'individu"
+
+msgid "MCA"
+msgstr "ACM"
+
+msgid "Eigenvalues"
+msgstr "Valeurs propres"
+
+msgid "Dimensions to plot"
+msgstr "Axes à afficher"
+
+msgid "Variables plot"
+msgstr "Variables - graphique"
+
+msgid "X axis"
+msgstr "Axe X"
+
+msgid "Y axis"
+msgstr "Axe Y"
+
+msgid "Labels size"
+msgstr "Taille des étiquettes"
+
+msgid "Supplementary variables"
+msgstr "Variables supplémentaires"
+
+msgid "Animations"
+msgstr "Animations"
+
+msgid "Reset zoom"
+msgstr "Réinitialiser le zoom"
+
+msgid "Export as SVG"
+msgstr "Exporter en SVG"
+
+msgid "Variables data"
+msgstr "Variables - données"
+
+msgid "Dimension"
+msgstr "Axe"
+
+msgid "Max p-value"
+msgstr "p-value maximale"
+
+msgid "Active variables"
+msgstr "Variables actives"
+
+msgid "Variables \\(\\eta^2\\)"
+msgstr "\\(\\eta^2\\) des variables actives"
+
+msgid "Supplementary variables \\(\\eta^2\\)"
+msgstr "\\(\\eta^2\\) des variables supplémentaires"
+
+msgid "Individuals plot"
+msgstr "Individus - graphique"
+
+msgid "Points size"
+msgstr "Taille des points"
+
+msgid "Points opacity"
+msgstr "Opacité des points"
+
+msgid "Show labels"
+msgstr "Afficher les étiquettes"
+
+msgid "Supplementary individuals"
+msgstr "Individus supplémentaires"
+
+msgid "Individuals data"
+msgstr "Individus - données"
+
+msgid "Active individuals"
+msgstr "Individus actifs"
+
+msgid "Axis"
+msgstr "Axe"
+
+msgid "Percentage of inertia"
+msgstr "Pourcentage d'inertie"
+
+msgid "Variable"
+msgstr "Variable"
+
+msgid "Cos2"
+msgstr "Cosinus carré"
+
+msgid "Contribution:"
+msgstr "Contribution :"
+
+#~ msgid "explor - MCA"
+#~ msgstr "explor - ACM"
+
+#~ msgid "Variables Î·Â²"
+#~ msgstr "η² des variables"
+
+#~ msgid "Supplementary variables Î·Â²"
+#~ msgstr "η² des variables supplémentaires"

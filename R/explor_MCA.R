@@ -22,29 +22,49 @@ explor.MCA <- function(obj) {
   ## results preparation
   res <- prepare_results(obj)
   
-  ## Precompute inputs depending of sup vars
+  ## Precompute inputs 
   has_sup_vars <- "Supplementary" %in% res$vars$Type 
-  var_col_input <- if (has_sup_vars) {
-      selectInput("var_col", "Points color :",
-            choices = c("None" = "None", "Variable name" = "Variable", "Variable type" = "Type"),
-            selected = "Variable")
+  if (has_sup_vars) {
+      choices <- c("None", "Variable", "Type")
+      names(choices) <- c(gettext("None", domain = "R-explor"),
+                          gettext("Variable name", domain = "R-explor"),
+                          gettext("Variable type", domain = "R-explor"))
+      symbol_selected <- "Type"
   } else {
-      selectInput("var_col", "Points color :",
-                  choices = c("None" = "None", "Variable name" = "Variable"),
-                  selected = "Variable")
+    choices <- c("None", "Variable")
+    names(choices) <- c(gettext("None", domain = "R-explor"),
+                        gettext("Variable name", domain = "R-explor"))
+    symbol_selected <- "None"
   }
-  var_symbol_input <- if (has_sup_vars) {
-    selectInput("var_symbol", "Points symbol :",
-              choices = c("None" = "None", "Variable name" = "Variable",  "Variable type" = "Type"),
-              selected = "Type")
-  } else {
-    selectInput("var_symbol", "Points symbol :",
-                choices = c("None" = "None", "Variable name" = "Variable"),
-                selected = "None")
-  }
+  ## Variable color input
+  var_col_input <- selectInput("var_col", gettext("Points color :", domain = "R-explor"),
+                               choices = choices,  selected = "Variable")
+  ## Variable symbol input
+  var_symbol_input <- selectInput("var_symbol", gettext("Points symbol :", domain = "R-explor"),
+                                  choices = choices, selected = symbol_selected)
+  ## Variable size input
+  var_size_choices <- c("None", "Contrib", "Cos2")
+  names(var_size_choices) <- c(gettext("None", domain = "R-explor"),
+                               gettext("Contribution", domain = "R-explor"),
+                               gettext("Squared cosinus", domain = "R-explor"))
+  var_size_input <- selectInput("var_size", 
+                                gettext("Points size :", domain = "R-explor"),
+                                choices = var_size_choices,
+                                selected = "None")
+  ## Individual color input
+  ind_col_choices <- c("None", "Type")
+  names(ind_col_choices) <- c(gettext("None", domain = "R-explor"),
+                              gettext("Individual type", domain = "R-explor"))
+  ind_col_input <- selectInput("ind_col", 
+                               gettext("Points color :", domain = "R-explor"),
+                               choices = ind_col_choices,
+                               selected = "Type")
+  
+  
   
   has_sup_ind <- "Supplementary" %in% res$ind$Type
 
+  ## Custom CSS
   css_string <- "
   .well label, 
   .well input, 
@@ -52,6 +72,7 @@ explor.MCA <- function(obj) {
   .well option,
   .well button,
   .well a,
+  div.option,
   input, label, select, option, .selectize-input {
       font-size: 11px !important;
       height: auto !important;
@@ -75,16 +96,18 @@ explor.MCA <- function(obj) {
   #varplot, #indplot { height: 90vh !important}
   #eigplot { max-width: 850px; }
   .legend .label { font-weight: normal !important; font-size: 10px !important;}
+  .navbar-nav>li>a { font-size: 13px; padding: 15px 10px;}
   "
   
   shiny::shinyApp(
-    ui = navbarPage("explor - MCA",
+    ui = navbarPage(gettext("MCA", domain = "R-explor"),
                   header = tags$head(
                   tags$style(HTML(css_string))),
-                  tabPanel("Eigenvalues",
+                  tabPanel(gettext("Eigenvalues", domain = "R-explor"),
                            fluidRow(
                              column(2,
-                                    wellPanel(numericInput("eig_nb", "Dimensions to plot", 
+                                    wellPanel(numericInput("eig_nb", 
+                                                           gettext("Dimensions to plot", domain = "R-explor"), 
                                                  min = 2, max = max(res$eig$dim), value = max(res$eig$dim), 
                                                  step = 1))),
                             column(10,
@@ -92,102 +115,116 @@ explor.MCA <- function(obj) {
                              
                              )),
                   
-                  tabPanel("Variables plot",
+                  tabPanel(gettext("Variables plot", domain = "R-explor"),
                            fluidRow(
                              column(2,
                                     wellPanel(
-                                      selectInput("var_x", "X axis", choices = res$axes, selected = "1"),
-                                      selectInput("var_y", "Y axis", choices = res$axes, selected = "2"),
-                                      sliderInput("var_lab_size", "Labels size", 4, 20, 10),
+                                      selectInput("var_x", 
+                                                  gettext("X axis", domain = "R-explor"), 
+                                                  choices = res$axes, selected = "1"),
+                                      selectInput("var_y", 
+                                                  gettext("Y axis", domain = "R-explor"), 
+                                                  choices = res$axes, selected = "2"),
+                                      sliderInput("var_lab_size", 
+                                                  gettext("Labels size", domain = "R-explor"),
+                                                  4, 20, 10),
                                       var_col_input,
                                       var_symbol_input,
-                                      selectInput("var_size", "Points size :",
-                                                  choices = c("None" = "None",
-                                                              "Contribution" = "Contrib",
-                                                              "Cos2" = "Cos2"),
-                                                  selected = "None"),
+                                      var_size_input,
                                       if(has_sup_vars)
-                                        checkboxInput("var_sup", HTML("Supplementary variables"), value = TRUE),
-                                      checkboxInput("var_transitions", HTML("Animations"), value = TRUE),
+                                        checkboxInput("var_sup", 
+                                                      HTML(gettext("Supplementary variables", domain = "R-explor")), 
+                                                      value = TRUE),
+                                      checkboxInput("var_transitions", 
+                                                    HTML(gettext("Animations", domain = "R-explor")),
+                                                    value = TRUE),
                                       tags$p(actionButton("imca-var-reset-zoom", 
-                                                          title = "Reset zoom",
+                                                          title = gettext("Reset zoom", domain = "R-explor"),
                                                           HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
                                              tags$a(id = "imca-var-svg-export", href = "#",
                                                     class = "btn btn-default", 
-                                                    title = "Export as SVG",
+                                                    title = gettext("Export as SVG", domain = "R-explor"),
                                                     HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),
                              column(10,
                                     scatterD3Output("varplot", height = "auto"))
                   )),
                   
-                  tabPanel("Variables data",
+                  tabPanel(gettext("Variables data", domain = "R-explor"),
                            fluidRow(
                              column(2,
                                     wellPanel(
-                                    selectInput("vardim", "Dimension", choices = res$axes, selected = "1"),
-                                    textInput("varpvalue", "Max p-value", 0.1))),
+                                    selectInput("vardim", 
+                                                gettext("Dimension", domain = "R-explor"),
+                                                choices = res$axes, selected = "1"),
+                                    textInput("varpvalue", 
+                                              gettext("Max p-value", domain = "R-explor"), 0.1))),
                              column(10,
-                                    # h4("Positive coordinates"),
-                                    # DT::dataTableOutput("vartablepos"),
-                                    # h4("Negative coordinates"),                   
-                                    # DT::dataTableOutput("vartableneg"),
-                                    h4("Active variables"),                   
+                                    h4(gettext("Active variables", domain = "R-explor")),                   
                                     DT::dataTableOutput("vartable"),
                                     if (has_sup_vars) {
-                                      list(h4("Supplementary variables"),                   
+                                      list(h4(gettext("Supplementary variables", domain = "R-explor")),
                                            DT::dataTableOutput("vartablesup"))
                                     },
-                                    h4("Variables eta2"),                   
+                                    h4(withMathJax(gettext("Variables \\(\\eta^2\\)", domain = "R-explor"))),
                                     DT::dataTableOutput("vartableeta2"),
                                     if (has_sup_vars) {
-                                      list(h4("Supplementary variables eta2"),                   
+                                      list(h4(gettext("Supplementary variables \\(\\eta^2\\)", domain = "R-explor")),
                                            DT::dataTableOutput("vartablesupeta2"))
                                     }
                              ))),
                   
-                  tabPanel("Individuals plot",
+                  tabPanel(gettext("Individuals plot", domain="R-explor"),
                            fluidRow(
                              column(2,
                                     wellPanel(
-                                      selectInput("ind_x", "X axis", choices = res$axes, selected = "1"),
-                                      selectInput("ind_y", "Y axis", choices = res$axes, selected = "2"),
-                                      sliderInput("ind_point_size", "Points size", 8, 128, 64),
-                                      sliderInput("ind_opacity", "Points opacity", 0, 1, 0.5),
-                                      checkboxInput("ind_labels_show", HTML("Show labels"), value = FALSE),                                              conditionalPanel(
+                                      selectInput("ind_x", 
+                                                  gettext("X axis", domain = "R-explor"),
+                                                  choices = res$axes, selected = "1"),
+                                      selectInput("ind_y", 
+                                                  gettext("Y axis", domain = "R-explor"),
+                                                  choices = res$axes, selected = "2"),
+                                      sliderInput("ind_point_size", 
+                                                  gettext("Points size", domain = "R-explor"),
+                                                  8, 128, 64),
+                                      sliderInput("ind_opacity", 
+                                                  gettext("Points opacity", domain = "R-explor"),
+                                                  0, 1, 0.5),
+                                      checkboxInput("ind_labels_show", 
+                                                    HTML(gettext("Show labels", domain = "R-explor")),
+                                                    value = FALSE),
+                                      conditionalPanel(
                                         condition = 'input.ind_labels_show == true',
                                         sliderInput("ind_labels_size", "Labels size", 5, 20, 9)
                                       ),
+                                      if(has_sup_ind) ind_col_input,
                                       if(has_sup_ind)
-                                        selectInput("ind_col", "Points color :",
-                                                    choices = c("None" = "None",
-                                                                "Individual type" = "Type"),
-                                                    selected = "Type"),
-                                      if(has_sup_ind)
-                                        checkboxInput("ind_sup", HTML("Supplementary individuals"), value = TRUE),
-                                      checkboxInput("ind_transitions", HTML("Animations"), value = TRUE),          
+                                        checkboxInput("ind_sup", 
+                                                      HTML(gettext("Supplementary individuals", domain = "R-explor")),
+                                                      value = TRUE),
+                                      checkboxInput("ind_transitions", 
+                                                    HTML(gettext("Animations", domain = "R-explor")),
+                                                    value = TRUE),          
                                       tags$p(actionButton("imca-ind-reset-zoom", 
-                                                          title = "Reset zoom",
+                                                          title = gettext("Reset zoom", domain = "R-explor"),
                                                           HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
                                              tags$a(id = "imca-ind-svg-export", href = "#",
                                                     class = "btn btn-default", 
-                                                    title = "Export as SVG",
+                                                    title = gettext("Export as SVG", domain = "R-explor"),
                                                     HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),                                 column(10,
                                     scatterD3Output("indplot")))),
                   
-                  tabPanel("Individuals data",
+                  tabPanel(gettext("Individuals data", domain = "R-explor"),
                            fluidRow(
                              column(2,
                                     wellPanel(
-                                    selectInput("inddim", "Dimension", choices = res$axes, selected = "Axis 1"))),
+                                    selectInput("inddim", 
+                                                gettext("Dimension", domain = "R-explor"),
+                                                choices = res$axes, selected = "Axis 1"))),
                              column(10,
-                                    # h4("Positive coordinates"),
-                                    # DT::dataTableOutput("indtablepos"),
-                                    # h4("Negative coordinates"),                   
-                                    # DT::dataTableOutput("indtableneg"),
-                                    h4("Active individuals"),
+                                    h4(gettext("Active individuals", domain = "R-explor")),
                                     DT::dataTableOutput("indtable"),
                                     if (has_sup_ind) {
-                                      list(h4("Supplementary individuals"),                   
+                                      list(h4(gettext("Supplementary individuals", domain = "R-explor")),
                                       DT::dataTableOutput("indtablesup"))
                                     }
                              )))
@@ -201,8 +238,8 @@ explor.MCA <- function(obj) {
         tmp$dim <- factor(tmp$dim)
         ggplot(data = tmp) +
           geom_bar(aes_string(x = "dim", y = "percent"), stat = "identity") +
-          scale_x_discrete("Axis") +
-          scale_y_discrete("Percentage of inertia")
+          scale_x_discrete(gettext("Axis", domain = "R-explor")) +
+          scale_y_discrete(gettext("Percentage of inertia", domain = "R-explor"))
       })
 
       ## Variables plot reactive data
@@ -217,17 +254,23 @@ explor.MCA <- function(obj) {
           select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
         if (is.null(input$var_sup) || !input$var_sup)
           tmp_y <- tmp_y %>% filter(Type == 'Active')
-        tmp <- tmp_x %>% 
+        tmp <- tmp_x %>%
           left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,
                  Cos2 = Cos2.x + Cos2.y,
                  tooltip = paste(paste0("<strong>", Level, "</strong>"),
-                                 paste0("<strong>Variable:</strong>", Variable),
-                                 paste0("<strong>x:</strong> ", Coord.x),
-                                 paste0("<strong>y:</strong> ", Coord.y),
-                                 paste0("<strong>Cos2:</strong> ", Cos2),
-                                 paste0("<strong>Contribution:</strong> ", Contrib),
-                                 sep = "<br />"))
+                                 paste0("<strong>",
+                                        gettext("Variable", domain = "R-explor"),
+                                        ":</strong> ", Variable),
+                                  paste0("<strong>x:</strong> ", Coord.x),
+                                  paste0("<strong>y:</strong> ", Coord.y),
+                                  paste0("<strong>",
+                                         gettext("Cos2", domain = "R-explor"),
+                                         ":</strong> ", Cos2),
+                                  paste0("<strong>",
+                                         gettext("Contribution:", domain = "R-explor"),
+                                         "</strong> ", Contrib),
+                                  sep = "<br />"))
         data.frame(tmp)
       })
       
@@ -276,15 +319,19 @@ explor.MCA <- function(obj) {
           select(Name, Type, Coord, Contrib, Cos2)
         if (is.null(input$ind_sup) || !input$ind_sup)
           tmp_y <- tmp_y %>% filter(Type == "Active")
-        tmp <- tmp_x %>% 
+        tmp <- tmp_x %>%
           left_join(tmp_y, by = c("Name", "Type")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,
                  Cos2 = Cos2.x + Cos2.y,
                  tooltip = paste(paste0("<strong>", Name, "</strong>"),
                                  paste0("<strong>x:</strong> ", Coord.x),
                                  paste0("<strong>y:</strong> ", Coord.y),
-                                 paste0("<strong>Cos2:</strong> ", Cos2),
-                                 paste0("<strong>Contribution:</strong> ", Contrib),
+                                 paste0("<strong>",
+                                        gettext("Squared cosinus", domain = "R-explor"),
+                                        ":</strong> ", Cos2),
+                                 paste0("<strong>",
+                                        gettext("Contribution:", domain = "R-explor"),
+                                        "</strong> ", Contrib),
                                  sep = "<br />"))
         data.frame(tmp)
       })
@@ -318,28 +365,6 @@ explor.MCA <- function(obj) {
       tableOptions_ind <- list(lengthMenu = c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
       tableOptions_eta2 <- list(lengthMenu = c(10,20,50), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = FALSE)
       
-      # ## Variables, positive coordinates
-      # varTablePos <- reactive({
-      #   res$vars %>% 
-      #     filter(Type == "Active", Axis == input$vardim, 
-      #            Coord >= 0, P.value <= as.numeric(input$varpvalue)) %>%
-      #     select(-Type, -Class, -Axis)
-      # })
-      # output$vartablepos <- DT::renderDataTable(
-      #   DT::datatable({varTablePos()}, 
-      #                 options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))
-      # 
-      # ## Variables, negative coordinates
-      # varTableNeg <- reactive({
-      #   res$vars %>% 
-      #     filter(Type == "Active", Axis == input$vardim, 
-      #            Coord < 0, P.value <= as.numeric(input$varpvalue)) %>%
-      #     select(-Type, -Class, -Axis)
-      # })
-      # output$vartableneg <- DT::renderDataTable(
-      #   DT::datatable({varTableNeg()}, 
-      #                 options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))      
-      ## Active variables
       varTable <- reactive({
         res$vars %>% 
           filter(Type == "Active", Axis == input$vardim, 
@@ -383,28 +408,6 @@ explor.MCA <- function(obj) {
         DT::datatable({varTableSupEta2()}, 
                       options=tableOptions_eta2,rownames=FALSE))
       
-      # ## Individuals, positive coordinates
-      # indTablePos <- reactive({
-      #   res$ind %>% 
-      #     filter(Type == "Active", Axis == input$inddim, 
-      #            Coord >= 0) %>%
-      #     select(-Type, -Axis)
-      # })
-      # output$indtablepos = DT::renderDataTable(
-      #   DT::datatable({indTablePos()}, 
-      #                 options=c(tableOptions_ind,list(order=list(list(1,'desc')))),rownames=FALSE))
-      # 
-      # ## Individuals, negative coordinates
-      # indTableNeg <- reactive({
-      #   res$ind %>% 
-      #     filter(Type == "Active", Axis == input$inddim, 
-      #            Coord < 0) %>%
-      #     select(-Type, -Axis)
-      # })
-      # output$indtableneg = DT::renderDataTable(
-      #   DT::datatable({indTableNeg()}, 
-      #                 options=c(tableOptions_ind,list(order=list(list(1,'asc')))),rownames=FALSE))
-
       ## Active individuals
       indTable <- reactive({
         res$ind %>% 

@@ -1,0 +1,122 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: explor 0.1\n"
+"POT-Creation-Date: 2015-11-26 13:59\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+msgid "obj must be of class MCA"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Variable name"
+msgstr ""
+
+msgid "Variable type"
+msgstr ""
+
+msgid "Points color :"
+msgstr ""
+
+msgid "Points symbol :"
+msgstr ""
+
+msgid "Contribution"
+msgstr ""
+
+msgid "Squared cosinus"
+msgstr ""
+
+msgid "Points size :"
+msgstr ""
+
+msgid "Individual type"
+msgstr ""
+
+msgid "MCA"
+msgstr ""
+
+msgid "Eigenvalues"
+msgstr ""
+
+msgid "Dimensions to plot"
+msgstr ""
+
+msgid "Variables plot"
+msgstr ""
+
+msgid "X axis"
+msgstr ""
+
+msgid "Y axis"
+msgstr ""
+
+msgid "Labels size"
+msgstr ""
+
+msgid "Supplementary variables"
+msgstr ""
+
+msgid "Animations"
+msgstr ""
+
+msgid "Reset zoom"
+msgstr ""
+
+msgid "Export as SVG"
+msgstr ""
+
+msgid "Variables data"
+msgstr ""
+
+msgid "Dimension"
+msgstr ""
+
+msgid "Max p-value"
+msgstr ""
+
+msgid "Active variables"
+msgstr ""
+
+msgid "Variables \\(\\eta^2\\)"
+msgstr ""
+
+msgid "Supplementary variables \\(\\eta^2\\)"
+msgstr ""
+
+msgid "Individuals plot"
+msgstr ""
+
+msgid "Points size"
+msgstr ""
+
+msgid "Points opacity"
+msgstr ""
+
+msgid "Show labels"
+msgstr ""
+
+msgid "Supplementary individuals"
+msgstr ""
+
+msgid "Individuals data"
+msgstr ""
+
+msgid "Active individuals"
+msgstr ""
+
+msgid "Axis"
+msgstr ""
+
+msgid "Percentage of inertia"
+msgstr ""
+
+msgid "Contribution:"
+msgstr ""
