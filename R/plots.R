@@ -7,8 +7,7 @@
 ##' @import ggplot2
 ##' @export
 
-ggind <-
-  function (obj, ...) {
+ggind <- function(obj, ...) {
     UseMethod("ggind")
   }
 
@@ -29,22 +28,23 @@ ggind <-
 ##' @export
 
 
-ggind.MCA <- function(obj, xax=1, yax=2, fac=NA, label=NULL, alpha=0.5, palette="Set1", ...) {
-  .tmp <- data.frame(x=obj$ind$coord[,xax],
-                     y=obj$ind$coord[,yax],
-                     fac=fac)
-  g <- ggplot(data=.tmp, aes(x=x, y=y)) + 
-    geom_vline(xintercept=0) +
-    geom_hline(yintercept=0) +
-    coord_fixed(ratio=1) +
+ggind.MCA <- function(obj, xax = 1, yax = 2, fac = NA, label = NULL, alpha = 0.5, palette = "Set1", ...) {
+  .tmp <- data.frame(x = obj$ind$coord[,xax],
+                     y = obj$ind$coord[,yax],
+                     fac = fac)
+  g <- ggplot(data = .tmp, aes_string(x = "x", y = "y")) + 
+    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0) +
+    coord_fixed(ratio = 1) +
     scale_x_continuous(paste0("Dim.",xax)) +
     scale_y_continuous(paste0("Dim.",yax))
-  if(all(is.na(fac))) {
-    g <- g +  geom_point(alpha=alpha)
+  if (all(is.na(fac))) {
+    g <- g +  geom_point(alpha = alpha)
   }
   else {
-    g <- g + geom_point(aes(col=factor(fac)), alpha=alpha) + stat_ellipse(aes(col=factor(fac)),level=0.95) +
-      scale_color_brewer(label, palette=palette)
+    g <- g + geom_point(aes(col = factor(fac)), alpha = alpha) + 
+      stat_ellipse(aes(col = factor(fac)),level = 0.95) +
+      scale_color_brewer(label, palette = palette)
   }
   g
 }
@@ -61,8 +61,8 @@ ggind.MCA <- function(obj, xax=1, yax=2, fac=NA, label=NULL, alpha=0.5, palette=
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import ggplot2
 ##' @export
-ggvar <-
-  function (obj, ...) {
+
+ggvar <- function(obj, ...) {
     UseMethod("ggvar")
   }
 
@@ -83,7 +83,7 @@ ggvar <-
 ##' @param palette palette for variables coloring
 ##' @export 
 
-ggvar.MCA <- function(obj, xax=1, yax=2, size=4, alpha=0.5, palette="Set1", ...) {
+ggvar.MCA <- function(obj, xax = 1, yax = 2, size = 4, alpha = 0.5, palette = "Set1", ...) {
   vars <- data.frame(obj$var$coord)
   varnames <- sapply(obj$call$X[,obj$call$quali], nlevels)
   vars$varnames <- rep(names(varnames),varnames)
@@ -91,13 +91,13 @@ ggvar.MCA <- function(obj, xax=1, yax=2, size=4, alpha=0.5, palette="Set1", ...)
   x <- paste0("Dim.",xax)
   y <- paste0("Dim.",yax)  
   
-  g <- ggplot(data=vars) +
-    geom_vline(xintercept=0) +
-    geom_hline(yintercept=0) +
+  g <- ggplot(data = vars) +
+    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0) +
     ##geom_point(aes_string(x=x,y=y,colour="varnames")) +
-    geom_text(aes_string(x=x,y=y,colour="varnames",label="modnames"),size=size) +
-    scale_color_brewer(palette=palette) +
-    coord_fixed(ratio=1)
+    geom_text(aes_string(x = x, y = y, colour = "varnames", label = "modnames"), size = size) +
+    scale_color_brewer(palette = palette) +
+    coord_fixed(ratio = 1)
   
   g  
 }
