@@ -12,5 +12,5 @@ explor(acm)
 
 d <- hdv2003 %>% 
   select(sexe, nivetud, qualif, clso, relig, cuisine, bricol)
-acm <- MCA(d)
+acm <- MCA(d, graph = FALSE)
 explor(acm)
