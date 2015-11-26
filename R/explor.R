@@ -1,3 +1,11 @@
+if (getRversion() >= "2.15.1")  
+  utils::globalVariables(c("Type", "Contrib.x", "Contrib.y", "Cos2.x", "Cos2.y", 
+                           "Level", "Variable", "Coord.x", "Coord.y", "Name", 
+                           "P.value", "Class", "Cor", "Cor.x", "Cor.y", "Coord", 
+                           "starts_with", "Contrib", "Cos2", "varname", "modname", 
+                           "V.test", "eta2"))
+
+
 ##' Interface for analysis results exploration
 ##'
 ##' This function launches a shiny app in a web browser in order to do
