@@ -19,8 +19,30 @@ explor.MCA <- function(obj) {
   
   if (!inherits(obj, "MCA")) stop("obj must be of class MCA")
   
+  ## results preparation
   res <- prepare_results(obj)
+  
+  ## Precompute inputs depending of sup vars
   has_sup_vars <- "Supplementary" %in% res$vars$Type 
+  var_col_input <- if (has_sup_vars) {
+      selectInput("var_col", "Points color :",
+            choices = c("None" = "None", "Variable name" = "Variable", "Variable type" = "Type"),
+            selected = "Variable")
+  } else {
+      selectInput("var_col", "Points color :",
+                  choices = c("None" = "None", "Variable name" = "Variable"),
+                  selected = "Variable")
+  }
+  var_symbol_input <- if (has_sup_vars) {
+    selectInput("var_symbol", "Points symbol :",
+              choices = c("None" = "None", "Variable name" = "Variable",  "Variable type" = "Type"),
+              selected = "Type")
+  } else {
+    selectInput("var_symbol", "Points symbol :",
+                choices = c("None" = "None", "Variable name" = "Variable"),
+                selected = "None")
+  }
+  
   has_sup_ind <- "Supplementary" %in% res$ind$Type
 
   css_string <- "
@@ -56,7 +78,7 @@ explor.MCA <- function(obj) {
   "
   
   shiny::shinyApp(
-    ui = navbarPage("iMCA",
+    ui = navbarPage("explor - MCA",
                   header = tags$head(
                   tags$style(HTML(css_string))),
                   tabPanel("Eigenvalues",
@@ -77,16 +99,8 @@ explor.MCA <- function(obj) {
                                       selectInput("var_x", "X axis", choices = res$axes, selected = "1"),
                                       selectInput("var_y", "Y axis", choices = res$axes, selected = "2"),
                                       sliderInput("var_lab_size", "Labels size", 4, 20, 10),
-                                      selectInput("var_col", "Points color :",
-                                                  choices = c("None" = "None",
-                                                              "Variable name" = "Variable",
-                                                              "Variable type" = "Type"),
-                                                  selected = "Variable"),
-                                      selectInput("var_symbol", "Points symbol :",
-                                                  choices = c("None" = "None",
-                                                              "Variable name" = "Variable",
-                                                              "Variable type" = "Type"),
-                                                  selected = "Type"),
+                                      var_col_input,
+                                      var_symbol_input,
                                       selectInput("var_size", "Points size :",
                                                   choices = c("None" = "None",
                                                               "Contribution" = "Contrib",
@@ -143,10 +157,11 @@ explor.MCA <- function(obj) {
                                         condition = 'input.ind_labels_show == true',
                                         sliderInput("ind_labels_size", "Labels size", 5, 20, 9)
                                       ),
-                                      selectInput("ind_col", "Points color :",
-                                                  choices = c("None" = "None",
-                                                              "Individual type" = "Type"),
-                                                  selected = "Type"),
+                                      if(has_sup_ind)
+                                        selectInput("ind_col", "Points color :",
+                                                    choices = c("None" = "None",
+                                                                "Individual type" = "Type"),
+                                                    selected = "Type"),
                                       if(has_sup_ind)
                                         checkboxInput("ind_sup", HTML("Supplementary individuals"), value = TRUE),
                                       checkboxInput("ind_transitions", HTML("Animations"), value = TRUE),          
@@ -276,7 +291,7 @@ explor.MCA <- function(obj) {
       
       ## Individuals plot
       output$indplot <- scatterD3::renderScatterD3({
-        col_var <- if (input$ind_col == "None") NULL else ind_data()[, input$ind_col]
+        col_var <- if (is.null(input$ind_col) || input$ind_col == "None") NULL else ind_data()[, input$ind_col]
         lab_var <- if (input$ind_labels_show) ind_data()[, "Name"] else NULL
         scatterD3::scatterD3(
           x = ind_data()[, "Coord.x"],
