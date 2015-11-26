@@ -3,3 +3,4 @@
 example.R
 ggcrosstab.R
 resources/
+^\.travis\.yml$
