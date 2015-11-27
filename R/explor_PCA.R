@@ -1,14 +1,5 @@
 ##' @rdname explor
 ##' @aliases explor.PCA
-##' @details 
-##' Interface for principal correspondence analysis
-##'
-##' This function launches a shiny app in a web browser in order to do
-##' interactive visualisation and exploration of a principal correspondence analysis.
-##' @return
-##' The function launches a shiny app in the system web browser.
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
-##' @seealso \code{\link[FactoMineR]{PCA}}
 ##' @import shiny
 ##' @import dplyr
 ##' @import scatterD3

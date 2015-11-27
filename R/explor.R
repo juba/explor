@@ -16,6 +16,23 @@ if (getRversion() >= "2.15.1")
 ##' The function launches a shiny app in the system web browser.
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
+##' @examples
+##' \dontrun{
+##' 
+##' require(FactoMineR)
+##' 
+##' ## MCA exploration
+##' data(hobbies)
+##' mca <- MCA(hobbies[1:1000,c(1:8,21:23)], quali.sup = 9:10, 
+##'            quanti.sup = 11, ind.sup = 1:100, graph = FALSE)
+##' explor(mca)
+##' 
+##' ## PCA exploration
+##' data(decathlon)
+##' d <- decathlon[,1:12]
+##' pca <- PCA(d, quanti.sup = 11:12, graph = FALSE)
+##' explor(pca)
+##' }
 
 explor <- function(obj) {
   UseMethod("explor")

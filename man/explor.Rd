@@ -17,36 +17,30 @@ explor(obj)
 }
 \value{
 The function launches a shiny app in the system web browser.
-
-The function launches a shiny app in the system web browser.
-
-The function launches a shiny app in the system web browser.
 }
 \description{
 This function launches a shiny app in a web browser in order to do
 interactive visualisation and exploration of an analysis results.
 }
-\details{
-Interface for multiple correspondence analysis
+\examples{
+\dontrun{
 
-This function launches a shiny app in a web browser in order to do
-interactive visualisation and exploration of a multiple correspondence analysis.
+require(FactoMineR)
 
-Interface for principal correspondence analysis
+## MCA exploration
+data(hobbies)
+mca <- MCA(hobbies[1:1000,c(1:8,21:23)], quali.sup = 9:10, 
+           quanti.sup = 11, ind.sup = 1:100, graph = FALSE)
+explor(mca)
 
-This function launches a shiny app in a web browser in order to do
-interactive visualisation and exploration of a principal correspondence analysis.
+## PCA exploration
+data(decathlon)
+d <- decathlon[,1:12]
+pca <- PCA(d, quanti.sup = 11:12, graph = FALSE)
+explor(pca)
+}
 }
 \author{
 Julien Barnier <julien.barnier@ens-lyon.fr>
-
-Julien Barnier <julien.barnier@ens-lyon.fr>
-
-Julien Barnier <julien.barnier@ens-lyon.fr>
-}
-\seealso{
-\code{\link[FactoMineR]{MCA}}
-
-\code{\link[FactoMineR]{PCA}}
 }
 

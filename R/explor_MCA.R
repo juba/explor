@@ -1,14 +1,5 @@
 ##' @rdname explor
 ##' @aliases explor.MCA
-##' @details 
-##' Interface for multiple correspondence analysis
-##'
-##' This function launches a shiny app in a web browser in order to do
-##' interactive visualisation and exploration of a multiple correspondence analysis.
-##' @return
-##' The function launches a shiny app in the system web browser.
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
-##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import shiny
 ##' @import dplyr
 ##' @import scatterD3
