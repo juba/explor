@@ -25,6 +25,7 @@ The package is not on CRAN yet, so you'll have to install it from GitHub :
 
 ```r
 install.packages("devtools")
+devtools::install_github("juba/scatterD3")
 devtools::install_github("juba/explor")
 ```
     
