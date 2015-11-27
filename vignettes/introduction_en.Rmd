@@ -1,0 +1,71 @@
+---
+title: "Interactive results exploration with explor"
+author: "Julien Barnier"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+  fig_width: 5
+  toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+  
+## explor
+
+`explor` is an R package to allow interactive exploration of multivariate analysis results.
+
+For now on, it is usable on two types of analyses :
+
+Analysis | Function  | Package | Notes
+------------- | ------------- | ---------- | --------
+Principal component analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | Qualitative supplementary variables are not taken into account
+Multiple correspondence analysis  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
+
+The philosophy behind `explor` is to only be an exploration interface which doesn't really do anything by itself : analysis and computations are made in your R script, and `explor` only helps you visualizing the results. As such it can not disrupt code execution and reproducibility.
+
+## Features
+
+For each type of analysis, `explor` launches a `shiny` interactive Web interface which is displayed inside RStudio or in your system Web browser. This interface provides a series of tabs with interactive data and graphics.
+
+These data and graphics are displayed with several "interactive" features. Numerical results are shown as dynamic tables which are sortable and searchable thanks to the `DT` package. Most graphics are generated with the `scatterD3` package which provides the following features :
+
+- zoom with your mousewheel
+- pan with your mouse
+- tooltips when hovering points
+- points highlighting when hovering legend items
+- draggable labels
+- ability to export the currently displayed plot as an SVG file
+- fully updatable plot, which means than any change in the interface controls leads to an animated transition, which can give some interesting visual clues.
+
+
+
+## Usage
+
+Usage is very simple : you just apply the `explor()` function to the result object of one of the supported analysis functions.
+
+Example with a principal correspondence analysis from `FactoMineR::PCA` :
+
+```r
+library(FactoMineR)
+data(decathlon)
+pca <- PCA(decathlon[,1:12], quanti.sup = 11:12, graph = FALSE)
+explor(pca)
+```
+
+Example with a multiple correspondence analysis from `FactoMineR::MCA` :
+
+```r
+library(FactoMineR)
+data(hobbies)
+mca <- MCA(hobbies[1:1000, c(1:8,21:23)], quali.sup = 9:10, 
+           quanti.sup = 11, ind.sup = 1:100)
+explor(mca)
+```
+
+
+## Feedback
+
+`explor` is quite a young package, so there certainly are bugs or problems. Thanks for reporting them by mail or by opening an [issue on GitHub](https://github.com/juba/explor/issues)

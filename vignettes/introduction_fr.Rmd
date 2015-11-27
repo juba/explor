@@ -1,0 +1,72 @@
+---
+title: "Exploration interactive de résultats d'ACP/ACM avec `explor`"
+author: "Julien Barnier"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+  fig_width: 5
+  toc: true
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+  
+## explor
+
+`explor` est un package R qui permet l'exploration "interactive" des résultats d'une analyse exploratoire multidimensionnelle.
+
+Pour le moment il est utilisable avec deux types d'analyses :
+
+Méthode                                     | Fonction  | Package | Notes
+-------------------------------------------- | ---- | ---------------------------------------- | --------
+Analyse en composantes principales (ACP)     | PCA  | [FactoMineR](http://factominer.free.fr/) | Les variables supplémentaires qualitatives ne sont pas traitées
+Analyse des correspondances multiples (ACM)  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
+
+La philosophie d'`explor` est de n'être qu'une interface de visualisation, et de ne rien "exécuter" par elle-même. Les analyses et calculs se font dans votre script R, et `explor` vous aide seulement à visualiser leurs résultats. L'idée est de conserver l'ensemble des commandes dans les scripts et de ne pas risquer d'être un obstacle à la reproductibilité des analyses.
+
+## Fonctionnalités
+
+Pour chaque méthode, `explor` lance une interface Web interactive qui s'affiche soit directement dans RStudio, soit dans votre navigateur Web. Cette interface comprend une série d'onglets présentant différents tableaux et graphiques. Ceux-ci sont, autant que possible, "interactifs" : les résultats numériques sont affichés sous forme de tableaux dynamiques triables et filtrables (grâce au package `DT`), et les graphiques, générés pour la plupart par le package `scatterD3`, ont les fonctionnalités suivantes :
+
+- zoom avec la molette de la souris
+- déplacement avec la souris
+- affichage de *tooltips* au survol des points
+- mise en valeur des données correspondantes au survol des items de légendes
+- étiquettes déplaçables
+- possibilité d'export du graphique actuel au format SVG
+- les modifications du graphique se font sous la forme de transitions animées
+
+À noter que les interfaces sont traduites en français.
+
+
+## Utilisation
+
+L'utilisation du package est très simple : il suffit d'appliquer la fonction `explor()` à l'objet résultant d'une méthode prise en charge.
+
+Exemple avec une ACP faite avec `FactoMineR::PCA` :
+
+```r
+library(FactoMineR)
+data(decathlon)
+pca <- PCA(decathlon[,1:12], quanti.sup = 11:12, graph = FALSE)
+explor(pca)
+```
+
+Exemple avec une ACM faite avec `FactoMineR::MCA` :
+
+```r
+library(FactoMineR)
+data(hobbies)
+mca <- MCA(hobbies[1:1000, c(1:8,21:23)], quali.sup = 9:10, 
+           quanti.sup = 11, ind.sup = 1:100)
+explor(mca)
+```
+
+
+
+
+## Bugs et commentaires
+
+`explor` est un package très récent, qui comporte donc certainement des bugs et autres problèmes. N'hésitez pas à les signaler par mail ou en créant une [*issue* sur GitHub](https://github.com/juba/explor/issues).
