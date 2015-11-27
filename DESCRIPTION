@@ -8,14 +8,15 @@ License: GPL (>= 2)
 Encoding: UTF-8
 Title: Interactive Interfaces for Analysis Results Exploration
 Description: Shiny interfaces and graphical functions for multivariate analysis results exploration.
-Imports:
+Imports: 
     shiny (>= 0.11),
     DT,
     dplyr,
     tidyr,
     ggplot2,
     scatterD3 (>= 0.5)
-Suggests:
-    FactoMineR
+Suggests: 
+    FactoMineR,
+    testthat
 URL: https://github.com/juba/explor
 RoxygenNote: 5.0.1
