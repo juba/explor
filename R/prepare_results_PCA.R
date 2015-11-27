@@ -49,7 +49,7 @@ prepare_results.PCA <- function(obj) {
 
   ## Contributions
   tmp <- data.frame(obj$var$contrib)
-  tmp <- tmp %>% mutate(varname = rownames(tmp), Type = "Active", Class = "Qualitative") %>%
+  tmp <- tmp %>% mutate(varname = rownames(tmp), Type = "Active", Class = "Quantitative") %>%
     gather(Axis, Contrib, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
            Contrib = signif(Contrib, 3))
@@ -78,7 +78,7 @@ prepare_results.PCA <- function(obj) {
   tmp <- data.frame(obj$var$cor)
   tmp$varname <- rownames(tmp)
   tmp$Type <- "Active"
-  tmp$Class <- "Qualitative"  
+  tmp$Class <- "Quantitative"  
   if (!is.null(obj$quanti.sup)) {
     tmp_sup <- data.frame(obj$quanti.sup$cor)
     tmp_sup$varname <- rownames(tmp_sup)
