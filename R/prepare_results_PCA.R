@@ -4,6 +4,7 @@
 ##' @seealso \code{\link[FactoMineR]{PCA}}
 ##' @import dplyr
 ##' @importFrom tidyr gather
+##' @export
 
 prepare_results.PCA <- function(obj) {
 

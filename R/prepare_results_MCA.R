@@ -4,6 +4,7 @@
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import dplyr
 ##' @importFrom tidyr gather
+##' @export
 
 prepare_results.MCA <- function(obj) {
 

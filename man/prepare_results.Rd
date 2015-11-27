@@ -4,7 +4,7 @@
 \alias{prepare_results}
 \alias{prepare_results.MCA}
 \alias{prepare_results.PCA}
-\title{Results preparation for a FactoMineR MCA analysis}
+\title{Analysis results preparation}
 \usage{
 prepare_results(obj)
 
@@ -16,7 +16,7 @@ prepare_results(obj)
 \item{obj}{object containing analysis results}
 }
 \description{
-This function prepares MCA results to be used by \code{explor}. Not to be used directly.
+This function prepares results to be used by \code{explor}. Not to be used directly.
 }
 \author{
 Julien Barnier <julien.barnier@ens-lyon.fr>
