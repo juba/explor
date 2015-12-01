@@ -17,7 +17,7 @@ prepare_results.MCA <- function(obj) {
   ## Eigenvalues
   eig <- data.frame(dim = 1:nrow(obj$eig), percent = obj$eig[,2])
   
-  ## Variables data coordinates
+  ## Variables coordinates
   varnames <- sapply(obj$call$X[,obj$call$quali, drop = FALSE], nlevels)
   vars$varname <- rep(names(varnames),varnames)
   vars$modname <- rownames(vars)
@@ -76,26 +76,21 @@ prepare_results.MCA <- function(obj) {
   
   vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
 
-  ## V.test  
-  tmp <- data.frame(obj$var$v.test)
-  tmp$modname <- rownames(tmp)
-  tmp$Type <- "Active"
-  tmp$Class <- "Qualitative"  
-  if (!is.null(obj$quali.sup)) {
-    tmp_sup <- data.frame(obj$quali.sup$v.test)
-    tmp_sup$modname <- rownames(tmp_sup)
-    tmp_sup$Type <- "Supplementary"
-    tmp_sup$Class <- "Qualitative"    
-    tmp <- tmp %>% bind_rows(tmp_sup)
-  }
-  tmp <- tmp %>% gather(Axis, V.test, starts_with("Dim.")) %>%
-    mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-           P.value = signif(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
-           V.test = signif(V.test, 2))
+  ## V.test for supplementary qualitative variables
+  if (!is.null(obj$quali.sup)) {  
+    tmp <- data.frame(obj$quali.sup$v.test)
+    tmp$modname <- rownames(tmp)
+    tmp$Type <- "Supplementary"
+    tmp$Class <- "Qualitative"    
+    tmp <- tmp %>% gather(Axis, V.test, starts_with("Dim.")) %>%
+      mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
+             P.value = signif(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
+             V.test = signif(V.test, 2))
   
-  vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis")) %>% 
-    rename(Variable = varname, Level = modname)
-
+    vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis")) %>% 
+      rename(Variable = varname, Level = modname)
+  }
+  
   ## Variables eta2
   vareta2 <- data.frame(obj$var$eta2)
   vareta2$Variable <- rownames(vareta2)
