@@ -7,5 +7,8 @@
 ##' @export
 ##' 
 prepare_results <- function(obj) {
+  old_scipen <- options("scipen")
+  options(scipen=1000)
   UseMethod("prepare_results") 
+  options(scipen=old_scipen)
 }

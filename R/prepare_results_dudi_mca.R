@@ -52,7 +52,7 @@ prepare_results.acm <- function(obj) {
 
   vars <- vars %>% gather(Axis, Coord, starts_with("Comp")) %>%
     mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
-           Coord = signif(Coord, 3))
+           Coord = round(Coord, 3))
 
   ## Contributions
   tmp <- data.frame(inertia$col.abs / 100)
@@ -61,7 +61,7 @@ prepare_results.acm <- function(obj) {
                         Type = "Active", Class = "Qualitative") %>%
     gather(Axis, Contrib, starts_with("Comp")) %>%
     mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
-           Contrib = signif(Contrib, 3))
+           Contrib = round(Contrib, 3))
     
   vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
   
@@ -74,7 +74,7 @@ prepare_results.acm <- function(obj) {
 
   tmp <- tmp %>% gather(Axis, Cos2, starts_with("Comp")) %>%
     mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
-           Cos2 = signif(Cos2, 2))
+           Cos2 = round(Cos2, 3))
   
   vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
   
@@ -102,14 +102,14 @@ prepare_results.acm <- function(obj) {
   }
   ind <- ind %>% gather(Axis, Coord, starts_with("Axis")) %>%
     mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
-           Coord = signif(Coord, 3))
+           Coord = round(Coord, 3))
 
   ## Individuals contrib
   tmp <- data.frame(inertia$row.abs / 100)
   tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
     gather(Axis, Contrib, starts_with("Axis")) %>%
     mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
-           Contrib = signif(Contrib, 3))
+           Contrib = round(Contrib, 3))
   
   ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
   
@@ -117,17 +117,11 @@ prepare_results.acm <- function(obj) {
   tmp <- data.frame(inertia$row.rel / 10000)
   tmp$Name <- rownames(tmp)
   tmp$Type <- "Active"
-  # if (!is.null(obj$ind.sup)) {
-  #   tmp_sup <- data.frame(obj$ind.sup$cos2)
-  #   tmp_sup$Name <- rownames(tmp_sup)
-  #   tmp_sup$Type <- "Supplementary"
-  #   tmp <- tmp %>% bind_rows(tmp_sup)
-  # }
   tmp <- tmp %>% select(-con.tra) %>%
     gather(Axis, Cos2, starts_with("Axis")) %>%
     mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
-           Cos2 = signif(Cos2, 2))
-  
+           Cos2 = round(Cos2, 3))
+
   ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
   
   return(list(vars = vars, ind = ind, eig = eig, axes = axes, vareta2 = vareta2))

@@ -47,14 +47,14 @@ prepare_results.MCA <- function(obj) {
 
   vars <- vars %>% gather(Axis, Coord, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-           Coord = signif(Coord, 3))
+           Coord = round(Coord, 3))
 
   ## Contributions
   tmp <- data.frame(obj$var$contrib)
   tmp <- tmp %>% mutate(modname = rownames(tmp), Type = "Active", Class = "Qualitative") %>%
     gather(Axis, Contrib, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-           Contrib = signif(Contrib, 3))
+           Contrib = round(Contrib, 3))
     
   vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
   
@@ -72,7 +72,7 @@ prepare_results.MCA <- function(obj) {
   }
   tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-           Cos2 = signif(Cos2, 2))
+           Cos2 = round(Cos2, 2))
   
   vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
 
@@ -84,8 +84,8 @@ prepare_results.MCA <- function(obj) {
     tmp$Class <- "Qualitative"    
     tmp <- tmp %>% gather(Axis, V.test, starts_with("Dim.")) %>%
       mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-             P.value = signif(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
-             V.test = signif(V.test, 2))
+             P.value = round(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
+             V.test = round(V.test, 3))
   
     vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis")) %>% 
       rename(Variable = varname, Level = modname)
@@ -119,14 +119,14 @@ prepare_results.MCA <- function(obj) {
   }
   ind <- ind %>% gather(Axis, Coord, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-           Coord = signif(Coord, 3))
+           Coord = round(Coord, 3))
 
   ## Individuals contrib
   tmp <- data.frame(obj$ind$contrib)
   tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
     gather(Axis, Contrib, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-           Contrib = signif(Contrib, 3))
+           Contrib = round(Contrib, 3))
   
   ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
   
@@ -142,7 +142,7 @@ prepare_results.MCA <- function(obj) {
   }
   tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-           Cos2 = signif(Cos2, 2))
+           Cos2 = round(Cos2, 3))
   
   ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
   
