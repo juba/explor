@@ -1,9 +1,5 @@
 ##' @rdname explor
 ##' @aliases explor.PCA
-##' @import shiny
-##' @import dplyr
-##' @import scatterD3
-##' @import ggplot2
 ##' @export
 
 explor.PCA <- function(obj) {
@@ -13,19 +9,88 @@ explor.PCA <- function(obj) {
   ## results preparation
   res <- prepare_results(obj)
   
+  ## Settings
+  settings <- list()
+  settings$var_columns <- c("Variable", "Coord", "Contrib", "Cos2", "Cor")
+  settings$varsup_columns <- c("Variable", "Coord", "Cos2", "Cor")
+  settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
+  settings$indsup_columns <- c("Name", "Coord", "Cos2")
+  settings$scale_unit <- obj$call$scale.unit
+  
+  ## Launch interface
+  explor_pca(res, settings)
+  
+}
+
+
+##' @rdname explor
+##' @aliases explor.pca
+##' @details 
+##' If you want to display supplementary individuals or variables and you're using
+##' the \code{\link[ade4]{dudi.pca}} function, you can add the coordinates of 
+##' \code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or 
+##' \code{supv} elements added to your \code{\link[ade4]{dudi.pca}} result (See example).
+##' @export
+##' @examples
+##' \dontrun{
+##' 
+##' library(ade4)
+##' data(deug)
+##' d <- deug$tab
+##' sup_var <- d[-(1:10), 8:9]
+##' sup_ind <- d[1:10, -(8:9)]
+##' pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
+##' supi <- suprow(pca, sup_ind)
+##' pca$supi <- supi$lisup
+##' supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
+##' pca$supv <- supv$cosup
+##' explor(pca)
+##' }
+
+
+explor.pca <- function(obj) {
+  
+  if (!inherits(obj, "pca") || !inherits(obj, "dudi")) stop("obj must be of class dudi and pca")
+  
+  ## results preparation
+  res <- prepare_results(obj)
+  
+  ## Settings
+  settings <- list()
+  settings$var_columns <- c("Variable", "Coord", "Contrib", "Cos2")
+  settings$varsup_columns <- c("Variable", "Coord")
+  settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
+  settings$indsup_columns <- c("Name", "Coord")
+  settings$scale_unit <- obj$call$scale 
+  
+
+  ## Launch interface
+  explor_pca(res, settings)
+  
+}
+
+
+
+##' @import shiny
+##' @import dplyr
+##' @import scatterD3
+##' @import ggplot2
+
+explor_pca <- function(res, settings) {
+  
   ## Precompute inputs 
   has_sup_vars <- "Supplementary" %in% res$vars$Type 
-  if (has_sup_vars) {
-      choices <- c("None", "Type")
-      names(choices) <- c(gettext("None", domain = "R-explor"),
-                          gettext("Variable type", domain = "R-explor"))
-  } else {
-    choices <- c("None", "Variable")
-    names(choices) <- c(gettext("None", domain = "R-explor"))
-  }
   ## Variable color input
-  var_col_input <- selectInput("var_col", gettext("Points color :", domain = "R-explor"),
-                               choices = choices,  selected = "Type")
+  if (has_sup_vars) {
+    choices <- c("None", "Type")
+    names(choices) <- c(gettext("None", domain = "R-explor"),
+                        gettext("Variable type", domain = "R-explor"))
+    var_col_input <- selectInput("var_col", 
+                                 gettext("Points color :", domain = "R-explor"),
+                                 choices = choices,  selected = "Type")
+  } else {
+    var_col_input <- NULL
+  }
 
   ## Individual color input
   ind_col_choices <- c("None", "Type")
@@ -104,8 +169,8 @@ explor.PCA <- function(obj) {
                                       sliderInput("var_lab_size", 
                                                   gettext("Labels size", domain = "R-explor"),
                                                   4, 20, 10),
-                                      var_col_input,
-                                      if(has_sup_vars)
+                                      if (has_sup_vars) var_col_input,
+                                      if (has_sup_vars)
                                         checkboxInput("var_sup", 
                                                       HTML(gettext("Supplementary variables", domain = "R-explor")), 
                                                       value = TRUE),
@@ -214,21 +279,19 @@ explor.PCA <- function(obj) {
       var_data <- reactive({
         tmp_x <- res$vars %>% 
           filter(Axis == input$var_x) %>%
-          select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Cor")
+          select_("Variable", "Type", "Class", "Coord", "Contrib", "Cos2")
         if (is.null(input$var_sup) || !input$var_sup)
           tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- res$vars %>% 
           filter(Axis == input$var_y) %>%
-          select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Cor")
+          select_("Variable", "Type", "Class", "Coord", "Contrib", "Cos2")
         if (is.null(input$var_sup) || !input$var_sup)
           tmp_y <- tmp_y %>% filter(Type == 'Active')
         tmp <- tmp_x %>%
-          left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
+          left_join(tmp_y, by = c("Variable", "Type", "Class")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,
                  Cos2 = Cos2.x + Cos2.y,
-                 Cor = Cor.x + Cor.y,
-                 tooltip = paste(paste0("<strong>", Level, "</strong>"),
-                                 paste0("<strong>",
+                 tooltip = paste(paste0("<strong>",
                                         gettext("Variable", domain = "R-explor"),
                                         ":</strong> ", Variable),
                                   paste0("<strong>x:</strong> ", Coord.x),
@@ -239,16 +302,13 @@ explor.PCA <- function(obj) {
                                   paste0("<strong>",
                                          gettext("Contribution:", domain = "R-explor"),
                                          "</strong> ", Contrib),
-                                 paste0("<strong>",
-                                        gettext("Correlation:", domain = "R-explor"),
-                                        "</strong> ", Cor),
                                   sep = "<br />"))
         data.frame(tmp)
       })
       
       ## Variables plot
       output$varplot <- scatterD3::renderScatterD3({
-        col_var <- if (input$var_col == "None") NULL else var_data()[, input$var_col]
+        col_var <- if (is.null(input$var_col) || input$var_col == "None") NULL else var_data()[, input$var_col]
         type_var <- ifelse(var_data()[,"Class"] == "Quantitative", "arrow", "point")
         scatterD3::scatterD3(
           x = var_data()[, "Coord.x"],
@@ -262,9 +322,9 @@ explor.PCA <- function(obj) {
           col_lab = input$var_col,
           tooltip_text = var_data()[, "tooltip"],
           type_var = type_var,
-          unit_circle = obj$call$scale.unit,
-          xlim = if (obj$call$scale.unit) c(-1.1, 1.1) else NULL,
-          ylim = if (obj$call$scale.unit) c(-1.1, 1.1) else NULL,          
+          unit_circle = settings$scale_unit,
+          xlim = if (settings$scale_unit) c(-1.1, 1.1) else NULL,
+          ylim = if (settings$scale_unit) c(-1.1, 1.1) else NULL,          
           key_var = var_data()[, "Variable"],
           fixed = TRUE,
           transitions = input$var_transitions,
@@ -337,43 +397,43 @@ explor.PCA <- function(obj) {
       varTable <- reactive({
         res$vars %>% 
           filter(Type == "Active", Axis == input$vardim) %>%
-          select(-Type, -Level, -Class, -Axis)
+          select_(.dots = settings$var_columns)
       })
       output$vartable <- DT::renderDataTable(
         DT::datatable({varTable()}, 
-                      options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))
+                      options = c(tableOptions_var,list(order = list(list(2,'desc')))), rownames = FALSE))
       
       ## Supplementary variables
       varTableSup <- reactive({
         res$vars %>% 
           filter(Type == "Supplementary", Axis == input$vardim, 
                  Class == "Quantitative") %>%
-          select(-Type, -Level, -Axis, -Contrib)
+          select_(.dots = settings$varsup_columns)
       })
       output$vartablesup <- DT::renderDataTable(
         DT::datatable({varTableSup()}, 
-                      options = c(tableOptions_var,list(order = list(list(2,'desc')))),rownames = FALSE))
+                      options = c(tableOptions_var,list(order = list(list(1,'desc')))),rownames = FALSE))
       
       ## Active individuals
       indTable <- reactive({
         res$ind %>% 
           filter(Type == "Active", Axis == input$inddim) %>%
-          select(-Type, -Axis)
+          select_(.dots = settings$ind_columns)
       })
       output$indtable = DT::renderDataTable(
         DT::datatable({indTable()}, 
-                      options=c(tableOptions_ind,list(order=list(list(2,'desc')))),rownames=FALSE))
+                      options = c(tableOptions_ind,list(order = list(list(2,'desc')))), rownames = FALSE))
 
       
       ## Supplementary individuals
       indTableSup <- reactive({
         res$ind %>% 
           filter(Type == "Supplementary", Axis == input$inddim) %>%
-          select(-Type, -Axis, -Contrib)
+          select_(.dots = settings$indsup_columns)
       })
       output$indtablesup = DT::renderDataTable(
         DT::datatable({indTableSup()}, 
-                      options = c(tableOptions_ind, list(order = list(list(1,'asc')))), rownames = FALSE))
+                      options = c(tableOptions_ind, list(order = list(list(1,'desc')))), rownames = FALSE))
       
           
     }

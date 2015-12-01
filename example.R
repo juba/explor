@@ -23,9 +23,8 @@ library(explor)
 
 data(decathlon)
 d <- decathlon[,1:12]
-pca <- PCA(d, quanti.sup = 11:12, graph = FALSE)
+pca <- PCA(d, quanti.sup = 11:12,  ind.sup=1:4, graph = FALSE, scale.unit = FALSE)
 explor(pca)
-
 
 library(FactoMineR)
 library(explor)
@@ -36,6 +35,19 @@ mca <- MCA(hobbies[1:1000,c(1:8,21:23)],quali.sup = 9:10, quanti.sup = 11, ind.s
 explor(mca)
 
 ## Ade4 examples --------------------------------------------------------------
+
+library(ade4)
+data(deug)
+d <- deug$tab
+sup_var <- d[-(1:10), 8:9]
+sup_ind <- d[1:10, -(8:9)]
+pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
+supi <- suprow(pca, sup_ind)
+pca$supi <- supi$lisup
+supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
+pca$supv <- supv$cosup
+explor(pca)
+
 
 library(ade4)
 data(banque)
