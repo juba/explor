@@ -5,6 +5,7 @@
 \alias{explor.MCA}
 \alias{explor.PCA}
 \alias{explor.acm}
+\alias{explor.pca}
 \title{Interface for analysis results exploration}
 \usage{
 explor(obj)
@@ -14,6 +15,8 @@ explor(obj)
 \method{explor}{acm}(obj)
 
 \method{explor}{PCA}(obj)
+
+\method{explor}{pca}(obj)
 }
 \arguments{
 \item{obj}{object containing analysis results}
@@ -30,6 +33,11 @@ If you want to display supplementary individuals or variables and you're using
 the \code{\link[ade4]{dudi.acm}} function, you can add the coordinates of 
 \code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or 
 \code{supv} elements added to your \code{\link[ade4]{dudi.acm}} result (See example).
+
+If you want to display supplementary individuals or variables and you're using
+the \code{\link[ade4]{dudi.pca}} function, you can add the coordinates of 
+\code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or 
+\code{supv} elements added to your \code{\link[ade4]{dudi.pca}} result (See example).
 }
 \examples{
 \dontrun{
@@ -62,6 +70,20 @@ X <- acm.disjonctif(ind_sup)
 X <- data.frame(t(t(X)/colw) - 1)
 acm$supi <- suprow(acm, X)$lisup
 explor(acm)
+}
+\dontrun{
+
+library(ade4)
+data(deug)
+d <- deug$tab
+sup_var <- d[-(1:10), 8:9]
+sup_ind <- d[1:10, -(8:9)]
+pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
+supi <- suprow(pca, sup_ind)
+pca$supi <- supi$lisup
+supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
+pca$supv <- supv$cosup
+explor(pca)
 }
 }
 \author{
