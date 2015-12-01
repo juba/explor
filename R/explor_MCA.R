@@ -216,8 +216,6 @@ explor_mca <- function(res, settings) {
                                     selectInput("vardim", 
                                                 gettext("Dimension", domain = "R-explor"),
                                                 choices = res$axes, selected = "1")
-                                    #textInput("varpvalue", 
-                                    #          gettext("Max p-value", domain = "R-explor"), 0.1)
                                     )),
                              column(10,
                                     h4(gettext("Active variables", domain = "R-explor")),                   
