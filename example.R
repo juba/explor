@@ -1,5 +1,7 @@
 ## FactoMineR examples --------------------------------------------------------------
 
+## MCA 1
+
 library(questionr)
 library(FactoMineR)
 library(dplyr)
@@ -17,6 +19,16 @@ d <- hdv2003 %>%
 acm <- MCA(d, graph = FALSE)
 explor(acm)
 
+## MCA 2
+
+library(FactoMineR)
+library(explor)
+
+data(hobbies)
+mca <- MCA(hobbies[1:1000,c(1:8,21:23)],quali.sup = 9:10, quanti.sup = 11, ind.sup = 1:100, graph = FALSE)
+explor(mca)
+
+## PCA
 
 library(FactoMineR)
 library(explor)
@@ -26,15 +38,11 @@ d <- decathlon[,1:12]
 pca <- PCA(d, quanti.sup = 11:12,  ind.sup=1:4, graph = FALSE, scale.unit = FALSE)
 explor(pca)
 
-library(FactoMineR)
-library(explor)
 
-
-data(hobbies)
-mca <- MCA(hobbies[1:1000,c(1:8,21:23)],quali.sup = 9:10, quanti.sup = 11, ind.sup = 1:100, graph = FALSE)
-explor(mca)
 
 ## Ade4 examples --------------------------------------------------------------
+
+## PCA
 
 library(ade4)
 data(deug)
@@ -48,6 +56,7 @@ supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
 pca$supv <- supv$cosup
 explor(pca)
 
+## MCA
 
 library(ade4)
 data(banque)
