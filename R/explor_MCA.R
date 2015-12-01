@@ -124,45 +124,10 @@ explor_mca <- function(res, settings) {
   
   has_sup_ind <- "Supplementary" %in% res$ind$Type
 
-  ## Custom CSS
-  css_string <- "
-  .well label, 
-  .well input, 
-  .well select, 
-  .well option,
-  .well button,
-  .well a,
-  div.option,
-  input, label, select, option, .selectize-input {
-      font-size: 11px !important;
-      height: auto !important;
-  }
-  .well .checkbox { margin-left: 5px !important; }
-  .well {padding: 5px !important;}
-  .dataTable th, 
-  .dataTable td {
-      font-size: 11px !important;
-      padding: 3px 5px !important; 
-  }
-  .dataTable th { padding-right: 18px !important }
-  .dataTables_wrapper {
-    max-width: 850px;
-    margin-bottom: 2em;
-  }
-  .dataTables_info, .dataTables_length, 
-  .dataTables_filter, .dataTables_paginate {
-      font-size: 11px !important;
-  }
-  #varplot, #indplot { height: 90vh !important}
-  #eigplot { max-width: 850px; }
-  .legend .label { font-weight: normal !important; font-size: 10px !important;}
-  .navbar-nav>li>a { font-size: 13px; padding: 15px 10px;}
-  "
-  
   shiny::shinyApp(
     ui = navbarPage(gettext("MCA", domain = "R-explor"),
                   header = tags$head(
-                  tags$style(HTML(css_string))),
+                  tags$style(explor_css())),
                   tabPanel(gettext("Eigenvalues", domain = "R-explor"),
                            fluidRow(
                              column(2,
