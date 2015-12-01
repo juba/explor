@@ -300,7 +300,7 @@ explor_mca <- function(res, settings) {
         ggplot(data = tmp) +
           geom_bar(aes_string(x = "dim", y = "percent"), stat = "identity") +
           scale_x_discrete(gettext("Axis", domain = "R-explor")) +
-          scale_y_discrete(gettext("Percentage of inertia", domain = "R-explor"))
+          scale_y_continuous(gettext("Percentage of inertia", domain = "R-explor"))
       })
 
       ## Variables plot reactive data
