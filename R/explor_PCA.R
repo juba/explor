@@ -394,6 +394,12 @@ explor_pca <- function(res, settings) {
       tableOptions_ind <- list(lengthMenu = c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
       tableOptions_eta2 <- list(lengthMenu = c(10,20,50), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = FALSE)
       
+      ## Generate correct datatable order option from a column name
+      order_option <- function(table, name, order="desc") {
+        index <- which(names(table) == name) - 1
+        list(order = list(list(index, order)))
+      }
+      
       varTable <- reactive({
         res$vars %>% 
           filter(Type == "Active", Axis == input$vardim) %>%
@@ -401,7 +407,7 @@ explor_pca <- function(res, settings) {
       })
       output$vartable <- DT::renderDataTable(
         DT::datatable({varTable()}, 
-                      options = c(tableOptions_var,list(order = list(list(2,'desc')))), rownames = FALSE))
+                      options = c(tableOptions_var, order_option(varTable(), "Contrib")), rownames = FALSE))
       
       ## Supplementary variables
       varTableSup <- reactive({
@@ -412,7 +418,7 @@ explor_pca <- function(res, settings) {
       })
       output$vartablesup <- DT::renderDataTable(
         DT::datatable({varTableSup()}, 
-                      options = c(tableOptions_var,list(order = list(list(1,'desc')))),rownames = FALSE))
+                      options = c(tableOptions_var, order_option(varTableSup(), "Coord")), rownames = FALSE))
       
       ## Active individuals
       indTable <- reactive({
@@ -422,7 +428,7 @@ explor_pca <- function(res, settings) {
       })
       output$indtable = DT::renderDataTable(
         DT::datatable({indTable()}, 
-                      options = c(tableOptions_ind,list(order = list(list(2,'desc')))), rownames = FALSE))
+                      options = c(tableOptions_ind, order_option(indTable(), "Coord")), rownames = FALSE))
 
       
       ## Supplementary individuals
@@ -433,7 +439,7 @@ explor_pca <- function(res, settings) {
       })
       output$indtablesup = DT::renderDataTable(
         DT::datatable({indTableSup()}, 
-                      options = c(tableOptions_ind, list(order = list(list(1,'desc')))), rownames = FALSE))
+                      options = c(tableOptions_ind,  order_option(indTableSup(), "Coord")), rownames = FALSE))
       
           
     }
