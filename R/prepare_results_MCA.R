@@ -72,7 +72,7 @@ prepare_results.MCA <- function(obj) {
   }
   tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
     mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-           Cos2 = round(Cos2, 2))
+           Cos2 = round(Cos2, 3))
   
   vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
 
@@ -85,7 +85,7 @@ prepare_results.MCA <- function(obj) {
     tmp <- tmp %>% gather(Axis, V.test, starts_with("Dim.")) %>%
       mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
              P.value = round(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
-             V.test = round(V.test, 3))
+             V.test = round(V.test, 2))
   
     vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis")) %>% 
       rename(Variable = varname, Level = modname)
