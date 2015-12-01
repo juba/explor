@@ -32,8 +32,10 @@ explor.MCA <- function(obj) {
 ##' the \code{\link[ade4]{dudi.acm}} function, you can add the coordinates of 
 ##' \code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or 
 ##' \code{supv} elements added to your \code{\link[ade4]{dudi.acm}} result (See example).
-##' @example
+##' @export
+##' @examples
 ##' \dontrun{
+##' 
 ##' library(ade4)
 ##' data(banque)
 ##' d <- banque[-(1:100),-(19:21)]
@@ -47,7 +49,7 @@ explor.MCA <- function(obj) {
 ##' acm$supi <- suprow(acm, X)$lisup
 ##' explor(acm)
 ##' }
-##' @export
+
 
 explor.acm <- function(obj) {
   

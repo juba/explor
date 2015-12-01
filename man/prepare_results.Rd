@@ -21,12 +21,6 @@ prepare_results(obj)
 \description{
 This function prepares results to be used by \code{explor}. Not to be used directly.
 }
-\details{
-If you want to display supplementary individuals or variables and you're using
-the \code{\link[ade4]{dudi.acm}} function, you can add the results of 
-\code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to a \code{supi} and/or 
-\code{supv} element added to your \code{\link[ade4]{dudi.acm}} (See example)
-}
 \author{
 Julien Barnier <julien.barnier@ens-lyon.fr>
 
