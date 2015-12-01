@@ -3,7 +3,7 @@ if (getRversion() >= "2.15.1")
                            "Level", "Variable", "Coord.x", "Coord.y", "Name", 
                            "P.value", "Class", "Cor", "Cor.x", "Cor.y", "Coord", 
                            "starts_with", "Contrib", "Cos2", "varname", "modname", 
-                           "V.test", "eta2"))
+                           "V.test", "eta2", "con.tra"))
 
 
 ##' Interface for analysis results exploration
@@ -21,13 +21,13 @@ if (getRversion() >= "2.15.1")
 ##' 
 ##' require(FactoMineR)
 ##' 
-##' ## MCA exploration
+##' ## FactoMineR::MCA exploration
 ##' data(hobbies)
 ##' mca <- MCA(hobbies[1:1000,c(1:8,21:23)], quali.sup = 9:10, 
 ##'            quanti.sup = 11, ind.sup = 1:100, graph = FALSE)
 ##' explor(mca)
 ##' 
-##' ## PCA exploration
+##' ## FactoMineR::PCA exploration
 ##' data(decathlon)
 ##' d <- decathlon[,1:12]
 ##' pca <- PCA(d, quanti.sup = 11:12, graph = FALSE)

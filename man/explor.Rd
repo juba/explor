@@ -4,11 +4,14 @@
 \alias{explor}
 \alias{explor.MCA}
 \alias{explor.PCA}
+\alias{explor.acm}
 \title{Interface for analysis results exploration}
 \usage{
 explor(obj)
 
 \method{explor}{MCA}(obj)
+
+\method{explor}{acm}(obj)
 
 \method{explor}{PCA}(obj)
 }
@@ -21,6 +24,12 @@ The function launches a shiny app in the system web browser.
 \description{
 This function launches a shiny app in a web browser in order to do
 interactive visualisation and exploration of an analysis results.
+}
+\details{
+If you want to display supplementary individuals or variables and you're using
+the \code{\link[ade4]{dudi.acm}} function, you can add the results of 
+\code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to a \code{supi} and/or 
+\code{supv} element added to your \code{\link[ade4]{dudi.acm}} (See example).
 }
 \examples{
 \dontrun{

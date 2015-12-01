@@ -1,9 +1,5 @@
 ##' @rdname explor
 ##' @aliases explor.MCA
-##' @import shiny
-##' @import dplyr
-##' @import scatterD3
-##' @import ggplot2
 ##' @export
 
 explor.MCA <- function(obj) {
@@ -12,7 +8,78 @@ explor.MCA <- function(obj) {
   
   ## results preparation
   res <- prepare_results(obj)
+
+  ## Settings
+  settings <- list()
+  settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
+  settings$varsup_columns <- c("Variable", "Level", "Class", "Coord", "Cos2", "V.test", "P.value")
+  settings$vareta2_columns <- c("Variable", "eta2")
+  settings$show_varsup_eta2 <- TRUE
+  settings$varsupeta2_columns <- c("Variable", "Class", "eta2")
+  settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
+  settings$indsup_columns <- c("Name", "Coord")
+
+  ## Launch interface
+  explor_mca(res, settings)
   
+}
+  
+
+##' @rdname explor
+##' @aliases explor.acm
+##' @details 
+##' If you want to display supplementary individuals or variables and you're using
+##' the \code{\link[ade4]{dudi.acm}} function, you can add the coordinates of 
+##' \code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or 
+##' \code{supv} elements added to your \code{\link[ade4]{dudi.acm}} result (See example).
+##' @example
+##' \dontrun{
+##' library(ade4)
+##' data(banque)
+##' d <- banque[-(1:100),-(19:21)]
+##' ind_sup <- banque[1:100, -(19:21)]
+##' var_sup <- banque[-(1:100),19:21]
+##' acm <- dudi.acm(d, scannf = FALSE, nf = 5)
+##' acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
+##' colw <- acm$cw*ncol(d)
+##' X <- acm.disjonctif(ind_sup)
+##' X <- data.frame(t(t(X)/colw) - 1)
+##' acm$supi <- suprow(acm, X)$lisup
+##' explor(acm)
+##' }
+##' @export
+
+explor.acm <- function(obj) {
+  
+  if (!inherits(obj, "acm") || !inherits(obj, "dudi")) stop("obj must be of class dudi and acm")
+  
+  ## results preparation
+  res <- prepare_results(obj)
+
+  ## Settings
+  settings <- list()
+  settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
+  settings$varsup_columns <- c("Variable", "Level", "Class", "Coord")
+  settings$vareta2_columns <- c("Variable", "eta2")
+  settings$show_varsup_eta2 <- FALSE
+  settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
+  settings$indsup_columns <- c("Name", "Coord")
+  
+  ## Launch interface
+  explor_mca(res, settings)
+  
+}
+
+
+
+
+##' @import shiny
+##' @import dplyr
+##' @import scatterD3
+##' @import ggplot2
+
+explor_mca <- function(res, settings) { 
+    
   ## Precompute inputs 
   has_sup_vars <- "Supplementary" %in% res$vars$Type 
   if (has_sup_vars) {
@@ -146,9 +213,10 @@ explor.MCA <- function(obj) {
                                     wellPanel(
                                     selectInput("vardim", 
                                                 gettext("Dimension", domain = "R-explor"),
-                                                choices = res$axes, selected = "1"),
-                                    textInput("varpvalue", 
-                                              gettext("Max p-value", domain = "R-explor"), 0.1))),
+                                                choices = res$axes, selected = "1")
+                                    #textInput("varpvalue", 
+                                    #          gettext("Max p-value", domain = "R-explor"), 0.1)
+                                    )),
                              column(10,
                                     h4(gettext("Active variables", domain = "R-explor")),                   
                                     DT::dataTableOutput("vartable"),
@@ -158,13 +226,13 @@ explor.MCA <- function(obj) {
                                     },
                                     h4(withMathJax(gettext("Variables \\(\\eta^2\\)", domain = "R-explor"))),
                                     DT::dataTableOutput("vartableeta2"),
-                                    if (has_sup_vars) {
+                                    if (has_sup_vars && settings$show_varsup_eta2) {
                                       list(h4(gettext("Supplementary variables \\(\\eta^2\\)", domain = "R-explor")),
                                            DT::dataTableOutput("vartablesupeta2"))
                                     }
                              ))),
                   
-                  tabPanel(gettext("Individuals plot", domain="R-explor"),
+                  tabPanel(gettext("Individuals plot", domain = "R-explor"),
                            fluidRow(
                              column(2,
                                     wellPanel(
@@ -289,7 +357,8 @@ explor.MCA <- function(obj) {
           size_lab = input$var_size,
           tooltip_text = var_data()[, "tooltip"],
           type_var = type_var,
-          key_var = var_data()[, "Level"],
+          unit_circle = has_sup_vars && input$var_sup && "Quantitative" %in% var_data()[,"Class"],
+          key_var = paste0(var_data()[, "Variable"], var_data()[, "Level"]),
           fixed = TRUE,
           transitions = input$var_transitions,
           html_id = "imca_var",
@@ -359,22 +428,20 @@ explor.MCA <- function(obj) {
       tableOptions_eta2 <- list(lengthMenu = c(10,20,50), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = FALSE)
       
       varTable <- reactive({
-        res$vars %>% 
-          filter(Type == "Active", Axis == input$vardim, 
-                 P.value <= as.numeric(input$varpvalue)) %>%
-          select(-Type, -Class, -Axis)
+        tab <- res$vars %>% 
+          filter(Type == "Active", Axis == input$vardim) %>%
+          select_(.dots = settings$var_columns)
       })
       output$vartable <- DT::renderDataTable(
         DT::datatable({varTable()}, 
-                      options=c(tableOptions_var,list(order=list(list(3,'desc')))),rownames=FALSE))
+                      options = c(tableOptions_var,list(order = list(list(3,'desc')))),rownames = FALSE))
       
       ## Supplementary variables
       varTableSup <- reactive({
         res$vars %>% 
-          filter(Type == "Supplementary", Axis == input$vardim, 
-                 P.value <= as.numeric(input$varpvalue) | Class == "Quantitative") %>%
-          mutate(Level=ifelse(Class=="Quantitative", "-", Level)) %>%
-          select(-Type, -Axis, -Contrib)
+          filter(Type == "Supplementary", Axis == input$vardim) %>%
+          mutate(Level = ifelse(Class == "Quantitative", "-", Level)) %>%
+          select_(.dots = settings$varsup_columns)
       })
       output$vartablesup <- DT::renderDataTable(
         DT::datatable({varTableSup()}, 
@@ -384,39 +451,42 @@ explor.MCA <- function(obj) {
       ## Variables eta2
       varTableEta2 <- reactive({
         tmp <- res$vareta2 %>% filter(Type == "Active", Axis == input$vardim) %>%
-          select(-Type, -Class, -Axis) %>% arrange(eta2)
+          select_(.dots = settings$vareta2_columns) %>% arrange(eta2)
       })
       output$vartableeta2 <- DT::renderDataTable(
         DT::datatable({varTableEta2()}, 
-                      options=tableOptions_eta2,rownames=FALSE))
+                      options = tableOptions_eta2,rownames = FALSE))
       
       ## Supplementary variables eta2
       varTableSupEta2 <- reactive({
-        tmp <- res$vareta2 %>% filter(Type == "Supplementary", 
+        if (settings$show_varsup_eta2) {
+          tmp <- res$vareta2 %>% filter(Type == "Supplementary", 
                                       Class == "Qualitative", 
                                       Axis == input$vardim) %>%
-          select(-Type, -Axis) %>% arrange(eta2)
+          select_(.dots = settings$varsupeta2_columns) %>% arrange(eta2)
+        }
+        else data.frame()
       })
       output$vartablesupeta2 <- DT::renderDataTable(
         DT::datatable({varTableSupEta2()}, 
-                      options=tableOptions_eta2,rownames=FALSE))
+                      options = tableOptions_eta2,rownames = FALSE))
       
       ## Active individuals
       indTable <- reactive({
         res$ind %>% 
           filter(Type == "Active", Axis == input$inddim) %>%
-          select(-Type, -Axis)
+          select_(.dots = settings$ind_columns)
       })
       output$indtable = DT::renderDataTable(
         DT::datatable({indTable()}, 
-                      options=c(tableOptions_ind,list(order=list(list(2,'desc')))),rownames=FALSE))
+                      options = c(tableOptions_ind,list(order = list(list(2,'desc')))), rownames = FALSE))
 
       
       ## Supplementary individuals
       indTableSup <- reactive({
         res$ind %>% 
           filter(Type == "Supplementary", Axis == input$inddim) %>%
-          select(-Type, -Axis, -Contrib)
+          select_(.dots = settings$indsup_columns)
       })
       output$indtablesup = DT::renderDataTable(
         DT::datatable({indTableSup()}, 

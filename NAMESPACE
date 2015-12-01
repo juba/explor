@@ -2,10 +2,12 @@
 
 S3method(explor,MCA)
 S3method(explor,PCA)
+S3method(explor,acm)
 S3method(ggind,MCA)
 S3method(ggvar,MCA)
 S3method(prepare_results,MCA)
 S3method(prepare_results,PCA)
+S3method(prepare_results,acm)
 export(explor)
 export(ggind)
 export(ggvar)

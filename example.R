@@ -1,3 +1,5 @@
+## FactoMineR examples --------------------------------------------------------------
+
 library(questionr)
 library(FactoMineR)
 library(dplyr)
@@ -25,6 +27,27 @@ pca <- PCA(d, quanti.sup = 11:12, graph = FALSE)
 explor(pca)
 
 
+library(FactoMineR)
+library(explor)
+
+
 data(hobbies)
 mca <- MCA(hobbies[1:1000,c(1:8,21:23)],quali.sup = 9:10, quanti.sup = 11, ind.sup = 1:100, graph = FALSE)
 explor(mca)
+
+## Ade4 examples --------------------------------------------------------------
+
+library(ade4)
+data(banque)
+d <- banque[-(1:100),-(19:21)]
+ind_sup <- banque[1:100, -(19:21)]
+var_sup <- banque[-(1:100),19:21]
+acm <- dudi.acm(d, scannf = FALSE, nf = 5)
+acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
+colw <- acm$cw*ncol(d)
+X <- acm.disjonctif(ind_sup)
+X <- t(t(X)/colw) - 1
+X <- data.frame(X)
+acm$supi <- suprow(acm, X)$lisup
+explor(acm)
+

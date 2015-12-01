@@ -17,6 +17,7 @@ Imports:
     scatterD3 (>= 0.5)
 Suggests: 
     FactoMineR,
+    ade4,
     testthat
 URL: https://github.com/juba/explor
 RoxygenNote: 5.0.1
