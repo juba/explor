@@ -36,9 +36,9 @@ interactive visualisation and exploration of an analysis results.
 }
 \details{
 If you want to display supplementary individuals or variables and you're using
-the \code{\link[ade4]{dudi.acm}} function, you can add the coordinates of 
-\code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or 
-\code{supv} elements added to your \code{\link[ade4]{dudi.acm}} result (See example).
+the \code{\link[ade4]{dudi.coa}} function, you can add the coordinates of 
+\code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supr} and/or 
+\code{supr} elements added to your \code{\link[ade4]{dudi.coa}} result (See example).
 
 If you want to display supplementary individuals or variables and you're using
 the \code{\link[ade4]{dudi.acm}} function, you can add the coordinates of 
@@ -70,17 +70,15 @@ explor(pca)
 \dontrun{
 
 library(ade4)
-data(banque)
-d <- banque[-(1:100),-(19:21)]
-ind_sup <- banque[1:100, -(19:21)]
-var_sup <- banque[-(1:100),19:21]
-acm <- dudi.acm(d, scannf = FALSE, nf = 5)
-acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
-colw <- acm$cw*ncol(d)
-X <- acm.disjonctif(ind_sup)
-X <- data.frame(t(t(X)/colw) - 1)
-acm$supi <- suprow(acm, X)$lisup
-explor(acm)
+
+data(bordeaux)
+tab <- bordeaux
+row_sup <- tab[5,-4]
+col_sup <- tab[-5,4]
+coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
+coa$supr <- suprow(coa, row_sup)$lisup
+coa$supc <- supcol(coa, col_sup)$cosup
+explor(coa)
 }
 \dontrun{
 

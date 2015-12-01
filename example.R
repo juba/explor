@@ -35,10 +35,19 @@ library(explor)
 
 data(decathlon)
 d <- decathlon[,1:12]
-pca <- PCA(d, quanti.sup = 11:12,  ind.sup=1:4, graph = FALSE, scale.unit = FALSE)
+pca <- PCA(d, quanti.sup = 11:12,  ind.sup = 1:4, graph = FALSE, scale.unit = FALSE)
 explor(pca)
 
+## CA
 
+library(FactoMineR)
+library(explor)
+library(questionr)
+
+data(hdv2003)
+tab <- table(hdv2003$qualif, hdv2003$relig)
+ca <- CA(tab, row.sup=6:7, col.sup = 5:6)
+explor(ca)
 
 ## Ade4 examples --------------------------------------------------------------
 
@@ -71,4 +80,20 @@ X <- t(t(X)/colw) - 1
 X <- data.frame(X)
 acm$supi <- suprow(acm, X)$lisup
 explor(acm)
+
+## CA
+
+library(ade4)
+library(explor)
+
+data(bordeaux)
+tab <- bordeaux
+row_sup <- tab[5,-4]
+col_sup <- tab[-5,4]
+coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
+coa$supr <- suprow(coa, row_sup)$lisup
+coa$supc <- supcol(coa, col_sup)$cosup
+explor(coa)
+
+
 

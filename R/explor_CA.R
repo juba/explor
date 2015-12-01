@@ -24,44 +24,38 @@ explor.CA <- function(obj) {
 ##' @aliases explor.coa
 ##' @details 
 ##' If you want to display supplementary individuals or variables and you're using
-##' the \code{\link[ade4]{dudi.acm}} function, you can add the coordinates of 
-##' \code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or 
-##' \code{supv} elements added to your \code{\link[ade4]{dudi.acm}} result (See example).
+##' the \code{\link[ade4]{dudi.coa}} function, you can add the coordinates of 
+##' \code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supr} and/or 
+##' \code{supr} elements added to your \code{\link[ade4]{dudi.coa}} result (See example).
 ##' @export
 ##' @examples
 ##' \dontrun{
 ##' 
 ##' library(ade4)
-##' data(banque)
-##' d <- banque[-(1:100),-(19:21)]
-##' ind_sup <- banque[1:100, -(19:21)]
-##' var_sup <- banque[-(1:100),19:21]
-##' acm <- dudi.acm(d, scannf = FALSE, nf = 5)
-##' acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
-##' colw <- acm$cw*ncol(d)
-##' X <- acm.disjonctif(ind_sup)
-##' X <- data.frame(t(t(X)/colw) - 1)
-##' acm$supi <- suprow(acm, X)$lisup
-##' explor(acm)
+##' 
+##' data(bordeaux)
+##' tab <- bordeaux
+##' row_sup <- tab[5,-4]
+##' col_sup <- tab[-5,4]
+##' coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
+##' coa$supr <- suprow(coa, row_sup)$lisup
+##' coa$supc <- supcol(coa, col_sup)$cosup
+##' explor(coa)
 ##' }
 
 
 explor.coa <- function(obj) {
   
-  if (!inherits(obj, "acm") || !inherits(obj, "dudi")) stop("obj must be of class dudi and acm")
+  if (!inherits(obj, "coa") || !inherits(obj, "dudi")) stop("obj must be of class dudi and coa")
   
   ## results preparation
   res <- prepare_results(obj)
 
   ## Settings
   settings <- list()
-  settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
-  settings$varsup_columns <- c("Variable", "Level", "Coord")
-  settings$vareta2_columns <- c("Variable", "eta2")
-  settings$show_varsup_eta2 <- FALSE
-  settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
-  settings$indsup_columns <- c("Name", "Coord")
-  
+  settings$var_columns <- c("Level", "Position", "Coord", "Contrib", "Cos2")
+  settings$varsup_columns <- c("Level", "Position", "Coord")
+
   ## Launch interface
   explor_ca(res, settings)
   
