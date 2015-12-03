@@ -67,6 +67,7 @@ explor(pca)
 
 ## MCA
 
+library(explor)
 library(ade4)
 data(banque)
 d <- banque[-(1:100),-(19:21)]
