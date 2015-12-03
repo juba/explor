@@ -98,7 +98,8 @@ prepare_results.coa <- function(obj) {
   
   vars <- vars %>% left_join(tmp, by = c("name", "pos", "Type", "Class", "Axis")) %>%
     select(-con.tra) %>%
-    rename(Level = name, Position = pos)
+    rename(Level = name, Position = pos) %>%
+    as.data.frame()
 
   return(list(vars = vars, eig = eig, axes = axes))
   
