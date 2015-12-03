@@ -87,9 +87,13 @@ prepare_results.MCA <- function(obj) {
              P.value = round(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
              V.test = round(V.test, 2))
   
-    vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis")) %>% 
-      rename(Variable = varname, Level = modname)
+    vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
   }
+  
+  vars <- vars %>%
+    rename(Variable = varname, Level = modname) %>%
+    arrange(Axis, Type, Variable) %>%
+    as.data.frame()
   
   ## Variables eta2
   vareta2 <- data.frame(obj$var$eta2)
