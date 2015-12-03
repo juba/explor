@@ -119,9 +119,7 @@ explor_mca <- function(res, settings) {
                                gettext("Points color :", domain = "R-explor"),
                                choices = ind_col_choices,
                                selected = "Type")
-  
-  
-  
+
   has_sup_ind <- "Supplementary" %in% res$ind$Type
 
   shiny::shinyApp(
@@ -153,10 +151,13 @@ explor_mca <- function(res, settings) {
                                       sliderInput("var_lab_size", 
                                                   gettext("Labels size", domain = "R-explor"),
                                                   4, 20, 10),
+                                      numericInput("var_lab_min_contrib",
+                                                  gettext("Minimum contribution to show label", domain = "R-explor"),
+                                                  min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0),
                                       var_col_input,
                                       var_symbol_input,
                                       var_size_input,
-                                      if(has_sup_vars)
+                                      if (has_sup_vars)
                                         checkboxInput("var_sup", 
                                                       HTML(gettext("Supplementary variables", domain = "R-explor")), 
                                                       value = TRUE),
@@ -296,7 +297,9 @@ explor_mca <- function(res, settings) {
                                   paste0("<strong>",
                                          gettext("Contribution:", domain = "R-explor"),
                                          "</strong> ", Contrib),
-                                  sep = "<br />"))
+                                  sep = "<br />"),
+                 Level = ifelse(Contrib >= as.numeric(input$var_lab_min_contrib) | 
+                                  (is.na(Contrib) & as.numeric(input$var_lab_min_contrib) == 0), Level, ""))
         data.frame(tmp)
       })
       
