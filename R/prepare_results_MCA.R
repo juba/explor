@@ -92,7 +92,6 @@ prepare_results.MCA <- function(obj) {
   
   vars <- vars %>%
     rename(Variable = varname, Level = modname) %>%
-    arrange(Axis, Type, Variable) %>%
     as.data.frame()
   
   ## Variables eta2

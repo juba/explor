@@ -79,9 +79,8 @@ prepare_results.acm <- function(obj) {
   vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
   
   vars <- vars %>% 
-    rename(Variable = varname, Level = modname) %>%
-    arrange(Axis, Type, Variable)
-
+    rename(Variable = varname, Level = modname)
+  
   ## Variables eta2
   vareta2 <- data.frame(obj$cr)
   vareta2$Variable <- rownames(vareta2)

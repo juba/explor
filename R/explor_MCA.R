@@ -271,7 +271,8 @@ explor_mca <- function(res, settings) {
 
       ## Variables plot reactive data
       var_data <- reactive({
-        tmp_x <- res$vars %>% 
+        tmp_x <- res$vars %>%
+          arrange(Axis, Type, Variable) %>%
           filter(Axis == input$var_x) %>%
           select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
         if (is.null(input$var_sup) || !input$var_sup)
