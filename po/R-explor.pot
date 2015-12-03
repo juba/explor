@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2015-11-26 15:16\n"
+"POT-Creation-Date: 2015-12-03 11:45\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,13 +10,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 
-msgid "obj must be of class MCA"
+msgid "obj must be of class CA"
+msgstr ""
+
+msgid "obj must be of class dudi and coa"
 msgstr ""
 
 msgid "None"
 msgstr ""
 
-msgid "Variable name"
+msgid "Variable position"
 msgstr ""
 
 msgid "Variable type"
@@ -35,9 +38,6 @@ msgid "Squared cosinus"
 msgstr ""
 
 msgid "Points size :"
-msgstr ""
-
-msgid "Individual type"
 msgstr ""
 
 msgid "MCA"
@@ -61,7 +61,10 @@ msgstr ""
 msgid "Labels size"
 msgstr ""
 
-msgid "Supplementary variables"
+msgid "Minimum contribution to show label"
+msgstr ""
+
+msgid "Supplementary levels"
 msgstr ""
 
 msgid "Animations"
@@ -79,7 +82,37 @@ msgstr ""
 msgid "Dimension"
 msgstr ""
 
-msgid "Max p-value"
+msgid "Active levels"
+msgstr ""
+
+msgid "Axis"
+msgstr ""
+
+msgid "Percentage of inertia"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Cos2"
+msgstr ""
+
+msgid "Contribution:"
+msgstr ""
+
+msgid "obj must be of class MCA"
+msgstr ""
+
+msgid "obj must be of class dudi and acm"
+msgstr ""
+
+msgid "Variable name"
+msgstr ""
+
+msgid "Individual type"
+msgstr ""
+
+msgid "Supplementary variables"
 msgstr ""
 
 msgid "Active variables"
@@ -112,26 +145,20 @@ msgstr ""
 msgid "Active individuals"
 msgstr ""
 
-msgid "Axis"
-msgstr ""
-
-msgid "Percentage of inertia"
-msgstr ""
-
 msgid "Variable"
-msgstr ""
-
-msgid "Cos2"
-msgstr ""
-
-msgid "Contribution:"
 msgstr ""
 
 msgid "obj must be of class PCA"
 msgstr ""
 
+msgid "obj must be of class dudi and pca"
+msgstr ""
+
 msgid "PCA"
 msgstr ""
 
-msgid "Correlation:"
+msgid "obj must be of class coa"
+msgstr ""
+
+msgid "the ade4 package is needed for this function to work."
 msgstr ""

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2015-11-26 15:16+0100\n"
-"PO-Revision-Date: 2015-11-26 15:16+0100\n"
+"POT-Creation-Date: 2015-12-03 11:45\n"
+"PO-Revision-Date: 2015-12-03 11:49+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -13,14 +13,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-msgid "obj must be of class MCA"
-msgstr "obj doit être de classe MCA"
+msgid "obj must be of class CA"
+msgstr "obj doit être de classe CA"
+
+msgid "obj must be of class dudi and coa"
+msgstr "obj doit être de classes dudi et coa"
 
 msgid "None"
 msgstr "Aucun"
 
-msgid "Variable name"
-msgstr "Nom de variable"
+msgid "Variable position"
+msgstr "Position"
 
 msgid "Variable type"
 msgstr "Type de variable"
@@ -39,9 +42,6 @@ msgstr "Cosinus carré"
 
 msgid "Points size :"
 msgstr "Taille :"
-
-msgid "Individual type"
-msgstr "Type d'individu"
 
 msgid "MCA"
 msgstr "ACM"
@@ -64,8 +64,11 @@ msgstr "Axe Y"
 msgid "Labels size"
 msgstr "Taille des étiquettes"
 
-msgid "Supplementary variables"
-msgstr "Variables supplémentaires"
+msgid "Minimum contribution to show label"
+msgstr "Contribution min pour afficher l'étiquette"
+
+msgid "Supplementary levels"
+msgstr "Modalités supplémentaires"
 
 msgid "Animations"
 msgstr "Animations"
@@ -82,8 +85,38 @@ msgstr "Variables - données"
 msgid "Dimension"
 msgstr "Axe"
 
-msgid "Max p-value"
-msgstr "p-value maximale"
+msgid "Active levels"
+msgstr "Modalités actives"
+
+msgid "Axis"
+msgstr "Axe"
+
+msgid "Percentage of inertia"
+msgstr "Pourcentage d'inertie"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Cos2"
+msgstr "Cosinus carré"
+
+msgid "Contribution:"
+msgstr "Contribution :"
+
+msgid "obj must be of class MCA"
+msgstr "obj doit être de classe MCA"
+
+msgid "obj must be of class dudi and acm"
+msgstr "obj doit être de classes dudi et acm"
+
+msgid "Variable name"
+msgstr "Nom de variable"
+
+msgid "Individual type"
+msgstr "Type d'individu"
+
+msgid "Supplementary variables"
+msgstr "Variables supplémentaires"
 
 msgid "Active variables"
 msgstr "Variables actives"
@@ -115,29 +148,29 @@ msgstr "Individus - données"
 msgid "Active individuals"
 msgstr "Individus actifs"
 
-msgid "Axis"
-msgstr "Axe"
-
-msgid "Percentage of inertia"
-msgstr "Pourcentage d'inertie"
-
 msgid "Variable"
 msgstr "Variable"
-
-msgid "Cos2"
-msgstr "Cosinus carré"
-
-msgid "Contribution:"
-msgstr "Contribution :"
 
 msgid "obj must be of class PCA"
 msgstr "obj doit être de classe PCA"
 
+msgid "obj must be of class dudi and pca"
+msgstr "obj doit être de classes dudi et pca"
+
 msgid "PCA"
 msgstr "ACP"
 
-msgid "Correlation:"
-msgstr "Corrélation :"
+msgid "obj must be of class coa"
+msgstr "obj doit être de classe coa"
+
+msgid "the ade4 package is needed for this function to work."
+msgstr "le package ade4 doit être installé pour utiliser cette fonction."
+
+#~ msgid "Max p-value"
+#~ msgstr "p-value maximale"
+
+#~ msgid "Correlation:"
+#~ msgstr "Corrélation :"
 
 #~ msgid "explor - MCA"
 #~ msgstr "explor - ACM"
