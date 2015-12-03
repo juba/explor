@@ -35,7 +35,7 @@ library(explor)
 
 data(decathlon)
 d <- decathlon[,1:12]
-pca <- PCA(d, quanti.sup = 11:12,  ind.sup = 1:4, graph = FALSE, scale.unit = FALSE)
+pca <- PCA(d, quanti.sup = 11:12,  ind.sup = 1:4, graph = FALSE, scale.unit = TRUE)
 explor(pca)
 
 ## CA
