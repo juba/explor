@@ -14,7 +14,7 @@ Imports:
     dplyr,
     tidyr,
     ggplot2,
-    scatterD3 (>= 0.5)
+    scatterD3 (>= 0.5.1)
 Suggests: 
     FactoMineR,
     ade4,
