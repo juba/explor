@@ -19,10 +19,15 @@ vignette: >
 
 Pour le moment il est utilisable avec deux types d'analyses :
 
-Méthode                                     | Fonction  | Package | Notes
--------------------------------------------- | ---- | ---------------------------------------- | --------
-Analyse en composantes principales (ACP)     | PCA  | [FactoMineR](http://factominer.free.fr/) | Les variables supplémentaires qualitatives ne sont pas traitées
-Analyse des correspondances multiples (ACM)  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
+Méthode | Fonction  | Package | Notes
+------------- | ------------- | ---------- | --------
+Analyse en composantes principales  | PCA  | [FactoMineR](http://factominer.free.fr/) | Les variables supplémentaires qualitatives ne sont pas prises en charge
+Analyse des correspondances  | CA  | [FactoMineR](http://factominer.free.fr/) | -
+Analyse des correspondances multiples  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
+Analyse en composantes principales | dudi.pca  | [ade4](https://cran.r-project.org/web/packages/ade4/) | Les variables supplémentaires qualitatives ne sont pas prises en charge
+Analyse des correspondances   | dudi.coa  | [ade4](https://cran.r-project.org/web/packages/ade4/)  | -
+Analyse des correspondances multiples   | dudi.acm  | [ade4](https://cran.r-project.org/web/packages/ade4/) | Les variables supplémentaires quantitatives ne sont pas prises en charge
+
 
 La philosophie d'`explor` est de n'être qu'une interface de visualisation, et de ne rien "exécuter" par elle-même. Les analyses et calculs se font dans votre script R, et `explor` vous aide seulement à visualiser leurs résultats. L'idée est de conserver l'ensemble des commandes dans les scripts et de ne pas risquer d'être un obstacle à la reproductibilité des analyses.
 
@@ -45,16 +50,28 @@ Pour chaque méthode, `explor` lance une interface Web interactive qui s'affiche
 
 L'utilisation du package est très simple : il suffit d'appliquer la fonction `explor()` à l'objet résultant d'une méthode prise en charge.
 
-Exemple avec une ACP faite avec `FactoMineR::PCA` :
+### Fonctions de `FactoMineR`
+
+Pour les fonctions de `FactoMineR`  prises en charge, il suffit de passer l'objet contenant les résultats directement à`explor()`.
+
+Exemple d'analyse en composantes principales avec `FactoMineR::PCA` :
 
 ```r
 library(FactoMineR)
 data(decathlon)
-pca <- PCA(decathlon[,1:12], quanti.sup = 11:12, graph = FALSE)
+pca <- PCA(decathlon[,1:12], quanti.sup = 11:12)
 explor(pca)
 ```
 
-Exemple avec une ACM faite avec `FactoMineR::MCA` :
+Exemple d'analyse des correspondances simples avec `FactoMiner::CA` :
+
+```r
+data(children)
+res.ca <- CA(children, row.sup = 15:18, col.sup = 6:8)
+explor(res.ca)
+```
+
+Exemple d'analyse des correspondances multiples avec `FactoMineR::MCA` :
 
 ```r
 library(FactoMineR)
@@ -64,6 +81,69 @@ mca <- MCA(hobbies[1:1000, c(1:8,21:23)], quali.sup = 9:10,
 explor(mca)
 ```
 
+### Fonctions d'`ade4` 
+
+Les résultats des fonctions d'`ade4` prises en charge peuvent également être directement passées à `explor()`.
+
+Par exemple, pour visualiser les résultats d'une ACP :
+
+```r
+library(ade4)
+data(deug)
+pca <- dudi.pca(deug$tab, scale = TRUE, scannf = FALSE, nf = 5)
+explor(pca)
+```
+
+Des étapes supplémentaires sont nécessaires si on souhaite ajouter des éléments supplémentaires, car `ade4` ne les inclut pas directement dans l'objet résultat. Il faut donc calculer les coordonnées de ces éléments avec `suprow` ou `supcol`, et les ajouter comme éléments `supi` (pour les individus supplémentaires) ou `supv` (pour les variables supplémentaires) de l'objet résultat.
+
+Voici un exemple de comment faire tout cela pour une ACP :
+
+```r
+data(deug)
+d <- deug$tab
+sup_var <- d[-(1:10), 8:9]
+sup_ind <- d[1:10, -(8:9)]
+pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
+## Individus supplémentaires
+supi <- suprow(pca, sup_ind)
+pca$supi <- supi$lisup
+## Variables supplémentaires
+supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
+pca$supv <- supv$cosup
+explor(pca)
+```
+
+Il est nécessaire de faire la même chose en cas d'éléments supplémentaires pour une analyse des correspondances multiples, mais le calcul des coordonnées des variables supplémentaires est un peu plus compliqué :
+
+```r
+data(banque)
+d <- banque[-(1:100),-(19:21)]
+ind_sup <- banque[1:100, -(19:21)]
+var_sup <- banque[-(1:100),19:21]
+acm <- dudi.acm(d, scannf = FALSE, nf = 5)
+## Variables supplémentaires
+acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
+colw <- acm$cw*ncol(d)
+X <- acm.disjonctif(ind_sup)
+X <- t(t(X)/colw) - 1
+X <- data.frame(X)
+## Individus supplémentaires
+acm$supi <- suprow(acm, X)$lisup
+explor(acm)
+```
+
+Pour une analyse des correspondances simples, on peut afficher des lignes ou colonnes supplémentaires en ajoutant leurs coordonnées à des éléments nommés `supr` ou `supc` :
+
+```r
+data(bordeaux)
+tab <- bordeaux
+row_sup <- tab[5,-4]
+col_sup <- tab[-5,4]
+coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
+coa$supr <- suprow(coa, row_sup)$lisup
+coa$supc <- supcol(coa, col_sup)$cosup
+explor(coa)
+```
 
 
 

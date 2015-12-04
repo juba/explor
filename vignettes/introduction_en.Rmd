@@ -17,12 +17,18 @@ vignette: >
 
 `explor` is an R package to allow interactive exploration of multivariate analysis results.
 
-For now on, it is usable on two types of analyses :
+For now on, the following analyses are supported :
 
 Analysis | Function  | Package | Notes
 ------------- | ------------- | ---------- | --------
-Principal component analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | Qualitative supplementary variables are not taken into account
+Principal component analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | Qualitative supplementary variables are ignored
+Correspondance analysis  | CA  | [FactoMineR](http://factominer.free.fr/) | -
 Multiple correspondence analysis  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
+Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/web/packages/ade4/) | Qualitative supplementary variables are ignored
+Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/web/packages/ade4/)  | -
+Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/web/packages/ade4/) | Quantitative supplementary variables are ignored
+
+
 
 The philosophy behind `explor` is to only be an exploration interface which doesn't really do anything by itself : analysis and computations are made in your R script, and `explor` only helps you visualizing the results. As such it can not disrupt code execution and reproducibility.
 
@@ -46,13 +52,25 @@ These data and graphics are displayed with several "interactive" features. Numer
 
 Usage is very simple : you just apply the `explor()` function to the result object of one of the supported analysis functions.
 
+### `FactoMineR` functions
+
+Supported `FactoMineR` functions should work "out of the box". Just pass the result object to `explor()`.
+
 Example with a principal correspondence analysis from `FactoMineR::PCA` :
 
 ```r
 library(FactoMineR)
 data(decathlon)
-pca <- PCA(decathlon[,1:12], quanti.sup = 11:12, graph = FALSE)
+pca <- PCA(decathlon[,1:12], quanti.sup = 11:12)
 explor(pca)
+```
+
+Example with a simple correspondence analysis from `FactoMiner::CA` :
+
+```r
+data(children)
+res.ca <- CA(children, row.sup = 15:18, col.sup = 6:8)
+explor(res.ca)
 ```
 
 Example with a multiple correspondence analysis from `FactoMineR::MCA` :
@@ -65,6 +83,71 @@ mca <- MCA(hobbies[1:1000, c(1:8,21:23)], quali.sup = 9:10,
 explor(mca)
 ```
 
+### `ade4` functions
+
+`ade4` functions should also work by directly passing the object result to `explor()`. 
+
+For example, to visualize a simple PCA results :
+
+```r
+library(ade4)
+data(deug)
+pca <- dudi.pca(deug$tab, scale = TRUE, scannf = FALSE, nf = 5)
+explor(pca)
+```
+
+There's a bit more work to be done if you want to display supplementary elements, as `ade4` don't include them directly in the results analysis.
+
+For a principal component analysis, you have to compute supplementary individuals (resp. variables) results with `suprow` (resp. `supcol`) and add them manually as a `supi` (resp. `supv`) element of your result object.
+
+Here is an example of how to do this :
+
+```r
+data(deug)
+d <- deug$tab
+sup_var <- d[-(1:10), 8:9]
+sup_ind <- d[1:10, -(8:9)]
+pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
+## Supplementary individuals
+supi <- suprow(pca, sup_ind)
+pca$supi <- supi$lisup
+## Supplementary variables
+supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
+pca$supv <- supv$cosup
+explor(pca)
+```
+
+You have to do the same thing for supplementary elements in a multiple correspondence analysis, with a slightly more complicated computation for supplementary variables :
+
+```r
+data(banque)
+d <- banque[-(1:100),-(19:21)]
+ind_sup <- banque[1:100, -(19:21)]
+var_sup <- banque[-(1:100),19:21]
+acm <- dudi.acm(d, scannf = FALSE, nf = 5)
+## Supplementary variables
+acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
+colw <- acm$cw*ncol(d)
+X <- acm.disjonctif(ind_sup)
+X <- t(t(X)/colw) - 1
+X <- data.frame(X)
+## Supplementary individuals
+acm$supi <- suprow(acm, X)$lisup
+explor(acm)
+```
+
+For simple correspondence analysis, you can add supplementary rows or columns by adding their coordinates to `supr` and `supc` elements of your result object :
+
+```r
+data(bordeaux)
+tab <- bordeaux
+row_sup <- tab[5,-4]
+col_sup <- tab[-5,4]
+coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
+coa$supr <- suprow(coa, row_sup)$lisup
+coa$supc <- supcol(coa, col_sup)$cosup
+explor(coa)
+```
 
 ## Feedback
 
