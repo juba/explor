@@ -44,10 +44,11 @@ library(FactoMineR)
 library(explor)
 library(questionr)
 
-data(hdv2003)
-tab <- table(hdv2003$qualif, hdv2003$relig)
-ca <- CA(tab, row.sup=6:7, col.sup = 5:6)
-explor(ca)
+data(children)
+res.ca <- CA(children, row.sup = 15:18, col.sup = 6:8, graph = FALSE)
+explor(res.ca)
+
+
 
 ## Ade4 examples --------------------------------------------------------------
 
@@ -65,6 +66,11 @@ supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
 pca$supv <- supv$cosup
 explor(pca)
 
+library(ade4)
+data(deug)
+pca <- dudi.pca(deug$tab, scale = TRUE, scannf = FALSE, nf = 5)
+explor(pca)
+
 ## MCA
 
 library(explor)
@@ -74,11 +80,13 @@ d <- banque[-(1:100),-(19:21)]
 ind_sup <- banque[1:100, -(19:21)]
 var_sup <- banque[-(1:100),19:21]
 acm <- dudi.acm(d, scannf = FALSE, nf = 5)
+## Supplementary variables
 acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
 colw <- acm$cw*ncol(d)
 X <- acm.disjonctif(ind_sup)
 X <- t(t(X)/colw) - 1
 X <- data.frame(X)
+## Supplementary individuals
 acm$supi <- suprow(acm, X)$lisup
 explor(acm)
 
