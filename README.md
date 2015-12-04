@@ -64,7 +64,7 @@ explor(mca)
 
 Two vignettes are provided for more detailed documentation :
 
-- An introduction in english
-- An introduction in french
+- [English introduction vignette](https://github.com/juba/explor/blob/master/vignettes/introduction_en.Rmd)
+- [French introduction vignette](https://github.com/juba/explor/blob/master/vignettes/introduction_fr.Rmd)
 
 Depending on your system locale settings, the interface is displayed in english or french (other languages can be easily added).
