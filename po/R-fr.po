@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2015-12-03 11:45\n"
-"PO-Revision-Date: 2015-12-03 11:49+0100\n"
+"POT-Creation-Date: 2015-12-04 10:11\n"
+"PO-Revision-Date: 2015-12-04 10:11+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -43,8 +43,8 @@ msgstr "Cosinus carré"
 msgid "Points size :"
 msgstr "Taille :"
 
-msgid "MCA"
-msgstr "ACM"
+msgid "CA"
+msgstr "CA"
 
 msgid "Eigenvalues"
 msgstr "Valeurs propres"
@@ -52,8 +52,8 @@ msgstr "Valeurs propres"
 msgid "Dimensions to plot"
 msgstr "Axes à afficher"
 
-msgid "Variables plot"
-msgstr "Variables - graphique"
+msgid "Plot"
+msgstr "Graphique"
 
 msgid "X axis"
 msgstr "Axe X"
@@ -79,8 +79,8 @@ msgstr "Réinitialiser le zoom"
 msgid "Export as SVG"
 msgstr "Exporter en SVG"
 
-msgid "Variables data"
-msgstr "Variables - données"
+msgid "Data"
+msgstr "Données"
 
 msgid "Dimension"
 msgstr "Axe"
@@ -115,8 +115,17 @@ msgstr "Nom de variable"
 msgid "Individual type"
 msgstr "Type d'individu"
 
+msgid "MCA"
+msgstr "ACM"
+
+msgid "Variables plot"
+msgstr "Variables - graphique"
+
 msgid "Supplementary variables"
 msgstr "Variables supplémentaires"
+
+msgid "Variables data"
+msgstr "Variables - données"
 
 msgid "Active variables"
 msgstr "Variables actives"
@@ -160,11 +169,11 @@ msgstr "obj doit être de classes dudi et pca"
 msgid "PCA"
 msgstr "ACP"
 
-msgid "obj must be of class coa"
-msgstr "obj doit être de classe coa"
-
 msgid "the ade4 package is needed for this function to work."
 msgstr "le package ade4 doit être installé pour utiliser cette fonction."
+
+msgid "obj must be of class coa"
+msgstr "obj doit être de classe coa"
 
 #~ msgid "Max p-value"
 #~ msgstr "p-value maximale"

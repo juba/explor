@@ -103,7 +103,7 @@ explor_ca <- function(res, settings) {
                                 selected = "None")
 
   shiny::shinyApp(
-    ui = navbarPage(gettext("MCA", domain = "R-explor"),
+    ui = navbarPage(gettext("CA", domain = "R-explor"),
                   header = tags$head(
                   tags$style(explor_css())),
                   tabPanel(gettext("Eigenvalues", domain = "R-explor"),
@@ -118,7 +118,7 @@ explor_ca <- function(res, settings) {
                              
                              )),
                   
-                  tabPanel(gettext("Variables plot", domain = "R-explor"),
+                  tabPanel(gettext("Plot", domain = "R-explor"),
                            fluidRow(
                              column(2,
                                     wellPanel(
@@ -155,7 +155,7 @@ explor_ca <- function(res, settings) {
                                     scatterD3Output("varplot", height = "auto"))
                   )),
                   
-                  tabPanel(gettext("Variables data", domain = "R-explor"),
+                  tabPanel(gettext("Data", domain = "R-explor"),
                            fluidRow(
                              column(2,
                                     wellPanel(

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2015-12-03 11:45\n"
+"POT-Creation-Date: 2015-12-04 10:11\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Points size :"
 msgstr ""
 
-msgid "MCA"
+msgid "CA"
 msgstr ""
 
 msgid "Eigenvalues"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Dimensions to plot"
 msgstr ""
 
-msgid "Variables plot"
+msgid "Plot"
 msgstr ""
 
 msgid "X axis"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Export as SVG"
 msgstr ""
 
-msgid "Variables data"
+msgid "Data"
 msgstr ""
 
 msgid "Dimension"
@@ -112,7 +112,16 @@ msgstr ""
 msgid "Individual type"
 msgstr ""
 
+msgid "MCA"
+msgstr ""
+
+msgid "Variables plot"
+msgstr ""
+
 msgid "Supplementary variables"
+msgstr ""
+
+msgid "Variables data"
 msgstr ""
 
 msgid "Active variables"
@@ -157,8 +166,8 @@ msgstr ""
 msgid "PCA"
 msgstr ""
 
-msgid "obj must be of class coa"
+msgid "the ade4 package is needed for this function to work."
 msgstr ""
 
-msgid "the ade4 package is needed for this function to work."
+msgid "obj must be of class coa"
 msgstr ""
