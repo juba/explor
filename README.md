@@ -6,10 +6,16 @@
 
 `explor` is an R package to allow interactive exploration of multivariate analysis results.
 
-For the moment, it is usable on two types of analyses :
+For now on, it is usable the following types of analyses :
 
-- Principal component analysis (PCA) computed by the `PCA` function of the [FactoMineR package](http://factominer.free.fr/)
-- Multiple correspondence analysis (MCA) computed by the `MCA` function of the [FactoMineR package](http://factominer.free.fr/)
+Analysis | Function  | Package | Notes
+------------- | ------------- | ---------- | --------
+Principal component analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | Qualitative supplementary variables are ignored
+Correspondance analysis  | CA  | [FactoMineR](http://factominer.free.fr/) | -
+Multiple correspondence analysis  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
+Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/web/packages/ade4/) | Qualitative supplementary variables are ignored
+Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/web/packages/ade4/)  | -
+Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/web/packages/ade4/) | Quantitative supplementary variables are ignored
 
 
 ## Features
@@ -35,7 +41,7 @@ devtools::install_github("juba/explor")
 
 Usage is very simple : you just apply the `explor` function to the result of one of the supported analysis functions.
 
-Example with a principal correspondence analysis :
+Example with a principal correspondence analysis from `FactoMineR::PCA` :
 
 ```r
 library(FactoMineR)
@@ -46,13 +52,19 @@ pca <- PCA(decathlon[,1:12], quanti.sup = 11:12, graph = FALSE)
 explor(pca)
 ```
 
-Example with a multiple correspondence analysis :
+Example with a multiple correspondence analysis from `FactoMineR::MCA`:
 
 ```r
-library(FactoMineR)
-library(explor)
-
 data(hobbies)
 mca <- MCA(hobbies[1:1000,c(1:8,21:23)],quali.sup = 9:10, quanti.sup = 11, ind.sup = 1:100)
 explor(mca)
 ```
+
+## Documentation and localization
+
+Two vignettes are provided for more detailed documentation :
+
+- An introduction in english
+- An introduction in french
+
+Depending on your system locale settings, the interface is displayed in english or french (other languages can be easily added).
