@@ -4,6 +4,7 @@
 ##' @seealso \code{\link[ade4]{dudi.pca}}
 ##' @import dplyr
 ##' @importFrom tidyr gather
+##' @importFrom utils head
 ##' @export
 
 prepare_results.pca <- function(obj) {

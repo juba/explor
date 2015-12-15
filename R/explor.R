@@ -3,7 +3,7 @@ if (getRversion() >= "2.15.1")
                            "Level", "Variable", "Coord.x", "Coord.y", "Name", 
                            "P.value", "Class", "Cor", "Cor.x", "Cor.y", "Coord", 
                            "starts_with", "Contrib", "Cos2", "varname", "modname", 
-                           "V.test", "eta2", "con.tra", "name", "pos"))
+                           "V.test", "eta2", "con.tra", "name", "pos", "Axis"))
 
 
 ##' Interface for analysis results exploration
