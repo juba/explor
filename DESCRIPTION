@@ -2,8 +2,8 @@ Package: explor
 Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
 Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
     role=c("aut","cre")))
-Version: 0.1
-Date: 2015-12-15
+Version: 0.1.1
+Date: 2015-12-16
 License: GPL (>= 2)
 Encoding: UTF-8
 Title: Interactive Interfaces for Results Exploration
