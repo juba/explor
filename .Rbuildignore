@@ -2,5 +2,5 @@
 ^\.Rproj\.user$
 example.R
 ggcrosstab.R
-resources/
+resources
 ^\.travis\.yml$
