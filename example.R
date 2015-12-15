@@ -104,5 +104,8 @@ coa$supr <- suprow(coa, row_sup)$lisup
 coa$supc <- supcol(coa, col_sup)$cosup
 explor(coa)
 
+data(bordeaux)
+coa <- dudi.coa(bordeaux, nf = 5, scannf = FALSE)
+explor(coa)
 
 
