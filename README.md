@@ -2,6 +2,7 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/juba/explor.svg?branch=master)](https://travis-ci.org/juba/explor)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/explor)](http://cran.r-project.org/package=explor)
+![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/explor) 
 
 
 `explor` is an R package to allow interactive exploration of multivariate analysis results.
