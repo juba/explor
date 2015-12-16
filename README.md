@@ -30,10 +30,16 @@ Here is a preview of what you will get (note that real colors are much better th
 
 ## Installation
 
-The package is not on CRAN yet, so you'll have to install it from GitHub :
+To get the stable version from CRAN :
 
 ```r
-install.packages("devtools")
+install.packages("explor")
+```
+
+To install the latest dev version from GitHub :
+
+```r
+install.packages("devtools")  # If necessary
 devtools::install_github("juba/scatterD3")
 devtools::install_github("juba/explor")
 ```
