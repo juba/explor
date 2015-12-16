@@ -1,13 +1,17 @@
 Package: explor
-Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
-Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
-    role=c("aut","cre")))
+Type: Package
+Title: Interactive Interfaces for Results Exploration
 Version: 0.1.1
 Date: 2015-12-16
-License: GPL (>= 2)
-Encoding: UTF-8
-Title: Interactive Interfaces for Results Exploration
+Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
+    role=c("aut","cre")))
+Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
 Description: Shiny interfaces and graphical functions for multivariate analysis results exploration.
+License: GPL (>= 3)
+VignetteBuilder: knitr
+URL: https://github.com/juba/explor
+BugReports: https://github.com/juba/explor/issues
+Encoding: UTF-8
 Imports: 
     shiny (>= 0.11),
     DT,
@@ -18,6 +22,6 @@ Imports:
 Suggests: 
     FactoMineR,
     ade4,
-    testthat
-URL: https://github.com/juba/explor
+    testthat,
+    knitr
 RoxygenNote: 5.0.1
