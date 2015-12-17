@@ -7,7 +7,7 @@ output:
   fig_width: 5
   toc: true
 vignette: >
-  %\VignetteIndexEntry{Introduction à explor [fr]}
+  %\VignetteIndexEntry{Introduction à explor}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
