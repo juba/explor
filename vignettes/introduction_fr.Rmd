@@ -17,7 +17,7 @@ vignette: >
 
 `explor` est un package R qui permet l'exploration "interactive" des résultats d'une analyse exploratoire multidimensionnelle.
 
-Pour le moment il est utilisable avec deux types d'analyses :
+Pour le moment il est utilisable avec les types d'analyses suivants :
 
 Méthode | Fonction  | Package | Notes
 ------------- | ------------- | ---------- | --------
