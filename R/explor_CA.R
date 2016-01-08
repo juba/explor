@@ -101,7 +101,17 @@ explor_ca <- function(res, settings) {
                                 gettext("Points size :", domain = "R-explor"),
                                 choices = var_size_choices,
                                 selected = "None")
-
+  ## Variable hide elements input
+  var_hide_choices <- c("None", "Row", "Column")
+  names(var_hide_choices) <- c(gettext("None", domain = "R-explor"),
+                               gettext("Rows", domain = "R-explor"),
+                               gettext("Columns", domain = "R-explor"))
+  var_hide_input <- selectInput("var_hide", 
+                                gettext("Hide :", domain = "R-explor"),
+                                choices = var_hide_choices,
+                                selected = "None")
+  
+  
   shiny::shinyApp(
     ui = navbarPage(gettext("CA", domain = "R-explor"),
                   header = tags$head(
@@ -131,12 +141,16 @@ explor_ca <- function(res, settings) {
                                       sliderInput("var_lab_size", 
                                                   gettext("Labels size", domain = "R-explor"),
                                                   4, 20, 10),
+                                      sliderInput("var_point_size", 
+                                                  gettext("Points size", domain = "R-explor"),
+                                                  4, 128, 56),                                       
                                       numericInput("var_lab_min_contrib",
                                                    gettext("Minimum contribution to show label", domain = "R-explor"),
                                                    min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0),
                                       var_col_input,
                                       var_symbol_input,
                                       var_size_input,
+                                      var_hide_input,
                                       if(has_sup_vars)
                                         checkboxInput("var_sup", 
                                                       HTML(gettext("Supplementary levels", domain = "R-explor")), 
@@ -190,13 +204,18 @@ explor_ca <- function(res, settings) {
         tmp_x <- res$vars %>% 
           filter(Axis == input$var_x) %>%
           select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (is.null(input$var_sup) || !input$var_sup)
-          tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- res$vars %>% 
           filter(Axis == input$var_y) %>%
           select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (is.null(input$var_sup) || !input$var_sup)
+        if (is.null(input$var_sup) || !input$var_sup) {
+          tmp_x <- tmp_x %>% filter(Type == 'Active')
           tmp_y <- tmp_y %>% filter(Type == 'Active')
+        }
+        if (input$var_hide != "None") {
+          tmp_x <- tmp_x %>% filter(Position != input$var_hide)
+          tmp_y <- tmp_y %>% filter(Position != input$var_hide)
+        }
+          
         tmp <- tmp_x %>%
           left_join(tmp_y, by = c("Level", "Position", "Type", "Class")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,
@@ -224,6 +243,8 @@ explor_ca <- function(res, settings) {
         col_var <- if (input$var_col == "None") NULL else var_data()[, input$var_col]
         symbol_var <- if (input$var_symbol == "None") NULL else var_data()[, input$var_symbol]
         size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
+        size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
+        key_var <- paste0(var_data()[, "Level"], var_data()[, "Position"])
         scatterD3::scatterD3(
           x = var_data()[, "Coord.x"],
           y = var_data()[, "Coord.y"],
@@ -232,16 +253,18 @@ explor_ca <- function(res, settings) {
           lab = var_data()[, "Level"],
           labels_size = input$var_lab_size,
           point_opacity = 1,
+          point_size = input$var_point_size,          
           col_var = col_var,
           col_lab = input$var_col,
           symbol_var = symbol_var,
           symbol_lab = input$var_symbol,
           size_var = size_var,
           size_lab = input$var_size,
+          size_range = size_range,
           tooltip_text = var_data()[, "tooltip"],
-          type_var = NULL,
+          type_var = "point",
           unit_circle = NULL,
-          key_var = paste0(var_data()[, "Level"], var_data()[, "Position"]),
+          key_var = key_var,
           fixed = TRUE,
           transitions = input$var_transitions,
           html_id = "imca_var",
