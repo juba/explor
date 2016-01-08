@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2015-12-04 10:11\n"
+"Project-Id-Version: explor 0.1.1\n"
+"POT-Creation-Date: 2016-01-08 16:48\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,15 @@ msgstr ""
 msgid "Points size :"
 msgstr ""
 
+msgid "Rows"
+msgstr ""
+
+msgid "Columns"
+msgstr ""
+
+msgid "Hide :"
+msgstr ""
+
 msgid "CA"
 msgstr ""
 
@@ -59,6 +68,9 @@ msgid "Y axis"
 msgstr ""
 
 msgid "Labels size"
+msgstr ""
+
+msgid "Points size"
 msgstr ""
 
 msgid "Minimum contribution to show label"
@@ -136,9 +148,6 @@ msgstr ""
 msgid "Individuals plot"
 msgstr ""
 
-msgid "Points size"
-msgstr ""
-
 msgid "Points opacity"
 msgstr ""
 
@@ -166,8 +175,8 @@ msgstr ""
 msgid "PCA"
 msgstr ""
 
-msgid "the ade4 package is needed for this function to work."
+msgid "obj must be of class coa"
 msgstr ""
 
-msgid "obj must be of class coa"
+msgid "the ade4 package is needed for this function to work."
 msgstr ""

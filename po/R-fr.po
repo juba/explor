@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2015-12-04 10:11\n"
-"PO-Revision-Date: 2015-12-04 10:11+0100\n"
+"POT-Creation-Date: 2016-01-08 16:48\n"
+"PO-Revision-Date: 2016-01-08 16:50+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -43,6 +43,15 @@ msgstr "Cosinus carré"
 msgid "Points size :"
 msgstr "Taille :"
 
+msgid "Rows"
+msgstr "Lignes"
+
+msgid "Columns"
+msgstr "Colonnes"
+
+msgid "Hide :"
+msgstr "Masquer :"
+
 msgid "CA"
 msgstr "CA"
 
@@ -63,6 +72,9 @@ msgstr "Axe Y"
 
 msgid "Labels size"
 msgstr "Taille des étiquettes"
+
+msgid "Points size"
+msgstr "Taille des points"
 
 msgid "Minimum contribution to show label"
 msgstr "Contribution min pour afficher l'étiquette"
@@ -139,9 +151,6 @@ msgstr "\\(\\eta^2\\) des variables supplémentaires"
 msgid "Individuals plot"
 msgstr "Individus - graphique"
 
-msgid "Points size"
-msgstr "Taille des points"
-
 msgid "Points opacity"
 msgstr "Opacité des points"
 
@@ -169,11 +178,11 @@ msgstr "obj doit être de classes dudi et pca"
 msgid "PCA"
 msgstr "ACP"
 
-msgid "the ade4 package is needed for this function to work."
-msgstr "le package ade4 doit être installé pour utiliser cette fonction."
-
 msgid "obj must be of class coa"
 msgstr "obj doit être de classe coa"
+
+msgid "the ade4 package is needed for this function to work."
+msgstr "le package ade4 doit être installé pour utiliser cette fonction."
 
 #~ msgid "Max p-value"
 #~ msgstr "p-value maximale"
