@@ -278,13 +278,13 @@ explor_mca <- function(res, settings) {
           arrange(Axis, Type, Variable) %>%
           filter(Axis == input$var_x) %>%
           select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (is.null(input$var_sup) || !input$var_sup)
-          tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- res$vars %>% 
           filter(Axis == input$var_y) %>%
           select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (is.null(input$var_sup) || !input$var_sup)
+        if (is.null(input$var_sup) || !input$var_sup) {
+          tmp_x <- tmp_x %>% filter(Type == 'Active')
           tmp_y <- tmp_y %>% filter(Type == 'Active')
+        }
         tmp <- tmp_x %>%
           left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
           mutate(Contrib = Contrib.x + Contrib.y,
