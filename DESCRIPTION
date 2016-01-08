@@ -23,5 +23,6 @@ Suggests:
     FactoMineR,
     ade4,
     testthat,
-    knitr
+    knitr,
+    rmarkdown
 RoxygenNote: 5.0.1
