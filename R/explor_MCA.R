@@ -151,6 +151,9 @@ explor_mca <- function(res, settings) {
                                       sliderInput("var_lab_size", 
                                                   gettext("Labels size", domain = "R-explor"),
                                                   4, 20, 10),
+                                      sliderInput("var_point_size", 
+                                                  gettext("Points size", domain = "R-explor"),
+                                                  4, 128, 56),                                      
                                       numericInput("var_lab_min_contrib",
                                                   gettext("Minimum contribution to show label", domain = "R-explor"),
                                                   min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0),
@@ -309,6 +312,7 @@ explor_mca <- function(res, settings) {
         col_var <- if (input$var_col == "None") NULL else var_data()[, input$var_col]
         symbol_var <- if (input$var_symbol == "None") NULL else var_data()[, input$var_symbol]
         size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
+        size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
         type_var <- ifelse(var_data()[,"Class"] == "Quantitative", "arrow", "point")
         scatterD3::scatterD3(
           x = var_data()[, "Coord.x"],
@@ -318,12 +322,14 @@ explor_mca <- function(res, settings) {
           lab = var_data()[, "Level"],
           labels_size = input$var_lab_size,
           point_opacity = 1,
+          point_size = input$var_point_size,
           col_var = col_var,
           col_lab = input$var_col,
           symbol_var = symbol_var,
           symbol_lab = input$var_symbol,
           size_var = size_var,
           size_lab = input$var_size,
+          size_range = size_range,
           tooltip_text = var_data()[, "tooltip"],
           type_var = type_var,
           unit_circle = has_sup_vars && input$var_sup && "Quantitative" %in% var_data()[,"Class"],
