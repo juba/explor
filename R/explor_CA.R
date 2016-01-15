@@ -110,9 +110,13 @@ explor_ca <- function(res, settings) {
                                 gettext("Hide :", domain = "R-explor"),
                                 choices = var_hide_choices,
                                 selected = "None")
+  var_tab_hide_input <- selectInput("var_tab_hide", 
+                                    gettext("Hide :", domain = "R-explor"),
+                                    choices = var_hide_choices,
+                                    selected = "None")
   
   
-  shiny::shinyApp(
+    shiny::shinyApp(
     ui = navbarPage(gettext("CA", domain = "R-explor"),
                   header = tags$head(
                   tags$style(explor_css())),
@@ -175,7 +179,8 @@ explor_ca <- function(res, settings) {
                                     wellPanel(
                                     selectInput("vardim", 
                                                 gettext("Dimension", domain = "R-explor"),
-                                                choices = res$axes, selected = "1")
+                                                choices = res$axes, selected = "1"),
+                                    var_tab_hide_input                                    
                                     )),
                              column(10,
                                     h4(gettext("Active levels", domain = "R-explor")),                   
@@ -284,9 +289,13 @@ explor_ca <- function(res, settings) {
       }
       
       varTable <- reactive({
-        res$vars %>% 
+        tmp <- res$vars %>% 
           filter(Type == "Active", Axis == input$vardim) %>%
           select_(.dots = settings$var_columns)
+        if (input$var_tab_hide != "None") {
+          tmp <- tmp %>% filter(Position != input$var_tab_hide)
+        }
+        data.frame(tmp)
       })
       output$vartable <- DT::renderDataTable(
         DT::datatable({varTable()}, 
@@ -294,10 +303,14 @@ explor_ca <- function(res, settings) {
       
       ## Supplementary variables
       varTableSup <- reactive({
-        res$vars %>% 
+        tmp <- res$vars %>% 
           filter(Type == "Supplementary", Axis == input$vardim) %>%
           mutate(Level = ifelse(Class == "Quantitative", "-", Level)) %>%
           select_(.dots = settings$varsup_columns)
+        if (input$var_tab_hide != "None") {
+          tmp <- tmp %>% filter(Position != input$var_tab_hide)
+        }
+        data.frame(tmp)
       })
       output$vartablesup <- DT::renderDataTable(
         DT::datatable({varTableSup()}, 
