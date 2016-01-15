@@ -140,7 +140,7 @@ explor_ca <- function(res, settings) {
                                                   choices = res$axes, selected = "2"),
                                       sliderInput("var_lab_size", 
                                                   gettext("Labels size", domain = "R-explor"),
-                                                  4, 20, 10),
+                                                  0, 20, 10),
                                       sliderInput("var_point_size", 
                                                   gettext("Points size", domain = "R-explor"),
                                                   4, 128, 56),                                       
@@ -244,13 +244,14 @@ explor_ca <- function(res, settings) {
         symbol_var <- if (input$var_symbol == "None") NULL else var_data()[, input$var_symbol]
         size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
         size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
+        lab  <- if (input$var_lab_size > 0) var_data()[, "Level"] else NULL
         key_var <- paste0(var_data()[, "Level"], var_data()[, "Position"])
         scatterD3::scatterD3(
           x = var_data()[, "Coord.x"],
           y = var_data()[, "Coord.y"],
           xlab = names(res$axes)[res$axes == input$var_x],
           ylab = names(res$axes)[res$axes == input$var_y],
-          lab = var_data()[, "Level"],
+          lab = lab,
           labels_size = input$var_lab_size,
           point_opacity = 1,
           point_size = input$var_point_size,          
