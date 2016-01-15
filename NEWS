@@ -1,7 +1,7 @@
 explor 0.1.1
 ------------
 
-* Add control to hide Rows or Columns in CA plot.
+* Add control to hide Rows or Columns in CA plot and tables
 * Add the ability to change point size and sizes range in variables plots for CA and MCA.
 
 explor 0.1
