@@ -200,7 +200,12 @@ explor_pca <- function(res, settings) {
                                                     gettext("Labels size", domain = "R-explor"),
                                                             5, 20, 9)
                                       ),
-                                      if (has_sup_ind) ind_col_input,
+                                      if (has_sup_ind) 
+                                        ind_col_input,
+                                      if (has_sup_ind) 
+                                        checkboxInput("ind_ellipses", 
+                                                      HTML(gettext("Ellipses", domain = "R-explor")),
+                                                      value = FALSE),
                                       if (has_sup_ind)
                                         checkboxInput("ind_sup", 
                                                       HTML(gettext("Supplementary individuals", domain = "R-explor")),
@@ -359,6 +364,7 @@ explor_pca <- function(res, settings) {
           labels_size = input$ind_labels_size,
           col_var = col_var,
           col_lab = input$ind_col,
+          ellipses = if (is.null(input$ind_ellipses)) FALSE else input$ind_ellipses,
           tooltip_text = ind_data()[, "tooltip"],
           key_var = ind_data()[, "Name"],
           fixed = TRUE,
