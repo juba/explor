@@ -128,7 +128,7 @@ prepare_results.acm <- function(obj) {
   ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
   
   ## Qualitative data for individuals plot color mapping
-  tmp <- acm$tab
+  tmp <- obj$tab
   row_names <- rownames(tmp)
   # Rebuild original data from `tab` slot
   tmp <- as.data.frame(vapply(names(tmp), function(name) {
