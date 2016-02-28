@@ -275,7 +275,8 @@ explor_ca <- function(res, settings) {
           transitions = input$var_transitions,
           html_id = "imca_var",
           dom_id_reset_zoom = "imca-var-reset-zoom",
-          dom_id_svg_export = "imca-var-svg-export"
+          dom_id_svg_export = "imca-var-svg-export",
+          lasso = TRUE
         )
       })
       

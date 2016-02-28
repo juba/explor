@@ -170,6 +170,10 @@ explor_mca <- function(res, settings) {
                                       tags$p(actionButton("imca-var-reset-zoom", 
                                                           title = gettext("Reset zoom", domain = "R-explor"),
                                                           HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
+                                             actionButton("imca-var-lasso-toggle", 
+                                                          title = gettext("Toggle lasso", domain = "R-explor"),
+                                                          HTML("<span class='glyphicon glyphicon-screenshot' aria-hidden='true'></span>"), 
+                                                          "data-toggle" = "button"),
                                              tags$a(id = "imca-var-svg-export", href = "#",
                                                     class = "btn btn-default", 
                                                     title = gettext("Export as SVG", domain = "R-explor"),
@@ -237,6 +241,10 @@ explor_mca <- function(res, settings) {
                                       tags$p(actionButton("imca-ind-reset-zoom", 
                                                           title = gettext("Reset zoom", domain = "R-explor"),
                                                           HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
+                                             actionButton("imca-ind-lasso-toggle", 
+                                                          title = gettext("Toggle lasso", domain = "R-explor"),
+                                                          HTML("<span class='glyphicon glyphicon-screenshot' aria-hidden='true'></span>"), 
+                                                          "data-toggle" = "button"),
                                              tags$a(id = "imca-ind-svg-export", href = "#",
                                                     class = "btn btn-default", 
                                                     title = gettext("Export as SVG", domain = "R-explor"),
@@ -338,7 +346,9 @@ explor_mca <- function(res, settings) {
           transitions = input$var_transitions,
           html_id = "imca_var",
           dom_id_reset_zoom = "imca-var-reset-zoom",
-          dom_id_svg_export = "imca-var-svg-export"
+          dom_id_svg_export = "imca-var-svg-export",
+          dom_id_lasso_toggle = "imca-var-lasso-toggle",
+          lasso = TRUE
         )
       })
       
@@ -394,7 +404,9 @@ explor_mca <- function(res, settings) {
           transitions = input$ind_transitions,
           html_id = "imca_ind",
           dom_id_reset_zoom = "imca-ind-reset-zoom",
-          dom_id_svg_export = "imca-ind-svg-export"
+          dom_id_svg_export = "imca-ind-svg-export",
+          dom_id_lasso_toggle = "imca-ind-lasso-toggle",
+          lasso = TRUE
         )
       })
       
