@@ -76,3 +76,13 @@ explor_css <- function() {
   .navbar-nav>li>a { font-size: 13px; padding: 15px 10px;}              
   ")
 }
+
+
+explor_lasso_callback <- function() {
+  paste("function(sel) {",
+        "var text = sel.data().map(function(d) {return d.key_var}).join('<br />');",
+        "console.log(text);",
+        "$('#lasso-mod-content').html(text);",
+        "$('#lasso-modal').modal();",
+        "}")
+}
