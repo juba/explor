@@ -162,10 +162,10 @@ explor_ca <- function(res, settings) {
                                       checkboxInput("var_transitions", 
                                                     HTML(gettext("Animations", domain = "R-explor")),
                                                     value = TRUE),
-                                      tags$p(actionButton("imca-var-reset-zoom", 
+                                      tags$p(actionButton("explor-var-reset-zoom", 
                                                           title = gettext("Reset zoom", domain = "R-explor"),
                                                           HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
-                                             tags$a(id = "imca-var-svg-export", href = "#",
+                                             tags$a(id = "explor-var-svg-export", href = "#",
                                                     class = "btn btn-default", 
                                                     title = gettext("Export as SVG", domain = "R-explor"),
                                                     HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),
@@ -273,9 +273,9 @@ explor_ca <- function(res, settings) {
           key_var = key_var,
           fixed = TRUE,
           transitions = input$var_transitions,
-          html_id = "imca_var",
-          dom_id_reset_zoom = "imca-var-reset-zoom",
-          dom_id_svg_export = "imca-var-svg-export",
+          html_id = "explor_var",
+          dom_id_reset_zoom = "explor-var-reset-zoom",
+          dom_id_svg_export = "explor-var-svg-export",
           lasso = TRUE
         )
       })
