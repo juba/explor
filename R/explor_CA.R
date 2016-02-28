@@ -65,6 +65,7 @@ explor.coa <- function(obj) {
 
 
 ##' @import shiny
+##' @import shinyBS
 ##' @import dplyr
 ##' @import scatterD3
 ##' @import ggplot2
@@ -189,8 +190,10 @@ explor_ca <- function(res, settings) {
                                       list(h4(gettext("Supplementary levels", domain = "R-explor")),
                                            DT::dataTableOutput("vartablesup"))
                                     }
-                              )))
-                  
+                              ))),
+                  footer = shinyBS::bsModal(id = "lasso-modal", trigger = NULL,
+                                            title = gettext("Selected points", domain = "R-explor"), 
+                                            tags$p(id = "lasso-mod-content"))
     ),
     
     server = function(input, output) {
@@ -250,7 +253,7 @@ explor_ca <- function(res, settings) {
         size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
         size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
         lab  <- if (input$var_lab_size > 0) var_data()[, "Level"] else NULL
-        key_var <- paste0(var_data()[, "Level"], var_data()[, "Position"])
+        key_var <- paste(var_data()[, "Position"], var_data()[, "Level"], sep="-")
         scatterD3::scatterD3(
           x = var_data()[, "Coord.x"],
           y = var_data()[, "Coord.y"],
@@ -276,7 +279,8 @@ explor_ca <- function(res, settings) {
           html_id = "explor_var",
           dom_id_reset_zoom = "explor-var-reset-zoom",
           dom_id_svg_export = "explor-var-svg-export",
-          lasso = TRUE
+          lasso = TRUE,
+          lasso_callback = explor_lasso_callback()
         )
       })
       

@@ -76,6 +76,7 @@ explor.acm <- function(obj) {
 
 
 ##' @import shiny
+##' @import shinyBS
 ##' @import dplyr
 ##' @import scatterD3
 ##' @import ggplot2
@@ -270,8 +271,10 @@ explor_mca <- function(res, settings) {
                                       list(h4(gettext("Supplementary individuals", domain = "R-explor")),
                                       DT::dataTableOutput("indtablesup"))
                                     }
-                             )))
-                  
+                             ))),
+                  footer = shinyBS::bsModal(id = "lasso-modal", trigger = NULL,
+                                            title = gettext("Selected points", domain = "R-explor"), 
+                                            tags$p(id = "lasso-mod-content"))
     ),
     
     server = function(input, output) {
@@ -346,16 +349,16 @@ explor_mca <- function(res, settings) {
           tooltip_text = var_data()[, "tooltip"],
           type_var = type_var,
           unit_circle = has_sup_vars && input$var_sup && "Quantitative" %in% var_data()[,"Class"],
-          key_var = paste0(var_data()[, "Variable"], var_data()[, "Level"]),
+          key_var = paste(var_data()[, "Variable"], var_data()[, "Level"], sep="-"),
           fixed = TRUE,
           transitions = input$var_transitions,
           html_id = "explor_var",
           dom_id_reset_zoom = "explor-var-reset-zoom",
           dom_id_svg_export = "explor-var-svg-export",
           dom_id_lasso_toggle = "explor-var-lasso-toggle",
-          lasso = TRUE
-        )
-      })
+          lasso = TRUE,
+          lasso_callback = explor_lasso_callback()
+      )})
       
 
       
@@ -417,7 +420,8 @@ explor_mca <- function(res, settings) {
           dom_id_reset_zoom = "explor-ind-reset-zoom",
           dom_id_svg_export = "explor-ind-svg-export",
           dom_id_lasso_toggle = "explor-ind-lasso-toggle",
-          lasso = TRUE
+          lasso = TRUE,
+          lasso_callback = explor_lasso_callback()
         )
       })
       

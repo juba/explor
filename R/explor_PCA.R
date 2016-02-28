@@ -72,6 +72,7 @@ explor.pca <- function(obj) {
 
 
 ##' @import shiny
+##' @import shinyBS
 ##' @import dplyr
 ##' @import scatterD3
 ##' @import ggplot2
@@ -240,7 +241,10 @@ explor_pca <- function(res, settings) {
                                       list(h4(gettext("Supplementary individuals", domain = "R-explor")),
                                       DT::dataTableOutput("indtablesup"))
                                     }
-                             )))
+                             ))),
+                  footer = shinyBS::bsModal(id = "lasso-modal", trigger = NULL,
+                                            title = gettext("Selected points", domain = "R-explor"), 
+                                            tags$p(id = "lasso-mod-content"))
                   
     ),
     
@@ -314,7 +318,8 @@ explor_pca <- function(res, settings) {
           dom_id_reset_zoom = "explor-var-reset-zoom",
           dom_id_svg_export = "explor-var-svg-export",
           dom_id_lasso_toggle = "explor-var-lasso-toggle",
-          lasso = TRUE
+          lasso = TRUE,
+          lasso_callback = explor_lasso_callback()
         )
       })
       
@@ -373,7 +378,8 @@ explor_pca <- function(res, settings) {
           dom_id_reset_zoom = "explor-ind-reset-zoom",
           dom_id_svg_export = "explor-ind-svg-export",
           dom_id_lasso_toggle = "explor-ind-lasso-toggle",
-          lasso = TRUE
+          lasso = TRUE,
+          lasso_callback = explor_lasso_callback()
         )
       })
       

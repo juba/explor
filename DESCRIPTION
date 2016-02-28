@@ -14,6 +14,7 @@ BugReports: https://github.com/juba/explor/issues
 Encoding: UTF-8
 Imports: 
     shiny (>= 0.11),
+    shinyBS,
     DT,
     dplyr,
     tidyr,
