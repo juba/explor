@@ -1,6 +1,9 @@
-explor 0.1.1
+explor 0.2
 ------------
 
+* Add ability to select points with lasso
+* Add ellipses to color mapping variables
+* Add ability to color individual points according to one of the qualitative variables in MCA
 * Add control to hide Rows or Columns in CA plot and tables
 * Add the ability to change point size and sizes range in variables plots for CA and MCA.
 
