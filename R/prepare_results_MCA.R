@@ -151,6 +151,12 @@ prepare_results.MCA <- function(obj) {
   
   ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
   
-  return(list(vars = vars, ind = ind, eig = eig, axes = axes, vareta2 = vareta2))
+  ## Qualitative data for individuals plot color mapping
+  quali_data <- obj$call$X[,obj$call$quali] %>% 
+    bind_cols(obj$call$X[,obj$call$quali.sup])
+  quali_data$Name <- rownames(quali_data)
+    
+  
+  return(list(vars = vars, ind = ind, eig = eig, axes = axes, vareta2 = vareta2, quali_data = quali_data))
   
 }

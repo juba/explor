@@ -4,6 +4,7 @@
 ##' @seealso \code{\link[ade4]{dudi.acm}}
 ##' @import dplyr
 ##' @importFrom tidyr gather
+##' @importFrom tidyr unite
 ##' @importFrom utils head
 ##' @export
 
@@ -126,6 +127,25 @@ prepare_results.acm <- function(obj) {
 
   ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
   
-  return(list(vars = vars, ind = ind, eig = eig, axes = axes, vareta2 = vareta2))
+  ## Qualitative data for individuals plot color mapping
+  tmp <- acm$tab
+  row_names <- rownames(tmp)
+  # Rebuild original data from `tab` slot
+  tmp <- as.data.frame(vapply(names(tmp), function(name) {
+    value <- sub("^.*?\\.", "", name)
+    v <- rep("", nrow(tmp))
+    v[tmp[,name] >= 0] <- value
+    return(v)
+  }, character(nrow(tmp))))
+  names <- sub("\\..*$", "", names(tmp))
+  for (name in unique(names)) {
+    cols <- grep(paste0("^", name, "\\."), names(tmp), value = TRUE)
+    tmp <- tmp %>% 
+      tidyr::unite_(name, cols, sep = "")
+  }
+  tmp$Name <- row_names
+  quali_data <- tmp
+  
+  return(list(vars = vars, ind = ind, eig = eig, axes = axes, vareta2 = vareta2, quali_data = quali_data))
   
 }
