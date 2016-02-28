@@ -115,10 +115,12 @@ explor_mca <- function(res, settings) {
   ind_col_choices <- c("None", "Type")
   names(ind_col_choices) <- c(gettext("None", domain = "R-explor"),
                               gettext("Individual type", domain = "R-explor"))
+  ind_col_choices <- c(ind_col_choices, names(res$quali_data))
+  ind_col_choices <- setdiff(ind_col_choices, "Name")
   ind_col_input <- selectInput("ind_col", 
                                gettext("Points color :", domain = "R-explor"),
                                choices = ind_col_choices,
-                               selected = "Type")
+                               selected = "None")
 
   has_sup_ind <- "Supplementary" %in% res$ind$Type
 
@@ -230,7 +232,10 @@ explor_mca <- function(res, settings) {
                                                     gettext("Labels size", domain = "R-explor"),
                                                     5, 20, 9)
                                       ),
-                                      if (has_sup_ind) ind_col_input,
+                                      ind_col_input,
+                                      checkboxInput("ind_ellipses", 
+                                                    HTML(gettext("Ellipses", domain = "R-explor")),
+                                                    value = FALSE),
                                       if (has_sup_ind)
                                         checkboxInput("ind_sup", 
                                                       HTML(gettext("Supplementary individuals", domain = "R-explor")),
@@ -380,6 +385,11 @@ explor_mca <- function(res, settings) {
                                         gettext("Contribution:", domain = "R-explor"),
                                         "</strong> ", Contrib),
                                  sep = "<br />"))
+        if (!(is.null(input$ind_col) || input$ind_col %in% c("None", "Type"))) {
+          tmp_data <- res$quali_data %>% select_("Name", input$ind_col)
+          tmp <- tmp %>%
+            left_join(tmp_data, by="Name")
+        }
         data.frame(tmp)
       })
       
@@ -398,6 +408,7 @@ explor_mca <- function(res, settings) {
           labels_size = input$ind_labels_size,
           col_var = col_var,
           col_lab = input$ind_col,
+          ellipses = input$ind_ellipses,
           tooltip_text = ind_data()[, "tooltip"],
           key_var = ind_data()[, "Name"],
           fixed = TRUE,
