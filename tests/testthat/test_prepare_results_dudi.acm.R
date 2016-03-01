@@ -55,3 +55,9 @@ test_that("Supplementary individuals results are equal", {
                data.frame(res$ind)[res$ind$Type == "Supplementary" & res$ind$Axis == "4", "Coord"])
 })  
 
+test_that("Qualitative data are equal", {
+  ids <- c(11, 20, 45, 87, 89, 99, 100)
+  expect_equal(as.character(res$quali_data$duree[res$quali_data$Name %in% ids]),
+               as.character(banque[ids, "duree"]))
+})
+

@@ -60,3 +60,9 @@ test_that("Supplementary individuals results are equal", {
                data.frame(res$ind)[res$ind$Type == "Supplementary" & res$ind$Axis == "2", "Cos2"])
 })  
 
+test_that("Qualitative data are equal", {
+  ids <- c("11000210", "11009110", "21052910", "21063810", "22007510")
+  expect_equal(as.character(res$quali_data$`Marital status`[res$quali_data$Name %in% ids]),
+               as.character(hobbies[ids, "Marital status"]))
+})
+
