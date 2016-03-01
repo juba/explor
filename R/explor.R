@@ -56,6 +56,7 @@ explor_css <- function() {
   }
   .well .checkbox { margin-left: 5px !important; }
   .well {padding: 5px !important;}
+  .well .btn { padding: 6px 10px; }
   .dataTable th, 
   .dataTable td {
       font-size: 11px !important;
