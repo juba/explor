@@ -285,7 +285,7 @@ explor_ca <- function(res, settings) {
       })
       
 
-      tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = FALSE)
+      tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
 
       ## Generate correct datatable order option from a column name
       order_option <- function(table, name, order="desc") {
