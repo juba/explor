@@ -154,7 +154,7 @@ prepare_results.MCA <- function(obj) {
   ## Qualitative data for individuals plot color mapping
   quali_data <- obj$call$X[,obj$call$quali] %>% 
     bind_cols(obj$call$X[,obj$call$quali.sup])
-  quali_data$Name <- rownames(obj$ind$coord)
+  quali_data$Name <- rownames(obj$call$X)
     
   
   return(list(vars = vars, ind = ind, eig = eig, axes = axes, vareta2 = vareta2, quali_data = quali_data))
