@@ -43,6 +43,7 @@ These data and graphics are displayed with several "interactive" features. Numer
 - tooltips when hovering points
 - points highlighting when hovering legend items
 - draggable labels
+- points selection with a lasso selection tool
 - ability to export the currently displayed plot as an SVG file
 - fully updatable plot, which means than any change in the interface controls leads to an animated transition, which can give some interesting visual clues.
 

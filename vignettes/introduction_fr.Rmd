@@ -40,6 +40,7 @@ Pour chaque méthode, `explor` lance une interface Web interactive qui s'affiche
 - affichage de *tooltips* au survol des points
 - mise en valeur des données correspondantes au survol des items de légendes
 - étiquettes déplaçables
+- sélection de points à l'aide d'un outil de type "lasso"
 - possibilité d'export du graphique actuel au format SVG
 - les modifications du graphique se font sous la forme de transitions animées
 
