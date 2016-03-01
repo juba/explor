@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: explor 0.1.1\n"
-"POT-Creation-Date: 2016-01-08 16:48\n"
+"Project-Id-Version: explor 0.2\n"
+"POT-Creation-Date: 2016-03-01 14:36\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,6 +97,9 @@ msgstr ""
 msgid "Active levels"
 msgstr ""
 
+msgid "Selected points"
+msgstr ""
+
 msgid "Axis"
 msgstr ""
 
@@ -133,6 +136,9 @@ msgstr ""
 msgid "Supplementary variables"
 msgstr ""
 
+msgid "Toggle lasso"
+msgstr ""
+
 msgid "Variables data"
 msgstr ""
 
@@ -152,6 +158,9 @@ msgid "Points opacity"
 msgstr ""
 
 msgid "Show labels"
+msgstr ""
+
+msgid "Ellipses"
 msgstr ""
 
 msgid "Supplementary individuals"

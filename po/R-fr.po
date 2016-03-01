@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2016-01-08 16:48\n"
-"PO-Revision-Date: 2016-01-08 16:50+0100\n"
+"POT-Creation-Date: 2016-03-01 14:36\n"
+"PO-Revision-Date: 2016-03-01 14:37+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -100,6 +100,9 @@ msgstr "Axe"
 msgid "Active levels"
 msgstr "Modalités actives"
 
+msgid "Selected points"
+msgstr "Points sélectionnés"
+
 msgid "Axis"
 msgstr "Axe"
 
@@ -136,6 +139,9 @@ msgstr "Variables - graphique"
 msgid "Supplementary variables"
 msgstr "Variables supplémentaires"
 
+msgid "Toggle lasso"
+msgstr "Sélection lasso"
+
 msgid "Variables data"
 msgstr "Variables - données"
 
@@ -156,6 +162,9 @@ msgstr "Opacité des points"
 
 msgid "Show labels"
 msgstr "Afficher les étiquettes"
+
+msgid "Ellipses"
+msgstr "Ellipses"
 
 msgid "Supplementary individuals"
 msgstr "Individus supplémentaires"
