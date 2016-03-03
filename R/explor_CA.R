@@ -241,7 +241,7 @@ explor_ca <- function(res, settings) {
                                          gettext("Contribution:", domain = "R-explor"),
                                          "</strong> ", Contrib),
                                   sep = "<br />"),
-                 Level = ifelse(Contrib >= as.numeric(input$var_lab_min_contrib) | 
+                 Lab = ifelse(Contrib >= as.numeric(input$var_lab_min_contrib) | 
                                   (is.na(Contrib) & as.numeric(input$var_lab_min_contrib) == 0), Level, ""))                 
         data.frame(tmp)
       })
@@ -252,7 +252,7 @@ explor_ca <- function(res, settings) {
         symbol_var <- if (input$var_symbol == "None") NULL else var_data()[, input$var_symbol]
         size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
         size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
-        lab  <- if (input$var_lab_size > 0) var_data()[, "Level"] else NULL
+        lab  <- if (input$var_lab_size > 0) var_data()[, "Lab"] else NULL
         key_var <- paste(var_data()[, "Position"], var_data()[, "Level"], sep="-")
         scatterD3::scatterD3(
           x = var_data()[, "Coord.x"],

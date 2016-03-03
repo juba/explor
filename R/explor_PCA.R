@@ -287,7 +287,7 @@ explor_pca <- function(res, settings) {
                                          gettext("Contribution:", domain = "R-explor"),
                                          "</strong> ", Contrib),
                                   sep = "<br />"),
-                 Variable = ifelse(Contrib >= as.numeric(input$var_lab_min_contrib) | 
+                 Lab = ifelse(Contrib >= as.numeric(input$var_lab_min_contrib) | 
                                   (is.na(Contrib) & as.numeric(input$var_lab_min_contrib) == 0), Variable, ""))
         data.frame(tmp)
       })
@@ -301,7 +301,7 @@ explor_pca <- function(res, settings) {
           y = var_data()[, "Coord.y"],
           xlab = names(res$axes)[res$axes == input$var_x],
           ylab = names(res$axes)[res$axes == input$var_y],
-          lab = var_data()[, "Variable"],
+          lab = var_data()[, "Lab"],
           labels_size = input$var_lab_size,
           point_opacity = 1,
           col_var = col_var,
