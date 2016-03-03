@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2016-03-01 14:36\n"
-"PO-Revision-Date: 2016-03-01 14:37+0100\n"
+"POT-Creation-Date: 2016-03-03 15:02\n"
+"PO-Revision-Date: 2016-03-03 15:03+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -12,6 +12,12 @@ msgstr ""
 "X-Generator: Poedit 1.8.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "Identifiers"
+msgstr "Identifiants"
+
+msgid "R vector"
+msgstr "Vecteur R"
 
 msgid "obj must be of class CA"
 msgstr "obj doit être de classe CA"
