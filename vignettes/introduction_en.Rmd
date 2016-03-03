@@ -24,9 +24,9 @@ Analysis | Function  | Package | Notes
 Principal component analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | Qualitative supplementary variables are ignored
 Correspondance analysis  | CA  | [FactoMineR](http://factominer.free.fr/) | -
 Multiple correspondence analysis  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
-Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/web/packages/ade4/) | Qualitative supplementary variables are ignored
-Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/web/packages/ade4/)  | -
-Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/web/packages/ade4/) | Quantitative supplementary variables are ignored
+Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Qualitative supplementary variables are ignored
+Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
+Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Quantitative supplementary variables are ignored
 
 
 
