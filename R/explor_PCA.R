@@ -61,7 +61,7 @@ explor.pca <- function(obj) {
   settings$varsup_columns <- c("Variable", "Coord")
   settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
   settings$indsup_columns <- c("Name", "Coord")
-  settings$scale_unit <- obj$call$scale 
+  settings$scale_unit <- if (is.null(obj$call$scale)) TRUE else obj$call$scale
   
 
   ## Launch interface

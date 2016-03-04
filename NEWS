@@ -1,7 +1,7 @@
 explor 0.2.1
 ------------
 
-* 
+* Bugfix : No variable plot when missing `scale` argument in `dudi.pca`
 
 
 explor 0.2
