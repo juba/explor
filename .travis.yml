@@ -2,5 +2,6 @@
 
 language: r
 warnings_are_errors: true
-sudo: false
+sudo: required
 cache: package
+r_binary_packages: ggplot2, FactoMineR
