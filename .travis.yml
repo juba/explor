@@ -7,3 +7,4 @@ cache: package
 r_binary_packages: 
   - ggplot2
   - FactoMineR
+
