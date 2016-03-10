@@ -34,7 +34,7 @@ test_that("Qualitative supplementary variables results are equal", {
                           res$vars$Class == "Qualitative" & res$vars$Axis == "3", "V.test"])
   expect_equal(as.vector(format(mca$quali.sup$eta2[,2], scientific = FALSE, nsmall = 3, digits = 0)),
                data.frame(res$vareta2)[res$vareta2$Type == "Supplementary" & 
-                                         res$vars$Class == "Qualitative" &
+                                         res$vareta2$Class == "Qualitative" &
                                          res$vareta2$Axis == "2", "eta2", drop = TRUE])
 })
 
