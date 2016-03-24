@@ -3,6 +3,7 @@ explor 0.2.1
 
 * Bugfix : core dump in explor.MCA when only one supplementary qualitative variable
 * Bugfix : No variable plot when missing `scale` argument in `dudi.pca`
+* Fix test failing with next `testthat` version
 
 
 explor 0.2
