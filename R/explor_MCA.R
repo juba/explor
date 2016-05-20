@@ -288,141 +288,43 @@ explor_mca <- function(res, settings) {
           scale_y_continuous(gettext("Percentage of inertia", domain = "R-explor"))
       })
 
-      ## Variables plot reactive data
-      var_data <- reactive({
-        tmp_x <- res$vars %>%
-          arrange(Axis, Type, Variable) %>%
-          filter(Axis == input$var_x) %>%
-          select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
-        tmp_y <- res$vars %>% 
-          filter(Axis == input$var_y) %>%
-          select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (is.null(input$var_sup) || !input$var_sup) {
-          tmp_x <- tmp_x %>% filter(Type == 'Active')
-          tmp_y <- tmp_y %>% filter(Type == 'Active')
-        }
-        tmp <- tmp_x %>%
-          left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
-          mutate(Contrib = Contrib.x + Contrib.y,
-                 Cos2 = Cos2.x + Cos2.y,
-                 tooltip = paste(paste0("<strong>", Level, "</strong>"),
-                                 paste0("<strong>",
-                                        gettext("Variable", domain = "R-explor"),
-                                        ":</strong> ", Variable),
-                                  paste0("<strong>x:</strong> ", Coord.x),
-                                  paste0("<strong>y:</strong> ", Coord.y),
-                                  paste0("<strong>",
-                                         gettext("Cos2", domain = "R-explor"),
-                                         ":</strong> ", Cos2),
-                                  paste0("<strong>",
-                                         gettext("Contribution:", domain = "R-explor"),
-                                         "</strong> ", Contrib),
-                                  sep = "<br />"),
-                 Lab = ifelse(Contrib >= as.numeric(input$var_lab_min_contrib) | 
-                                  (is.na(Contrib) & as.numeric(input$var_lab_min_contrib) == 0), Level, ""))
-        data.frame(tmp)
-      })
-      
       ## Variables plot
       output$varplot <- scatterD3::renderScatterD3({
-        col_var <- if (input$var_col == "None") NULL else var_data()[, input$var_col]
-        symbol_var <- if (input$var_symbol == "None") NULL else var_data()[, input$var_symbol]
-        size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
+        col_var <- if (input$var_col == "None") NULL else input$var_col
+        symbol_var <- if (input$var_symbol == "None") NULL else input$var_symbol
+        size_var <- if (input$var_size == "None") NULL else input$var_size
         size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
-        type_var <- ifelse(var_data()[,"Class"] == "Quantitative", "arrow", "point")
-        scatterD3::scatterD3(
-          x = var_data()[, "Coord.x"],
-          y = var_data()[, "Coord.y"],
-          xlab = names(res$axes)[res$axes == input$var_x],
-          ylab = names(res$axes)[res$axes == input$var_y],
-          lab = var_data()[, "Lab"],
-          labels_size = input$var_lab_size,
-          point_opacity = 1,
-          point_size = input$var_point_size,
-          col_var = col_var,
-          col_lab = input$var_col,
-          symbol_var = symbol_var,
-          symbol_lab = input$var_symbol,
-          size_var = size_var,
-          size_lab = input$var_size,
-          size_range = size_range,
-          tooltip_text = var_data()[, "tooltip"],
-          type_var = type_var,
-          unit_circle = has_sup_vars && input$var_sup && "Quantitative" %in% var_data()[,"Class"],
-          key_var = paste(var_data()[, "Variable"], var_data()[, "Level"], sep="-"),
-          fixed = TRUE,
-          transitions = input$var_transitions,
-          html_id = "explor_var",
-          dom_id_reset_zoom = "explor-var-reset-zoom",
-          dom_id_svg_export = "explor-var-svg-export",
-          dom_id_lasso_toggle = "explor-var-lasso-toggle",
-          lasso = TRUE,
-          lasso_callback = explor_lasso_callback()
-      )})
-      
-
-      
-      ## Individuals plot reactive data
-      ind_data <- reactive({
-        tmp_x <- res$ind %>% 
-          filter(Axis == input$ind_x) %>%
-          select(Name, Type, Coord, Contrib, Cos2)
-        if (is.null(input$ind_sup) || !input$ind_sup)
-          tmp_x <- tmp_x %>% filter(Type == "Active")
-        tmp_y <- res$ind %>% 
-          filter(Axis == input$ind_y) %>%
-          select(Name, Type, Coord, Contrib, Cos2)
-        if (is.null(input$ind_sup) || !input$ind_sup)
-          tmp_y <- tmp_y %>% filter(Type == "Active")
-        tmp <- tmp_x %>%
-          left_join(tmp_y, by = c("Name", "Type")) %>%
-          mutate(Contrib = Contrib.x + Contrib.y,
-                 Cos2 = Cos2.x + Cos2.y,
-                 tooltip = paste(paste0("<strong>", Name, "</strong>"),
-                                 paste0("<strong>x:</strong> ", Coord.x),
-                                 paste0("<strong>y:</strong> ", Coord.y),
-                                 paste0("<strong>",
-                                        gettext("Squared cosinus", domain = "R-explor"),
-                                        ":</strong> ", Cos2),
-                                 paste0("<strong>",
-                                        gettext("Contribution:", domain = "R-explor"),
-                                        "</strong> ", Contrib),
-                                 sep = "<br />"))
-        if (!(is.null(input$ind_col) || input$ind_col %in% c("None", "Type"))) {
-          tmp_data <- res$quali_data %>% select_("Name", input$ind_col)
-          tmp <- tmp %>%
-            left_join(tmp_data, by="Name")
-        }
-        data.frame(tmp)
+        explor::MCA_var_plot(res, 
+                             xax = input$var_x,
+                             yax = input$var_y,
+                             var_sup = has_sup_vars && input$var_sup,
+                             var_lab_min_contrib = input$var_lab_min_contrib,
+                             col_var = col_var,
+                             symbol_var = symbol_var,
+                             size_var = size_var,
+                             size_range = size_range,
+                             var_lab_size = input$var_lab_size,
+                             var_point_size = input$var_point_size,
+                             transitions = input$var_transitions
+                             )
       })
       
+
       ## Individuals plot
       output$indplot <- scatterD3::renderScatterD3({
-        col_var <- if (is.null(input$ind_col) || input$ind_col == "None") NULL else ind_data()[, input$ind_col]
-        lab_var <- if (input$ind_labels_show) ind_data()[, "Name"] else NULL
-        scatterD3::scatterD3(
-          x = ind_data()[, "Coord.x"],
-          y = ind_data()[, "Coord.y"],
-          xlab = names(res$axes)[res$axes == input$ind_x],
-          ylab = names(res$axes)[res$axes == input$ind_y],
-          point_size = input$ind_point_size,
-          point_opacity = input$ind_opacity,
-          lab = lab_var,
-          labels_size = input$ind_labels_size,
-          col_var = col_var,
-          col_lab = input$ind_col,
-          ellipses = input$ind_ellipses,
-          tooltip_text = ind_data()[, "tooltip"],
-          key_var = ind_data()[, "Name"],
-          fixed = TRUE,
-          transitions = input$ind_transitions,
-          html_id = "explor_ind",
-          dom_id_reset_zoom = "explor-ind-reset-zoom",
-          dom_id_svg_export = "explor-ind-svg-export",
-          dom_id_lasso_toggle = "explor-ind-lasso-toggle",
-          lasso = TRUE,
-          lasso_callback = explor_lasso_callback()
-        )
+        ind_col <- if (is.null(input$ind_col) || input$ind_col == "None") NULL else input$ind_col
+        lab_var <- if (input$ind_labels_show) "Name" else NULL
+        explor::MCA_ind_plot(res, 
+                     xax = input$ind_x,
+                     yax = input$ind_y,
+                     ind_sup = input$ind_sup,
+                     ind_col = ind_col,
+                     lab_var = lab_var,
+                     ellipses = input$ind_ellipses,
+                     ind_point_size = input$ind_point_size,
+                     ind_labels_size = input$ind_labels_size,
+                     ind_opacity = input$ind_opacity,
+                     transitions = input$ind_transitions)
       })
       
       tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
