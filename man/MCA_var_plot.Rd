@@ -5,8 +5,8 @@
 \title{Interactive MCA variables plot}
 \usage{
 MCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
-  var_lab_min_contrib = 0, col_var = "Variable", symbol_var = "Type",
-  size_var = NULL, size_range = c(30, 400), var_lab_size = 12,
+  var_lab_min_contrib = 0, col_var = "Variable", symbol_var = NULL,
+  size_var = NULL, size_range = c(10, 400), var_lab_size = 10,
   var_point_size = 30, transitions = FALSE)
 }
 \arguments{

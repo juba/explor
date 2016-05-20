@@ -4,8 +4,8 @@
 \alias{MCA_ind_plot}
 \title{Interactive MCA indivuals plot}
 \usage{
-MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, ind_col = "Type",
-  symbol_var = "Type", size_var = NULL, size_range = c(30, 400),
+MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, ind_col = NULL,
+  symbol_var = "Type", size_var = NULL, size_range = c(10, 400),
   lab_var = "Name", ellipses = FALSE, ind_point_size = 64,
   ind_labels_size = 9, ind_opacity = 0.5, transitions = FALSE)
 }
