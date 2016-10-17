@@ -253,24 +253,11 @@ explor_multi_mca <- function(res, settings) {
                                              tags$a(id = "explor-ind-svg-export", href = "#",
                                                     class = "btn btn-default", 
                                                     title = gettext("Export as SVG", domain = "R-explor"),
-                                                    HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),                                 column(10,
-                                    scatterD3Output("indplot")))),
-                  
-                  tabPanel(gettext("Individuals data", domain = "R-explor"),
-                           fluidRow(
-                             column(2,
-                                    wellPanel(
-                                    selectInput("inddim", 
-                                                gettext("Dimension", domain = "R-explor"),
-                                                choices = res$axes, selected = "Axis 1"))),
+                                                    HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),
                              column(10,
-                                    h4(gettext("Active individuals", domain = "R-explor")),
-                                    DT::dataTableOutput("indtable"),
-                                    if (has_sup_ind) {
-                                      list(h4(gettext("Supplementary individuals", domain = "R-explor")),
-                                      DT::dataTableOutput("indtablesup"))
-                                    }
-                             )))
+                                    scatterD3Output("indplot")))),
+                  tabPanel(gettext("Individuals data", domain = "R-explor"),
+                           explor_multi_ind_dataUI("ind_data", has_sup_ind, res$axes))
     ),
     
     server = function(input, output) {
@@ -324,15 +311,9 @@ explor_multi_mca <- function(res, settings) {
       })
       
       tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
-      tableOptions_ind <- list(lengthMenu = c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
       tableOptions_eta2 <- list(lengthMenu = c(10,20,50), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
       
-      ## Generate correct datatable order option from a column name
-      order_option <- function(table, name, order="desc") {
-        index <- which(names(table) == name) - 1
-        list(order = list(list(index, order)))
-      }
-      
+    
       varTable <- reactive({
         res$vars %>% 
           filter(Type == "Active", Axis == input$vardim) %>%
@@ -378,27 +359,9 @@ explor_multi_mca <- function(res, settings) {
         DT::datatable({varTableSupEta2()},
                       options = c(tableOptions_eta2, order_option(varTableSupEta2(), "eta2")), rownames = FALSE))
 
-      ## Active individuals
-      indTable <- reactive({
-        res$ind %>%
-          filter(Type == "Active", Axis == input$inddim) %>%
-          select_(.dots = settings$ind_columns)
-      })
-      output$indtable = DT::renderDataTable(
-        DT::datatable({indTable()},
-                      options = c(tableOptions_ind, order_option(indTable(), "Coord")), rownames = FALSE))
 
-
-      ## Supplementary individuals
-      indTableSup <- reactive({
-        res$ind %>%
-          filter(Type == "Supplementary", Axis == input$inddim) %>%
-          select_(.dots = settings$indsup_columns)
-      })
-      output$indtablesup = DT::renderDataTable(
-        DT::datatable({indTableSup()},
-                      options = c(tableOptions_ind, order_option(indTableSup(), "Coord")), rownames = FALSE))
-
+        callModule(explor_multi_ind_data, "ind_data", reactive(res$ind), reactive(settings))
+        
         ## Lasso modal dialog
         observeEvent(input$show_lasso_modal, {
             showModal(modalDialog(

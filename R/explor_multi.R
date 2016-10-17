@@ -61,3 +61,59 @@ explor_multi_lasso_callback <- function() {
         Shiny.onInputChange('show_lasso_modal', out);
      }"
 }
+
+
+## Generate correct datatable order option from a column name
+order_option <- function(table, name, order="desc") {
+    index <- which(names(table) == name) - 1
+    list(order = list(list(index, order)))
+}
+
+
+## INDIVIDUAL DATA SHINY MODULE
+
+explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
+    ns <- NS(id)
+    fluidRow(
+        column(2,
+               wellPanel(
+                   selectInput(ns("inddim"), 
+                               gettext("Dimension", domain = "R-explor"),
+                               choices = axes, selected = "Axis 1"))),
+        column(10,
+               h4(gettext("Active individuals", domain = "R-explor")),
+               DT::dataTableOutput(ns("indtable")),
+               if (has_sup_ind) {
+                   list(h4(gettext("Supplementary individuals", domain = "R-explor")),
+                        DT::dataTableOutput(ns("indtablesup")))
+               }
+               ))
+}
+
+
+explor_multi_ind_data <- function(input, output, session, ind, settings) {
+
+    tableOptions_ind <- list(lengthMenu = c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
+
+    ## Active individuals
+    indTable <- reactive({
+        ind() %>%
+            filter(Type == "Active", Axis == input$inddim) %>%
+            select_(.dots = settings()$ind_columns)
+    })
+    output$indtable <- DT::renderDataTable(
+                               DT::datatable({indTable()},
+                                             options = c(tableOptions_ind, order_option(indTable(), "Coord")), rownames = FALSE))
+
+    ## Supplementary individuals
+    indTableSup <- reactive({
+        ind() %>%
+            filter(Type == "Supplementary", Axis == input$inddim) %>%
+            select_(.dots = settings()$indsup_columns)
+    })
+    output$indtablesup <- DT::renderDataTable(
+                                  DT::datatable({indTableSup()},
+                                                options = c(tableOptions_ind, order_option(indTableSup(), "Coord")), rownames = FALSE))
+    
+}
+
