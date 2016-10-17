@@ -17,6 +17,7 @@ explor(acm)
 d <- hdv2003 %>% 
   select(sexe, nivetud, qualif, clso, relig, cuisine, bricol)
 acm <- MCA(d, graph = FALSE)
+detach(package:explor, unload=TRUE); library(explor)
 explor(acm)
 
 ## MCA 2
