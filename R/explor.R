@@ -85,15 +85,13 @@ explor_css <- function() {
 
 
 explor_lasso_callback <- function() {
-  paste("function(sel) {",
-        "var selected = sel.data().map(function(d) {return d.key_var});",
-        "var values = selected.join('<br />');",        
-        "var r_code = 'c(\"' + selected.join('\", \"') + '\")';",
-        "var out = '<h4>", gettext("Identifiers", domain = "R-explor"), "</h4>",
-                  "<p><pre>'+values+'</pre></p>",
-                  "<h4>",gettext("R vector", domain = "R-explor"), "</h4>",
-                  "<p><pre>'+r_code+'</pre></p>';",
-        "$('#lasso-mod-content').html(out);",
-        "$('#lasso-modal').modal();",
-        "}")
+    "function(sel) {
+        var selected = sel.data().map(function(d) {return d.key_var});
+        var values = selected.join('<br />');       
+        var r_code = 'c(\"' + selected.join('\", \"') + '\")';
+        var out = '<h4>IDs</h4><p><pre>'+values+'</pre></p>';
+        out += '<h4>R vector</h4>';
+        out += '<p><pre>'+r_code+'</pre></p>';
+        Shiny.onInputChange('show_lasso_modal', out);
+     }"
 }

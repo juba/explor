@@ -72,7 +72,6 @@ explor.pca <- function(obj) {
 
 
 ##' @import shiny
-##' @import shinyBS
 ##' @import dplyr
 ##' @import scatterD3
 ##' @import ggplot2
@@ -241,11 +240,7 @@ explor_pca <- function(res, settings) {
                                       list(h4(gettext("Supplementary individuals", domain = "R-explor")),
                                       DT::dataTableOutput("indtablesup"))
                                     }
-                             ))),
-                  footer = shinyBS::bsModal(id = "lasso-modal", trigger = NULL,
-                                            title = gettext("Selected points", domain = "R-explor"), 
-                                            tags$p(id = "lasso-mod-content"))
-                  
+                             )))
     ),
     
     server = function(input, output) {
@@ -434,7 +429,15 @@ explor_pca <- function(res, settings) {
         DT::datatable({indTableSup()}, 
                       options = c(tableOptions_ind,  order_option(indTableSup(), "Coord")), rownames = FALSE))
       
-          
+        ## Lasso modal dialog
+        observeEvent(input$show_lasso_modal, {
+            showModal(modalDialog(
+                title = "Lasso selection",
+                HTML(input$show_lasso_modal),
+                easyClose = TRUE
+            ))
+        })
+        
     }
   )
 }

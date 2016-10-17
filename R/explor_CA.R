@@ -65,7 +65,6 @@ explor.coa <- function(obj) {
 
 
 ##' @import shiny
-##' @import shinyBS
 ##' @import dplyr
 ##' @import scatterD3
 ##' @import ggplot2
@@ -190,10 +189,7 @@ explor_ca <- function(res, settings) {
                                       list(h4(gettext("Supplementary levels", domain = "R-explor")),
                                            DT::dataTableOutput("vartablesup"))
                                     }
-                              ))),
-                  footer = shinyBS::bsModal(id = "lasso-modal", trigger = NULL,
-                                            title = gettext("Selected points", domain = "R-explor"), 
-                                            tags$p(id = "lasso-mod-content"))
+                              )))
     ),
     
     server = function(input, output) {
@@ -320,6 +316,15 @@ explor_ca <- function(res, settings) {
       output$vartablesup <- DT::renderDataTable(
         DT::datatable({varTableSup()}, 
                       options = c(tableOptions_var, order_option(varTableSup(), "Coord")), rownames = FALSE))
+        
+        ## Lasso modal dialog
+        observeEvent(input$show_lasso_modal, {
+            showModal(modalDialog(
+                title = "Lasso selection",
+                HTML(input$show_lasso_modal),
+                easyClose = TRUE
+            ))
+        })
       
     }
   )
