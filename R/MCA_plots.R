@@ -92,7 +92,7 @@ MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
     dom_id_svg_export = "explor-var-svg-export",
     dom_id_lasso_toggle = "explor-var-lasso-toggle",
     lasso = TRUE,
-    lasso_callback = explor_lasso_callback()
+    lasso_callback = explor_multi_lasso_callback()
   )  
 }
 
@@ -183,7 +183,7 @@ MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_col = NULL,
     dom_id_svg_export = "explor-ind-svg-export",
     dom_id_lasso_toggle = "explor-ind-lasso-toggle",
     lasso = TRUE,
-    lasso_callback = explor_lasso_callback()
+    lasso_callback = explor_multi_lasso_callback()
   )
 }
 

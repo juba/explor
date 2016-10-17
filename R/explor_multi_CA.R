@@ -15,7 +15,7 @@ explor.CA <- function(obj) {
   settings$varsup_columns <- c("Level", "Position", "Coord", "Cos2")
   
   ## Launch interface
-  explor_ca(res, settings)
+  explor_multi_ca(res, settings)
   
 }
   
@@ -57,7 +57,7 @@ explor.coa <- function(obj) {
   settings$varsup_columns <- c("Level", "Position", "Coord")
 
   ## Launch interface
-  explor_ca(res, settings)
+  explor_multi_ca(res, settings)
   
 }
 
@@ -69,7 +69,7 @@ explor.coa <- function(obj) {
 ##' @import scatterD3
 ##' @import ggplot2
 
-explor_ca <- function(res, settings) { 
+explor_multi_ca <- function(res, settings) { 
     
   ## Precompute inputs 
   has_sup_vars <- "Supplementary" %in% res$vars$Type
@@ -119,7 +119,7 @@ explor_ca <- function(res, settings) {
     shiny::shinyApp(
     ui = navbarPage(gettext("CA", domain = "R-explor"),
                   header = tags$head(
-                  tags$style(explor_css())),
+                  tags$style(explor_multi_css())),
                   tabPanel(gettext("Eigenvalues", domain = "R-explor"),
                            fluidRow(
                              column(2,
@@ -276,7 +276,7 @@ explor_ca <- function(res, settings) {
           dom_id_reset_zoom = "explor-var-reset-zoom",
           dom_id_svg_export = "explor-var-svg-export",
           lasso = TRUE,
-          lasso_callback = explor_lasso_callback()
+          lasso_callback = explor_multi_lasso_callback()
         )
       })
       

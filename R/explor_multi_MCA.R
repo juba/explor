@@ -20,7 +20,7 @@ explor.MCA <- function(obj) {
   settings$indsup_columns <- c("Name", "Coord")
 
   ## Launch interface
-  explor_mca(res, settings)
+  explor_multi_mca(res, settings)
   
 }
   
@@ -68,7 +68,7 @@ explor.acm <- function(obj) {
   settings$indsup_columns <- c("Name", "Coord")
   
   ## Launch interface
-  explor_mca(res, settings)
+  explor_multi_mca(res, settings)
   
 }
 
@@ -80,7 +80,7 @@ explor.acm <- function(obj) {
 ##' @import scatterD3
 ##' @import ggplot2
 
-explor_mca <- function(res, settings) { 
+explor_multi_mca <- function(res, settings) { 
     
   ## Precompute inputs 
   has_sup_vars <- "Supplementary" %in% res$vars$Type 
@@ -127,7 +127,7 @@ explor_mca <- function(res, settings) {
   shiny::shinyApp(
     ui = navbarPage(gettext("MCA", domain = "R-explor"),
                   header = tags$head(
-                  tags$style(explor_css())),
+                  tags$style(explor_multi_css())),
                   tabPanel(gettext("Eigenvalues", domain = "R-explor"),
                            fluidRow(
                              column(2,

@@ -18,7 +18,7 @@ explor.PCA <- function(obj) {
   settings$scale_unit <- obj$call$scale.unit
   
   ## Launch interface
-  explor_pca(res, settings)
+  explor_multi_pca(res, settings)
   
 }
 
@@ -65,7 +65,7 @@ explor.pca <- function(obj) {
   
 
   ## Launch interface
-  explor_pca(res, settings)
+  explor_multi_pca(res, settings)
   
 }
 
@@ -76,7 +76,7 @@ explor.pca <- function(obj) {
 ##' @import scatterD3
 ##' @import ggplot2
 
-explor_pca <- function(res, settings) {
+explor_multi_pca <- function(res, settings) {
   
   ## Precompute inputs 
   has_sup_vars <- "Supplementary" %in% res$vars$Type 
@@ -108,7 +108,7 @@ explor_pca <- function(res, settings) {
   shiny::shinyApp(
     ui = navbarPage(gettext("PCA", domain = "R-explor"),
                   header = tags$head(
-                  tags$style(explor_css())),
+                  tags$style(explor_multi_css())),
                   tabPanel(gettext("Eigenvalues", domain = "R-explor"),
                            fluidRow(
                              column(2,
@@ -314,7 +314,7 @@ explor_pca <- function(res, settings) {
           dom_id_svg_export = "explor-var-svg-export",
           dom_id_lasso_toggle = "explor-var-lasso-toggle",
           lasso = TRUE,
-          lasso_callback = explor_lasso_callback()
+          lasso_callback = explor_multi_lasso_callback()
         )
       })
       
@@ -374,7 +374,7 @@ explor_pca <- function(res, settings) {
           dom_id_svg_export = "explor-ind-svg-export",
           dom_id_lasso_toggle = "explor-ind-lasso-toggle",
           lasso = TRUE,
-          lasso_callback = explor_lasso_callback()
+          lasso_callback = explor_multi_lasso_callback()
         )
       })
       
