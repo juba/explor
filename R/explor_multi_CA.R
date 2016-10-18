@@ -134,18 +134,9 @@ explor_multi_ca <- function(res, settings) {
                                       explor_multi_hide_input("var_hide"),
                                       if(has_sup_vars)
                                         checkboxInput("var_sup", 
-                                                      HTML(gettext("Supplementary levels", domain = "R-explor")), 
-                                                      value = TRUE),                                      
-                                      checkboxInput("var_transitions", 
-                                                    HTML(gettext("Animations", domain = "R-explor")),
-                                                    value = TRUE),
-                                      tags$p(actionButton("explor-var-reset-zoom", 
-                                                          title = gettext("Reset zoom", domain = "R-explor"),
-                                                          HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
-                                             tags$a(id = "explor-var-svg-export", href = "#",
-                                                    class = "btn btn-default", 
-                                                    title = gettext("Export as SVG", domain = "R-explor"),
-                                                    HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))),
+                                                      HTML(gettext("Supplementary levels", domain = "R-explor")),
+                                                      value = TRUE),
+                                      explor_multi_sidebar_footer(type = "var"))),
                              column(10,
                                     scatterD3Output("varplot", height = "auto"))
                   )),
@@ -233,6 +224,7 @@ explor_multi_ca <- function(res, settings) {
           html_id = "explor_var",
           dom_id_reset_zoom = "explor-var-reset-zoom",
           dom_id_svg_export = "explor-var-svg-export",
+          dom_id_lasso_toggle = "explor-var-lasso-toggle",          
           lasso = TRUE,
           lasso_callback = explor_multi_lasso_callback()
         )

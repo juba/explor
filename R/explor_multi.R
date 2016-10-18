@@ -63,6 +63,26 @@ explor_multi_lasso_callback <- function() {
 }
 
 
+
+explor_multi_sidebar_footer <- function(type = "var") {
+    list(
+        checkboxInput(paste0(type, "_transitions"), 
+                      HTML(gettext("Animations", domain = "R-explor")),
+                      value = TRUE),
+        tags$p(actionButton(paste0("explor-", type, "-reset-zoom"), 
+                            title = gettext("Reset zoom", domain = "R-explor"),
+                            HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
+               actionButton(paste0("explor-", type, "-lasso-toggle"), 
+                            title = gettext("Toggle lasso", domain = "R-explor"),
+                            HTML("<span class='glyphicon glyphicon-screenshot' aria-hidden='true'></span>"), 
+                            "data-toggle" = "button"),
+               tags$a(id = paste0("explor-", type, "-svg-export"), href = "#",
+                  class = "btn btn-default", 
+                  title = gettext("Export as SVG", domain = "R-explor"),
+                  HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))
+}
+
+
 ## Generate correct datatable order option from a column name
 order_option <- function(table, name, order="desc") {
     index <- which(names(table) == name) - 1
@@ -77,7 +97,6 @@ explor_multi_table <- function(tab, options, sort_column) {
 }
 
 ## Hide input for CA results
-
 explor_multi_hide_input <- function(id) {
     choices <- c("None", "Row", "Column")
     names(choices) <- c(gettext("None", domain = "R-explor"),
