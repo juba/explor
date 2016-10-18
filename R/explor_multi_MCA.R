@@ -185,7 +185,7 @@ explor_multi_mca <- function(res, settings) {
                   )),
                   
                   tabPanel(gettext("Variables data", domain = "R-explor"),
-                           explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, has_eta2 = TRUE))),
+                           explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, is_MCA = TRUE)),
                   
                   tabPanel(gettext("Individuals plot", domain = "R-explor"),
                            fluidRow(
@@ -296,11 +296,11 @@ explor_multi_mca <- function(res, settings) {
                    "var_data",
                    reactive(res),
                    reactive(settings),
-                   has_eta2 = TRUE)
+                   is_MCA = TRUE)
         
         callModule(explor_multi_ind_data,
                    "ind_data",
-                   reactive(res),
+                   reactive(res$ind),
                    reactive(settings))
         
         ## Lasso modal dialog

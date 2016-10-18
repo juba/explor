@@ -160,7 +160,7 @@ explor_multi_pca <- function(res, settings) {
                   )),
                   
                   tabPanel(gettext("Variables data", domain = "R-explor"),
-                           explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, has_eta2 = FALSE)),
+                           explor_multi_var_dataUI("var_data", has_sup_vars, res$axes)),
 
                   tabPanel(gettext("Individuals plot", domain = "R-explor"),
                            fluidRow(
@@ -354,8 +354,7 @@ explor_multi_pca <- function(res, settings) {
         callModule(explor_multi_var_data,
                    "var_data",
                    reactive(res),
-                   reactive(settings),
-                   has_eta2 = FALSE)
+                   reactive(settings))
 
         callModule(explor_multi_ind_data,
                    "ind_data",

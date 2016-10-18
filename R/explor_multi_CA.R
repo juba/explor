@@ -101,20 +101,6 @@ explor_multi_ca <- function(res, settings) {
                                 gettext("Points size :", domain = "R-explor"),
                                 choices = var_size_choices,
                                 selected = "None")
-  ## Variable hide elements input
-  var_hide_choices <- c("None", "Row", "Column")
-  names(var_hide_choices) <- c(gettext("None", domain = "R-explor"),
-                               gettext("Rows", domain = "R-explor"),
-                               gettext("Columns", domain = "R-explor"))
-  var_hide_input <- selectInput("var_hide", 
-                                gettext("Hide :", domain = "R-explor"),
-                                choices = var_hide_choices,
-                                selected = "None")
-  var_tab_hide_input <- selectInput("var_tab_hide", 
-                                    gettext("Hide :", domain = "R-explor"),
-                                    choices = var_hide_choices,
-                                    selected = "None")
-  
   
     shiny::shinyApp(
     ui = navbarPage(gettext("CA", domain = "R-explor"),
@@ -154,7 +140,7 @@ explor_multi_ca <- function(res, settings) {
                                       var_col_input,
                                       var_symbol_input,
                                       var_size_input,
-                                      var_hide_input,
+                                      explor_multi_hide_input("var_hide"),
                                       if(has_sup_vars)
                                         checkboxInput("var_sup", 
                                                       HTML(gettext("Supplementary levels", domain = "R-explor")), 
@@ -174,22 +160,7 @@ explor_multi_ca <- function(res, settings) {
                   )),
                   
                   tabPanel(gettext("Data", domain = "R-explor"),
-                           fluidRow(
-                             column(2,
-                                    wellPanel(
-                                    selectInput("vardim", 
-                                                gettext("Dimension", domain = "R-explor"),
-                                                choices = res$axes, selected = "1"),
-                                    var_tab_hide_input                                    
-                                    )),
-                             column(10,
-                                    h4(gettext("Active levels", domain = "R-explor")),                   
-                                    DT::dataTableOutput("vartable"),
-                                    if (has_sup_vars) {
-                                      list(h4(gettext("Supplementary levels", domain = "R-explor")),
-                                           DT::dataTableOutput("vartablesup"))
-                                    }
-                              )))
+                           explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, is_CA = TRUE))
     ),
     
     server = function(input, output) {
@@ -280,42 +251,11 @@ explor_multi_ca <- function(res, settings) {
         )
       })
       
-
-      tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
-
-      ## Generate correct datatable order option from a column name
-      order_option <- function(table, name, order="desc") {
-        index <- which(names(table) == name) - 1
-        list(order = list(list(index, order)))
-      }
-      
-      varTable <- reactive({
-        tmp <- res$vars %>% 
-          filter(Type == "Active", Axis == input$vardim) %>%
-          select_(.dots = settings$var_columns)
-        if (input$var_tab_hide != "None") {
-          tmp <- tmp %>% filter(Position != input$var_tab_hide)
-        }
-        data.frame(tmp)
-      })
-      output$vartable <- DT::renderDataTable(
-        DT::datatable({varTable()}, 
-                      options = c(tableOptions_var, order_option(varTable(), "Contrib")), rownames = FALSE))
-      
-      ## Supplementary variables
-      varTableSup <- reactive({
-        tmp <- res$vars %>% 
-          filter(Type == "Supplementary", Axis == input$vardim) %>%
-          mutate(Level = ifelse(Class == "Quantitative", "-", Level)) %>%
-          select_(.dots = settings$varsup_columns)
-        if (input$var_tab_hide != "None") {
-          tmp <- tmp %>% filter(Position != input$var_tab_hide)
-        }
-        data.frame(tmp)
-      })
-      output$vartablesup <- DT::renderDataTable(
-        DT::datatable({varTableSup()}, 
-                      options = c(tableOptions_var, order_option(varTableSup(), "Coord")), rownames = FALSE))
+        callModule(explor_multi_var_data,
+                   "var_data",
+                   reactive(res),
+                   reactive(settings),
+                   is_CA = TRUE)
         
         ## Lasso modal dialog
         observeEvent(input$show_lasso_modal, {

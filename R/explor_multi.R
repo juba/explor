@@ -69,12 +69,27 @@ order_option <- function(table, name, order="desc") {
     list(order = list(list(index, order)))
 }
 
+## Generate a DataTable for numerical results
 explor_multi_table <- function(tab, options, sort_column) {
     DT::renderDataTable(
             DT::datatable(tab,
                           options = c(options, order_option(tab, sort_column)),
                           rownames = FALSE))
 }
+
+## Hide input for CA results
+
+explor_multi_hide_input <- function(id) {
+    choices <- c("None", "Row", "Column")
+    names(choices) <- c(gettext("None", domain = "R-explor"),
+                        gettext("Rows", domain = "R-explor"),
+                        gettext("Columns", domain = "R-explor"))
+    selectInput(id, 
+                gettext("Hide :", domain = "R-explor"),
+                choices = choices,
+                selected = "None")
+}
+
 
 
 ## INDIVIDUAL DATA SHINY MODULE ---------------------------------------------------------
@@ -99,7 +114,7 @@ explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
 }
 
 ## Server for individual data panel
-explor_multi_ind_data <- function(input, output, session, res, settings) {
+explor_multi_ind_data <- function(input, output, session, ind, settings) {
 
     table_options <- list(lengthMenu = c(10,20,50,100),
                           pageLength = 10, orderClasses = TRUE,
@@ -107,7 +122,7 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
 
     ## Active individuals
     indTable <- reactive({
-        res()$ind %>%
+        ind() %>%
             filter(Type == "Active", Axis == input$inddim) %>%
             select_(.dots = settings()$ind_columns)
     })
@@ -115,7 +130,7 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
 
     ## Supplementary individuals
     indTableSup <- reactive({
-        res()$ind %>%
+        ind() %>%
             filter(Type == "Supplementary", Axis == input$inddim) %>%
             select_(.dots = settings()$indsup_columns)
     })
@@ -123,61 +138,77 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
 }
 
 
+
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 
 ## UI for variable data panel
-explor_multi_var_dataUI <- function(id, has_sup_var, axes, has_eta2) {
+explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA = FALSE) {
     ns <- NS(id)
     fluidRow(
         column(2,
                wellPanel(
                    selectInput(ns("vardim"), 
                                gettext("Dimension", domain = "R-explor"),
-                               choices = axes, selected = "1")
+                               choices = axes, selected = "1"),
+                   if (is_CA) explor_multi_hide_input(ns("var_tab_hide"))
                )),
         column(10,
-               h4(gettext("Active variables", domain = "R-explor")),                   
+               h4(if(is_CA) gettext("Active levels", domain = "R-explor")                   
+                  else gettext("Active variables", domain = "R-explor")),
                DT::dataTableOutput(ns("vartable")),
                if (has_sup_var) {
-                   list(h4(gettext("Supplementary variables", domain = "R-explor")),
-                        DT::dataTableOutput("vartablesup"))
+                   list(h4(if(is_CA) gettext("Supplementary levels", domain = "R-explor")                   
+                           else gettext("Supplementary variables", domain = "R-explor")),
+                        DT::dataTableOutput(ns("vartablesup")))
                },
-               if (has_eta2) {
-                   h4(withMathJax(gettext("Variables \\(\\eta^2\\)", domain = "R-explor"))),
-                   DT::dataTableOutput(ns("vartableeta2")),
-                   if (has_sup_var) {
-                       list(h4(gettext("Supplementary variables \\(\\eta^2\\)", domain = "R-explor")),
-                            DT::dataTableOutput("vartablesupeta2"))
-                   }
+               if (is_MCA) {
+                   list(h4(withMathJax(gettext("Variables \\(\\eta^2\\)", domain = "R-explor"))),
+                        DT::dataTableOutput(ns("vartableeta2")))
+               },
+               if (is_MCA && has_sup_var) {
+                   list(h4(gettext("Supplementary variables \\(\\eta^2\\)", domain = "R-explor")),
+                        DT::dataTableOutput(ns("vartablesupeta2")))
                }
-               ))
+               )
+    )
 }
 
 
 ## Server for variable data panel
-explor_multi_var_data <- function(input, output, session, res, settings, has_eta2) {
+explor_multi_var_data <- function(input, output, session, res, settings, is_MCA = FALSE, is_CA = FALSE) {
 
     table_options <- list(lengthMenu = c(10,20,50,100),
                           pageLength = 10, orderClasses = TRUE,
                           autoWidth = TRUE, searching = TRUE)
     ## Active variables
     varTable <- reactive({
-        res()$var %>% 
-            filter(Type == "Active", Axis == input$vardim) %>%
-            select_(.dots = settings()$var_columns)
+        tmp <- res()$vars %>% 
+                   filter(Type == "Active", Axis == input$vardim) %>%
+                   select_(.dots = settings()$var_columns)
+        ## CA data hide option
+        if (is_CA && input$var_tab_hide != "None") {
+            tmp <- tmp %>% filter(Position != input$var_tab_hide)
+        }
+        data.frame(tmp)
     })
     output$vartable <- explor_multi_table(varTable(), table_options, "Contrib")
       
     ## Supplementary variables
     varTableSup <- reactive({
-        res()$var %>% 
-            filter(Type == "Supplementary", Axis == input$vardim) %>%
-            mutate(Level = ifelse(Class == "Quantitative", "-", Level)) %>%
-            select_(.dots = settings()$varsup_columns)
+        tmp <- res()$vars %>% 
+                   filter(Type == "Supplementary", Axis == input$vardim) %>%
+                   mutate(Level = ifelse(Class == "Quantitative", "-", Level)) %>%
+                   select_(.dots = settings()$varsup_columns)
+        ## CA data hide option
+        if (is_CA && input$var_tab_hide != "None") {
+            tmp <- tmp %>% filter(Position != input$var_tab_hide)
+        }
+        data.frame(tmp)
     })
     output$vartablesup <- explor_multi_table(varTableSup(), table_options, "Coord")
 
-    if (has_eta2) {
+    ## Variables eta2 for MCA
+    if (is_MCA) {
                   
         ## Variables eta2
         varTableEta2 <- reactive({
