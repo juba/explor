@@ -70,8 +70,16 @@ order_option <- function(table, name, order="desc") {
 }
 
 
-## INDIVIDUAL DATA SHINY MODULE
+## INDIVIDUAL DATA SHINY MODULE ---------------------------------------------------------
 
+explor_multi_ind_table <- function(tab, options) {
+    DT::renderDataTable(
+            DT::datatable(tab,
+                          options = c(options, order_option(tab, "Coord")),
+                          rownames = FALSE))
+}
+
+## UI for individual data panel
 explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
     ns <- NS(id)
     fluidRow(
@@ -90,10 +98,12 @@ explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
                ))
 }
 
-
+## Server for individual data panel
 explor_multi_ind_data <- function(input, output, session, ind, settings) {
 
-    tableOptions_ind <- list(lengthMenu = c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
+    table_options <- list(lengthMenu = c(10,20,50,100),
+                          pageLength = 10, orderClasses = TRUE,
+                          autoWidth = TRUE, searching = TRUE)
 
     ## Active individuals
     indTable <- reactive({
@@ -101,9 +111,7 @@ explor_multi_ind_data <- function(input, output, session, ind, settings) {
             filter(Type == "Active", Axis == input$inddim) %>%
             select_(.dots = settings()$ind_columns)
     })
-    output$indtable <- DT::renderDataTable(
-                               DT::datatable({indTable()},
-                                             options = c(tableOptions_ind, order_option(indTable(), "Coord")), rownames = FALSE))
+    output$indtable <- explor_multi_ind_table(indTable(), table_options)
 
     ## Supplementary individuals
     indTableSup <- reactive({
@@ -111,9 +119,6 @@ explor_multi_ind_data <- function(input, output, session, ind, settings) {
             filter(Type == "Supplementary", Axis == input$inddim) %>%
             select_(.dots = settings()$indsup_columns)
     })
-    output$indtablesup <- DT::renderDataTable(
-                                  DT::datatable({indTableSup()},
-                                                options = c(tableOptions_ind, order_option(indTableSup(), "Coord")), rownames = FALSE))
-    
+    output$indtablesup <- explor_multi_ind_table(indTableSup(), table_options)
 }
 
