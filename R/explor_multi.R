@@ -71,10 +71,9 @@ order_option <- function(table, name, order="desc") {
 
 ## Generate a DataTable for numerical results
 explor_multi_table <- function(tab, options, sort_column) {
-    DT::renderDataTable(
             DT::datatable(tab,
                           options = c(options, order_option(tab, sort_column)),
-                          rownames = FALSE))
+                          rownames = FALSE)
 }
 
 ## Hide input for CA results
@@ -126,7 +125,8 @@ explor_multi_ind_data <- function(input, output, session, ind, settings) {
             filter(Type == "Active", Axis == input$inddim) %>%
             select_(.dots = settings()$ind_columns)
     })
-    output$indtable <- explor_multi_table(indTable(), table_options, "Coord")
+    output$indtable <- DT::renderDataTable(
+                               explor_multi_table(indTable(), table_options, "Coord"))
 
     ## Supplementary individuals
     indTableSup <- reactive({
@@ -134,7 +134,8 @@ explor_multi_ind_data <- function(input, output, session, ind, settings) {
             filter(Type == "Supplementary", Axis == input$inddim) %>%
             select_(.dots = settings()$indsup_columns)
     })
-    output$indtablesup <- explor_multi_table(indTableSup(), table_options, "Coord")
+    output$indtablesup <- DT::renderDataTable(
+                                  explor_multi_table(indTableSup(), table_options, "Coord"))
 }
 
 
@@ -191,7 +192,8 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
         }
         data.frame(tmp)
     })
-    output$vartable <- explor_multi_table(varTable(), table_options, "Contrib")
+    output$vartable <- DT::renderDataTable(
+                               explor_multi_table(varTable(), table_options, "Contrib"))
       
     ## Supplementary variables
     varTableSup <- reactive({
@@ -205,7 +207,8 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
         }
         data.frame(tmp)
     })
-    output$vartablesup <- explor_multi_table(varTableSup(), table_options, "Coord")
+    output$vartablesup <- DT::renderDataTable(
+                                  explor_multi_table(varTableSup(), table_options, "Coord"))
 
     ## Variables eta2 for MCA
     if (is_MCA) {
@@ -216,7 +219,8 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
                     select_(.dots = settings()$vareta2_columns) %>%
                     arrange(eta2)
         })
-        output$vartableeta2 <- explor_multi_table(varTableEta2(), table_options, "eta2")
+        output$vartableeta2 <- DT::renderDataTable(
+                                       explor_multi_table(varTableEta2(), table_options, "eta2"))
 
         ## Supplementary variables eta2
         varTableSupEta2 <- reactive({
@@ -226,7 +230,8 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
                     select_(.dots = settings()$varsupeta2_columns) %>%
                     arrange(eta2)
         })
-        output$vartablesupeta2 <- explor_multi_table(varTableSupEta2(), table_options, "eta2")
+        output$vartablesupeta2 <- DT::renderDataTable(
+                                          explor_multi_table(varTableSupEta2(), table_options, "eta2"))
     }
 
 }
