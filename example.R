@@ -27,6 +27,7 @@ library(explor)
 
 data(hobbies)
 mca <- MCA(hobbies[1:1000,c(1:8,21:23)],quali.sup = 9:10, quanti.sup = 11, ind.sup = 1:100, graph = FALSE)
+detach(package:explor, unload=TRUE); library(explor)
 explor(mca)
 
 ## PCA
@@ -37,6 +38,7 @@ library(explor)
 data(decathlon)
 d <- decathlon[,1:12]
 pca <- PCA(d, quanti.sup = 11:12,  ind.sup = 1:4, graph = FALSE, scale.unit = TRUE)
+detach(package:explor, unload=TRUE); library(explor)
 explor(pca)
 
 ## CA
@@ -47,6 +49,7 @@ library(questionr)
 
 data(children)
 res.ca <- CA(children, row.sup = 15:18, col.sup = 6:8, graph = FALSE)
+detach(package:explor, unload=TRUE); library(explor)
 explor(res.ca)
 
 
@@ -65,11 +68,13 @@ supi <- suprow(pca, sup_ind)
 pca$supi <- supi$lisup
 supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
 pca$supv <- supv$cosup
+detach(package:explor, unload=TRUE); library(explor)
 explor(pca)
 
 library(ade4)
 data(deug)
 pca <- dudi.pca(deug$tab, scale = TRUE, scannf = FALSE, nf = 5)
+detach(package:explor, unload=TRUE); library(explor)
 explor(pca)
 
 ## MCA
@@ -89,6 +94,7 @@ X <- t(t(X)/colw) - 1
 X <- data.frame(X)
 ## Supplementary individuals
 acm$supi <- suprow(acm, X)$lisup
+detach(package:explor, unload=TRUE); library(explor)
 explor(acm)
 
 ## CA
@@ -103,10 +109,12 @@ col_sup <- tab[-5,4]
 coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
 coa$supr <- suprow(coa, row_sup)$lisup
 coa$supc <- supcol(coa, col_sup)$cosup
+detach(package:explor, unload=TRUE); library(explor)
 explor(coa)
 
 data(bordeaux)
 coa <- dudi.coa(bordeaux, nf = 5, scannf = FALSE)
+detach(package:explor, unload=TRUE); library(explor)
 explor(coa)
 
 
