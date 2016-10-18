@@ -365,14 +365,6 @@ explor_multi_pca <- function(res, settings) {
       })
       
       tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
-      tableOptions_ind <- list(lengthMenu = c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
-      tableOptions_eta2 <- list(lengthMenu = c(10,20,50), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
-      
-      ## Generate correct datatable order option from a column name
-      order_option <- function(table, name, order="desc") {
-        index <- which(names(table) == name) - 1
-        list(order = list(list(index, order)))
-      }
       
       varTable <- reactive({
         res$vars %>% 
