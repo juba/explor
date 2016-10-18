@@ -129,16 +129,7 @@ explor_multi_mca <- function(res, settings) {
                   header = tags$head(
                   tags$style(explor_multi_css())),
                   tabPanel(gettext("Eigenvalues", domain = "R-explor"),
-                           fluidRow(
-                             column(2,
-                                    wellPanel(numericInput("eig_nb", 
-                                                           gettext("Dimensions to plot", domain = "R-explor"), 
-                                                 min = 2, max = max(res$eig$dim), value = max(res$eig$dim), 
-                                                 step = 1))),
-                            column(10,
-                                    plotOutput("eigplot", height = "600px"))
-                             
-                             )),
+                           explor_multi_eigenplotUI("eigenplot", res$eig)),
                   
                   tabPanel(gettext("Variables plot", domain = "R-explor"),
                            fluidRow(
@@ -242,16 +233,12 @@ explor_multi_mca <- function(res, settings) {
     
     server = function(input, output) {
 
-      output$eigplot <- renderPlot({
-        tmp <- res$eig[1:input$eig_nb,]
-        tmp$dim <- factor(tmp$dim)
-        ggplot(data = tmp) +
-          geom_bar(aes_string(x = "dim", y = "percent"), stat = "identity") +
-          scale_x_discrete(gettext("Axis", domain = "R-explor")) +
-          scale_y_continuous(gettext("Percentage of inertia", domain = "R-explor"))
-      })
+        ## Eigenvalues
+        callModule(explor_multi_eigenplot,
+                   "eigenplot",
+                   reactive(res$eig))
 
-      ## Variables plot
+        ## Variables plot
       output$varplot <- scatterD3::renderScatterD3({
         col_var <- if (input$var_col == "None") NULL else input$var_col
         symbol_var <- if (input$var_symbol == "None") NULL else input$var_symbol
@@ -300,7 +287,7 @@ explor_multi_mca <- function(res, settings) {
         
         callModule(explor_multi_ind_data,
                    "ind_data",
-                   reactive(res$ind),
+                   reactive(res),
                    reactive(settings))
         
         ## Lasso modal dialog

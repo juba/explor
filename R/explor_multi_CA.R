@@ -105,19 +105,10 @@ explor_multi_ca <- function(res, settings) {
     shiny::shinyApp(
     ui = navbarPage(gettext("CA", domain = "R-explor"),
                   header = tags$head(
-                  tags$style(explor_multi_css())),
+                                    tags$style(explor_multi_css())),
                   tabPanel(gettext("Eigenvalues", domain = "R-explor"),
-                           fluidRow(
-                             column(2,
-                                    wellPanel(numericInput("eig_nb", 
-                                                           gettext("Dimensions to plot", domain = "R-explor"), 
-                                                 min = 2, max = max(res$eig$dim), value = max(res$eig$dim), 
-                                                 step = 1))),
-                            column(10,
-                                    plotOutput("eigplot", height = "600px"))
-                             
-                             )),
-                  
+                           explor_multi_eigenplotUI("eigenplot", res$eig)),
+
                   tabPanel(gettext("Plot", domain = "R-explor"),
                            fluidRow(
                              column(2,
@@ -164,15 +155,11 @@ explor_multi_ca <- function(res, settings) {
     ),
     
     server = function(input, output) {
-      
-      output$eigplot <- renderPlot({
-        tmp <- res$eig[1:input$eig_nb,]
-        tmp$dim <- factor(tmp$dim)
-        ggplot(data = tmp) +
-          geom_bar(aes_string(x = "dim", y = "percent"), stat = "identity") +
-          scale_x_discrete(gettext("Axis", domain = "R-explor")) +
-          scale_y_continuous(gettext("Percentage of inertia", domain = "R-explor"))
-      })
+
+        ## Eigenvalues
+        callModule(explor_multi_eigenplot,
+                   "eigenplot",
+                   reactive(res$eig))
 
       ## Variables plot reactive data
       var_data <- reactive({

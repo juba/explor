@@ -113,7 +113,7 @@ explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
 }
 
 ## Server for individual data panel
-explor_multi_ind_data <- function(input, output, session, ind, settings) {
+explor_multi_ind_data <- function(input, output, session, res, settings) {
 
     table_options <- list(lengthMenu = c(10,20,50,100),
                           pageLength = 10, orderClasses = TRUE,
@@ -121,7 +121,7 @@ explor_multi_ind_data <- function(input, output, session, ind, settings) {
 
     ## Active individuals
     indTable <- reactive({
-        ind() %>%
+        res()$ind %>%
             filter(Type == "Active", Axis == input$inddim) %>%
             select_(.dots = settings()$ind_columns)
     })
@@ -130,7 +130,7 @@ explor_multi_ind_data <- function(input, output, session, ind, settings) {
 
     ## Supplementary individuals
     indTableSup <- reactive({
-        ind() %>%
+        res()$ind %>%
             filter(Type == "Supplementary", Axis == input$inddim) %>%
             select_(.dots = settings()$indsup_columns)
     })
@@ -234,4 +234,31 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
                                           explor_multi_table(varTableSupEta2(), table_options, "eta2"))
     }
 
+}
+
+
+## EIGENPLOT MODULE ------------------------------------------------------------------
+
+explor_multi_eigenplotUI <- function(id, eig) {
+    ns <- NS(id)
+    fluidRow(
+        column(2,
+               wellPanel(numericInput(ns("eig_nb"), 
+                                      gettext("Dimensions to plot", domain = "R-explor"), 
+                                      min = 2, max = max(eig$dim), value = max(eig$dim), 
+                                      step = 1))),
+        column(10,
+               plotOutput(ns("eigplot"), height = "600px"))
+    )
+}
+
+explor_multi_eigenplot <- function(input, output, session, eig) {
+    output$eigplot <- renderPlot({
+        tmp <- eig()[1:input$eig_nb,]
+        tmp$dim <- factor(tmp$dim)
+        ggplot(data = tmp) +
+          geom_bar(aes_string(x = "dim", y = "percent"), stat = "identity") +
+          scale_x_discrete(gettext("Axis", domain = "R-explor")) +
+          scale_y_continuous(gettext("Percentage of inertia", domain = "R-explor"))
+      })
 }
