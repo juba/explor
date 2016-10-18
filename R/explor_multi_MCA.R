@@ -185,27 +185,7 @@ explor_multi_mca <- function(res, settings) {
                   )),
                   
                   tabPanel(gettext("Variables data", domain = "R-explor"),
-                           fluidRow(
-                             column(2,
-                                    wellPanel(
-                                    selectInput("vardim", 
-                                                gettext("Dimension", domain = "R-explor"),
-                                                choices = res$axes, selected = "1")
-                                    )),
-                             column(10,
-                                    h4(gettext("Active variables", domain = "R-explor")),                   
-                                    DT::dataTableOutput("vartable"),
-                                    if (has_sup_vars) {
-                                      list(h4(gettext("Supplementary variables", domain = "R-explor")),
-                                           DT::dataTableOutput("vartablesup"))
-                                    },
-                                    h4(withMathJax(gettext("Variables \\(\\eta^2\\)", domain = "R-explor"))),
-                                    DT::dataTableOutput("vartableeta2"),
-                                    if (has_sup_vars && settings$show_varsup_eta2) {
-                                      list(h4(gettext("Supplementary variables \\(\\eta^2\\)", domain = "R-explor")),
-                                           DT::dataTableOutput("vartablesupeta2"))
-                                    }
-                             ))),
+                           explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, has_eta2 = TRUE))),
                   
                   tabPanel(gettext("Individuals plot", domain = "R-explor"),
                            fluidRow(
@@ -310,57 +290,18 @@ explor_multi_mca <- function(res, settings) {
                      transitions = input$ind_transitions)
       })
       
-      tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
-      tableOptions_eta2 <- list(lengthMenu = c(10,20,50), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
-      
     
-      varTable <- reactive({
-        res$vars %>% 
-          filter(Type == "Active", Axis == input$vardim) %>%
-          select_(.dots = settings$var_columns)
-      })
-      output$vartable <- DT::renderDataTable(
-        DT::datatable({varTable()}, 
-                      options = c(tableOptions_var, order_option(varTable(), "Contrib")), rownames = FALSE))
-      
-      ## Supplementary variables
-      varTableSup <- reactive({
-        res$vars %>% 
-          filter(Type == "Supplementary", Axis == input$vardim) %>%
-          mutate(Level = ifelse(Class == "Quantitative", "-", Level)) %>%
-          select_(.dots = settings$varsup_columns)
-      })
-      output$vartablesup <- DT::renderDataTable(
-        DT::datatable({varTableSup()}, 
-                      options = c(tableOptions_var, order_option(varTableSup(), "Coord")), rownames = FALSE))
-      
-      
-                  
-      ## Variables eta2
-      varTableEta2 <- reactive({
-        res$vareta2 %>% filter(Type == "Active", Axis == input$vardim) %>%
-          select_(.dots = settings$vareta2_columns) %>% arrange(eta2)
-      })
-      output$vartableeta2 <- DT::renderDataTable(
-        DT::datatable({varTableEta2()},
-                      options = c(tableOptions_eta2, order_option(varTableEta2(), "eta2")), rownames = FALSE))
 
-      ## Supplementary variables eta2
-      varTableSupEta2 <- reactive({
-        if (settings$show_varsup_eta2) {
-          tmp <- res$vareta2 %>% filter(Type == "Supplementary",
-                                      Class == "Qualitative",
-                                      Axis == input$vardim) %>%
-          select_(.dots = settings$varsupeta2_columns) %>% arrange(eta2)
-        }
-        else data.frame()
-      })
-      output$vartablesupeta2 <- DT::renderDataTable(
-        DT::datatable({varTableSupEta2()},
-                      options = c(tableOptions_eta2, order_option(varTableSupEta2(), "eta2")), rownames = FALSE))
-
-
-        callModule(explor_multi_ind_data, "ind_data", reactive(res$ind), reactive(settings))
+        callModule(explor_multi_var_data,
+                   "var_data",
+                   reactive(res),
+                   reactive(settings),
+                   has_eta2 = TRUE)
+        
+        callModule(explor_multi_ind_data,
+                   "ind_data",
+                   reactive(res),
+                   reactive(settings))
         
         ## Lasso modal dialog
         observeEvent(input$show_lasso_modal, {

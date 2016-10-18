@@ -69,15 +69,15 @@ order_option <- function(table, name, order="desc") {
     list(order = list(list(index, order)))
 }
 
-
-## INDIVIDUAL DATA SHINY MODULE ---------------------------------------------------------
-
-explor_multi_ind_table <- function(tab, options) {
+explor_multi_table <- function(tab, options, sort_column) {
     DT::renderDataTable(
             DT::datatable(tab,
-                          options = c(options, order_option(tab, "Coord")),
+                          options = c(options, order_option(tab, sort_column)),
                           rownames = FALSE))
 }
+
+
+## INDIVIDUAL DATA SHINY MODULE ---------------------------------------------------------
 
 ## UI for individual data panel
 explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
@@ -99,7 +99,7 @@ explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
 }
 
 ## Server for individual data panel
-explor_multi_ind_data <- function(input, output, session, ind, settings) {
+explor_multi_ind_data <- function(input, output, session, res, settings) {
 
     table_options <- list(lengthMenu = c(10,20,50,100),
                           pageLength = 10, orderClasses = TRUE,
@@ -107,18 +107,95 @@ explor_multi_ind_data <- function(input, output, session, ind, settings) {
 
     ## Active individuals
     indTable <- reactive({
-        ind() %>%
+        res()$ind %>%
             filter(Type == "Active", Axis == input$inddim) %>%
             select_(.dots = settings()$ind_columns)
     })
-    output$indtable <- explor_multi_ind_table(indTable(), table_options)
+    output$indtable <- explor_multi_table(indTable(), table_options, "Coord")
 
     ## Supplementary individuals
     indTableSup <- reactive({
-        ind() %>%
+        res()$ind %>%
             filter(Type == "Supplementary", Axis == input$inddim) %>%
             select_(.dots = settings()$indsup_columns)
     })
-    output$indtablesup <- explor_multi_ind_table(indTableSup(), table_options)
+    output$indtablesup <- explor_multi_table(indTableSup(), table_options, "Coord")
 }
 
+
+## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
+
+## UI for variable data panel
+explor_multi_var_dataUI <- function(id, has_sup_var, axes, has_eta2) {
+    ns <- NS(id)
+    fluidRow(
+        column(2,
+               wellPanel(
+                   selectInput(ns("vardim"), 
+                               gettext("Dimension", domain = "R-explor"),
+                               choices = axes, selected = "1")
+               )),
+        column(10,
+               h4(gettext("Active variables", domain = "R-explor")),                   
+               DT::dataTableOutput(ns("vartable")),
+               if (has_sup_var) {
+                   list(h4(gettext("Supplementary variables", domain = "R-explor")),
+                        DT::dataTableOutput("vartablesup"))
+               },
+               if (has_eta2) {
+                   h4(withMathJax(gettext("Variables \\(\\eta^2\\)", domain = "R-explor"))),
+                   DT::dataTableOutput(ns("vartableeta2")),
+                   if (has_sup_var) {
+                       list(h4(gettext("Supplementary variables \\(\\eta^2\\)", domain = "R-explor")),
+                            DT::dataTableOutput("vartablesupeta2"))
+                   }
+               }
+               ))
+}
+
+
+## Server for variable data panel
+explor_multi_var_data <- function(input, output, session, res, settings, has_eta2) {
+
+    table_options <- list(lengthMenu = c(10,20,50,100),
+                          pageLength = 10, orderClasses = TRUE,
+                          autoWidth = TRUE, searching = TRUE)
+    ## Active variables
+    varTable <- reactive({
+        res()$var %>% 
+            filter(Type == "Active", Axis == input$vardim) %>%
+            select_(.dots = settings()$var_columns)
+    })
+    output$vartable <- explor_multi_table(varTable(), table_options, "Contrib")
+      
+    ## Supplementary variables
+    varTableSup <- reactive({
+        res()$var %>% 
+            filter(Type == "Supplementary", Axis == input$vardim) %>%
+            mutate(Level = ifelse(Class == "Quantitative", "-", Level)) %>%
+            select_(.dots = settings()$varsup_columns)
+    })
+    output$vartablesup <- explor_multi_table(varTableSup(), table_options, "Coord")
+
+    if (has_eta2) {
+                  
+        ## Variables eta2
+        varTableEta2 <- reactive({
+            res()$vareta2 %>% filter(Type == "Active", Axis == input$vardim) %>%
+                    select_(.dots = settings()$vareta2_columns) %>%
+                    arrange(eta2)
+        })
+        output$vartableeta2 <- explor_multi_table(varTableEta2(), table_options, "eta2")
+
+        ## Supplementary variables eta2
+        varTableSupEta2 <- reactive({
+            res()$vareta2 %>% filter(Type == "Supplementary",
+                                     Class == "Qualitative",
+                                     Axis == input$vardim) %>%
+                    select_(.dots = settings()$varsupeta2_columns) %>%
+                    arrange(eta2)
+        })
+        output$vartablesupeta2 <- explor_multi_table(varTableSupEta2(), table_options, "eta2")
+    }
+
+}

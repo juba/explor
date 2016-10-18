@@ -160,21 +160,8 @@ explor_multi_pca <- function(res, settings) {
                   )),
                   
                   tabPanel(gettext("Variables data", domain = "R-explor"),
-                           fluidRow(
-                             column(2,
-                                    wellPanel(
-                                    selectInput("vardim", 
-                                                gettext("Dimension", domain = "R-explor"),
-                                                choices = res$axes, selected = "1"))),
-                             column(10,
-                                    h4(gettext("Active variables", domain = "R-explor")),                   
-                                    DT::dataTableOutput("vartable"),
-                                     if (has_sup_vars) {
-                                       list(h4(gettext("Supplementary variables", domain = "R-explor")),
-                                            DT::dataTableOutput("vartablesup"))
-                                     }
-                             ))),
-                  
+                           explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, has_eta2 = FALSE)),
+
                   tabPanel(gettext("Individuals plot", domain = "R-explor"),
                            fluidRow(
                              column(2,
@@ -364,29 +351,16 @@ explor_multi_pca <- function(res, settings) {
         )
       })
       
-      tableOptions_var <- list(lengthMenu =  c(10,20,50,100), pageLength = 10, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)
-      
-      varTable <- reactive({
-        res$vars %>% 
-          filter(Type == "Active", Axis == input$vardim) %>%
-          select_(.dots = settings$var_columns)
-      })
-      output$vartable <- DT::renderDataTable(
-        DT::datatable({varTable()}, 
-                      options = c(tableOptions_var, order_option(varTable(), "Contrib")), rownames = FALSE))
-      
-      ## Supplementary variables
-      varTableSup <- reactive({
-        res$vars %>% 
-          filter(Type == "Supplementary", Axis == input$vardim, 
-                 Class == "Quantitative") %>%
-          select_(.dots = settings$varsup_columns)
-      })
-      output$vartablesup <- DT::renderDataTable(
-        DT::datatable({varTableSup()}, 
-                      options = c(tableOptions_var, order_option(varTableSup(), "Coord")), rownames = FALSE))
+        callModule(explor_multi_var_data,
+                   "var_data",
+                   reactive(res),
+                   reactive(settings),
+                   has_eta2 = FALSE)
 
-        callModule(explor_multi_ind_data, "ind_data", reactive(res$ind), reactive(settings))
+        callModule(explor_multi_ind_data,
+                   "ind_data",
+                   reactive(res),
+                   reactive(settings))
         
         ## Lasso modal dialog
         observeEvent(input$show_lasso_modal, {
