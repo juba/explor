@@ -248,7 +248,8 @@ explor_multi_mca <- function(res, settings) {
 
             showModal(modalDialog(
                 title = "Export R code",
-                HTML(paste0("<pre><code>",
+                HTML(paste0(explor_multi_export_code_message(),
+                            "<pre><code>",
                             paste(highr::hi_html(code), collapse="\n"),
                             "</code></pre>")),
                 easyClose = TRUE))
@@ -269,7 +270,7 @@ explor_multi_mca <- function(res, settings) {
                    "    point_opacity = ", input$ind_opacity, ", ",
                    "point_size = ", input$ind_point_size, ",\n",
                    "    ellipses = ", input$ind_ellipses, ", ",
-                   "transitions = ", input$var_transitions)
+                   "transitions = ", input$ind_transitions)
         })
         
         ## Indidivuals plot
@@ -286,7 +287,8 @@ explor_multi_mca <- function(res, settings) {
 
             showModal(modalDialog(
                 title = "Export R code",
-                HTML(paste0("<pre><code>",
+                HTML(paste0(explor_multi_export_code_message(),
+                            "<pre><code>",
                             paste(highr::hi_html(code), collapse="\n"),
                             "</code></pre>")),
                 easyClose = TRUE))
