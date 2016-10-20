@@ -44,13 +44,12 @@ PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 ##' @param yax Vertical axis number
 ##' @param var_sup TRUE to display supplementary variables
 ##' @param var_lab_min_contrib Contribution threshold to display points labels
-##' @param point_size base point size
 ##' @param col_var name of the variable for points color
-##' @param symbol_var name of the variable for points symbol
 ##' @param size_var name of the variable for points size
-##' @param size_range points size range with format c(minimum, maximum)
 ##' @param scale_unit wether the PCA is scaled
 ##' @param zoom_callback scatterD3 zoom callback JavaScript body
+##' @param xlim custom x axis limits
+##' @param ylim custom y axis limits
 ##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
 ##' @param ... Other arguments passed to scatterD3
 ##'

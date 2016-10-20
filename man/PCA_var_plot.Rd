@@ -5,8 +5,9 @@
 \title{Interactive PCA variables plot}
 \usage{
 PCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
-  var_lab_min_contrib = 0, col_var = NULL, size_var = NULL,
-  zoom_callback = NULL, in_explor = FALSE, ...)
+  var_lab_min_contrib = 0, scale_unit = FALSE, col_var = NULL,
+  size_var = NULL, zoom_callback = NULL, in_explor = FALSE, xlim = NULL,
+  ylim = NULL, ...)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}
@@ -19,6 +20,8 @@ PCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
 
 \item{var_lab_min_contrib}{Contribution threshold to display points labels}
 
+\item{scale_unit}{wether the PCA is scaled}
+
 \item{col_var}{name of the variable for points color}
 
 \item{size_var}{name of the variable for points size}
@@ -27,13 +30,11 @@ PCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
 
 \item{in_explor}{wether the plot is to be displayed in the \code{explor} interface}
 
+\item{xlim}{custom x axis limits}
+
+\item{ylim}{custom y axis limits}
+
 \item{...}{Other arguments passed to scatterD3}
-
-\item{point_size}{base point size}
-
-\item{symbol_var}{name of the variable for points symbol}
-
-\item{size_range}{points size range with format c(minimum, maximum)}
 }
 \description{
 This function generates an HTML widget displaying the variables plot of a PCA result.
