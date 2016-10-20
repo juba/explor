@@ -5,9 +5,9 @@
 \title{Interactive MCA variables plot}
 \usage{
 MCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
-  var_lab_min_contrib = 0, col_var = "Variable", symbol_var = NULL,
-  size_var = NULL, size_range = c(10, 400), var_lab_size = 10,
-  var_point_size = 30, transitions = FALSE)
+  var_lab_min_contrib = 0, point_size = 10, col_var = NULL,
+  symbol_var = NULL, size_var = NULL, size_range = c(10, 300),
+  zoom_callback = NULL, in_explor = FALSE, ...)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}
@@ -20,6 +20,8 @@ MCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
 
 \item{var_lab_min_contrib}{Contribution threshold to display points labels}
 
+\item{point_size}{base point size}
+
 \item{col_var}{name of the variable for points color}
 
 \item{symbol_var}{name of the variable for points symbol}
@@ -28,11 +30,11 @@ MCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
 
 \item{size_range}{points size range with format c(minimum, maximum)}
 
-\item{var_lab_size}{points label size}
+\item{zoom_callback}{scatterD3 zoom callback JavaScript body}
 
-\item{var_point_size}{fixed points size}
+\item{in_explor}{wether the plot is to be displayed in the \code{explor} interface}
 
-\item{transitions}{wether to display animated transitions (only when used in a shiny app)}
+\item{...}{Other arguments passed to scatterD3}
 }
 \description{
 This function generates an HTML widget displaying the variables plot of an MCA result.

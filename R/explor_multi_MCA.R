@@ -4,23 +4,24 @@
 
 explor.MCA <- function(obj) {
   
-  if (!inherits(obj, "MCA")) stop("obj must be of class MCA")
-  
-  ## results preparation
-  res <- prepare_results(obj)
+    if (!inherits(obj, "MCA")) stop("obj must be of class MCA")
+    
+    ## results preparation
+    res <- prepare_results(obj)
+    
+    ## Settings
+    settings <- list()
+    settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
+    settings$varsup_columns <- c("Variable", "Level", "Class", "Coord", "Cos2", "V.test", "P.value")
+    settings$vareta2_columns <- c("Variable", "eta2")
+    settings$show_varsup_eta2 <- TRUE
+    settings$varsupeta2_columns <- c("Variable", "eta2")
+    settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
+    settings$indsup_columns <- c("Name", "Coord")
+    settings$obj_name <- deparse(substitute(obj))
 
-  ## Settings
-  settings <- list()
-  settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
-  settings$varsup_columns <- c("Variable", "Level", "Class", "Coord", "Cos2", "V.test", "P.value")
-  settings$vareta2_columns <- c("Variable", "eta2")
-  settings$show_varsup_eta2 <- TRUE
-  settings$varsupeta2_columns <- c("Variable", "eta2")
-  settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
-  settings$indsup_columns <- c("Name", "Coord")
-
-  ## Launch interface
-  explor_multi_mca(res, settings)
+    ## Launch interface
+    explor_multi_mca(res, settings)
   
 }
   
@@ -79,6 +80,7 @@ explor.acm <- function(obj) {
 ##' @import dplyr
 ##' @import scatterD3
 ##' @import ggplot2
+##' @importFrom highr hi_html
 
 explor_multi_mca <- function(res, settings) { 
     
@@ -211,47 +213,85 @@ explor_multi_mca <- function(res, settings) {
         callModule(explor_multi_eigenplot,
                    "eigenplot",
                    reactive(res$eig))
-
+        
+        ## Variables plot code
+        varplot_code <- reactive({
+            col_var <- if (input$var_col == "None") NULL else input$var_col
+            symbol_var <- if (input$var_symbol == "None") NULL else input$var_symbol
+            size_var <- if (input$var_size == "None") NULL else input$var_size
+            size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
+           
+            paste0("explor::MCA_var_plot(res",
+                   ", xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
+                   "    var_sup = ", has_sup_vars && input$var_sup, ", ",
+                   ", var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
+                   "    col_var = ", deparse(substitute(col_var)),
+                   ", symbol_var = ", deparse(substitute(symbol_var)), ",\n",
+                   "    size_var = ", deparse(substitute(size_var)),
+                   ", size_range = ", deparse(dput(size_range)), ",\n",
+                   "    labels_size = ", input$var_lab_size,
+                   ", point_size = ", input$var_point_size, ",\n",
+                   "    transitions = ", input$var_transitions)
+        })
+        
         ## Variables plot
-      output$varplot <- scatterD3::renderScatterD3({
-        col_var <- if (input$var_col == "None") NULL else input$var_col
-        symbol_var <- if (input$var_symbol == "None") NULL else input$var_symbol
-        size_var <- if (input$var_size == "None") NULL else input$var_size
-        size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
-        explor::MCA_var_plot(res, 
-                             xax = input$var_x,
-                             yax = input$var_y,
-                             var_sup = has_sup_vars && input$var_sup,
-                             var_lab_min_contrib = input$var_lab_min_contrib,
-                             col_var = col_var,
-                             symbol_var = symbol_var,
-                             size_var = size_var,
-                             size_range = size_range,
-                             var_lab_size = input$var_lab_size,
-                             var_point_size = input$var_point_size,
-                             transitions = input$var_transitions
-                             )
-      })
+        output$varplot <- scatterD3::renderScatterD3({
+            code <- paste0(varplot_code(), ", in_explor = TRUE)")        
+            eval(parse(text = code))
+        })
       
+        ## Variables plot code export modal dialog
+        observeEvent(input$explor_var_plot_code, {
+            code <- paste0("res <- explor::prepare_results(", settings$obj_name, ")\n")
+            code <- paste0(code, varplot_code())
+            code <- paste0(code, explor_multi_zoom_code(input$var_zoom_range), ")")
 
-      ## Individuals plot
-      output$indplot <- scatterD3::renderScatterD3({
-        ind_col <- if (is.null(input$ind_col) || input$ind_col == "None") NULL else input$ind_col
-        lab_var <- if (input$ind_labels_show) "Name" else NULL
-        explor::MCA_ind_plot(res, 
-                     xax = input$ind_x,
-                     yax = input$ind_y,
-                     ind_sup = input$ind_sup,
-                     ind_col = ind_col,
-                     lab_var = lab_var,
-                     ellipses = input$ind_ellipses,
-                     ind_point_size = input$ind_point_size,
-                     ind_labels_size = input$ind_labels_size,
-                     ind_opacity = input$ind_opacity,
-                     transitions = input$ind_transitions)
-      })
+            showModal(modalDialog(
+                title = "Export R code",
+                HTML(paste0("<pre><code>",
+                            paste(highr::hi_html(code), collapse="\n"),
+                            "</code></pre>")),
+                easyClose = TRUE))
+        })
+
+
+        ## Indidivuals plot code
+        indplot_code <- reactive({
+            col_var <- if (input$ind_col == "None") NULL else input$ind_col
+            lab_var <- if (input$ind_labels_show) "Name" else NULL
+           
+            paste0("explor::MCA_ind_plot(res, ",
+                   "xax = ", input$ind_x, ", yax = ", input$ind_y, ",",
+                   "ind_sup = ", has_sup_ind && input$ind_sup, ",\n",
+                   "    col_var = ", deparse(substitute(col_var)), ", ",
+                   "lab_var = ", deparse(substitute(lab_var)), ", ",
+                   "labels_size = ", input$ind_labels_size, ",\n",
+                   "    point_opacity = ", input$ind_opacity, ", ",
+                   "point_size = ", input$ind_point_size, ",\n",
+                   "    ellipses = ", input$ind_ellipses, ", ",
+                   "transitions = ", input$var_transitions)
+        })
+        
+        ## Indidivuals plot
+        output$indplot <- scatterD3::renderScatterD3({
+            code <- paste0(indplot_code(), ", in_explor = TRUE)")        
+            eval(parse(text = code))
+        })
       
-    
+        ## Indidivuals plot code export modal dialog
+        observeEvent(input$explor_ind_plot_code, {
+            code <- paste0("res <- explor::prepare_results(", settings$obj_name, ")\n")
+            code <- paste0(code, indplot_code())
+            code <- paste0(code, explor_multi_zoom_code(input$ind_zoom_range), ")")
+
+            showModal(modalDialog(
+                title = "Export R code",
+                HTML(paste0("<pre><code>",
+                            paste(highr::hi_html(code), collapse="\n"),
+                            "</code></pre>")),
+                easyClose = TRUE))
+        })
+
 
         callModule(explor_multi_var_data,
                    "var_data",
@@ -273,7 +313,5 @@ explor_multi_mca <- function(res, settings) {
             ))
         })
 
-          
-    }
-  )
+    })
 }

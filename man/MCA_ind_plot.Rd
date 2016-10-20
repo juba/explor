@@ -4,10 +4,9 @@
 \alias{MCA_ind_plot}
 \title{Interactive MCA indivuals plot}
 \usage{
-MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, ind_col = NULL,
-  symbol_var = "Type", size_var = NULL, size_range = c(10, 400),
-  lab_var = "Name", ellipses = FALSE, ind_point_size = 64,
-  ind_labels_size = 9, ind_opacity = 0.5, transitions = FALSE)
+MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL,
+  symbol_var = NULL, size_var = NULL, size_range = c(10, 300),
+  lab_var = NULL, zoom_callback = NULL, in_explor = FALSE, ...)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}
@@ -18,7 +17,7 @@ MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, ind_col = NULL,
 
 \item{ind_sup}{TRUE to display supplementary individuals}
 
-\item{ind_col}{variable to be used for points color}
+\item{col_var}{variable to be used for points color}
 
 \item{symbol_var}{name of the variable for points symbol}
 
@@ -28,15 +27,11 @@ MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, ind_col = NULL,
 
 \item{lab_var}{variable to be used for points names}
 
-\item{ellipses}{wether to display confidence ellipses for points color}
+\item{zoom_callback}{scatterD3 zoom callback JavaScript body}
 
-\item{ind_point_size}{fixed points size}
+\item{in_explor}{wether the plot is to be displayed in the \code{explor} interface}
 
-\item{ind_labels_size}{points labels size}
-
-\item{ind_opacity}{points opacity}
-
-\item{transitions}{wether to display animated transitions (only when used in a shiny app)}
+\item{...}{Other arguments passed to scatterD3}
 }
 \description{
 This function generates an HTML widget displaying the individuals plot of an MCA result.

@@ -18,6 +18,7 @@ Imports:
     dplyr,
     tidyr,
     ggplot2,
+    highr,
     scatterD3 (>= 0.6.2)
 Suggests: 
     FactoMineR,

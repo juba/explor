@@ -46,6 +46,13 @@ explor_multi_css <- function() {
     overflow: auto;
     padding: 10px;
   }
+
+  /* Syntax highlighting */
+  span.hl.str { color: #d14;}
+  span.hl.kwa { color: #099;}
+  span.hl.num { color: #099;}
+  span.hl.kwd { color: #333; font-weight: bold;}
+  span.hl.com { color: #888; font-style: italic;}
   ")
 }
 
@@ -62,6 +69,12 @@ explor_multi_lasso_callback <- function() {
      }"
 }
 
+explor_multi_zoom_callback <- function(type = "var") {
+    paste0(
+        "function(xmin, xmax, ymin, ymax) {
+            Shiny.onInputChange('", type, "_zoom_range', {xmin:xmin, xmax:xmax, ymin:ymin, ymax:ymax});
+         }")
+}
 
 
 explor_multi_sidebar_footer <- function(type = "var") {
@@ -69,15 +82,12 @@ explor_multi_sidebar_footer <- function(type = "var") {
         checkboxInput(paste0(type, "_transitions"), 
                       HTML(gettext("Animations", domain = "R-explor")),
                       value = TRUE),
-        tags$p(actionButton(paste0("explor-", type, "-reset-zoom"), 
-                            title = gettext("Reset zoom", domain = "R-explor"),
-                            HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span>")),
-               actionButton(paste0("explor-", type, "-lasso-toggle"), 
-                            title = gettext("Toggle lasso", domain = "R-explor"),
-                            HTML("<span class='glyphicon glyphicon-screenshot' aria-hidden='true'></span>"), 
-                            "data-toggle" = "button"),
+        tags$p(actionLink(paste0("explor_", type, "_plot_code"), href = "#",
+                          title = gettext("Get R code", domain = "R-explor"),
+                          class = "btn btn-default", 
+                          label = HTML("<span class='glyphicon glyphicon-open-file' aria-hidden='true'></span>")), 
                tags$a(id = paste0("explor-", type, "-svg-export"), href = "#",
-                  class = "btn btn-default", 
+                      class = "btn btn-default", 
                   title = gettext("Export as SVG", domain = "R-explor"),
                   HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))
 }
@@ -108,7 +118,15 @@ explor_multi_hide_input <- function(id) {
                 selected = "None")
 }
 
+explor_multi_zoom_code <- function(zoom_range) {
+    if (is.null(zoom_range)) return("")
+    xmin <- signif(zoom_range$xmin, 3)
+    xmax <- signif(zoom_range$xmax, 3)
+    ymin <- signif(zoom_range$ymin, 3)
+    ymax <- signif(zoom_range$ymax, 3)
+    return(sprintf(",\n    xlim = c(%s, %s), ylim = c(%s, %s))", xmin, xmax, ymin, ymax))
 
+}
 
 ## INDIVIDUAL DATA SHINY MODULE ---------------------------------------------------------
 
