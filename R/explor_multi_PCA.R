@@ -15,7 +15,8 @@ explor.PCA <- function(obj) {
   settings$varsup_columns <- c("Variable", "Coord", "Cos2", "Cor")
   settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
   settings$indsup_columns <- c("Name", "Coord", "Cos2")
-  settings$scale_unit <- obj$call$scale.unit
+    settings$scale_unit <- obj$call$scale.unit
+    settings$obj_name <- deparse(substitute(obj))    
   
   ## Launch interface
   explor_multi_pca(res, settings)
@@ -190,130 +191,82 @@ explor_multi_pca <- function(res, settings) {
                    "eigenplot",
                    reactive(res$eig))
 
-      ## Variables plot reactive data
-      var_data <- reactive({
-        tmp_x <- res$vars %>% 
-          filter(Axis == input$var_x) %>%
-          select_("Variable", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (is.null(input$var_sup) || !input$var_sup)
-          tmp_x <- tmp_x %>% filter(Type == 'Active')
-        tmp_y <- res$vars %>% 
-          filter(Axis == input$var_y) %>%
-          select_("Variable", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (is.null(input$var_sup) || !input$var_sup)
-          tmp_y <- tmp_y %>% filter(Type == 'Active')
-        tmp <- tmp_x %>%
-          left_join(tmp_y, by = c("Variable", "Type", "Class")) %>%
-          mutate(Contrib = Contrib.x + Contrib.y,
-                 Cos2 = Cos2.x + Cos2.y,
-                 tooltip = paste(paste0("<strong>",
-                                        gettext("Variable", domain = "R-explor"),
-                                        ":</strong> ", Variable),
-                                  paste0("<strong>x:</strong> ", Coord.x),
-                                  paste0("<strong>y:</strong> ", Coord.y),
-                                  paste0("<strong>",
-                                         gettext("Cos2", domain = "R-explor"),
-                                         ":</strong> ", Cos2),
-                                  paste0("<strong>",
-                                         gettext("Contribution:", domain = "R-explor"),
-                                         "</strong> ", Contrib),
-                                  sep = "<br />"),
-                 Lab = ifelse(Contrib >= as.numeric(input$var_lab_min_contrib) | 
-                                  (is.na(Contrib) & as.numeric(input$var_lab_min_contrib) == 0), Variable, ""))
-        data.frame(tmp)
-      })
       
-      ## Variables plot
-      output$varplot <- scatterD3::renderScatterD3({
-        col_var <- if (is.null(input$var_col) || input$var_col == "None") NULL else var_data()[, input$var_col]
-        type_var <- ifelse(var_data()[,"Class"] == "Quantitative", "arrow", "point")
-        scatterD3::scatterD3(
-          x = var_data()[, "Coord.x"],
-          y = var_data()[, "Coord.y"],
-          xlab = names(res$axes)[res$axes == input$var_x],
-          ylab = names(res$axes)[res$axes == input$var_y],
-          lab = var_data()[, "Lab"],
-          labels_size = input$var_lab_size,
-          point_opacity = 1,
-          col_var = col_var,
-          col_lab = input$var_col,
-          tooltip_text = var_data()[, "tooltip"],
-          type_var = type_var,
-          unit_circle = settings$scale_unit,
-          xlim = if (settings$scale_unit) c(-1.1, 1.1) else NULL,
-          ylim = if (settings$scale_unit) c(-1.1, 1.1) else NULL,          
-          key_var = var_data()[, "Variable"],
-          fixed = TRUE,
-          transitions = input$var_transitions,
-          html_id = "explor_var",
-          dom_id_reset_zoom = "explor-var-reset-zoom",
-          dom_id_svg_export = "explor-var-svg-export",
-          dom_id_lasso_toggle = "explor-var-lasso-toggle",
-          lasso = TRUE,
-          lasso_callback = explor_multi_lasso_callback()
-        )
-      })
+        ## Variables plot code
+        varplot_code <- reactive({
+            col_var <- if (input$var_col == "None") NULL else input$var_col
+           
+            paste0("explor::PCA_var_plot(res, ",
+                   "xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
+                   "    var_sup = ", has_sup_vars && input$var_sup, ", ",
+                   "var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
+                   "    col_var = ", deparse(substitute(col_var)), ", ",
+                   "labels_size = ", input$var_lab_size, ", ",
+                   "scale_unit = ", settings$scale_unit, ",\n",
+                   "    transitions = ", input$var_transitions)
+        })
+        
+        ## Variables plot
+        output$varplot <- scatterD3::renderScatterD3({
+            code <- paste0(varplot_code(), ", in_explor = TRUE)")        
+            eval(parse(text = code))
+        })
       
+        ## Variables plot code export modal dialog
+        observeEvent(input$explor_var_plot_code, {
+            code <- paste0("res <- explor::prepare_results(", settings$obj_name, ")\n")
+            code <- paste0(code, varplot_code())
+            code <- paste0(code, explor_multi_zoom_code(input$var_zoom_range), ")")
 
+            showModal(modalDialog(
+                title = "Export R code",
+                HTML(explor_multi_export_code_message(),
+                    paste0("<pre><code>",
+                            paste(highr::hi_html(code), collapse="\n"),
+                            "</code></pre>")),
+                easyClose = TRUE))
+        })
+
+
+        ## Indidivuals plot code
+        indplot_code <- reactive({
+            col_var <- if (input$ind_col == "None") NULL else input$ind_col
+            lab_var <- if (input$ind_labels_show) "Name" else NULL
+           
+            paste0("explor::PCA_ind_plot(res, ",
+                   "xax = ", input$ind_x, ", yax = ", input$ind_y, ",",
+                   "ind_sup = ", has_sup_ind && input$ind_sup, ",\n",
+                   "    col_var = ", deparse(substitute(col_var)), ", ",
+                   "lab_var = ", deparse(substitute(lab_var)), ", ",
+                   "labels_size = ", input$ind_labels_size, ",\n",
+                   "    point_opacity = ", input$ind_opacity, ", ",
+                   "point_size = ", input$ind_point_size, ",\n",
+                   "    ellipses = ", input$ind_ellipses, ", ",
+                   "transitions = ", input$ind_transitions)
+        })
+        
+        ## Indidivuals plot
+        output$indplot <- scatterD3::renderScatterD3({
+            code <- paste0(indplot_code(), ", in_explor = TRUE)")        
+            eval(parse(text = code))
+        })
       
-      ## Individuals plot reactive data
-      ind_data <- reactive({
-        tmp_x <- res$ind %>% 
-          filter(Axis == input$ind_x) %>%
-          select(Name, Type, Coord, Contrib, Cos2)
-        if (is.null(input$ind_sup) || !input$ind_sup)
-          tmp_x <- tmp_x %>% filter(Type == "Active")
-        tmp_y <- res$ind %>% 
-          filter(Axis == input$ind_y) %>%
-          select(Name, Type, Coord, Contrib, Cos2)
-        if (is.null(input$ind_sup) || !input$ind_sup)
-          tmp_y <- tmp_y %>% filter(Type == "Active")
-        tmp <- tmp_x %>%
-          left_join(tmp_y, by = c("Name", "Type")) %>%
-          mutate(Contrib = Contrib.x + Contrib.y,
-                 Cos2 = Cos2.x + Cos2.y,
-                 tooltip = paste(paste0("<strong>", Name, "</strong>"),
-                                 paste0("<strong>x:</strong> ", Coord.x),
-                                 paste0("<strong>y:</strong> ", Coord.y),
-                                 paste0("<strong>",
-                                        gettext("Squared cosinus", domain = "R-explor"),
-                                        ":</strong> ", Cos2),
-                                 paste0("<strong>",
-                                        gettext("Contribution:", domain = "R-explor"),
-                                        "</strong> ", Contrib),
-                                 sep = "<br />"))
-        data.frame(tmp)
-      })
-      
-      ## Individuals plot
-      output$indplot <- scatterD3::renderScatterD3({
-        col_var <- if (is.null(input$ind_col) || input$ind_col == "None") NULL else ind_data()[, input$ind_col]
-        lab_var <- if (input$ind_labels_show) ind_data()[, "Name"] else NULL
-        scatterD3::scatterD3(
-          x = ind_data()[, "Coord.x"],
-          y = ind_data()[, "Coord.y"],
-          xlab = names(res$axes)[res$axes == input$ind_x],
-          ylab = names(res$axes)[res$axes == input$ind_y],
-          point_size = input$ind_point_size,
-          point_opacity = input$ind_opacity,
-          lab = lab_var,
-          labels_size = input$ind_labels_size,
-          col_var = col_var,
-          col_lab = input$ind_col,
-          ellipses = if (is.null(input$ind_ellipses)) FALSE else input$ind_ellipses,
-          tooltip_text = ind_data()[, "tooltip"],
-          key_var = ind_data()[, "Name"],
-          fixed = TRUE,
-          transitions = input$ind_transitions,
-          html_id = "explor_ind",
-          dom_id_reset_zoom = "explor-ind-reset-zoom",
-          dom_id_svg_export = "explor-ind-svg-export",
-          dom_id_lasso_toggle = "explor-ind-lasso-toggle",
-          lasso = TRUE,
-          lasso_callback = explor_multi_lasso_callback()
-        )
-      })
-      
+        ## Indidivuals plot code export modal dialog
+        observeEvent(input$explor_ind_plot_code, {
+            code <- paste0("res <- explor::prepare_results(", settings$obj_name, ")\n")
+            code <- paste0(code, indplot_code())
+            code <- paste0(code, explor_multi_zoom_code(input$ind_zoom_range), ")")
+
+            showModal(modalDialog(
+                title = "Export R code",
+                HTML(paste0(explor_multi_export_code_message(),
+                            "<pre><code>",
+                            paste(highr::hi_html(code), collapse="\n"),
+                            "</code></pre>")),
+                easyClose = TRUE))
+        })
+
+        
         callModule(explor_multi_var_data,
                    "var_data",
                    reactive(res),

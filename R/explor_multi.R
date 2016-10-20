@@ -118,14 +118,20 @@ explor_multi_hide_input <- function(id) {
                 selected = "None")
 }
 
+## Generate the xlim and ylim from a zoom range for R code export
 explor_multi_zoom_code <- function(zoom_range) {
     if (is.null(zoom_range)) return("")
     xmin <- signif(zoom_range$xmin, 3)
     xmax <- signif(zoom_range$xmax, 3)
     ymin <- signif(zoom_range$ymin, 3)
     ymax <- signif(zoom_range$ymax, 3)
-    return(sprintf(",\n    xlim = c(%s, %s), ylim = c(%s, %s))", xmin, xmax, ymin, ymax))
+    return(sprintf(",\n    xlim = c(%s, %s), ylim = c(%s, %s)", xmin, xmax, ymin, ymax))
 
+}
+
+## Message displyed in the R code export dialog
+explor_multi_export_code_message <- function () {
+    gettext("<p>Copy/paste the following code to reproduce the displayed plot. Note that custom label positions are not taken into account, use the <em>export label positions</em> menu entry to save and reload them later.</p>", domain = "R-explor")
 }
 
 ## INDIVIDUAL DATA SHINY MODULE ---------------------------------------------------------
