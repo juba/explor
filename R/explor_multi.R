@@ -106,17 +106,6 @@ explor_multi_table <- function(tab, options, sort_column) {
                           rownames = FALSE)
 }
 
-## Hide input for CA results
-explor_multi_hide_input <- function(id) {
-    choices <- c("None", "Row", "Column")
-    names(choices) <- c(gettext("None", domain = "R-explor"),
-                        gettext("Rows", domain = "R-explor"),
-                        gettext("Columns", domain = "R-explor"))
-    selectInput(id, 
-                gettext("Hide :", domain = "R-explor"),
-                choices = choices,
-                selected = "None")
-}
 
 ## Generate the xlim and ylim from a zoom range for R code export
 explor_multi_zoom_code <- function(zoom_range) {
@@ -185,6 +174,15 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
 
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 
+## Hide input choices for CA results
+explor_multi_hide_choices <- function() {
+    choices <- c("None", "Row", "Column")
+    names(choices) <- c(gettext("None", domain = "R-explor"),
+                        gettext("Rows", domain = "R-explor"),
+                        gettext("Columns", domain = "R-explor"))
+    choices
+}
+
 ## UI for variable data panel
 explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA = FALSE) {
     ns <- NS(id)
@@ -194,7 +192,12 @@ explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA
                    selectInput(ns("vardim"), 
                                gettext("Dimension", domain = "R-explor"),
                                choices = axes, selected = "1"),
-                   if (is_CA) explor_multi_hide_input(ns("var_tab_hide"))
+                   if (is_CA) {
+                       selectInput(ns("var_tab_hide"), 
+                                   gettext("Hide :", domain = "R-explor"),
+                                   choices = explor_multi_hide_choices(),
+                                   selected = "None")
+                   }
                )),
         column(10,
                h4(if(is_CA) gettext("Active levels", domain = "R-explor")                   

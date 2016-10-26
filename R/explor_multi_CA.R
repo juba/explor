@@ -46,18 +46,20 @@ explor.CA <- function(obj) {
 
 explor.coa <- function(obj) {
   
-  if (!inherits(obj, "coa") || !inherits(obj, "dudi")) stop("obj must be of class dudi and coa")
+    if (!inherits(obj, "coa") || !inherits(obj, "dudi"))
+        stop("obj must be of class dudi and coa")
   
-  ## results preparation
-  res <- prepare_results(obj)
+    ## results preparation
+    res <- prepare_results(obj)
 
-  ## Settings
-  settings <- list()
-  settings$var_columns <- c("Level", "Position", "Coord", "Contrib", "Cos2")
-  settings$varsup_columns <- c("Level", "Position", "Coord")
+    ## Settings
+    settings <- list()
+    settings$var_columns <- c("Level", "Position", "Coord", "Contrib", "Cos2")
+    settings$varsup_columns <- c("Level", "Position", "Coord")
+    settings$obj_name <- deparse(substitute(obj))
 
-  ## Launch interface
-  explor_multi_ca(res, settings)
+    ## Launch interface
+    explor_multi_ca(res, settings)
   
 }
 
@@ -131,7 +133,10 @@ explor_multi_ca <- function(res, settings) {
                                       var_col_input,
                                       var_symbol_input,
                                       var_size_input,
-                                      explor_multi_hide_input("var_hide"),
+                                      selectInput("var_hide", 
+                                                  gettext("Hide :", domain = "R-explor"),
+                                                  choices = explor_multi_hide_choices(),
+                                                  selected = "None"),
                                       if(has_sup_vars)
                                         checkboxInput("var_sup", 
                                                       HTML(gettext("Supplementary levels", domain = "R-explor")),
@@ -152,83 +157,49 @@ explor_multi_ca <- function(res, settings) {
                    "eigenplot",
                    reactive(res$eig))
 
-      ## Variables plot reactive data
-      var_data <- reactive({
-        tmp_x <- res$vars %>% 
-          filter(Axis == input$var_x) %>%
-          select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2")
-        tmp_y <- res$vars %>% 
-          filter(Axis == input$var_y) %>%
-          select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2")
-        if (is.null(input$var_sup) || !input$var_sup) {
-          tmp_x <- tmp_x %>% filter(Type == 'Active')
-          tmp_y <- tmp_y %>% filter(Type == 'Active')
-        }
-        if (input$var_hide != "None") {
-          tmp_x <- tmp_x %>% filter(Position != input$var_hide)
-          tmp_y <- tmp_y %>% filter(Position != input$var_hide)
-        }
-          
-        tmp <- tmp_x %>%
-          left_join(tmp_y, by = c("Level", "Position", "Type", "Class")) %>%
-          mutate(Contrib = Contrib.x + Contrib.y,
-                 Cos2 = Cos2.x + Cos2.y,
-                 tooltip = paste(paste0("<strong>", Level, "</strong>"),
-                                 paste0("<strong>",
-                                        gettext("Position", domain = "R-explor"),
-                                        ":</strong> ", Position),
-                                  paste0("<strong>x:</strong> ", Coord.x),
-                                  paste0("<strong>y:</strong> ", Coord.y),
-                                  paste0("<strong>",
-                                         gettext("Cos2", domain = "R-explor"),
-                                         ":</strong> ", Cos2),
-                                  paste0("<strong>",
-                                         gettext("Contribution:", domain = "R-explor"),
-                                         "</strong> ", Contrib),
-                                  sep = "<br />"),
-                 Lab = ifelse(Contrib >= as.numeric(input$var_lab_min_contrib) | 
-                                  (is.na(Contrib) & as.numeric(input$var_lab_min_contrib) == 0), Level, ""))                 
-        data.frame(tmp)
-      })
+                
+        ## Variables plot code
+        varplot_code <- reactive({
+            col_var <- if (input$var_col == "None") NULL else input$var_col
+            symbol_var <- if (input$var_symbol == "None") NULL else input$var_symbol
+            size_var <- if (input$var_size == "None") NULL else input$var_size
+            size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
+
+            paste0("explor::CA_var_plot(res, ",
+                   "xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
+                   "    var_sup = ", has_sup_vars && input$var_sup, ", ",
+                   "var_hide = ", deparse(substitute(input$var_hide)), ", ",
+                   "var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
+                   "    col_var = ", deparse(substitute(col_var)), ", ", 
+                   "symbol_var = ", deparse(substitute(symbol_var)), ", ",
+                   "size_var = ", deparse(substitute(size_var)), ",\n",
+                   "    size_range = ", deparse(dput(size_range)), ", ",
+                   "labels_size = ", input$var_lab_size, ", ",
+                   "point_size = ", input$var_point_size, ",\n",
+                   "    transitions = ", input$var_transitions)
+        })
+        
+        ## Variables plot
+        output$varplot <- scatterD3::renderScatterD3({
+            code <- paste0(varplot_code(), ", in_explor = TRUE)")        
+            eval(parse(text = code))
+        })
       
-      ## Variables plot
-      output$varplot <- scatterD3::renderScatterD3({
-        col_var <- if (input$var_col == "None") NULL else var_data()[, input$var_col]
-        symbol_var <- if (input$var_symbol == "None") NULL else var_data()[, input$var_symbol]
-        size_var <- if (input$var_size == "None") NULL else var_data()[, input$var_size]
-        size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
-        lab  <- if (input$var_lab_size > 0) var_data()[, "Lab"] else NULL
-        key_var <- paste(var_data()[, "Position"], var_data()[, "Level"], sep="-")
-        scatterD3::scatterD3(
-          x = var_data()[, "Coord.x"],
-          y = var_data()[, "Coord.y"],
-          xlab = names(res$axes)[res$axes == input$var_x],
-          ylab = names(res$axes)[res$axes == input$var_y],
-          lab = lab,
-          labels_size = input$var_lab_size,
-          point_opacity = 1,
-          point_size = input$var_point_size,          
-          col_var = col_var,
-          col_lab = input$var_col,
-          symbol_var = symbol_var,
-          symbol_lab = input$var_symbol,
-          size_var = size_var,
-          size_lab = input$var_size,
-          size_range = size_range,
-          tooltip_text = var_data()[, "tooltip"],
-          type_var = "point",
-          unit_circle = NULL,
-          key_var = key_var,
-          fixed = TRUE,
-          transitions = input$var_transitions,
-          html_id = "explor_var",
-          dom_id_reset_zoom = "explor-var-reset-zoom",
-          dom_id_svg_export = "explor-var-svg-export",
-          dom_id_lasso_toggle = "explor-var-lasso-toggle",          
-          lasso = TRUE,
-          lasso_callback = explor_multi_lasso_callback()
-        )
-      })
+        ## Variables plot code export modal dialog
+        observeEvent(input$explor_var_plot_code, {
+            code <- paste0("res <- explor::prepare_results(", settings$obj_name, ")\n")
+            code <- paste0(code, varplot_code())
+            code <- paste0(code, explor_multi_zoom_code(input$var_zoom_range), ")")
+
+            showModal(modalDialog(
+                title = "Export R code",
+                HTML(paste0(explor_multi_export_code_message(),
+                            "<pre><code>",
+                            paste(highr::hi_html(code), collapse="\n"),
+                            "</code></pre>")),
+                easyClose = TRUE))
+        })
+
       
         callModule(explor_multi_var_data,
                    "var_data",
