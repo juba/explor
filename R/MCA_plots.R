@@ -3,40 +3,40 @@
 ## Variables plot reactive data
 ## Not exported
 MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_contrib = 0) {
-  tmp_x <- res$vars %>%
-    arrange(Axis, Type, Variable) %>%
-    filter(Axis == xax) %>%
-    select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
-  tmp_y <- res$vars %>% 
-    filter(Axis == yax) %>%
-    select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
-  if (!(var_sup)) {
-    tmp_x <- tmp_x %>% filter(Type == 'Active')
-    tmp_y <- tmp_y %>% filter(Type == 'Active')
-  }
-  tmp <- tmp_x %>%
-    left_join(tmp_y, by = c("Variable", "Level", "Type", "Class", "Count")) %>%
-    mutate(Contrib = Contrib.x + Contrib.y,
-           Cos2 = Cos2.x + Cos2.y,
-           tooltip = paste(paste0("<strong>", Level, "</strong>"),
-                           paste0("<strong>",
-                                  gettext("Variable", domain = "R-explor"),
-                                  ":</strong> ", Variable),
-                           paste0("<strong>x:</strong> ", Coord.x),
-                           paste0("<strong>y:</strong> ", Coord.y),
-                           paste0("<strong>",
-                                  gettext("Cos2:", domain = "R-explor"),
-                                  ":</strong> ", Cos2),
-                           paste0("<strong>",
-                                  gettext("Contribution:", domain = "R-explor"),
-                                  "</strong> ", Contrib),
-                           paste0("<strong>",
-                                  gettext("Count:", domain = "R-explor"),
-                                  "</strong> ", Count),
-                           sep = "<br />"),
-           Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) | 
-                          (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Level, ""))
-  data.frame(tmp)
+    tmp_x <- res$vars %>%
+        arrange(Axis, Type, Variable) %>%
+        filter(Axis == xax) %>%
+        select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
+    tmp_y <- res$vars %>% 
+        filter(Axis == yax) %>%
+        select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
+    if (!(var_sup)) {
+        tmp_x <- tmp_x %>% filter(Type == 'Active')
+        tmp_y <- tmp_y %>% filter(Type == 'Active')
+    }
+    tmp <- tmp_x %>%
+        left_join(tmp_y, by = c("Variable", "Level", "Type", "Class", "Count")) %>%
+        mutate(Contrib = Contrib.x + Contrib.y,
+               Cos2 = Cos2.x + Cos2.y,
+               tooltip = paste(paste0("<strong>", Level, "</strong>"),
+                               paste0("<strong>",
+                                      gettext("Variable", domain = "R-explor"),
+                                      ":</strong> ", Variable),
+                               paste0("<strong>x:</strong> ", Coord.x),
+                               paste0("<strong>y:</strong> ", Coord.y),
+                               paste0("<strong>",
+                                      gettext("Cos2:", domain = "R-explor"),
+                                      ":</strong> ", Cos2),
+                               paste0("<strong>",
+                                      gettext("Contribution:", domain = "R-explor"),
+                                      "</strong> ", Contrib),
+                               paste0("<strong>",
+                                      gettext("Count:", domain = "R-explor"),
+                                      "</strong> ", Count),
+                               sep = "<br />"),
+               Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) | 
+                            (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Level, ""))
+    data.frame(tmp)
 }
 
 
@@ -109,36 +109,36 @@ MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 
 ## MCA individuals plot data
 MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL) {
-  tmp_x <- res$ind %>% 
-    filter(Axis == xax) %>%
-    select(Name, Type, Coord, Contrib, Cos2)
-  if (!ind_sup)
-    tmp_x <- tmp_x %>% filter(Type == "Active")
-  tmp_y <- res$ind %>% 
-    filter(Axis == yax) %>%
-    select(Name, Type, Coord, Contrib, Cos2)
-  if (!ind_sup)
-    tmp_y <- tmp_y %>% filter(Type == "Active")
-  tmp <- tmp_x %>%
-    left_join(tmp_y, by = c("Name", "Type")) %>%
-    mutate(Contrib = Contrib.x + Contrib.y,
-           Cos2 = Cos2.x + Cos2.y,
-           tooltip = paste(paste0("<strong>", Name, "</strong>"),
-                           paste0("<strong>x:</strong> ", Coord.x),
-                           paste0("<strong>y:</strong> ", Coord.y),
-                           paste0("<strong>",
-                                  gettext("Squared cosinus", domain = "R-explor"),
-                                  ":</strong> ", Cos2),
-                           paste0("<strong>",
-                                  gettext("Contribution:", domain = "R-explor"),
-                                  "</strong> ", Contrib),
-                           sep = "<br />"))
-  if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
-    tmp_data <- res$quali_data %>% select_("Name", col_var)
-    tmp <- tmp %>%
-      left_join(tmp_data, by = "Name")
-  }
-  data.frame(tmp)
+    tmp_x <- res$ind %>% 
+        filter(Axis == xax) %>%
+        select(Name, Type, Coord, Contrib, Cos2)
+    if (!ind_sup)
+        tmp_x <- tmp_x %>% filter(Type == "Active")
+    tmp_y <- res$ind %>% 
+        filter(Axis == yax) %>%
+        select(Name, Type, Coord, Contrib, Cos2)
+    if (!ind_sup)
+        tmp_y <- tmp_y %>% filter(Type == "Active")
+    tmp <- tmp_x %>%
+        left_join(tmp_y, by = c("Name", "Type")) %>%
+        mutate(Contrib = Contrib.x + Contrib.y,
+               Cos2 = Cos2.x + Cos2.y,
+               tooltip = paste(paste0("<strong>", Name, "</strong>"),
+                               paste0("<strong>x:</strong> ", Coord.x),
+                               paste0("<strong>y:</strong> ", Coord.y),
+                               paste0("<strong>",
+                                      gettext("Squared cosinus", domain = "R-explor"),
+                                      ":</strong> ", Cos2),
+                               paste0("<strong>",
+                                      gettext("Contribution:", domain = "R-explor"),
+                                      "</strong> ", Contrib),
+                               sep = "<br />"))
+    if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
+        tmp_data <- res$quali_data %>% select_("Name", col_var)
+        tmp <- tmp %>%
+            left_join(tmp_data, by = "Name")
+    }
+    data.frame(tmp)
 }
 
 ##' Interactive MCA indivuals plot
