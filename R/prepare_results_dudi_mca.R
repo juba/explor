@@ -41,6 +41,7 @@ prepare_results.acm <- function(obj) {
   vars$modname <- extract_mod(vars)
   vars$Type <- "Active"
   vars$Class <- "Qualitative"
+  vars$Count <- NA
   
   ## Supplementary variables coordinates
   if (!is.null(obj$supv)) {
@@ -49,6 +50,7 @@ prepare_results.acm <- function(obj) {
     vars.quali.sup$modname <- extract_mod(vars.quali.sup)
     vars.quali.sup$Type <- "Supplementary"
     vars.quali.sup$Class <- "Qualitative"
+    vars.quali.sup$Count <- NA
     vars <- rbind(vars, vars.quali.sup)
   }
 

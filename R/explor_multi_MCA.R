@@ -11,10 +11,11 @@ explor.MCA <- function(obj) {
     
     ## Settings
     settings <- list()
-    settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
-    settings$varsup_columns <- c("Variable", "Level", "Class", "Coord", "Cos2", "V.test", "P.value")
+    settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2", "Count")
+    settings$varsup_columns <- c("Variable", "Level", "Class", "Coord", "Cos2", "Count", "V.test", "P.value")
     settings$vareta2_columns <- c("Variable", "eta2")
     settings$show_varsup_eta2 <- TRUE
+    settings$counts_size <- TRUE    
     settings$varsupeta2_columns <- c("Variable", "eta2")
     settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
     settings$indsup_columns <- c("Name", "Coord")
@@ -65,6 +66,7 @@ explor.acm <- function(obj) {
   settings$varsup_columns <- c("Variable", "Level", "Coord")
   settings$vareta2_columns <- c("Variable", "eta2")
   settings$show_varsup_eta2 <- FALSE
+  settings$counts_size <- FALSE
   settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
   settings$indsup_columns <- c("Name", "Coord")
   
@@ -109,6 +111,10 @@ explor_multi_mca <- function(res, settings) {
   names(var_size_choices) <- c(gettext("None", domain = "R-explor"),
                                gettext("Contribution", domain = "R-explor"),
                                gettext("Squared cosinus", domain = "R-explor"))
+  if (settings$counts_size) {
+    var_size_choices <- c(var_size_choices, "Count")
+    names(var_size_choices)[var_size_choices == "Count"] <- gettext("Count", domain = "R-explor")
+  }  
   var_size_input <- selectInput("var_size", 
                                 gettext("Points size :", domain = "R-explor"),
                                 choices = var_size_choices,

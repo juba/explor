@@ -6,16 +6,16 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
   tmp_x <- res$vars %>%
     arrange(Axis, Type, Variable) %>%
     filter(Axis == xax) %>%
-    select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
+    select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
   tmp_y <- res$vars %>% 
     filter(Axis == yax) %>%
-    select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
+    select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
   if (!(var_sup)) {
     tmp_x <- tmp_x %>% filter(Type == 'Active')
     tmp_y <- tmp_y %>% filter(Type == 'Active')
   }
   tmp <- tmp_x %>%
-    left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
+    left_join(tmp_y, by = c("Variable", "Level", "Type", "Class", "Count")) %>%
     mutate(Contrib = Contrib.x + Contrib.y,
            Cos2 = Cos2.x + Cos2.y,
            tooltip = paste(paste0("<strong>", Level, "</strong>"),
@@ -25,11 +25,14 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
                            paste0("<strong>x:</strong> ", Coord.x),
                            paste0("<strong>y:</strong> ", Coord.y),
                            paste0("<strong>",
-                                  gettext("Cos2", domain = "R-explor"),
+                                  gettext("Cos2:", domain = "R-explor"),
                                   ":</strong> ", Cos2),
                            paste0("<strong>",
                                   gettext("Contribution:", domain = "R-explor"),
                                   "</strong> ", Contrib),
+                           paste0("<strong>",
+                                  gettext("Count:", domain = "R-explor"),
+                                  "</strong> ", Count),
                            sep = "<br />"),
            Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) | 
                           (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Level, ""))
@@ -72,7 +75,7 @@ MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
     lasso <- if(in_explor) TRUE else FALSE 
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
-
+    
     var_data <- MCA_var_data(res, xax, yax, var_sup, var_lab_min_contrib)
     
     scatterD3::scatterD3(

@@ -27,6 +27,11 @@ prepare_results.MCA <- function(obj) {
     vars$modname <- rownames(vars)
     vars$Type <- "Active"
     vars$Class <- "Qualitative"
+
+    ## Variables count
+    counts <- sapply(obj$call$Xtot[,obj$call$quali, drop = FALSE], sum)
+    if (!is.null(obj$call$excl)) counts <- counts[-obj$call$excl]
+    vars$Count <- counts
     
     ## Supplementary variables coordinates
     if (!is.null(obj$quali.sup)) {
@@ -35,7 +40,10 @@ prepare_results.MCA <- function(obj) {
         vars.quali.sup$varname <- rep(names(varnames),varnames)
         vars.quali.sup$modname <- rownames(vars.quali.sup)
         vars.quali.sup$Type <- "Supplementary"
-        vars.quali.sup$Class <- "Qualitative"    
+        vars.quali.sup$Class <- "Qualitative"
+        quali.sup.mods <- rownames(obj$quali.sup$coord)
+        counts <- sapply(obj$call$Xtot[,quali.sup.mods, drop = FALSE], sum)
+        vars.quali.sup$Count <- counts
         vars <- rbind(vars, vars.quali.sup)
     }
 
@@ -46,6 +54,7 @@ prepare_results.MCA <- function(obj) {
         vars.quanti.sup$modname <- rownames(obj$quanti.sup$coord)
         vars.quanti.sup$Type <- "Supplementary"
         vars.quanti.sup$Class <- "Quantitative"
+        vars.quanti.sup$Count <- NA
         vars <- rbind(vars, vars.quanti.sup)
     }
 
