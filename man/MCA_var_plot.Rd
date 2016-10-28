@@ -5,7 +5,7 @@
 \title{Interactive MCA variables plot}
 \usage{
 MCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
-  var_lab_min_contrib = 0, point_size = 10, col_var = NULL,
+  var_lab_min_contrib = 0, point_size = 64, col_var = NULL,
   symbol_var = NULL, size_var = NULL, size_range = c(10, 300),
   zoom_callback = NULL, in_explor = FALSE, ...)
 }
