@@ -69,6 +69,7 @@ explor.acm <- function(obj) {
     settings$counts_size <- FALSE
     settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
     settings$indsup_columns <- c("Name", "Coord")
+    settings$obj_name <- deparse(substitute(obj))
     
     ## Launch interface
     explor_multi_mca(res, settings)
