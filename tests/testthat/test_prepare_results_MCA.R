@@ -67,3 +67,9 @@ test_that("Qualitative data are equal", {
                as.character(hobbies[ids, "Marital status"]))
 })
 
+test_that("Counts are equal" ,{
+    expect_equal(res$vars$Count[res$vars$Level == "Show_0" & res$vars$Axis == 1],
+                 as.numeric(table(hobbies[101:1000, "Show"])["0"]))
+    expect_equal(res$vars$Count[res$vars$Level == "Employee" & res$vars$Axis == 3],
+                 as.numeric(table(hobbies[101:1000, "Profession"])["Employee"]))
+})
