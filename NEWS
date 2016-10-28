@@ -1,5 +1,7 @@
-explor 0.2.2
-------------
+explor 0.3
+----------
+
+* explor.MCA now works if MCA has been called with an excl argument
 
 
 explor 0.2.1
