@@ -35,3 +35,12 @@ test_that("Supplementary levels results are equal", {
   expect_equal(as.vector(round(ca$row.sup$cos2[,1],3)),
                res$vars[res$vars$Type == "Supplementary" & res$vars$Position == "Row" & res$vars$Axis == "1", "Cos2"])
 })
+
+
+test_that("Counts are equal" ,{
+    expect_equal(res$vars$Count[res$vars$Level == "egoism" & res$vars$Axis == 1],
+                 sum(children["egoism", 1:5]))
+    expect_equal(res$vars$Count[res$vars$Level == "money" & res$vars$Axis == 3],
+                 sum(children["money", 1:5]))
+})
+

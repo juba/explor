@@ -6,10 +6,10 @@ CA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
                         var_lab_min_contrib = 0) {
     tmp_x <- res$vars %>% 
         filter(Axis == xax) %>%
-        select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2")
+        select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
     tmp_y <- res$vars %>% 
         filter(Axis == yax) %>%
-        select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2")
+        select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
     if (!var_sup) {
         tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- tmp_y %>% filter(Type == 'Active')
@@ -19,7 +19,7 @@ CA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
         tmp_y <- tmp_y %>% filter(Position != var_hide)
     }
     tmp <- tmp_x %>%
-        left_join(tmp_y, by = c("Level", "Position", "Type", "Class")) %>%
+        left_join(tmp_y, by = c("Level", "Position", "Type", "Class", "Count")) %>%
         mutate(Contrib = Contrib.x + Contrib.y,
                Cos2 = Cos2.x + Cos2.y,
                tooltip = paste(paste0("<strong>", Level, "</strong>"),
@@ -29,11 +29,15 @@ CA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
                                paste0("<strong>x:</strong> ", Coord.x),
                                paste0("<strong>y:</strong> ", Coord.y),
                                paste0("<strong>",
-                                      gettext("Cos2", domain = "R-explor"),
+                                      gettext("Cos2:", domain = "R-explor"),
                                       ":</strong> ", Cos2),
                                paste0("<strong>",
                                       gettext("Contribution:", domain = "R-explor"),
                                       "</strong> ", Contrib),
+                               ifelse(is.na(Count), "",
+                                      paste0("<strong>",
+                                             gettext("Count:", domain = "R-explor"),
+                                             "</strong> ", Count)),
                                sep = "<br />"),
                Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) | 
                             (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Level, ""))                 

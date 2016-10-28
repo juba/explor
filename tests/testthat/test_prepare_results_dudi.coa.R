@@ -36,3 +36,4 @@ test_that("Supplementary levels results are equal", {
   expect_equal(as.vector(round(coa$supr[,2],3)),
                res$vars[res$vars$Type == "Supplementary" & res$vars$Position == "Row" & res$vars$Axis == "2", "Coord"])
 })
+

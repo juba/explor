@@ -11,8 +11,10 @@ explor.CA <- function(obj) {
 
     ## Settings
     settings <- list()
-    settings$var_columns <- c("Level", "Position", "Coord", "Contrib", "Cos2")
-    settings$varsup_columns <- c("Level", "Position", "Coord", "Cos2")
+    settings$var_columns <- c("Level", "Position", "Coord", "Contrib", "Cos2", "Count")
+    settings$varsup_columns <- c("Level", "Position", "Coord", "Cos2", "Count")
+    settings$obj_name <- deparse(substitute(obj))    
+    settings$counts_size <- TRUE
     
     ## Launch interface
     explor_multi_ca(res, settings)
@@ -57,6 +59,7 @@ explor.coa <- function(obj) {
     settings$var_columns <- c("Level", "Position", "Coord", "Contrib", "Cos2")
     settings$varsup_columns <- c("Level", "Position", "Coord")
     settings$obj_name <- deparse(substitute(obj))
+    settings$counts_size <- FALSE
 
     ## Launch interface
     explor_multi_ca(res, settings)
@@ -99,6 +102,10 @@ explor_multi_ca <- function(res, settings) {
     names(var_size_choices) <- c(gettext("None", domain = "R-explor"),
                                  gettext("Contribution", domain = "R-explor"),
                                  gettext("Squared cosinus", domain = "R-explor"))
+    if (settings$counts_size) {
+        var_size_choices <- c(var_size_choices, "Count")
+        names(var_size_choices)[var_size_choices == "Count"] <- gettext("Count", domain = "R-explor")
+    }  
     var_size_input <- selectInput("var_size", 
                                   gettext("Points size :", domain = "R-explor"),
                                   choices = var_size_choices,

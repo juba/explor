@@ -18,23 +18,41 @@ prepare_results.CA <- function(obj) {
     eig <- data.frame(dim = 1:nrow(obj$eig), percent = obj$eig[,2])
     
     ## Variables coordinates
+
+    ## Columns
     vars <- data.frame(obj$col$coord)
     vars$name <- rownames(vars)
     vars$pos <- "Column"
+    # Counts
+    col.mods <- rownames(obj$col$coord)
+    counts.cols <- sapply(obj$call$Xtot[, col.mods, drop = FALSE], sum, na.rm = TRUE)
+    vars$Count <- counts.cols
+
+    ## Rows
     tmp <- data.frame(obj$row$coord)
     tmp$name <- rownames(tmp)
     tmp$pos <- "Row"
+    # Counts
+    row.mods <- rownames(obj$row$coord)
+    counts.rows <- sapply(data.frame(t(obj$call$Xtot))[, row.mods, drop = FALSE], sum, na.rm = TRUE)
+    tmp$Count <- counts.rows
+
     vars <- rbind(vars, tmp)
     vars$Type <- "Active"
     vars$Class <- "Qualitative"
+
     
     ## Supplementary rows coordinates
     if (!is.null(obj$row.sup)) {
         tmp <- data.frame(obj$row.sup$coord)
         tmp$name <- rownames(tmp)
+        ## Counts
+        row.mods <- rownames(obj$row.sup$coord)
+        counts.rows <- sapply(data.frame(t(obj$call$Xtot))[, row.mods, drop = FALSE], sum, na.rm = TRUE)
+        tmp$Count <- counts.rows
         tmp$pos <- "Row"
         tmp$Type <- "Supplementary"
-        tmp$Class <- "Qualitative"    
+        tmp$Class <- "Qualitative"  
         vars <- rbind(vars, tmp)
     }
 
@@ -42,6 +60,10 @@ prepare_results.CA <- function(obj) {
     if (!is.null(obj$col.sup)) {
         tmp <-  tmp <- data.frame(obj$col.sup$coord)
         tmp$name <- rownames(tmp)
+        ## Counts
+        col.mods <- rownames(obj$col.sup$coord)
+        counts.cols <- sapply(obj$call$Xtot[, col.mods, drop = FALSE], sum, na.rm = TRUE)
+        tmp$Count <- counts.cols
         tmp$pos <- "Column"
         tmp$Type <- "Supplementary"
         tmp$Class <- "Qualitative"    
