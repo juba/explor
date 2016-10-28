@@ -29,8 +29,8 @@ prepare_results.MCA <- function(obj) {
     vars$Class <- "Qualitative"
 
     ## Variables count
-    counts <- sapply(obj$call$Xtot[,obj$call$quali, drop = FALSE], sum)
-    if (!is.null(obj$call$excl)) counts <- counts[-obj$call$excl]
+    quali.mods <- rownames(obj$var$coord)
+    counts <- sapply(obj$call$Xtot[,quali.mods, drop = FALSE], sum)
     vars$Count <- counts
     
     ## Supplementary variables coordinates
