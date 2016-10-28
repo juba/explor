@@ -1,32 +1,111 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2016-03-03 15:02\n"
-"PO-Revision-Date: 2016-03-03 15:03+0100\n"
+"POT-Creation-Date: 2016-10-28 17:02\n"
+"PO-Revision-Date: 2016-10-28 17:05+0200\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-msgid "Identifiers"
-msgstr "Identifiants"
+msgid "Position"
+msgstr "Position"
 
-msgid "R vector"
-msgstr "Vecteur R"
+msgid "Cos2:"
+msgstr "Cosinus carré:"
+
+msgid "Contribution:"
+msgstr "Contribution:"
+
+msgid "Count:"
+msgstr "Effectif:"
+
+msgid "Variable"
+msgstr "Variable"
+
+msgid "Squared cosinus"
+msgstr "Cosinus carré"
+
+msgid "Cos2"
+msgstr "Cosinus carré"
+
+msgid "Animations"
+msgstr "Animations"
+
+msgid "Get R code"
+msgstr "Obtenir le code R"
+
+msgid "Export as SVG"
+msgstr "Exporter en SVG"
+
+msgid ""
+"<p>Copy/paste the following code to reproduce the displayed plot. Note that "
+"custom label positions are not taken into account, use the <em>export label "
+"positions</em> menu entry to save and reload them later.</p>"
+msgstr ""
+"<p>Copier/coller le code suivant pour reproduite le graphique actuellement "
+"affiché. À noter que le positionnement manuel des labels n'est pas "
+"sauvegardé, vous devez utiliser l'option <em>export label positions</em> du "
+"menu pour les enregistrer et les récupérer ensuite.</p>"
+
+msgid "Dimension"
+msgstr "Axe"
+
+msgid "Active individuals"
+msgstr "Individus actifs"
+
+msgid "Supplementary individuals"
+msgstr "Individus supplémentaires"
+
+msgid "None"
+msgstr "Aucun"
+
+msgid "Rows"
+msgstr "Lignes"
+
+msgid "Columns"
+msgstr "Colonnes"
+
+msgid "Hide :"
+msgstr "Masquer :"
+
+msgid "Active levels"
+msgstr "Modalités actives"
+
+msgid "Active variables"
+msgstr "Variables actives"
+
+msgid "Supplementary levels"
+msgstr "Modalités supplémentaires"
+
+msgid "Supplementary variables"
+msgstr "Variables supplémentaires"
+
+msgid "Variables \\(\\eta^2\\)"
+msgstr "\\(\\eta^2\\) des variables actives"
+
+msgid "Supplementary variables \\(\\eta^2\\)"
+msgstr "\\(\\eta^2\\) des variables supplémentaires"
+
+msgid "Dimensions to plot"
+msgstr "Axes à afficher"
+
+msgid "Axis"
+msgstr "Axe"
+
+msgid "Percentage of inertia"
+msgstr "Pourcentage d'inertie"
 
 msgid "obj must be of class CA"
 msgstr "obj doit être de classe CA"
 
 msgid "obj must be of class dudi and coa"
 msgstr "obj doit être de classes dudi et coa"
-
-msgid "None"
-msgstr "Aucun"
 
 msgid "Variable position"
 msgstr "Position"
@@ -43,29 +122,17 @@ msgstr "Symboles :"
 msgid "Contribution"
 msgstr "Contribution"
 
-msgid "Squared cosinus"
-msgstr "Cosinus carré"
+msgid "Count"
+msgstr "Effectif"
 
 msgid "Points size :"
 msgstr "Taille :"
-
-msgid "Rows"
-msgstr "Lignes"
-
-msgid "Columns"
-msgstr "Colonnes"
-
-msgid "Hide :"
-msgstr "Masquer :"
 
 msgid "CA"
 msgstr "CA"
 
 msgid "Eigenvalues"
 msgstr "Valeurs propres"
-
-msgid "Dimensions to plot"
-msgstr "Axes à afficher"
 
 msgid "Plot"
 msgstr "Graphique"
@@ -85,44 +152,8 @@ msgstr "Taille des points"
 msgid "Minimum contribution to show label"
 msgstr "Contribution min pour afficher l'étiquette"
 
-msgid "Supplementary levels"
-msgstr "Modalités supplémentaires"
-
-msgid "Animations"
-msgstr "Animations"
-
-msgid "Reset zoom"
-msgstr "Réinitialiser le zoom"
-
-msgid "Export as SVG"
-msgstr "Exporter en SVG"
-
 msgid "Data"
 msgstr "Données"
-
-msgid "Dimension"
-msgstr "Axe"
-
-msgid "Active levels"
-msgstr "Modalités actives"
-
-msgid "Selected points"
-msgstr "Points sélectionnés"
-
-msgid "Axis"
-msgstr "Axe"
-
-msgid "Percentage of inertia"
-msgstr "Pourcentage d'inertie"
-
-msgid "Position"
-msgstr "Position"
-
-msgid "Cos2"
-msgstr "Cosinus carré"
-
-msgid "Contribution:"
-msgstr "Contribution :"
 
 msgid "obj must be of class MCA"
 msgstr "obj doit être de classe MCA"
@@ -142,23 +173,8 @@ msgstr "ACM"
 msgid "Variables plot"
 msgstr "Variables - graphique"
 
-msgid "Supplementary variables"
-msgstr "Variables supplémentaires"
-
-msgid "Toggle lasso"
-msgstr "Sélection lasso"
-
 msgid "Variables data"
 msgstr "Variables - données"
-
-msgid "Active variables"
-msgstr "Variables actives"
-
-msgid "Variables \\(\\eta^2\\)"
-msgstr "\\(\\eta^2\\) des variables actives"
-
-msgid "Supplementary variables \\(\\eta^2\\)"
-msgstr "\\(\\eta^2\\) des variables supplémentaires"
 
 msgid "Individuals plot"
 msgstr "Individus - graphique"
@@ -172,17 +188,8 @@ msgstr "Afficher les étiquettes"
 msgid "Ellipses"
 msgstr "Ellipses"
 
-msgid "Supplementary individuals"
-msgstr "Individus supplémentaires"
-
 msgid "Individuals data"
 msgstr "Individus - données"
-
-msgid "Active individuals"
-msgstr "Individus actifs"
-
-msgid "Variable"
-msgstr "Variable"
 
 msgid "obj must be of class PCA"
 msgstr "obj doit être de classe PCA"
@@ -198,6 +205,21 @@ msgstr "obj doit être de classe coa"
 
 msgid "the ade4 package is needed for this function to work."
 msgstr "le package ade4 doit être installé pour utiliser cette fonction."
+
+#~ msgid "Identifiers"
+#~ msgstr "Identifiants"
+
+#~ msgid "R vector"
+#~ msgstr "Vecteur R"
+
+#~ msgid "Reset zoom"
+#~ msgstr "Réinitialiser le zoom"
+
+#~ msgid "Selected points"
+#~ msgstr "Points sélectionnés"
+
+#~ msgid "Toggle lasso"
+#~ msgstr "Sélection lasso"
 
 #~ msgid "Max p-value"
 #~ msgstr "p-value maximale"

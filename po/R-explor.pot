@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: explor 0.2\n"
-"POT-Creation-Date: 2016-03-03 15:02\n"
+"Project-Id-Version: explor 0.3\n"
+"POT-Creation-Date: 2016-10-28 17:02\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,19 +10,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 
-msgid "Identifiers"
+msgid "Position"
 msgstr ""
 
-msgid "R vector"
+msgid "Cos2:"
+msgstr ""
+
+msgid "Contribution:"
+msgstr ""
+
+msgid "Count:"
+msgstr ""
+
+msgid "Variable"
+msgstr ""
+
+msgid "Squared cosinus"
+msgstr ""
+
+msgid "Cos2"
+msgstr ""
+
+msgid "Animations"
+msgstr ""
+
+msgid "Get R code"
+msgstr ""
+
+msgid "Export as SVG"
+msgstr ""
+
+msgid "<p>Copy/paste the following code to reproduce the displayed plot. Note that custom label positions are not taken into account, use the <em>export label positions</em> menu entry to save and reload them later.</p>"
+msgstr ""
+
+msgid "Dimension"
+msgstr ""
+
+msgid "Active individuals"
+msgstr ""
+
+msgid "Supplementary individuals"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Rows"
+msgstr ""
+
+msgid "Columns"
+msgstr ""
+
+msgid "Hide :"
+msgstr ""
+
+msgid "Active levels"
+msgstr ""
+
+msgid "Active variables"
+msgstr ""
+
+msgid "Supplementary levels"
+msgstr ""
+
+msgid "Supplementary variables"
+msgstr ""
+
+msgid "Variables \\(\\eta^2\\)"
+msgstr ""
+
+msgid "Supplementary variables \\(\\eta^2\\)"
+msgstr ""
+
+msgid "Dimensions to plot"
+msgstr ""
+
+msgid "Axis"
+msgstr ""
+
+msgid "Percentage of inertia"
 msgstr ""
 
 msgid "obj must be of class CA"
 msgstr ""
 
 msgid "obj must be of class dudi and coa"
-msgstr ""
-
-msgid "None"
 msgstr ""
 
 msgid "Variable position"
@@ -40,28 +112,16 @@ msgstr ""
 msgid "Contribution"
 msgstr ""
 
-msgid "Squared cosinus"
+msgid "Count"
 msgstr ""
 
 msgid "Points size :"
-msgstr ""
-
-msgid "Rows"
-msgstr ""
-
-msgid "Columns"
-msgstr ""
-
-msgid "Hide :"
 msgstr ""
 
 msgid "CA"
 msgstr ""
 
 msgid "Eigenvalues"
-msgstr ""
-
-msgid "Dimensions to plot"
 msgstr ""
 
 msgid "Plot"
@@ -82,43 +142,7 @@ msgstr ""
 msgid "Minimum contribution to show label"
 msgstr ""
 
-msgid "Supplementary levels"
-msgstr ""
-
-msgid "Animations"
-msgstr ""
-
-msgid "Reset zoom"
-msgstr ""
-
-msgid "Export as SVG"
-msgstr ""
-
 msgid "Data"
-msgstr ""
-
-msgid "Dimension"
-msgstr ""
-
-msgid "Active levels"
-msgstr ""
-
-msgid "Selected points"
-msgstr ""
-
-msgid "Axis"
-msgstr ""
-
-msgid "Percentage of inertia"
-msgstr ""
-
-msgid "Position"
-msgstr ""
-
-msgid "Cos2"
-msgstr ""
-
-msgid "Contribution:"
 msgstr ""
 
 msgid "obj must be of class MCA"
@@ -139,22 +163,7 @@ msgstr ""
 msgid "Variables plot"
 msgstr ""
 
-msgid "Supplementary variables"
-msgstr ""
-
-msgid "Toggle lasso"
-msgstr ""
-
 msgid "Variables data"
-msgstr ""
-
-msgid "Active variables"
-msgstr ""
-
-msgid "Variables \\(\\eta^2\\)"
-msgstr ""
-
-msgid "Supplementary variables \\(\\eta^2\\)"
 msgstr ""
 
 msgid "Individuals plot"
@@ -169,16 +178,7 @@ msgstr ""
 msgid "Ellipses"
 msgstr ""
 
-msgid "Supplementary individuals"
-msgstr ""
-
 msgid "Individuals data"
-msgstr ""
-
-msgid "Active individuals"
-msgstr ""
-
-msgid "Variable"
 msgstr ""
 
 msgid "obj must be of class PCA"
