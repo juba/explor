@@ -30,9 +30,10 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
                                paste0("<strong>",
                                       gettext("Contribution:", domain = "R-explor"),
                                       "</strong> ", Contrib),
-                               paste0("<strong>",
-                                      gettext("Count:", domain = "R-explor"),
-                                      "</strong> ", Count),
+                               ifelse(is.na(Count), "",
+                                      paste0("<strong>",
+                                             gettext("Count:", domain = "R-explor"),
+                                             "</strong> ", Count)),
                                sep = "<br />"),
                Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) | 
                             (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Level, ""))
