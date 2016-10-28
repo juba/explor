@@ -61,7 +61,7 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
 MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_contrib = 0,
-                         point_size = 10,
+                         point_size = 64,
                          col_var = NULL,
                          symbol_var = NULL,
                          size_var = NULL,
