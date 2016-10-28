@@ -30,7 +30,10 @@ prepare_results.MCA <- function(obj) {
 
     ## Variables count
     quali.mods <- rownames(obj$var$coord)
-    counts <- sapply(obj$call$Xtot[,quali.mods, drop = FALSE], sum)
+    # Remove supplementary individuals from counts
+    if (is.null(obj$call$ind.sup)) counts.tab <- obj$call$Xtot
+    else counts.tab <- obj$call$Xtot[-(obj$call$ind.sup), ]
+    counts <- sapply(counts.tab[, quali.mods, drop = FALSE], sum)
     vars$Count <- counts
     
     ## Supplementary variables coordinates
@@ -42,7 +45,7 @@ prepare_results.MCA <- function(obj) {
         vars.quali.sup$Type <- "Supplementary"
         vars.quali.sup$Class <- "Qualitative"
         quali.sup.mods <- rownames(obj$quali.sup$coord)
-        counts <- sapply(obj$call$Xtot[,quali.sup.mods, drop = FALSE], sum)
+        counts <- sapply(counts.tab[,quali.sup.mods, drop = FALSE], sum)
         vars.quali.sup$Count <- counts
         vars <- rbind(vars, vars.quali.sup)
     }
