@@ -171,8 +171,8 @@ MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
                          in_explor = FALSE,
                          ...) {
 
-    html_id <- if(in_explor) "explor_var" else  NULL
-    dom_id_svg_export <- if(in_explor) "explor-var-svg-export" else NULL
+    html_id <- if(in_explor) "explor_ind" else  NULL
+    dom_id_svg_export <- if(in_explor) "explor-ind-svg-export" else NULL
     lasso <- if(in_explor) TRUE else FALSE 
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "ind") else NULL
@@ -191,7 +191,7 @@ MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
                    key_var = ind_data[, "Name"],
                    fixed = TRUE,
                    html_id = html_id,
-                   dom_id_svg_export = "explor-ind-svg-export",
+                   dom_id_svg_export = dom_id_svg_export,
                    lasso = lasso,
                    lasso_callback = lasso_callback,
                    zoom_callback = zoom_callback,
