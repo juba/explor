@@ -148,8 +148,8 @@ explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
 explor_multi_ind_data <- function(input, output, session, res, settings) {
 
     table_options <- list(lengthMenu = c(10,20,50,100),
-                          pageLength = 10, orderClasses = TRUE,
-                          autoWidth = TRUE, searching = TRUE)
+                          pageLength = 20, orderClasses = TRUE,
+                          autoWidth = FALSE, searching = TRUE)
 
     ## Active individuals
     indTable <- reactive({
@@ -226,7 +226,7 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
 
     table_options <- list(lengthMenu = c(10,20,50,100),
                           pageLength = 10, orderClasses = TRUE,
-                          autoWidth = TRUE, searching = TRUE)
+                          autoWidth = FALSE, searching = TRUE)
     ## Active variables
     varTable <- reactive({
         tmp <- res()$vars %>% 
