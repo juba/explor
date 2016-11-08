@@ -184,7 +184,7 @@ explor_multi_hide_choices <- function() {
 }
 
 ## UI for variable data panel
-explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA = FALSE) {
+explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA = FALSE, PCA_quali = FALSE) {
     ns <- NS(id)
     fluidRow(
         column(2,
@@ -215,6 +215,10 @@ explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA
                if (is_MCA && has_sup_var) {
                    list(h4(gettext("Supplementary variables \\(\\eta^2\\)", domain = "R-explor")),
                         DT::dataTableOutput(ns("vartablesupeta2")))
+               },
+               if (PCA_quali) {
+                   list(h4(gettext("Qualitative supplementary variables", domain = "R-explor")),
+                        DT::dataTableOutput(ns("vartablequalisup")))
                }
                )
     )
@@ -222,7 +226,7 @@ explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA
 
 
 ## Server for variable data panel
-explor_multi_var_data <- function(input, output, session, res, settings, is_MCA = FALSE, is_CA = FALSE) {
+explor_multi_var_data <- function(input, output, session, res, settings, is_MCA = FALSE, is_CA = FALSE, PCA_quali = FALSE) {
 
     table_options <- list(lengthMenu = c(10,20,50,100),
                           pageLength = 10, orderClasses = TRUE,
@@ -245,17 +249,35 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
     varTableSup <- reactive({
         tmp <- res()$vars %>% 
                    filter(Type == "Supplementary", Axis == input$vardim) %>%
-                   mutate(Level = ifelse(Class == "Quantitative", "-", Level)) %>%
-                   select_(.dots = settings()$varsup_columns)
+                   mutate(Level = ifelse(Class == "Quantitative", "-", Level))
         ## CA data hide option
         if (is_CA && input$var_tab_hide != "None") {
             tmp <- tmp %>% filter(Position != input$var_tab_hide)
         }
+        ## PCA with qualitative supplementary
+        if (PCA_quali) {
+            tmp <- tmp %>% filter(Class == "Quantitative")
+        }
+        tmp <- tmp %>% select_(.dots = settings()$varsup_columns)
         data.frame(tmp)
     })
     output$vartablesup <- DT::renderDataTable(
                                   explor_multi_table(varTableSup(), table_options, "Coord"))
 
+    ## PCA qualitative supplementary variable
+    if (PCA_quali) {
+        varTableQualiSup <- reactive({
+            tmp <- res()$vars %>% 
+                       filter(Type == "Supplementary", Class == "Qualitative",
+                              Axis == input$vardim) %>%
+                       select_(.dots = settings()$varsup_quali_columns)
+            data.frame(tmp)
+        })
+        output$vartablequalisup <- DT::renderDataTable(
+                                  explor_multi_table(varTableQualiSup(), table_options, "Coord"))
+
+    }
+    
     ## Variables eta2 for MCA
     if (is_MCA) {
                   

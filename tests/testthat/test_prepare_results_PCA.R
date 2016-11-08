@@ -32,6 +32,18 @@ test_that("Quantitative supplementary variables results are equal", {
                           res$vars$Class == "Quantitative" & res$vars$Axis == "5", "Cos2"])
 })
 
+test_that("Qualitative supplementary variables results are equal", {
+  expect_equal(as.vector(round(pca$quali.sup$coord[,1],3)),
+               res$vars[res$vars$Type == "Supplementary" & 
+                          res$vars$Class == "Qualitative" & res$vars$Axis == "1", "Coord"])
+  expect_equal(as.vector(round(pca$quali.sup$v.test[,3],2)),
+               res$vars[res$vars$Type == "Supplementary" & 
+                          res$vars$Class == "Qualitative" & res$vars$Axis == "3", "V.test"])
+  expect_equal(as.vector(round(pca$quali.sup$cos2[,5],3)),
+               res$vars[res$vars$Type == "Supplementary" & 
+                          res$vars$Class == "Qualitative" & res$vars$Axis == "5", "Cos2"])
+})
+
 test_that("Individuals results are equal", {
   expect_equal(as.vector(round(pca$ind$coord[,1],3)),
                data.frame(res$ind)[res$ind$Type == "Active" & res$ind$Axis == "1", "Coord"])

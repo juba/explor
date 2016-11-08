@@ -65,7 +65,9 @@ prepare_results.pca <- function(obj) {
   vars <- vars %>% left_join(tmp, by = c("varname", "Type", "Class", "Axis"))
   
   vars <- vars %>% rename(Variable = varname)
-
+  ## Compatibility with FactoMineR for qualitative supplementary variables
+  vars <- vars %>% mutate(Level = "")
+    
 
   ## Individuals coordinates
   ind <- data.frame(obj$li)

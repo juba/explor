@@ -5,7 +5,7 @@
 explor.PCA <- function(obj) {
     
     if (!inherits(obj, "PCA")) stop("obj must be of class PCA")
-    
+
     ## results preparation
     res <- prepare_results(obj)
     
@@ -13,6 +13,7 @@ explor.PCA <- function(obj) {
     settings <- list()
     settings$var_columns <- c("Variable", "Coord", "Contrib", "Cos2", "Cor")
     settings$varsup_columns <- c("Variable", "Coord", "Cos2", "Cor")
+    settings$varsup_quali_columns <- c("Variable", "Level", "Coord", "Cos2", "V.test", "P.value")
     settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
     settings$indsup_columns <- c("Name", "Coord", "Cos2")
     settings$scale_unit <- obj$call$scale.unit
@@ -80,12 +81,24 @@ explor.pca <- function(obj) {
 explor_multi_pca <- function(res, settings) {
     
     ## Precompute inputs 
-    has_sup_vars <- "Supplementary" %in% res$vars$Type 
+    has_sup_vars <- "Supplementary" %in% res$vars$Type
+    has_quali_sup_vars <- any("Supplementary" %in% res$vars$Type &
+                              "Qualitative" %in% res$vars$Class)
     ## Variable color input
     if (has_sup_vars) {
-        choices <- c("None", "Type")
-        names(choices) <- c(gettext("None", domain = "R-explor"),
-                            gettext("Variable type", domain = "R-explor"))
+        ## Qualitative supplementary
+        if (has_quali_sup_vars) {
+            choices <- c("None", "Type", "Variable")
+            names(choices) <- c(gettext("None", domain = "R-explor"),
+                                gettext("Variable type", domain = "R-explor"),
+                                gettext("Variable name", domain = "R-explor"))
+        }
+        ## Only quantitative supplementary
+        else {
+            choices <- c("None", "Type")
+            names(choices) <- c(gettext("None", domain = "R-explor"),
+                                gettext("Variable type", domain = "R-explor"))
+        }
         var_col_input <- selectInput("var_col", 
                                      gettext("Points color :", domain = "R-explor"),
                                      choices = choices,  selected = "Type")
@@ -97,6 +110,10 @@ explor_multi_pca <- function(res, settings) {
     ind_col_choices <- c("None", "Type")
     names(ind_col_choices) <- c(gettext("None", domain = "R-explor"),
                                 gettext("Individual type", domain = "R-explor"))
+    if (has_quali_sup_vars) {
+        ind_col_choices <- c(ind_col_choices, names(res$quali_data))
+        ind_col_choices <- setdiff(ind_col_choices, "Name")
+    }
     ind_col_input <- selectInput("ind_col", 
                                  gettext("Points color :", domain = "R-explor"),
                                  choices = ind_col_choices,
@@ -140,7 +157,7 @@ explor_multi_pca <- function(res, settings) {
                                         )),
                                
                                tabPanel(gettext("Variables data", domain = "R-explor"),
-                                        explor_multi_var_dataUI("var_data", has_sup_vars, res$axes)),
+                                        explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, PCA_quali = has_quali_sup_vars)),
 
                                tabPanel(gettext("Individuals plot", domain = "R-explor"),
                                         fluidRow(
@@ -194,7 +211,7 @@ explor_multi_pca <- function(res, settings) {
                    
                    ## Variables plot code
                    varplot_code <- reactive({
-                       col_var <- if (input$var_col == "None") NULL else input$var_col
+                       col_var <- if (!is.null(input$var_col) && input$var_col == "None") NULL else input$var_col
                        
                        paste0("explor::PCA_var_plot(res, ",
                               "xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
@@ -230,9 +247,9 @@ explor_multi_pca <- function(res, settings) {
 
                    ## Indidivuals plot code
                    indplot_code <- reactive({
-                       col_var <- if (input$ind_col == "None") NULL else input$ind_col
+                       col_var <- if (!is.null(input$ind_col) && input$ind_col == "None") NULL else input$ind_col
                        lab_var <- if (input$ind_labels_show) "Name" else NULL
-                       
+                       ellipses <- !is.null(input$ind_ellipses) && input$ind_ellipses
                        paste0("explor::PCA_ind_plot(res, ",
                               "xax = ", input$ind_x, ", yax = ", input$ind_y, ",",
                               "ind_sup = ", has_sup_ind && input$ind_sup, ",\n",
@@ -241,7 +258,7 @@ explor_multi_pca <- function(res, settings) {
                               "labels_size = ", input$ind_labels_size, ",\n",
                               "    point_opacity = ", input$ind_opacity, ", ",
                               "point_size = ", input$ind_point_size, ",\n",
-                              "    ellipses = ", input$ind_ellipses, ", ",
+                              "    ellipses = ", ellipses, ", ",
                               "transitions = ", input$ind_transitions)
                    })
                    
@@ -270,7 +287,8 @@ explor_multi_pca <- function(res, settings) {
                    callModule(explor_multi_var_data,
                               "var_data",
                               reactive(res),
-                              reactive(settings))
+                              reactive(settings),
+                              PCA_quali = has_quali_sup_vars)
 
                    callModule(explor_multi_ind_data,
                               "ind_data",

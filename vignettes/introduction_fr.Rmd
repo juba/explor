@@ -21,7 +21,7 @@ Pour le moment il est utilisable avec les types d'analyses suivants :
 
 Méthode | Fonction  | Package | Notes
 ------------- | ------------- | ---------- | --------
-Analyse en composantes principales  | PCA  | [FactoMineR](http://factominer.free.fr/) | Les variables supplémentaires qualitatives ne sont pas prises en charge
+Analyse en composantes principales  | PCA  | [FactoMineR](http://factominer.free.fr/) | -
 Analyse des correspondances  | CA  | [FactoMineR](http://factominer.free.fr/) | -
 Analyse des correspondances multiples  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
 Analyse en composantes principales | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Les variables supplémentaires qualitatives ne sont pas prises en charge

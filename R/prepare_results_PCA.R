@@ -20,68 +20,87 @@ prepare_results.PCA <- function(obj) {
     
     ## Variables data coordinates
     vars$varname <- rownames(vars)
+    vars$modname <- NA_character_
     vars$Type <- "Active"
     vars$Class <- "Quantitative"
     
-    ## Supplementary variables coordinates
-                                        # if (!is.null(obj$quali.sup)) {
-                                        #   vars.quali.sup <- data.frame(obj$quali.sup$coord)
-                                        #   varnames <- sapply(obj$call$X[, obj$call$quali.sup, drop = FALSE], nlevels)
-                                        #   vars.quali.sup$varname <- rep(names(varnames),varnames)
-                                        #   vars.quali.sup$modname <- rownames(vars.quali.sup)
-                                        #   vars.quali.sup$Type <- "Supplementary"
-                                        #   vars.quali.sup$Class <- "Qualitative"    
-                                        #   vars <- rbind(vars, vars.quali.sup)
-                                        # }
-
     ## Quantitative supplementary variables coordinates
     if (!is.null(obj$quanti.sup)) {
         vars.quanti.sup <- data.frame(obj$quanti.sup$coord)
         vars.quanti.sup$varname <- rownames(obj$quanti.sup$coord)
         vars.quanti.sup$Type <- "Supplementary"
         vars.quanti.sup$Class <- "Quantitative"
+        vars.quanti.sup$modname <- NA_character_
         vars <- rbind(vars, vars.quanti.sup)
     }
 
+    ## Qualitative supplementary variables coordinates
+    if (!is.null(obj$quali.sup)) {
+        vars.quali.sup <- data.frame(obj$quali.sup$coord)
+        quali_varnames <- names(obj$call$quali.sup$quali.sup)
+        quali_nlevels <- sapply(obj$call$X[, obj$call$quali.sup$numero, drop = FALSE],
+                          function(v) nlevels(factor(v)))
+        vars.quali.sup$varname <- rep(quali_varnames, quali_nlevels)
+        vars.quali.sup$modname <- rownames(vars.quali.sup)
+        vars.quali.sup$Type <- "Supplementary"
+        vars.quali.sup$Class <- "Qualitative"
+        vars <- rbind(vars, vars.quali.sup)
+    }
+    
     vars <- vars %>% gather(Axis, Coord, starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
     ## Contributions
     tmp <- data.frame(obj$var$contrib)
-    tmp <- tmp %>% mutate(varname = rownames(tmp), Type = "Active", Class = "Quantitative") %>%
+    tmp <- tmp %>% mutate(varname = rownames(tmp),
+                          modname = NA_character_,
+                          Type = "Active",
+                          Class = "Quantitative") %>%
         gather(Axis, Contrib, starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
     
-    vars <- vars %>% left_join(tmp, by = c("varname", "Type", "Class", "Axis"))
+    vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
     
     ## Cos2
     tmp <- data.frame(obj$var$cos2)
     tmp$varname <- rownames(tmp)
+    tmp$modname <- NA_character_
     tmp$Type <- "Active"
     tmp$Class <- "Quantitative"
     if (!is.null(obj$quanti.sup)) {
         tmp_sup <- data.frame(obj$quanti.sup$cos2)
         tmp_sup$varname <- rownames(tmp_sup)
+        tmp_sup$modname <- NA_character_
         tmp_sup$Type <- "Supplementary"
         tmp_sup$Class <- "Quantitative"
+        tmp <- tmp %>% bind_rows(tmp_sup)
+    }
+    if (!is.null(obj$quali.sup)) {
+        tmp_sup <- data.frame(obj$quali.sup$cos2)
+        tmp_sup$modname <- rownames(tmp_sup)
+        tmp_sup$varname <- rep(quali_varnames, quali_nlevels)
+        tmp_sup$Type <- "Supplementary"
+        tmp_sup$Class <- "Qualitative"
         tmp <- tmp %>% bind_rows(tmp_sup)
     }
     tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     
-    vars <- vars %>% left_join(tmp, by = c("varname", "Type", "Class", "Axis"))
+    vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
 
     ## Cor  
     tmp <- data.frame(obj$var$cor)
     tmp$varname <- rownames(tmp)
+    tmp$modname <- NA_character_
     tmp$Type <- "Active"
     tmp$Class <- "Quantitative"  
     if (!is.null(obj$quanti.sup)) {
         tmp_sup <- data.frame(obj$quanti.sup$cor)
         tmp_sup$varname <- rownames(tmp_sup)
+        tmp_sup$modname <- NA_character_        
         tmp_sup$Type <- "Supplementary"
         tmp_sup$Class <- "Quantitative"    
         tmp <- tmp %>% bind_rows(tmp_sup)
@@ -90,9 +109,25 @@ prepare_results.PCA <- function(obj) {
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cor = round(Cor, 3))
     
-    vars <- vars %>% left_join(tmp, by = c("varname", "Type", "Class", "Axis")) %>% 
-        rename(Variable = varname)
+    vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
 
+    ## v.test for qualitative supplementary variables
+    if (!is.null(obj$quali.sup)) {
+        ## v.test
+        tmp_sup <- data.frame(obj$quali.sup$v.test)
+        tmp_sup$modname <- rownames(tmp_sup)
+        tmp_sup$varname <- rep(quali_varnames, quali_nlevels)
+        tmp_sup$Type <- "Supplementary"
+        tmp_sup$Class <- "Qualitative"
+        tmp_sup <- tmp_sup %>% gather(Axis, v.test, starts_with("Dim.")) %>%
+            mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
+                   P.value = round(ifelse(v.test >= 0, 2 * (1 - pnorm(v.test)), 2 * pnorm(v.test)), 3),
+                   V.test = round(v.test, 2))
+        vars <- vars %>% left_join(tmp_sup, by = c("varname", "modname", "Type", "Class", "Axis"))
+    }
+
+    vars <- vars %>% rename(Variable = varname, Level = modname)
+    
     ## Individuals coordinates
     ind <- data.frame(obj$ind$coord)
     ind$Name <- rownames(ind)
@@ -131,7 +166,11 @@ prepare_results.PCA <- function(obj) {
                Cos2 = round(Cos2, 3))
     
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
+
+    ## Qualitative data for individuals plot color mapping
+    quali_data <- obj$call$X[,obj$call$quali.sup$numero]
+    quali_data$Name <- rownames(obj$call$X)
     
-    return(list(vars = vars, ind = ind, eig = eig, axes = axes))
+    return(list(vars = vars, ind = ind, eig = eig, axes = axes, quali_data = quali_data))
     
 }

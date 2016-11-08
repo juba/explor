@@ -11,7 +11,7 @@ For now on, it is usable the following types of analyses :
 
 Analysis | Function  | Package | Notes
 ------------- | ------------- | ---------- | --------
-Principal component analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | Qualitative supplementary variables are ignored
+Principal component analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | -
 Correspondance analysis  | CA  | [FactoMineR](http://factominer.free.fr/) | -
 Multiple correspondence analysis  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
 Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Qualitative supplementary variables are ignored

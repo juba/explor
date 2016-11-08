@@ -5,16 +5,17 @@
 PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_contrib = 0) {
     tmp_x <- res$vars %>% 
         filter(Axis == xax) %>%
-        select_("Variable", "Type", "Class", "Coord", "Contrib", "Cos2")
+        select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
     tmp_y <- res$vars %>% 
         filter(Axis == yax) %>%
-        select_("Variable", "Type", "Class", "Coord", "Contrib", "Cos2")
+        select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
     if (!(var_sup)) {
         tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- tmp_y %>% filter(Type == 'Active')
     }
+
     tmp <- tmp_x %>%
-        left_join(tmp_y, by = c("Variable", "Type", "Class")) %>%
+        left_join(tmp_y, by = c("Variable", "Level", "Type", "Class")) %>%
         mutate(Contrib = Contrib.x + Contrib.y,
                Cos2 = Cos2.x + Cos2.y,
                tooltip = paste(paste0("<strong>",
@@ -29,8 +30,10 @@ PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
                                       gettext("Contribution:", domain = "R-explor"),
                                       "</strong> ", Contrib),
                                sep = "<br />"),
+               Level = ifelse(Class == "Qualitative", Level, Variable),
+               Variable = if_else(Class == "Qualitative", Variable, "-"),
                Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) | 
-                            (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Variable, ""))
+                            (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Level, ""))
     data.frame(tmp)
 }
 
@@ -63,14 +66,17 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
                          in_explor = FALSE,
                          xlim = NULL, ylim = NULL, ...) {
 
+    has_quali_sup_vars <- any("Supplementary" %in% res$vars$Type &
+                              "Qualitative" %in% res$vars$Class)
+    
     ## Settings changed if not run in explor
     html_id <- if(in_explor) "explor_var" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-var-svg-export" else NULL
     lasso <- if(in_explor) TRUE else FALSE 
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
-    if (is.null(xlim) && scale_unit) xlim <- c(-1.1, 1.1)
-    if (is.null(ylim) && scale_unit) ylim <- c(-1.1, 1.1)
+    if (is.null(xlim) && scale_unit && !has_quali_sup_vars) xlim <- c(-1.1, 1.1)
+    if (is.null(ylim) && scale_unit && !has_quali_sup_vars) ylim <- c(-1.1, 1.1)
     
     var_data <- PCA_var_data(res, xax, yax, var_sup, var_lab_min_contrib)
     
@@ -85,7 +91,7 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
                    col_lab = col_var,
                    tooltip_text = var_data[, "tooltip"],
                    type_var = ifelse(var_data[,"Class"] == "Quantitative", "arrow", "point"),
-                   key_var = var_data[, "Variable"],
+                   key_var = var_data[, "Level"],
                    unit_circle = scale_unit,
                    fixed = TRUE,
                    html_id = html_id,
@@ -124,6 +130,11 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL) 
                                       gettext("Contribution:", domain = "R-explor"),
                                       "</strong> ", Contrib),
                                sep = "<br />"))
+    if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
+        tmp_data <- res$quali_data %>% select_("Name", col_var)
+        tmp <- tmp %>%
+            left_join(tmp_data, by = "Name")
+    }
     data.frame(tmp)
 }
 
