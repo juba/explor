@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.3\n"
-"POT-Creation-Date: 2016-10-28 17:02\n"
+"POT-Creation-Date: 2016-11-14 15:36\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Export as SVG"
 msgstr ""
 
-msgid "<p>Copy/paste the following code to reproduce the displayed plot. Note that custom label positions are not taken into account, use the <em>export label positions</em> menu entry to save and reload them later.</p>"
+msgid "<p>Copy/paste the following code to reproduce the displayed plot. Note that custom label positions are not taken into account, use the <em>export label positions</em> menu entry to save  them and add the file content to the <tt>labels_positions</tt> argument.</p>"
 msgstr ""
 
 msgid "Dimension"
@@ -80,6 +80,9 @@ msgid "Variables \\(\\eta^2\\)"
 msgstr ""
 
 msgid "Supplementary variables \\(\\eta^2\\)"
+msgstr ""
+
+msgid "Qualitative supplementary variables"
 msgstr ""
 
 msgid "Dimensions to plot"
