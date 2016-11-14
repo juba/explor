@@ -132,3 +132,15 @@ detach(package:explor, unload=TRUE); library(explor)
 explor(coa)
 
 
+## GDAtools examples ----------------------------------------
+
+library(explor)
+library(GDAtools)
+data(Music)
+getindexcat(Music[,1:5])
+mca <- speMCA(Music[,1:5],excl=c(3,6,9,12,15))
+explor(mca)
+
+
+
+

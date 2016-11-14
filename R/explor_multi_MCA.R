@@ -26,6 +26,35 @@ explor.MCA <- function(obj) {
     
 }
 
+##' @rdname explor
+##' @aliases explor.speMCA
+##' @export
+
+explor.speMCA <- function(obj) {
+    
+    if (!inherits(obj, "speMCA")) stop("obj must be of class speMCA")
+
+    print("speMCA")
+    ## results preparation
+    res <- prepare_results(obj)
+    
+    ## Settings
+    settings <- list()
+    settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
+    settings$varsup_columns <- c("Variable", "Level", "Class", "Coord", "Cos2", "V.test", "P.value")
+    settings$vareta2_columns <- c("Variable", "eta2")
+    settings$show_varsup_eta2 <- FALSE
+    settings$counts_size <- FALSE   
+    settings$varsupeta2_columns <- c("Variable", "eta2")
+    settings$ind_columns <- c("Name", "Coord", "Contrib")
+    settings$indsup_columns <- c("Name", "Coord")
+    settings$obj_name <- deparse(substitute(obj))
+
+    ## Launch interface
+    explor_multi_mca(res, settings)
+    
+}
+
 
 ##' @rdname explor
 ##' @aliases explor.acm
