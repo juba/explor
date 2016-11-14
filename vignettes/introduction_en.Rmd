@@ -4,8 +4,8 @@ author: "Julien Barnier"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
-  fig_width: 5
-  toc: true
+    fig_width: 5
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Introduction to explor}
   %\VignetteEngine{knitr::rmarkdown}
@@ -149,6 +149,39 @@ coa$supr <- suprow(coa, row_sup)$lisup
 coa$supc <- supcol(coa, col_sup)$cosup
 explor(coa)
 ```
+
+## Exporting Plots
+
+`explor` provides two different ways to export the displayed plots.
+
+### SVG export
+
+To save the displayed plot as an SVG file, click on the *Export to SVG* button in the bottom of the left sidebar, or choose *Export to SVG* in the gear menu.
+
+SVG is a vector graphics format, editable with softwares like [Inkscape](https://inkscape.org/).
+
+This SVG export may cause issues when used inside RStudio. As a workaround, you can open `explor` in a browser (with *Open in Browser* icon) before exporting.
+
+
+### R code
+
+Another way is to get the R code which allows to generate the current plot. This code can then be used in a script or a *Rmarkdown* document. 
+
+To do this, click on the *Get R code* button on the bottom of the left sidebar. A modal dialog should show up with the R code that you can then copy/paste.
+
+Please note that this R code keeps track of the current plot zooming, but not of any custom label positioning. If you want to keep those, you have to first save them in a CSV file with *Export labels positions* gear menu entry. Then, in your R script, read this file in an object with `read.csv` and pass this object to the `export_labels_positions` argument in the generated code :
+
+```r
+labels <- read.csv("position_labels.csv")
+res <- explor::prepare_results(mca)
+explor::MCA_var_plot(res, xax = 1, yax = 2,
+    var_sup = TRUE, , var_lab_min_contrib = 0,
+    col_var = "Variable", symbol_var = "Type",
+    size_var = NULL, size_range = c(10, 300),
+    labels_size = 10, point_size = 56,
+    transitions = TRUE, labels_positions = labels)
+```
+
 
 ## Feedback
 

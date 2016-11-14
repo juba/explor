@@ -120,7 +120,7 @@ explor_multi_zoom_code <- function(zoom_range) {
 
 ## Message displyed in the R code export dialog
 explor_multi_export_code_message <- function () {
-    gettext("<p>Copy/paste the following code to reproduce the displayed plot. Note that custom label positions are not taken into account, use the <em>export label positions</em> menu entry to save and reload them later.</p>", domain = "R-explor")
+    gettext("<p>Copy/paste the following code to reproduce the displayed plot. Note that custom label positions are not taken into account, use the <em>export label positions</em> menu entry to save  them and add the file content to the <tt>labels_positions</tt> argument.</p>", domain = "R-explor")
 }
 
 ## INDIVIDUAL DATA SHINY MODULE ---------------------------------------------------------

@@ -220,7 +220,8 @@ explor_multi_pca <- function(res, settings) {
                               "    col_var = ", deparse(substitute(col_var)), ", ",
                               "labels_size = ", input$var_lab_size, ", ",
                               "scale_unit = ", settings$scale_unit, ",\n",
-                              "    transitions = ", input$var_transitions)
+                              "    transitions = ", input$var_transitions,
+                              ", labels_positions = NULL")
                    })
                    
                    ## Variables plot
@@ -251,7 +252,7 @@ explor_multi_pca <- function(res, settings) {
                        lab_var <- if (input$ind_labels_show) "Name" else NULL
                        ellipses <- !is.null(input$ind_ellipses) && input$ind_ellipses
                        paste0("explor::PCA_ind_plot(res, ",
-                              "xax = ", input$ind_x, ", yax = ", input$ind_y, ",",
+                              "xax = ", input$ind_x, ", yax = ", input$ind_y, ", ",
                               "ind_sup = ", has_sup_ind && input$ind_sup, ",\n",
                               "    col_var = ", deparse(substitute(col_var)), ", ",
                               "lab_var = ", deparse(substitute(lab_var)), ", ",
@@ -259,7 +260,8 @@ explor_multi_pca <- function(res, settings) {
                               "    point_opacity = ", input$ind_opacity, ", ",
                               "point_size = ", input$ind_point_size, ",\n",
                               "    ellipses = ", ellipses, ", ",
-                              "transitions = ", input$ind_transitions)
+                              "transitions = ", input$ind_transitions,
+                              ", labels_positions = NULL")
                    })
                    
                    ## Indidivuals plot

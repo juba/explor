@@ -4,8 +4,8 @@ author: "Julien Barnier"
 date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
-  fig_width: 5
-  toc: true
+    fig_width: 5
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Introduction à explor}
   %\VignetteEngine{knitr::rmarkdown}
@@ -146,7 +146,37 @@ coa$supc <- supcol(coa, col_sup)$cosup
 explor(coa)
 ```
 
+## Export des graphiques
 
+`explor` offre deux possibilités pour exporter les graphiques affichés dans l'interface.
+
+### Export SVG
+
+Pour exporter le graphique actuellement affiché au format SVG, cliquez sur le bouton *Exporter en SVG* (icône en bas de la barre latérale gauche), ou choisissez l'entrée *Export to SVG* du menu "engrenage" du graphique.
+
+Le SVG est un format de dessin vectoriel, éditable et redimensionnable sans perte à l'aide d'un logiciel comme [Inkscape](https://inkscape.org/).
+
+La fonction d'export SVG peut rencontrer des problèmes quand elle est effectuée depuis RStudio. Si c'est le cas, ouvrez d'abord `explor` dans un navigateur en cliquant sur *Open in Browser*, avant d'exporter.
+
+
+### Récupérer le code R
+
+L'autre possibilité est de récupérer le code R permettant de générer le graphique actuellement affiché, ce qui permet de le reproduire ensuite dans un script ou un document *Rmarkdown*.
+
+Pour cela, cliquez sur le bouton *Obtenir le code R* en bas de la barre latérale. Une boîte de dialogue s'affiche, vous n'avez plus qu'à copier/coller le code R qui s'y trouve.
+
+À noter que ce code R respecte le zoom effectué sur le graphique au moment de l'export, mais pas les positions des labels. Si vous souhaitez conserver celles-ci, il faut d'abord les enregistrer dans un fichier CSV avec l'entrée *Export labels positions* du menu "Engrenage". Ensuite, dans votre script, chargez ce fichier CSV dans un objet à l'aide de `read.csv` puis passez cet objet à l'argument `export_labels_positions` dans le code généré :
+
+```r
+labels <- read.csv("position_labels.csv")
+res <- explor::prepare_results(mca)
+explor::MCA_var_plot(res, xax = 1, yax = 2,
+    var_sup = TRUE, , var_lab_min_contrib = 0,
+    col_var = "Variable", symbol_var = "Type",
+    size_var = NULL, size_range = c(10, 300),
+    labels_size = 10, point_size = 56,
+    transitions = TRUE, labels_positions = labels)
+```
 
 ## Bugs et commentaires
 

@@ -238,7 +238,8 @@ explor_multi_mca <- function(res, settings) {
                               ", size_range = ", deparse(dput(size_range)), ",\n",
                               "    labels_size = ", input$var_lab_size,
                               ", point_size = ", input$var_point_size, ",\n",
-                              "    transitions = ", input$var_transitions)
+                              "    transitions = ", input$var_transitions,
+                              ", labels_positions = NULL")
                    })
                    
                    ## Variables plot
@@ -277,7 +278,8 @@ explor_multi_mca <- function(res, settings) {
                               "    point_opacity = ", input$ind_opacity, ", ",
                               "point_size = ", input$ind_point_size, ",\n",
                               "    ellipses = ", input$ind_ellipses, ", ",
-                              "transitions = ", input$ind_transitions)
+                              "transitions = ", input$ind_transitions,
+                              ", labels_positions = NULL")
                    })
                    
                    ## Indidivuals plot

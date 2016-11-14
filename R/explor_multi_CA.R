@@ -175,7 +175,7 @@ explor_multi_ca <- function(res, settings) {
                        paste0("explor::CA_var_plot(res, ",
                               "xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
                               "    var_sup = ", has_sup_vars && input$var_sup, ", ",
-                              "var_hide = ", deparse(substitute(input$var_hide)), ", ",
+                              "var_hide = '", input$var_hide, "', ",
                               "var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
                               "    col_var = ", deparse(substitute(col_var)), ", ", 
                               "symbol_var = ", deparse(substitute(symbol_var)), ", ",
@@ -183,7 +183,8 @@ explor_multi_ca <- function(res, settings) {
                               "    size_range = ", deparse(dput(size_range)), ", ",
                               "labels_size = ", input$var_lab_size, ", ",
                               "point_size = ", input$var_point_size, ",\n",
-                              "    transitions = ", input$var_transitions)
+                              "    transitions = ", input$var_transitions,
+                              ", labels_positions = NULL")
                    })
                    
                    ## Variables plot
