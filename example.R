@@ -41,6 +41,20 @@ pca <- PCA(d, quanti.sup = 11:12,  ind.sup = 1:4, graph = FALSE, scale.unit = TR
 detach(package:explor, unload=TRUE); library(explor)
 explor(pca)
 
+
+## PCA with quali.sup
+
+library(FactoMineR)
+library(explor)
+
+data(decathlon)
+d <- decathlon
+d$sexe <- sample(c("Homme", "Femme"), 41, replace = TRUE)
+pca <- PCA(d, quanti.sup = 11:12,  quali.sup = 13:14, ind.sup = 1:4, graph = FALSE, scale.unit = TRUE)
+detach(package:explor, unload=TRUE); library(explor)
+explor(pca)
+
+
 ## CA
 
 library(FactoMineR)
