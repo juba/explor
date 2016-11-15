@@ -111,18 +111,18 @@ prepare_results.PCA <- function(obj) {
     
     vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
 
-    ## v.test for qualitative supplementary variables
+    ## V.test for qualitative supplementary variables
     if (!is.null(obj$quali.sup)) {
-        ## v.test
+        ## V.test
         tmp_sup <- data.frame(obj$quali.sup$v.test)
         tmp_sup$modname <- rownames(tmp_sup)
         tmp_sup$varname <- rep(quali_varnames, quali_nlevels)
         tmp_sup$Type <- "Supplementary"
         tmp_sup$Class <- "Qualitative"
-        tmp_sup <- tmp_sup %>% gather(Axis, v.test, starts_with("Dim.")) %>%
+        tmp_sup <- tmp_sup %>% gather(Axis, V.test, starts_with("Dim.")) %>%
             mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
-                   P.value = round(ifelse(v.test >= 0, 2 * (1 - pnorm(v.test)), 2 * pnorm(v.test)), 3),
-                   V.test = round(v.test, 2))
+                   P.value = round(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
+                   V.test = round(V.test, 2))
         vars <- vars %>% left_join(tmp_sup, by = c("varname", "modname", "Type", "Class", "Axis"))
     }
 
