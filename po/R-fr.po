@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2016-11-14 15:36\n"
-"PO-Revision-Date: 2016-11-14 15:38+0100\n"
+"POT-Creation-Date: 2016-11-15 11:38\n"
+"PO-Revision-Date: 2016-11-15 11:38+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -162,6 +162,9 @@ msgstr "Données"
 
 msgid "obj must be of class MCA"
 msgstr "obj doit être de classe MCA"
+
+msgid "obj must be of class speMCA"
+msgstr "obj doit être de classe speMCA"
 
 msgid "obj must be of class dudi and acm"
 msgstr "obj doit être de classes dudi et acm"
