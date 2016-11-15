@@ -85,11 +85,12 @@ explor_multi_sidebar_footer <- function(type = "var") {
         tags$p(actionLink(paste0("explor_", type, "_plot_code"), href = "#",
                           title = gettext("Get R code", domain = "R-explor"),
                           class = "btn btn-default", 
-                          label = HTML("<span class='glyphicon glyphicon-open-file' aria-hidden='true'></span>")), 
-               tags$a(id = paste0("explor-", type, "-svg-export"), href = "#",
+                          label = HTML("<span class='glyphicon glyphicon-open-file' aria-hidden='true'></span> Get R code"))),
+        tags$p(tags$a(id = paste0("explor-", type, "-svg-export"), href = "#",
                       class = "btn btn-default", 
                   title = gettext("Export as SVG", domain = "R-explor"),
-                  HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span>"))))
+                  HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Export as SVG"))))
+               
 }
 
 
