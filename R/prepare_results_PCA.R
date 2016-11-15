@@ -168,7 +168,7 @@ prepare_results.PCA <- function(obj) {
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
 
     ## Qualitative data for individuals plot color mapping
-    quali_data <- obj$call$X[,obj$call$quali.sup$numero]
+    quali_data <- obj$call$X[,obj$call$quali.sup$numero, drop = FALSE]
     quali_data$Name <- rownames(obj$call$X)
     
     return(list(vars = vars, ind = ind, eig = eig, axes = axes, quali_data = quali_data))
