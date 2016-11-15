@@ -23,7 +23,7 @@ explor.MCA <- function(obj) {
     settings$has_contrib <- TRUE
     settings$has_cos2 <- TRUE
     settings$has_var_eta2 <- TRUE
-    settings$has_varsup_eta2 <- FALSE
+    settings$has_varsup_eta2 <- TRUE
     
     ## Launch interface
     explor_multi_mca(res, settings)

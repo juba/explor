@@ -294,7 +294,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
 
     ## Supplementary variables eta2
     varTableSupEta2 <- reactive({
-        if (settings()$has_var_sup_eta2) {
+        if (settings()$has_varsup_eta2) {
             res()$vareta2 %>% filter(Type == "Supplementary",
                                      Class == "Qualitative",
                                      Axis == input$vardim) %>%
