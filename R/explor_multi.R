@@ -127,7 +127,7 @@ explor_multi_export_code_message <- function () {
 ## INDIVIDUAL DATA SHINY MODULE ---------------------------------------------------------
 
 ## UI for individual data panel
-explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
+explor_multi_ind_dataUI <- function(id, settings, axes) {
     ns <- NS(id)
     fluidRow(
         column(2,
@@ -138,7 +138,7 @@ explor_multi_ind_dataUI <- function(id, has_sup_ind, axes) {
         column(10,
                h4(gettext("Active individuals", domain = "R-explor")),
                DT::dataTableOutput(ns("indtable")),
-               if (has_sup_ind) {
+               if (settings$has_sup_ind) {
                    list(h4(gettext("Supplementary individuals", domain = "R-explor")),
                         DT::dataTableOutput(ns("indtablesup")))
                }
@@ -185,7 +185,7 @@ explor_multi_hide_choices <- function() {
 }
 
 ## UI for variable data panel
-explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA = FALSE, PCA_quali = FALSE) {
+explor_multi_var_dataUI <- function(id, settings, axes) {
     ns <- NS(id)
     fluidRow(
         column(2,
@@ -193,7 +193,7 @@ explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA
                    selectInput(ns("vardim"), 
                                gettext("Dimension", domain = "R-explor"),
                                choices = axes, selected = "1"),
-                   if (is_CA) {
+                   if (settings$type == "CA") {
                        selectInput(ns("var_tab_hide"), 
                                    gettext("Hide :", domain = "R-explor"),
                                    choices = explor_multi_hide_choices(),
@@ -201,23 +201,23 @@ explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA
                    }
                )),
         column(10,
-               h4(if(is_CA) gettext("Active levels", domain = "R-explor")                   
+               h4(if(settings$type == "CA") gettext("Active levels", domain = "R-explor")                   
                   else gettext("Active variables", domain = "R-explor")),
                DT::dataTableOutput(ns("vartable")),
-               if (has_sup_var) {
-                   list(h4(if(is_CA) gettext("Supplementary levels", domain = "R-explor")                   
+               if (settings$has_sup_var) {
+                   list(h4(if(settings$type == "CA") gettext("Supplementary levels", domain = "R-explor")                   
                            else gettext("Supplementary variables", domain = "R-explor")),
                         DT::dataTableOutput(ns("vartablesup")))
                },
-               if (is_MCA) {
+               if (settings$has_var_eta2) {
                    list(h4(withMathJax(gettext("Variables \\(\\eta^2\\)", domain = "R-explor"))),
                         DT::dataTableOutput(ns("vartableeta2")))
                },
-               if (is_MCA && has_sup_var) {
+               if (settings$has_sup_vars && settings$has_varsup_eta2) {
                    list(h4(gettext("Supplementary variables \\(\\eta^2\\)", domain = "R-explor")),
                         DT::dataTableOutput(ns("vartablesupeta2")))
                },
-               if (PCA_quali) {
+               if (settings$type == "PCA" && settings$has_quali_sup_vars) {
                    list(h4(gettext("Qualitative supplementary variables", domain = "R-explor")),
                         DT::dataTableOutput(ns("vartablequalisup")))
                }
@@ -227,7 +227,7 @@ explor_multi_var_dataUI <- function(id, has_sup_var, axes, is_MCA = FALSE, is_CA
 
 
 ## Server for variable data panel
-explor_multi_var_data <- function(input, output, session, res, settings, is_MCA = FALSE, is_CA = FALSE, PCA_quali = FALSE) {
+explor_multi_var_data <- function(input, output, session, res, settings) {
 
     table_options <- list(lengthMenu = c(10,20,50,100),
                           pageLength = 10, orderClasses = TRUE,
@@ -238,25 +238,28 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
                    filter(Type == "Active", Axis == input$vardim) %>%
                    select_(.dots = settings()$var_columns)
         ## CA data hide option
-        if (is_CA && input$var_tab_hide != "None") {
+        if (settings()$type == "CA" && input$var_tab_hide != "None") {
             tmp <- tmp %>% filter(Position != input$var_tab_hide)
         }
         data.frame(tmp)
     })
+    vartable_sort <- reactive({
+        if(settings()$has_contrib) "Contrib" else "Coord"
+    })
     output$vartable <- DT::renderDataTable(
-                               explor_multi_table(varTable(), table_options, "Contrib"))
-      
+                               explor_multi_table(varTable(), table_options, vartable_sort()))
+
     ## Supplementary variables
     varTableSup <- reactive({
         tmp <- res()$vars %>% 
                    filter(Type == "Supplementary", Axis == input$vardim) %>%
                    mutate(Level = ifelse(Class == "Quantitative", "-", Level))
         ## CA data hide option
-        if (is_CA && input$var_tab_hide != "None") {
+        if (settings()$type == "CA" && input$var_tab_hide != "None") {
             tmp <- tmp %>% filter(Position != input$var_tab_hide)
         }
         ## PCA with qualitative supplementary
-        if (PCA_quali) {
+        if (settings()$type == "PCA" && settings()$has_quali_sup_vars) {
             tmp <- tmp %>% filter(Class == "Quantitative")
         }
         tmp <- tmp %>% select_(.dots = settings()$varsup_columns)
@@ -266,42 +269,41 @@ explor_multi_var_data <- function(input, output, session, res, settings, is_MCA 
                                   explor_multi_table(varTableSup(), table_options, "Coord"))
 
     ## PCA qualitative supplementary variable
-    if (PCA_quali) {
-        varTableQualiSup <- reactive({
+    varTableQualiSup <- reactive({
+        if (settings()$type == "PCA" && settings()$has_quali_sup_vars) {
             tmp <- res()$vars %>% 
                        filter(Type == "Supplementary", Class == "Qualitative",
                               Axis == input$vardim) %>%
                        select_(.dots = settings()$varsup_quali_columns)
             data.frame(tmp)
-        })
-        output$vartablequalisup <- DT::renderDataTable(
-                                  explor_multi_table(varTableQualiSup(), table_options, "Coord"))
+        }
+    })
+    output$vartablequalisup <- DT::renderDataTable(
+                                       explor_multi_table(varTableQualiSup(), table_options, "Coord"))
 
-    }
-    
-    ## Variables eta2 for MCA
-    if (is_MCA) {
-                  
-        ## Variables eta2
-        varTableEta2 <- reactive({
+    ## Variables eta2
+    varTableEta2 <- reactive({
+        if (settings()$has_var_eta2) {
             res()$vareta2 %>% filter(Type == "Active", Axis == input$vardim) %>%
                     select_(.dots = settings()$vareta2_columns) %>%
                     arrange(eta2)
-        })
-        output$vartableeta2 <- DT::renderDataTable(
-                                       explor_multi_table(varTableEta2(), table_options, "eta2"))
+        }
+    })
+    output$vartableeta2 <- DT::renderDataTable(
+                                   explor_multi_table(varTableEta2(), table_options, "eta2"))
 
-        ## Supplementary variables eta2
-        varTableSupEta2 <- reactive({
+    ## Supplementary variables eta2
+    varTableSupEta2 <- reactive({
+        if (settings()$has_var_sup_eta2) {
             res()$vareta2 %>% filter(Type == "Supplementary",
                                      Class == "Qualitative",
                                      Axis == input$vardim) %>%
                     select_(.dots = settings()$varsupeta2_columns) %>%
                     arrange(eta2)
-        })
-        output$vartablesupeta2 <- DT::renderDataTable(
-                                          explor_multi_table(varTableSupEta2(), table_options, "eta2"))
-    }
+        }
+    })
+    output$vartablesupeta2 <- DT::renderDataTable(
+                                  explor_multi_table(varTableSupEta2(), table_options, "eta2"))
 
 }
 

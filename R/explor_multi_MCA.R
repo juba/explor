@@ -14,13 +14,17 @@ explor.MCA <- function(obj) {
     settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2", "Count")
     settings$varsup_columns <- c("Variable", "Level", "Class", "Coord", "Cos2", "Count", "V.test", "P.value")
     settings$vareta2_columns <- c("Variable", "eta2")
-    settings$show_varsup_eta2 <- TRUE
-    settings$counts_size <- TRUE    
     settings$varsupeta2_columns <- c("Variable", "eta2")
     settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
     settings$indsup_columns <- c("Name", "Coord")
     settings$obj_name <- deparse(substitute(obj))
 
+    settings$has_count <- TRUE
+    settings$has_contrib <- TRUE
+    settings$has_cos2 <- TRUE
+    settings$has_var_eta2 <- TRUE
+    settings$has_varsup_eta2 <- FALSE
+    
     ## Launch interface
     explor_multi_mca(res, settings)
     
@@ -42,13 +46,47 @@ explor.speMCA <- function(obj) {
     settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
     settings$varsup_columns <- c("Variable", "Level", "Class", "Coord", "Cos2", "V.test", "P.value")
     settings$vareta2_columns <- c("Variable", "eta2")
-    settings$show_varsup_eta2 <- FALSE
-    settings$counts_size <- FALSE   
     settings$varsupeta2_columns <- c("Variable", "eta2")
     settings$ind_columns <- c("Name", "Coord", "Contrib")
     settings$indsup_columns <- c("Name", "Coord", "Cos2")
     settings$obj_name <- deparse(substitute(obj))
 
+    settings$has_count <- FALSE
+    settings$has_contrib <- TRUE
+    settings$has_cos2 <- TRUE
+    settings$has_var_eta2 <- TRUE
+    settings$has_varsup_eta2 <- FALSE
+    
+    ## Launch interface
+    explor_multi_mca(res, settings)
+    
+}
+
+##' @rdname explor
+##' @aliases explor.mca
+##' @export
+
+explor.mca <- function(obj) {
+    
+    if (!inherits(obj, "mca")) stop("obj must be of class mca")
+
+    ## results preparation
+    res <- prepare_results(obj)
+    
+    ## Settings
+    settings <- list()
+    settings$var_columns <- c("Variable", "Level", "Coord")
+    settings$varsup_columns <- c("Variable", "Level", "Class", "Coord")
+    settings$ind_columns <- c("Name", "Coord")
+    settings$indsup_columns <- c("Name", "Coord")
+    settings$obj_name <- deparse(substitute(obj))
+
+    settings$has_count <- FALSE
+    settings$has_contrib <- FALSE
+    settings$has_cos2 <- FALSE
+    settings$has_var_eta2 <- FALSE
+    settings$has_varsup_eta2 <- FALSE
+    
     ## Launch interface
     explor_multi_mca(res, settings)
     
@@ -119,9 +157,12 @@ explor.acm <- function(obj) {
 
 explor_multi_mca <- function(res, settings) { 
     
+    settings$has_sup_vars <- "Supplementary" %in% res$vars$Type
+    settings$has_sup_ind <- "Supplementary" %in% res$ind$Type
+    settings$type <- "MCA"
+    
     ## Precompute inputs 
-    has_sup_vars <- "Supplementary" %in% res$vars$Type 
-    if (has_sup_vars) {
+    if (settings$has_sup_vars) {
         choices <- c("None", "Variable", "Type")
         names(choices) <- c(gettext("None", domain = "R-explor"),
                             gettext("Variable name", domain = "R-explor"),
@@ -140,18 +181,27 @@ explor_multi_mca <- function(res, settings) {
     var_symbol_input <- selectInput("var_symbol", gettext("Points symbol :", domain = "R-explor"),
                                     choices = choices, selected = symbol_selected)
     ## Variable size input
-    var_size_choices <- c("None", "Contrib", "Cos2")
-    names(var_size_choices) <- c(gettext("None", domain = "R-explor"),
-                                 gettext("Contribution", domain = "R-explor"),
-                                 gettext("Squared cosinus", domain = "R-explor"))
-    if (settings$counts_size) {
-        var_size_choices <- c(var_size_choices, "Count")
-        names(var_size_choices)[var_size_choices == "Count"] <- gettext("Count", domain = "R-explor")
-    }  
-    var_size_input <- selectInput("var_size", 
-                                  gettext("Points size :", domain = "R-explor"),
-                                  choices = var_size_choices,
-                                  selected = "None")
+    var_size_choices <- "None"
+    names <- gettext("None", domain = "R-explor")
+    if (settings$has_contrib) {
+        var_size_choices <- append(var_size_choices, "Contrib")
+        names <- append(names, gettext("Contribution", domain = "R-explor"))
+    }
+    if (settings$has_cos2) {
+        var_size_choices <- append(var_size_choices, "Cos2")
+        names <- append(names, gettext("Squared cosinus", domain = "R-explor"))
+    }
+    if (settings$has_count) {
+        var_size_choices <- append(var_size_choices, "Count")
+        names <- append(names, gettext("Count", domain = "R-explor"))
+    }
+    names(var_size_choices) <- names
+    var_size_input <- if (length(var_size_choices) > 1) {
+        selectInput("var_size", 
+                    gettext("Points size :", domain = "R-explor"),
+                    choices = var_size_choices,
+                    selected = "None")
+                      } else NULL
     ## Individual color input
     ind_col_choices <- c("None", "Type")
     names(ind_col_choices) <- c(gettext("None", domain = "R-explor"),
@@ -162,8 +212,6 @@ explor_multi_mca <- function(res, settings) {
                                  gettext("Points color :", domain = "R-explor"),
                                  choices = ind_col_choices,
                                  selected = "None")
-
-    has_sup_ind <- "Supplementary" %in% res$ind$Type
 
     shiny::shinyApp(
                ui = navbarPage(gettext("MCA", domain = "R-explor"),
@@ -188,13 +236,14 @@ explor_multi_mca <- function(res, settings) {
                                                        sliderInput("var_point_size", 
                                                                    gettext("Points size", domain = "R-explor"),
                                                                    4, 128, 56),                                      
-                                                       numericInput("var_lab_min_contrib",
+                                                       if (settings$has_contrib) {
+                                                           numericInput("var_lab_min_contrib",
                                                                     gettext("Minimum contribution to show label", domain = "R-explor"),
-                                                                    min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0),
+                                                                    min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0) },
                                                        var_col_input,
                                                        var_symbol_input,
                                                        var_size_input,
-                                                       if (has_sup_vars) checkboxInput("var_sup", 
+                                                       if (settings$has_sup_vars) checkboxInput("var_sup", 
                                                                                        HTML(gettext("Supplementary variables",
                                                                                                     domain = "R-explor")), 
                                                                                        value = TRUE),
@@ -204,7 +253,7 @@ explor_multi_mca <- function(res, settings) {
                                         )),
                                
                                tabPanel(gettext("Variables data", domain = "R-explor"),
-                                        explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, is_MCA = TRUE)),
+                                        explor_multi_var_dataUI("var_data", settings, res$axes)),
                                
                                tabPanel(gettext("Individuals plot", domain = "R-explor"),
                                         fluidRow(
@@ -235,7 +284,7 @@ explor_multi_mca <- function(res, settings) {
                                                        checkboxInput("ind_ellipses", 
                                                                      HTML(gettext("Ellipses", domain = "R-explor")),
                                                                      value = FALSE),
-                                                       if (has_sup_ind)
+                                                       if (settings$has_sup_ind)
                                                            checkboxInput("ind_sup", 
                                                                          HTML(gettext("Supplementary individuals", domain = "R-explor")),
                                                                          value = TRUE),
@@ -243,7 +292,7 @@ explor_multi_mca <- function(res, settings) {
                                             column(10,
                                                    scatterD3Output("indplot")))),
                                tabPanel(gettext("Individuals data", domain = "R-explor"),
-                                        explor_multi_ind_dataUI("ind_data", has_sup_ind, res$axes))
+                                        explor_multi_ind_dataUI("ind_data", settings, res$axes))
                                ),
                
                server = function(input, output) {
@@ -257,13 +306,14 @@ explor_multi_mca <- function(res, settings) {
                    varplot_code <- reactive({
                        col_var <- if (input$var_col == "None") NULL else input$var_col
                        symbol_var <- if (input$var_symbol == "None") NULL else input$var_symbol
-                       size_var <- if (input$var_size == "None") NULL else input$var_size
-                       size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
+                       size_var <- if (!is.null(input$var_size) && input$var_size != "None") input$var_size else NULL
+                       size_range <- if (!is.null(input$var_size) && input$var_size != "None") c(30,400) * input$var_point_size / 32 else c(10,300)
+                       var_lab_min_contrib <- if(settings$has_contrib) input$var_lab_min_contrib else 0
                        
                        paste0("explor::MCA_var_plot(res",
                               ", xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
-                              "    var_sup = ", has_sup_vars && input$var_sup, ", ",
-                              ", var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
+                              "    var_sup = ", settings$has_sup_vars && input$var_sup,
+                              ", var_lab_min_contrib = ", var_lab_min_contrib, ",\n",
                               "    col_var = ", deparse(substitute(col_var)),
                               ", symbol_var = ", deparse(substitute(symbol_var)), ",\n",
                               "    size_var = ", deparse(substitute(size_var)),
@@ -303,7 +353,7 @@ explor_multi_mca <- function(res, settings) {
                        
                        paste0("explor::MCA_ind_plot(res, ",
                               "xax = ", input$ind_x, ", yax = ", input$ind_y, ",",
-                              "ind_sup = ", has_sup_ind && input$ind_sup, ",\n",
+                              "ind_sup = ", settings$has_sup_ind && input$ind_sup, ",\n",
                               "    col_var = ", deparse(substitute(col_var)), ", ",
                               "lab_var = ", deparse(substitute(lab_var)), ", ",
                               "labels_size = ", input$ind_labels_size, ",\n",
@@ -339,8 +389,7 @@ explor_multi_mca <- function(res, settings) {
                    callModule(explor_multi_var_data,
                               "var_data",
                               reactive(res),
-                              reactive(settings),
-                              is_MCA = TRUE)
+                              reactive(settings))
                    
                    callModule(explor_multi_ind_data,
                               "ind_data",
