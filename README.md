@@ -18,6 +18,7 @@ Principal Component Analysis  | dudi.pca  | [ade4](https://cran.r-project.org/pa
 Correspondance Analysis  | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
 Multiple Correspondence Analysis  | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Quantitative supplementary variables are ignored
 Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Supplementary variables are not supported
+Multiple Correspondance Analysis | mca | [MASS](https://cran.r-project.org/package=MASS) | Supplementary variables are not supported
 
 ## Features
 

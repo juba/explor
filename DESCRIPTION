@@ -24,6 +24,7 @@ Suggests:
     FactoMineR,
     ade4,
     GDAtools,
+    MASS,
     testthat,
     knitr,
     rmarkdown

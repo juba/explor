@@ -28,7 +28,7 @@ Analyse en composantes principales | dudi.pca  | [ade4](https://cran.r-project.o
 Analyse des correspondances   | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
 Analyse des correspondances multiples   | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Les variables supplémentaires quantitatives ne sont pas prises en charge
 Analyse des correspondances multiples spécifique | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Les variables supplémentaires ne sont pas prises en charge
-
+Analyse des correspondances multiples | mca | [MASS](https://cran.r-project.org/package=MASS) | Les variables supplémentaires ne sont pas prises en charge
 
 La philosophie d'`explor` est de n'être qu'une interface de visualisation, et de ne rien "exécuter" par elle-même. Les analyses et calculs se font dans votre script R, et `explor` vous aide seulement à visualiser leurs résultats. L'idée est de conserver l'ensemble des commandes dans les scripts et de ne pas risquer d'être un obstacle à la reproductibilité des analyses.
 
