@@ -18,6 +18,13 @@ explor.PCA <- function(obj) {
     settings$indsup_columns <- c("Name", "Coord", "Cos2")
     settings$scale_unit <- obj$call$scale.unit
     settings$obj_name <- deparse(substitute(obj))    
+
+    settings$has_count <- FALSE
+    settings$has_contrib <- TRUE
+    settings$has_cos2 <- TRUE
+    settings$has_var_eta2 <- FALSE
+    settings$has_varsup_eta2 <- FALSE
+
     
     ## Launch interface
     explor_multi_pca(res, settings)
@@ -64,7 +71,13 @@ explor.pca <- function(obj) {
     settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
     settings$indsup_columns <- c("Name", "Coord")
     settings$scale_unit <- if (is.null(obj$call$scale)) TRUE else obj$call$scale
-    settings$obj_name <- deparse(substitute(obj))    
+    settings$obj_name <- deparse(substitute(obj))
+
+    settings$has_count <- FALSE
+    settings$has_contrib <- TRUE
+    settings$has_cos2 <- TRUE
+    settings$has_var_eta2 <- FALSE
+    settings$has_varsup_eta2 <- FALSE
 
     ## Launch interface
     explor_multi_pca(res, settings)
@@ -81,13 +94,16 @@ explor.pca <- function(obj) {
 explor_multi_pca <- function(res, settings) {
     
     ## Precompute inputs 
-    has_sup_vars <- "Supplementary" %in% res$vars$Type
-    has_quali_sup_vars <- any("Supplementary" %in% res$vars$Type &
-                              "Qualitative" %in% res$vars$Class)
+    settings$has_sup_vars <- "Supplementary" %in% res$vars$Type
+    settings$has_quali_sup_vars <- any("Supplementary" %in% res$vars$Type &
+                                       "Qualitative" %in% res$vars$Class)
+    settings$has_sup_ind <- "Supplementary" %in% res$ind$Type
+    settings$type <- "PCA"
+    
     ## Variable color input
-    if (has_sup_vars) {
+    if (settings$has_sup_vars) {
         ## Qualitative supplementary
-        if (has_quali_sup_vars) {
+        if (settings$has_quali_sup_vars) {
             choices <- c("None", "Type", "Variable")
             names(choices) <- c(gettext("None", domain = "R-explor"),
                                 gettext("Variable type", domain = "R-explor"),
@@ -110,7 +126,7 @@ explor_multi_pca <- function(res, settings) {
     ind_col_choices <- c("None", "Type")
     names(ind_col_choices) <- c(gettext("None", domain = "R-explor"),
                                 gettext("Individual type", domain = "R-explor"))
-    if (has_quali_sup_vars) {
+    if (settings$has_quali_sup_vars) {
         ind_col_choices <- c(ind_col_choices, names(res$quali_data))
         ind_col_choices <- setdiff(ind_col_choices, "Name")
     }
@@ -119,10 +135,7 @@ explor_multi_pca <- function(res, settings) {
                                  choices = ind_col_choices,
                                  selected = "Type")
     
-    
-    
-    has_sup_ind <- "Supplementary" %in% res$ind$Type
-
+  
     shiny::shinyApp(
                ui = navbarPage(gettext("PCA", domain = "R-explor"),
                                header = tags$head(
@@ -146,8 +159,8 @@ explor_multi_pca <- function(res, settings) {
                                                        numericInput("var_lab_min_contrib",
                                                                     gettext("Minimum contribution to show label", domain = "R-explor"),
                                                                     min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0),
-                                                       if (has_sup_vars) var_col_input,
-                                                       if (has_sup_vars)
+                                                       if (settings$has_sup_vars) var_col_input,
+                                                       if (settings$has_sup_vars)
                                                            checkboxInput("var_sup", 
                                                                          HTML(gettext("Supplementary variables", domain = "R-explor")), 
                                                                          value = TRUE),
@@ -157,7 +170,7 @@ explor_multi_pca <- function(res, settings) {
                                         )),
                                
                                tabPanel(gettext("Variables data", domain = "R-explor"),
-                                        explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, PCA_quali = has_quali_sup_vars)),
+                                        explor_multi_var_dataUI("var_data", settings, res$axes)),
 
                                tabPanel(gettext("Individuals plot", domain = "R-explor"),
                                         fluidRow(
@@ -184,13 +197,13 @@ explor_multi_pca <- function(res, settings) {
                                                                        gettext("Labels size", domain = "R-explor"),
                                                                        5, 20, 9)
                                                        ),
-                                                       if (has_sup_ind) 
+                                                       if (settings$has_sup_ind) 
                                                            ind_col_input,
-                                                       if (has_sup_ind) 
+                                                       if (settings$has_sup_ind) 
                                                            checkboxInput("ind_ellipses", 
                                                                          HTML(gettext("Ellipses", domain = "R-explor")),
                                                                          value = FALSE),
-                                                       if (has_sup_ind)
+                                                       if (settings$has_sup_ind)
                                                            checkboxInput("ind_sup", 
                                                                          HTML(gettext("Supplementary individuals", domain = "R-explor")),
                                                                          value = TRUE),
@@ -198,7 +211,7 @@ explor_multi_pca <- function(res, settings) {
                                             column(10,
                                                    scatterD3Output("indplot")))),
                                tabPanel(gettext("Individuals data", domain = "R-explor"),
-                                        explor_multi_ind_dataUI("ind_data", has_sup_ind, res$axes))
+                                        explor_multi_ind_dataUI("ind_data", settings, res$axes))
                                ),
                
                server = function(input, output) {
@@ -215,7 +228,7 @@ explor_multi_pca <- function(res, settings) {
                        
                        paste0("explor::PCA_var_plot(res, ",
                               "xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
-                              "    var_sup = ", has_sup_vars && input$var_sup, ", ",
+                              "    var_sup = ", settings$has_sup_vars && input$var_sup, ", ",
                               "var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
                               "    col_var = ", deparse(substitute(col_var)), ", ",
                               "labels_size = ", input$var_lab_size, ", ",
@@ -253,7 +266,7 @@ explor_multi_pca <- function(res, settings) {
                        ellipses <- !is.null(input$ind_ellipses) && input$ind_ellipses
                        paste0("explor::PCA_ind_plot(res, ",
                               "xax = ", input$ind_x, ", yax = ", input$ind_y, ", ",
-                              "ind_sup = ", has_sup_ind && input$ind_sup, ",\n",
+                              "ind_sup = ", settings$has_sup_ind && input$ind_sup, ",\n",
                               "    col_var = ", deparse(substitute(col_var)), ", ",
                               "lab_var = ", deparse(substitute(lab_var)), ", ",
                               "labels_size = ", input$ind_labels_size, ",\n",
@@ -289,8 +302,7 @@ explor_multi_pca <- function(res, settings) {
                    callModule(explor_multi_var_data,
                               "var_data",
                               reactive(res),
-                              reactive(settings),
-                              PCA_quali = has_quali_sup_vars)
+                              reactive(settings))
 
                    callModule(explor_multi_ind_data,
                               "ind_data",
