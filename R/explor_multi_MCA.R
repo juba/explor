@@ -34,7 +34,6 @@ explor.speMCA <- function(obj) {
     
     if (!inherits(obj, "speMCA")) stop("obj must be of class speMCA")
 
-    print("speMCA")
     ## results preparation
     res <- prepare_results(obj)
     
