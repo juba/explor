@@ -27,6 +27,7 @@ Analyse des correspondances multiples  | MCA  | [FactoMineR](http://factominer.f
 Analyse en composantes principales | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Les variables supplémentaires qualitatives ne sont pas prises en charge
 Analyse des correspondances   | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
 Analyse des correspondances multiples   | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Les variables supplémentaires quantitatives ne sont pas prises en charge
+Analyse des correspondances multiples spécifique | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Les variables supplémentaires ne sont pas prises en charge
 
 
 La philosophie d'`explor` est de n'être qu'une interface de visualisation, et de ne rien "exécuter" par elle-même. Les analyses et calculs se font dans votre script R, et `explor` vous aide seulement à visualiser leurs résultats. L'idée est de conserver l'ensemble des commandes dans les scripts et de ne pas risquer d'être un obstacle à la reproductibilité des analyses.
@@ -145,6 +146,30 @@ coa$supr <- suprow(coa, row_sup)$lisup
 coa$supc <- supcol(coa, col_sup)$cosup
 explor(coa)
 ```
+
+### Fonctions de `GDAtools` 
+
+Les résultats des fonctions de `GDAtools` prises en charge peuvent également être directement passées à `explor()`.
+
+```r
+library(GDAtools)
+data(Music)
+mca <- speMCA(Music[,1:5],excl=c(3,6,9,12,15))
+explor(mca)
+```
+
+Pour ajouter des individus supplémentaires, il est nécessaire de calculer leurs données associées à l'aide de la fonction `indsup`, puis de les ajouter manuellement comme un éléménet nommé `supi` de l'objet résultat. 
+
+Voici un exemple :
+
+```r
+library(GDAtools)
+data(Music)
+mca <- speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
+mca$supi <- indsup(mca,Music[1:2,1:5])
+explor(mca)
+```
+
 
 ## Export des graphiques
 

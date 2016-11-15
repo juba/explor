@@ -27,7 +27,7 @@ Multiple correspondence analysis  | MCA  | [FactoMineR](http://factominer.free.f
 Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Qualitative supplementary variables are ignored
 Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
 Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Quantitative supplementary variables are ignored
-
+Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Supplementary variables are not supported
 
 
 The philosophy behind `explor` is to only be an exploration interface which doesn't really do anything by itself : analysis and computations are made in your R script, and `explor` only helps you visualizing the results. As such it can not disrupt code execution and reproducibility.
@@ -149,6 +149,33 @@ coa$supr <- suprow(coa, row_sup)$lisup
 coa$supc <- supcol(coa, col_sup)$cosup
 explor(coa)
 ```
+
+### `GDAtools` functions
+
+`GDAtools` functions should also work by directly passing the object result to `explor()`. 
+
+For example, to visualize a `speMCA` results :
+
+```r
+library(GDAtools)
+data(Music)
+mca <- speMCA(Music[,1:5],excl=c(3,6,9,12,15))
+explor(mca)
+```
+
+To display supplementary individuals, you have to compute their data with the
+`indsup` function, and add them manually as a `supi` element of your result object.
+
+Here is an example :
+
+```r
+library(GDAtools)
+data(Music)
+mca <- speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
+mca$supi <- indsup(mca,Music[1:2,1:5])
+explor(mca)
+```
+
 
 ## Exporting Plots
 

@@ -11,13 +11,13 @@ For now on, it is usable the following types of analyses :
 
 Analysis | Function  | Package | Notes
 ------------- | ------------- | ---------- | --------
-Principal component analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | -
-Correspondance analysis  | CA  | [FactoMineR](http://factominer.free.fr/) | -
-Multiple correspondence analysis  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
-Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Qualitative supplementary variables are ignored
-Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
-Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Quantitative supplementary variables are ignored
-
+Principal Component Analysis  | PCA  | [FactoMineR](http://factominer.free.fr/) | -
+Correspondance Analysis  | CA  | [FactoMineR](http://factominer.free.fr/) | -
+Multiple Correspondence Analysis  | MCA  | [FactoMineR](http://factominer.free.fr/) | -
+Principal Component Analysis  | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Qualitative supplementary variables are ignored
+Correspondance Analysis  | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
+Multiple Correspondence Analysis  | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Quantitative supplementary variables are ignored
+Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Supplementary variables are not supported
 
 ## Features
 
