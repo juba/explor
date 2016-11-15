@@ -14,7 +14,13 @@ explor.CA <- function(obj) {
     settings$var_columns <- c("Level", "Position", "Coord", "Contrib", "Cos2", "Count")
     settings$varsup_columns <- c("Level", "Position", "Coord", "Cos2", "Count")
     settings$obj_name <- deparse(substitute(obj))    
-    settings$counts_size <- TRUE
+
+    settings$has_count <- TRUE
+    settings$has_contrib <- TRUE
+    settings$has_cos2 <- TRUE
+    settings$has_var_eta2 <- FALSE
+    settings$has_varsup_eta2 <- FALSE
+
     
     ## Launch interface
     explor_multi_ca(res, settings)
@@ -59,7 +65,12 @@ explor.coa <- function(obj) {
     settings$var_columns <- c("Level", "Position", "Coord", "Contrib", "Cos2")
     settings$varsup_columns <- c("Level", "Position", "Coord")
     settings$obj_name <- deparse(substitute(obj))
-    settings$counts_size <- FALSE
+
+    settings$has_count <- FALSE
+    settings$has_contrib <- TRUE
+    settings$has_cos2 <- TRUE
+    settings$has_var_eta2 <- FALSE
+    settings$has_varsup_eta2 <- FALSE
 
     ## Launch interface
     explor_multi_ca(res, settings)
@@ -77,9 +88,10 @@ explor.coa <- function(obj) {
 explor_multi_ca <- function(res, settings) { 
     
     ## Precompute inputs 
-    has_sup_vars <- "Supplementary" %in% res$vars$Type
+    settings$has_sup_vars <- "Supplementary" %in% res$vars$Type
+    settings$type <- "CA"
     
-    if (has_sup_vars) {
+    if (settings$has_sup_vars) {
         choices <- c("None", "Position", "Type")
         names(choices) <- c(gettext("None", domain = "R-explor"),
                             gettext("Variable position", domain = "R-explor"),
@@ -98,18 +110,27 @@ explor_multi_ca <- function(res, settings) {
     var_symbol_input <- selectInput("var_symbol", gettext("Points symbol :", domain = "R-explor"),
                                     choices = choices, selected = symbol_selected)
     ## Variable size input
-    var_size_choices <- c("None", "Contrib", "Cos2")
-    names(var_size_choices) <- c(gettext("None", domain = "R-explor"),
-                                 gettext("Contribution", domain = "R-explor"),
-                                 gettext("Squared cosinus", domain = "R-explor"))
-    if (settings$counts_size) {
-        var_size_choices <- c(var_size_choices, "Count")
-        names(var_size_choices)[var_size_choices == "Count"] <- gettext("Count", domain = "R-explor")
-    }  
-    var_size_input <- selectInput("var_size", 
-                                  gettext("Points size :", domain = "R-explor"),
-                                  choices = var_size_choices,
-                                  selected = "None")
+    var_size_choices <- "None"
+    names <- gettext("None", domain = "R-explor")
+    if (settings$has_contrib) {
+        var_size_choices <- append(var_size_choices, "Contrib")
+        names <- append(names, gettext("Contribution", domain = "R-explor"))
+    }
+    if (settings$has_cos2) {
+        var_size_choices <- append(var_size_choices, "Cos2")
+        names <- append(names, gettext("Squared cosinus", domain = "R-explor"))
+    }
+    if (settings$has_count) {
+        var_size_choices <- append(var_size_choices, "Count")
+        names <- append(names, gettext("Count", domain = "R-explor"))
+    }
+    names(var_size_choices) <- names
+    var_size_input <- if (length(var_size_choices) > 1) {
+        selectInput("var_size", 
+                    gettext("Points size :", domain = "R-explor"),
+                    choices = var_size_choices,
+                    selected = "None")
+                      } else NULL
     
     shiny::shinyApp(
                ui = navbarPage(gettext("CA", domain = "R-explor"),
@@ -144,7 +165,7 @@ explor_multi_ca <- function(res, settings) {
                                                                    gettext("Hide :", domain = "R-explor"),
                                                                    choices = explor_multi_hide_choices(),
                                                                    selected = "None"),
-                                                       if(has_sup_vars)
+                                                       if(settings$has_sup_vars)
                                                            checkboxInput("var_sup", 
                                                                          HTML(gettext("Supplementary levels", domain = "R-explor")),
                                                                          value = TRUE),
@@ -154,7 +175,7 @@ explor_multi_ca <- function(res, settings) {
                                         )),
                                
                                tabPanel(gettext("Data", domain = "R-explor"),
-                                        explor_multi_var_dataUI("var_data", has_sup_vars, res$axes, is_CA = TRUE))
+                                        explor_multi_var_dataUI("var_data", settings, res$axes))
                                ),
                
                server = function(input, output) {
@@ -174,7 +195,7 @@ explor_multi_ca <- function(res, settings) {
 
                        paste0("explor::CA_var_plot(res, ",
                               "xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
-                              "    var_sup = ", has_sup_vars && input$var_sup, ", ",
+                              "    var_sup = ", settings$has_sup_vars && input$var_sup, ", ",
                               "var_hide = '", input$var_hide, "', ",
                               "var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
                               "    col_var = ", deparse(substitute(col_var)), ", ", 
@@ -212,8 +233,7 @@ explor_multi_ca <- function(res, settings) {
                    callModule(explor_multi_var_data,
                               "var_data",
                               reactive(res),
-                              reactive(settings),
-                              is_CA = TRUE)
+                              reactive(settings))
                    
                    ## Lasso modal dialog
                    observeEvent(input$show_lasso_modal, {
