@@ -23,6 +23,7 @@ Imports:
 Suggests: 
     FactoMineR,
     ade4,
+    GDAtools,
     testthat,
     knitr,
     rmarkdown
