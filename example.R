@@ -134,6 +134,8 @@ explor(coa)
 
 ## GDAtools examples ----------------------------------------
 
+## speMCA
+
 library(explor)
 library(GDAtools)
 data(Music)
@@ -141,6 +143,14 @@ getindexcat(Music[,1:5])
 mca <- speMCA(Music[,1:5],excl=c(3,6,9,12,15))
 explor(mca)
 
+
+## speMCA with indsup 
+library(explor)
+library(GDAtools)
+data(Music)
+mca <- speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
+mca$supi <- indsup(mca,Music[1:2,1:5])
+explor(mca)
 
 
 

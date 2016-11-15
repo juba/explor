@@ -72,6 +72,12 @@ prepare_results.speMCA <- function(obj) {
     ind <- data.frame(obj$ind$coord)
     ind$Name <- rownames(ind)
     ind$Type <- "Active"
+    if (!is.null(obj$supi)) {
+        tmp_sup <- data.frame(obj$supi$coord)
+        tmp_sup$Name <- rownames(tmp_sup)
+        tmp_sup$Type <- "Supplementary"
+        ind <- ind %>% bind_rows(tmp_sup)
+    }
     ind <- ind %>% gather(Axis, Coord, starts_with("dim.")) %>%
         mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
@@ -84,7 +90,18 @@ prepare_results.speMCA <- function(obj) {
                Contrib = round(Contrib, 3))
     
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
-    ind$Cos2 <- NA
+
+    ## Individuals Cos2
+    if (!is.null(obj$supi)) {
+        tmp <- data.frame(obj$supi$cos2)
+        tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Supplementary") %>%
+            gather(Axis, Cos2, starts_with("dim.")) %>%
+            mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE),
+                   Cos2 = round(Cos2, 3))
+        ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
+    } else {
+        ind$Cos2 <- NA
+    }
     
     ## Qualitative data for individuals plot color mapping
     quali_data <- obj$call$X[,obj$call$quali]

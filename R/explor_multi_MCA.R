@@ -46,7 +46,7 @@ explor.speMCA <- function(obj) {
     settings$counts_size <- FALSE   
     settings$varsupeta2_columns <- c("Variable", "eta2")
     settings$ind_columns <- c("Name", "Coord", "Contrib")
-    settings$indsup_columns <- c("Name", "Coord")
+    settings$indsup_columns <- c("Name", "Coord", "Cos2")
     settings$obj_name <- deparse(substitute(obj))
 
     ## Launch interface
