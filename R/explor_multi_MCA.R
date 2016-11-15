@@ -161,57 +161,8 @@ explor_multi_mca <- function(res, settings) {
     settings$has_sup_ind <- "Supplementary" %in% res$ind$Type
     settings$type <- "MCA"
     
-    ## Precompute inputs 
-    if (settings$has_sup_vars) {
-        choices <- c("None", "Variable", "Type")
-        names(choices) <- c(gettext("None", domain = "R-explor"),
-                            gettext("Variable name", domain = "R-explor"),
-                            gettext("Variable type", domain = "R-explor"))
-        symbol_selected <- "Type"
-    } else {
-        choices <- c("None", "Variable")
-        names(choices) <- c(gettext("None", domain = "R-explor"),
-                            gettext("Variable name", domain = "R-explor"))
-        symbol_selected <- "None"
-    }
-    ## Variable color input
-    var_col_input <- selectInput("var_col", gettext("Points color :", domain = "R-explor"),
-                                 choices = choices,  selected = "Variable")
-    ## Variable symbol input
-    var_symbol_input <- selectInput("var_symbol", gettext("Points symbol :", domain = "R-explor"),
-                                    choices = choices, selected = symbol_selected)
-    ## Variable size input
-    var_size_choices <- "None"
-    names <- gettext("None", domain = "R-explor")
-    if (settings$has_contrib) {
-        var_size_choices <- append(var_size_choices, "Contrib")
-        names <- append(names, gettext("Contribution", domain = "R-explor"))
-    }
-    if (settings$has_cos2) {
-        var_size_choices <- append(var_size_choices, "Cos2")
-        names <- append(names, gettext("Squared cosinus", domain = "R-explor"))
-    }
-    if (settings$has_count) {
-        var_size_choices <- append(var_size_choices, "Count")
-        names <- append(names, gettext("Count", domain = "R-explor"))
-    }
-    names(var_size_choices) <- names
-    var_size_input <- if (length(var_size_choices) > 1) {
-        selectInput("var_size", 
-                    gettext("Points size :", domain = "R-explor"),
-                    choices = var_size_choices,
-                    selected = "None")
-                      } else NULL
-    ## Individual color input
-    ind_col_choices <- c("None", "Type")
-    names(ind_col_choices) <- c(gettext("None", domain = "R-explor"),
-                                gettext("Individual type", domain = "R-explor"))
-    ind_col_choices <- c(ind_col_choices, names(res$quali_data))
-    ind_col_choices <- setdiff(ind_col_choices, "Name")
-    ind_col_input <- selectInput("ind_col", 
-                                 gettext("Points color :", domain = "R-explor"),
-                                 choices = ind_col_choices,
-                                 selected = "None")
+
+
 
     shiny::shinyApp(
                ui = navbarPage(gettext("MCA", domain = "R-explor"),
@@ -240,9 +191,9 @@ explor_multi_mca <- function(res, settings) {
                                                            numericInput("var_lab_min_contrib",
                                                                     gettext("Minimum contribution to show label", domain = "R-explor"),
                                                                     min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0) },
-                                                       var_col_input,
-                                                       var_symbol_input,
-                                                       var_size_input,
+                                                       explor_multi_var_col_input(settings),
+                                                       explor_multi_var_symbol_input(settings),
+                                                       explor_multi_var_size_input(settings),
                                                        if (settings$has_sup_vars) checkboxInput("var_sup", 
                                                                                        HTML(gettext("Supplementary variables",
                                                                                                     domain = "R-explor")), 
@@ -280,7 +231,7 @@ explor_multi_mca <- function(res, settings) {
                                                                        gettext("Labels size", domain = "R-explor"),
                                                                        5, 20, 9)
                                                        ),
-                                                       ind_col_input,
+                                                       explor_multi_ind_col_input(settings, res),
                                                        checkboxInput("ind_ellipses", 
                                                                      HTML(gettext("Ellipses", domain = "R-explor")),
                                                                      value = FALSE),

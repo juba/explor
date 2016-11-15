@@ -172,6 +172,111 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
 }
 
 
+## INPUTS -----------------------------------------------------------------------------
+
+## Variable size input for MCA and CA
+explor_multi_var_size_input <- function(settings) {
+    var_size_choices <- "None"
+    names <- gettext("None", domain = "R-explor")
+    if (settings$has_contrib) {
+        var_size_choices <- append(var_size_choices, "Contrib")
+        names <- append(names, gettext("Contribution", domain = "R-explor"))
+    }
+    if (settings$has_cos2) {
+        var_size_choices <- append(var_size_choices, "Cos2")
+        names <- append(names, gettext("Squared cosinus", domain = "R-explor"))
+    }
+    if (settings$has_count) {
+        var_size_choices <- append(var_size_choices, "Count")
+        names <- append(names, gettext("Count", domain = "R-explor"))
+    }
+    names(var_size_choices) <- names
+    var_size_input <- if (length(var_size_choices) > 1) {
+        selectInput("var_size", 
+                    gettext("Points size :", domain = "R-explor"),
+                    choices = var_size_choices,
+                    selected = "None")
+                      } else NULL
+    return(var_size_input)
+}
+
+## Variable color input
+explor_multi_var_col_input <- function(settings) {
+    if (settings$type == "PCA" && !settings$has_sup_vars) return(NULL)
+    if (settings$type == "PCA" && settings$has_quali_sup_vars) {
+        choices <- c("None", "Type", "Variable")
+        selected <- "Type"
+    }
+    if (settings$type == "PCA" && !settings$has_quali_sup_vars) {
+        choices <- c("None", "Type")
+        selected <- "Type"
+    }
+    if (settings$type == "MCA" && settings$has_sup_vars) {
+        choices <- c("None", "Variable", "Type")
+        selected <- "Variable"
+    }
+    if (settings$type == "MCA" && !settings$has_sup_vars) {
+        choices <- c("None", "Variable")
+        selected <- "Variable"
+    }
+    if (settings$type == "CA" && settings$has_sup_vars) {
+        choices <- c("None", "Position", "Type")
+        selected <- "Position"
+    }
+    if (settings$type == "CA" && !settings$has_sup_vars) {
+        choices <- c("None", "Position")
+        selected <- "Position"
+    }
+    names(choices)[choices == "None"] <- gettext("None", domain = "R-explor")
+    names(choices)[choices == "Variable"] <- gettext("Variable name", domain = "R-explor")
+    names(choices)[choices == "Type"] <- gettext("Variable type", domain = "R-explor")
+    names(choices)[choices == "Position"] <- gettext("Variable position", domain = "R-explor")
+    
+    selectInput("var_col", gettext("Points color :", domain = "R-explor"),
+                choices = choices,  selected = selected)
+}
+
+## Variable symbol input
+explor_multi_var_symbol_input <- function(settings) {
+    if (settings$type == "MCA" && settings$has_sup_vars) {
+        choices <- c("None", "Variable", "Type")
+        selected <- "Type"
+    }
+    if (settings$type == "MCA" && !settings$has_sup_vars) {
+        choices <- c("None", "Variable")
+        selected <- "None"
+    }
+    if (settings$type == "CA" && settings$has_sup_vars) {
+        choices <- c("None", "Position", "Type")
+        selected <- "Type"
+    }
+    if (settings$type == "CA" && !settings$has_sup_vars) {
+        choices <- c("None", "Position")
+        selected <- "None"
+    }
+    names(choices)[choices == "None"] <- gettext("None", domain = "R-explor")
+    names(choices)[choices == "Variable"] <- gettext("Variable name", domain = "R-explor")
+    names(choices)[choices == "Type"] <- gettext("Variable type", domain = "R-explor")
+    names(choices)[choices == "Position"] <- gettext("Variable position", domain = "R-explor")
+
+    selectInput("var_symbol", gettext("Points symbol :", domain = "R-explor"),
+                choices = choices, selected = selected)   
+}
+
+## Individual color input
+explor_multi_ind_col_input <- function(settings, res) {
+    ind_col_choices <- c("None", "Type")
+    names(ind_col_choices) <- c(gettext("None", domain = "R-explor"),
+                                gettext("Individual type", domain = "R-explor"))
+    ind_col_choices <- c(ind_col_choices, names(res$quali_data))
+    ind_col_choices <- setdiff(ind_col_choices, "Name")
+
+    selectInput("ind_col", 
+                gettext("Points color :", domain = "R-explor"),
+                choices = ind_col_choices,
+                selected = "None")
+}
+
 
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 
@@ -183,6 +288,7 @@ explor_multi_hide_choices <- function() {
                         gettext("Columns", domain = "R-explor"))
     choices
 }
+
 
 ## UI for variable data panel
 explor_multi_var_dataUI <- function(id, settings, axes) {

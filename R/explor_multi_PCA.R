@@ -99,43 +99,7 @@ explor_multi_pca <- function(res, settings) {
                                        "Qualitative" %in% res$vars$Class)
     settings$has_sup_ind <- "Supplementary" %in% res$ind$Type
     settings$type <- "PCA"
-    
-    ## Variable color input
-    if (settings$has_sup_vars) {
-        ## Qualitative supplementary
-        if (settings$has_quali_sup_vars) {
-            choices <- c("None", "Type", "Variable")
-            names(choices) <- c(gettext("None", domain = "R-explor"),
-                                gettext("Variable type", domain = "R-explor"),
-                                gettext("Variable name", domain = "R-explor"))
-        }
-        ## Only quantitative supplementary
-        else {
-            choices <- c("None", "Type")
-            names(choices) <- c(gettext("None", domain = "R-explor"),
-                                gettext("Variable type", domain = "R-explor"))
-        }
-        var_col_input <- selectInput("var_col", 
-                                     gettext("Points color :", domain = "R-explor"),
-                                     choices = choices,  selected = "Type")
-    } else {
-        var_col_input <- NULL
-    }
 
-    ## Individual color input
-    ind_col_choices <- c("None", "Type")
-    names(ind_col_choices) <- c(gettext("None", domain = "R-explor"),
-                                gettext("Individual type", domain = "R-explor"))
-    if (settings$has_quali_sup_vars) {
-        ind_col_choices <- c(ind_col_choices, names(res$quali_data))
-        ind_col_choices <- setdiff(ind_col_choices, "Name")
-    }
-    ind_col_input <- selectInput("ind_col", 
-                                 gettext("Points color :", domain = "R-explor"),
-                                 choices = ind_col_choices,
-                                 selected = "Type")
-    
-  
     shiny::shinyApp(
                ui = navbarPage(gettext("PCA", domain = "R-explor"),
                                header = tags$head(
@@ -159,7 +123,7 @@ explor_multi_pca <- function(res, settings) {
                                                        numericInput("var_lab_min_contrib",
                                                                     gettext("Minimum contribution to show label", domain = "R-explor"),
                                                                     min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0),
-                                                       if (settings$has_sup_vars) var_col_input,
+                                                       if (settings$has_sup_vars) explor_multi_var_col_input(settings),
                                                        if (settings$has_sup_vars)
                                                            checkboxInput("var_sup", 
                                                                          HTML(gettext("Supplementary variables", domain = "R-explor")), 
@@ -198,7 +162,7 @@ explor_multi_pca <- function(res, settings) {
                                                                        5, 20, 9)
                                                        ),
                                                        if (settings$has_sup_ind) 
-                                                           ind_col_input,
+                                                           explor_multi_ind_col_input(settings, res),
                                                        if (settings$has_sup_ind) 
                                                            checkboxInput("ind_ellipses", 
                                                                          HTML(gettext("Ellipses", domain = "R-explor")),
