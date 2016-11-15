@@ -7,6 +7,7 @@
 \alias{explor.PCA}
 \alias{explor.acm}
 \alias{explor.coa}
+\alias{explor.mca}
 \alias{explor.pca}
 \alias{explor.speMCA}
 \title{Interface for analysis results exploration}
@@ -20,6 +21,8 @@ explor(obj)
 \method{explor}{MCA}(obj)
 
 \method{explor}{speMCA}(obj)
+
+\method{explor}{mca}(obj)
 
 \method{explor}{acm}(obj)
 

@@ -152,4 +152,19 @@ mca$supi <- indsup(mca,Music[1:2,1:5])
 explor(mca)
 
 
+## MASS examples ---------------------------------------------
+
+## mca
+
+library(MASS)
+library(explor)
+tmp <- farms[4:20, 2:4]
+mca <- MASS::mca(tmp, nf = 11)
+supi_df <- farms[1:3, 2:4]
+supi <- predict(mca, supi_df, type="row")
+rownames(supi) <- rownames(supi_df)
+mca$supi <- supi
+mca$supv <- predict(mca, farms[4:20, 1, drop=FALSE], type="factor")
+detach(package:explor, unload=TRUE); library(explor)
+explor(mca)
 

@@ -93,11 +93,15 @@ explor.acm <- function(obj) {
     settings$var_columns <- c("Variable", "Level", "Coord", "Contrib", "Cos2")
     settings$varsup_columns <- c("Variable", "Level", "Coord")
     settings$vareta2_columns <- c("Variable", "eta2")
-    settings$show_varsup_eta2 <- FALSE
-    settings$counts_size <- FALSE
     settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
     settings$indsup_columns <- c("Name", "Coord")
     settings$obj_name <- deparse(substitute(obj))
+
+    settings$has_count <- FALSE
+    settings$has_contrib <- TRUE
+    settings$has_cos2 <- TRUE
+    settings$has_var_eta2 <- TRUE
+    settings$has_varsup_eta2 <- FALSE
     
     ## Launch interface
     explor_multi_mca(res, settings)
