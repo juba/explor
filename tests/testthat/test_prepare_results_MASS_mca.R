@@ -20,6 +20,12 @@ test_that("Variables results are equal", {
                res$vars[res$vars$Type == "Active" & res$vars$Axis == "1", "Coord"])
 })
 
+test_that("Supplementary variables results are equal", {
+  expect_equal(as.vector(round(mca$supv[,4],3)),
+               data.frame(res$var)[res$var$Type == "Supplementary" & res$var$Axis == "4", "Coord"])
+})  
+
+
 test_that("Individuals results are equal", {
   expect_equal(as.vector(round(mca$rs[,1],3)),
                data.frame(res$ind)[res$ind$Type == "Active" & res$ind$Axis == "1", "Coord"])
