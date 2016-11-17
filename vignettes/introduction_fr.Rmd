@@ -55,6 +55,54 @@ Pour chaque méthode, `explor` lance une interface Web interactive qui s'affiche
 
 L'utilisation du package est très simple : il suffit d'appliquer la fonction `explor()` à l'objet résultant d'une méthode prise en charge.
 
+
+### `prcomp`, `princomp` et `MASS::mca`
+
+Pour visualiser les résultats de ces fonctions, il suffit de passer l'objet
+résultat à `explor()`.
+
+Voici un exemple avec une ACP réalisée avec `princomp` :
+
+```r
+data(USArrests)
+pca <- princomp(USArrests, cor = TRUE)
+explor(pca)
+```
+
+`explor` permet de visualiser des individus supplémentaires dont les
+coordonnées ont été calculées avec `predict`. Il suffit de les ajouter comme
+un élément nommé `supi` de l'objet résultat.
+
+Voici un exemple avec `prcomp` :
+
+```r
+pca <- prcomp(USArrests[6:50,], scale. = TRUE)
+pca$supi <- predict(pca, USArrests[1:5,])
+explor(pca)
+```
+
+Pour `MASS::mca`, `explor()` permet également la visualisation de variables
+qualitatives supplémentaires. Leurs coordonnées doivent être ajoutées comme un
+élément nommé `supv` de l'objet résultat. À noter qu'il est également
+préférable d'ajouter manuellement les noms de lignes à l'élément `supi` car
+`predict` ne les conserve pas :
+
+```r
+library(MASS)
+mca <- MASS::mca(farms[4:20, 2:4], nf = 11)
+supi_df <- farms[1:3, 2:4]
+supi <- predict(mca, supi_df, type="row")
+rownames(supi) <- rownames(supi_df)
+mca$supi <- supi
+mca$supv <- predict(mca, farms[4:20, 1, drop=FALSE], type="factor")
+explor(mca)
+```
+
+À noter que les réultats de ces trois fonctions sont assez limités, elles ne
+fournissent que les coordonnées des variables et des individus, pas de
+contributions ou de cosinus carrés par exemple.
+
+
 ### Fonctions de `FactoMineR`
 
 Pour les fonctions de `FactoMineR`  prises en charge, il suffit de passer l'objet contenant les résultats directement à`explor()`.

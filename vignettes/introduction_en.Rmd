@@ -28,7 +28,7 @@ Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/pa
 Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
 Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Quantitative supplementary variables are ignored
 Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Supplementary variables are not supported
-Multiple Correspondance Analysis | mca | [MASS](https://cran.r-project.org/package=MASS) | Supplementary variables are not supported
+Multiple Correspondance Analysis | mca | [MASS](https://cran.r-project.org/package=MASS) | Quantitative supplementary variables are not supported
 Principal Component Analysis  | princomp  | stats | Supplementary variables are ignored
 Principal Component Analysis  | prcomp  | stats | Supplementary variables are ignored
 
@@ -54,6 +54,52 @@ These data and graphics are displayed with several "interactive" features. Numer
 ## Usage
 
 Usage is very simple : you just apply the `explor()` function to the result object of one of the supported analysis functions.
+
+
+### `prcomp`, `princomp` and `MASS::mca`
+
+To visualize and explore these functions results, just pass the result object
+to `explor()`.
+
+Here is an example for a sample PCA with `princomp` :
+
+```r
+data(USArrests)
+pca <- princomp(USArrests, cor = TRUE)
+explor(pca)
+```
+
+`explor` supports the visualization of supplementary individuals whose scores
+have been computed with `predict`. You just have to add them as a `supi`
+element to your result object.
+
+Here is an example with `prcomp` :
+
+```r
+pca <- prcomp(USArrests[6:50,], scale. = TRUE)
+pca$supi <- predict(pca, USArrests[1:5,])
+explor(pca)
+```
+
+For `MASS::mca`, `explor()` also supports qualitative supplementary variables.
+You must include their predicted coordinates to a `supv` element. It's also
+best to manually add row names to the `supi`data, if any :
+
+```r
+library(MASS)
+mca <- MASS::mca(farms[4:20, 2:4], nf = 11)
+supi_df <- farms[1:3, 2:4]
+supi <- predict(mca, supi_df, type="row")
+rownames(supi) <- rownames(supi_df)
+mca$supi <- supi
+mca$supv <- predict(mca, farms[4:20, 1, drop=FALSE], type="factor")
+explor(mca)
+```
+
+Note that the results of these three functions are quite limited : they
+provide variables and individuals coordinates, but no contributions or squared
+cosinus.
+
 
 ### `FactoMineR` functions
 
