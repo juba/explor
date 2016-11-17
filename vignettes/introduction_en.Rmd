@@ -1,5 +1,5 @@
 ---
-title: "Interactive results exploration with explor"
+title: "Interactive MCA/PCA results exploration with explor"
 author: "Julien Barnier"
 date: "`r Sys.Date()`"
 output: 
@@ -7,7 +7,7 @@ output:
     fig_width: 5
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Introduction to explor}
+  %\VignetteIndexEntry{[en] Interactive MCA/PCA results exploration with explor}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -29,6 +29,7 @@ Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/package
 Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Quantitative supplementary variables are ignored
 Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Supplementary variables are not supported
 Multiple Correspondance Analysis | mca | [MASS](https://cran.r-project.org/package=MASS) | Supplementary variables are not supported
+Principal Component Analysis  | princomp  | stats | Supplementary variables are ignored
 
 The philosophy behind `explor` is to only be an exploration interface which doesn't really do anything by itself : analysis and computations are made in your R script, and `explor` only helps you visualizing the results. As such it can not disrupt code execution and reproducibility.
 

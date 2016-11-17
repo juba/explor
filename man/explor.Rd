@@ -9,6 +9,7 @@
 \alias{explor.coa}
 \alias{explor.mca}
 \alias{explor.pca}
+\alias{explor.princomp}
 \alias{explor.speMCA}
 \title{Interface for analysis results exploration}
 \usage{
@@ -27,6 +28,8 @@ explor(obj)
 \method{explor}{acm}(obj)
 
 \method{explor}{PCA}(obj)
+
+\method{explor}{princomp}(obj)
 
 \method{explor}{pca}(obj)
 }

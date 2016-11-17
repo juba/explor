@@ -7,7 +7,7 @@ output:
     fig_width: 5
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Introduction à explor}
+  %\VignetteIndexEntry{[fr] Exploration interactive de résultats d'ACP/ACM avec `explor`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -29,12 +29,13 @@ Analyse des correspondances   | dudi.coa  | [ade4](https://cran.r-project.org/pa
 Analyse des correspondances multiples   | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Les variables supplémentaires quantitatives ne sont pas prises en charge
 Analyse des correspondances multiples spécifique | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Les variables supplémentaires ne sont pas prises en charge
 Analyse des correspondances multiples | mca | [MASS](https://cran.r-project.org/package=MASS) | Les variables supplémentaires ne sont pas prises en charge
+Analyse en composantes principales  | princomp  | stats | Les variables supplémentaires ne sont pas prises en charge
 
 La philosophie d'`explor` est de n'être qu'une interface de visualisation, et de ne rien "exécuter" par elle-même. Les analyses et calculs se font dans votre script R, et `explor` vous aide seulement à visualiser leurs résultats. L'idée est de conserver l'ensemble des commandes dans les scripts et de ne pas risquer d'être un obstacle à la reproductibilité des analyses.
 
 ## Fonctionnalités
 
-Pour chaque méthode, `explor` lance une interface Web interactive qui s'affiche soit directement dans RStudio, soit dans votre navigateur Web. Cette interface comprend une série d'onglets présentant différents tableaux et graphiques. Ceux-ci sont, autant que possible, "interactifs" : les résultats numériques sont affichés sous forme de tableaux dynamiques triables et filtrables (grâce au package `DT`), et les graphiques, générés pour la plupart par le package `scatterD3`, ont les fonctionnalités suivantes :
+Pour chaque méthode, `explor` lance une interface Web interactive qui s'affiche soit directement dans RStudio, soit dans votre navigateur. Cette interface comprend une série d'onglets présentant différents tableaux et graphiques. Ceux-ci sont, autant que possible, "interactifs" : les résultats numériques sont affichés sous forme de tableaux dynamiques triables et filtrables (grâce au package `DT`), et les graphiques, générés pour la plupart par le package `scatterD3`, ont les fonctionnalités suivantes :
 
 - zoom avec la molette de la souris
 - déplacement avec la souris

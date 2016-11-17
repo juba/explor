@@ -168,3 +168,19 @@ mca$supv <- predict(mca, farms[4:20, 1, drop=FALSE], type="factor")
 detach(package:explor, unload=TRUE); library(explor)
 explor(mca)
 
+
+## Base examples ---------------------------------------------
+
+# princomp
+
+tmp <- USArrests
+pca <- princomp(tmp, cor = FALSE)
+detach(package:explor, unload=TRUE); library(explor)
+explor(pca)
+
+tmp <- USArrests[6:50,]
+pca <- princomp(tmp, cor = TRUE)
+pca$supi <- predict(pca, USArrests[1:5,])
+detach(package:explor, unload=TRUE); library(explor)
+explor(pca)
+

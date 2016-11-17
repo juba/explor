@@ -31,6 +31,38 @@ explor.PCA <- function(obj) {
     
 }
 
+##' @rdname explor
+##' @aliases explor.princomp
+##' @export
+
+explor.princomp <- function(obj) {
+    
+    if (!inherits(obj, "princomp")) stop("obj must be of class princomp")
+
+    ## results preparation
+    res <- prepare_results(obj)
+    
+    ## Settings
+    settings <- list()
+    settings$var_columns <- c("Variable", "Coord")
+    settings$varsup_columns <- c("Variable", "Coord")
+    settings$ind_columns <- c("Name", "Coord")
+    settings$indsup_columns <- c("Name", "Coord")
+    settings$scale_unit <- obj$call$cor
+    settings$obj_name <- deparse(substitute(obj))    
+
+    settings$has_count <- FALSE
+    settings$has_contrib <- FALSE
+    settings$has_cos2 <- FALSE
+    settings$has_var_eta2 <- FALSE
+    settings$has_varsup_eta2 <- FALSE
+
+    
+    ## Launch interface
+    explor_multi_pca(res, settings)
+    
+}
+
 
 ##' @rdname explor
 ##' @aliases explor.pca
@@ -120,9 +152,11 @@ explor_multi_pca <- function(res, settings) {
                                                        sliderInput("var_lab_size", 
                                                                    gettext("Labels size", domain = "R-explor"),
                                                                    4, 20, 10),
-                                                       numericInput("var_lab_min_contrib",
-                                                                    gettext("Minimum contribution to show label", domain = "R-explor"),
-                                                                    min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0),
+                                                       if (settings$has_contrib) {
+                                                           numericInput("var_lab_min_contrib",
+                                                                        gettext("Minimum contribution to show label", domain = "R-explor"),
+                                                                        min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0)
+                                                       },
                                                        if (settings$has_sup_vars) explor_multi_var_col_input(settings),
                                                        if (settings$has_sup_vars)
                                                            checkboxInput("var_sup", 
