@@ -30,6 +30,7 @@ Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.or
 Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Supplementary variables are not supported
 Multiple Correspondance Analysis | mca | [MASS](https://cran.r-project.org/package=MASS) | Supplementary variables are not supported
 Principal Component Analysis  | princomp  | stats | Supplementary variables are ignored
+Principal Component Analysis  | prcomp  | stats | Supplementary variables are ignored
 
 The philosophy behind `explor` is to only be an exploration interface which doesn't really do anything by itself : analysis and computations are made in your R script, and `explor` only helps you visualizing the results. As such it can not disrupt code execution and reproducibility.
 

@@ -63,6 +63,38 @@ explor.princomp <- function(obj) {
     
 }
 
+##' @rdname explor
+##' @aliases explor.prcomp
+##' @export
+
+explor.prcomp <- function(obj) {
+    
+    if (!inherits(obj, "prcomp")) stop("obj must be of class prcomp")
+
+    ## results preparation
+    res <- prepare_results(obj)
+    
+    ## Settings
+    settings <- list()
+    settings$var_columns <- c("Variable", "Coord")
+    settings$varsup_columns <- c("Variable", "Coord")
+    settings$ind_columns <- c("Name", "Coord")
+    settings$indsup_columns <- c("Name", "Coord")
+    settings$scale_unit <- obj$scale != FALSE
+    settings$obj_name <- deparse(substitute(obj))    
+
+    settings$has_count <- FALSE
+    settings$has_contrib <- FALSE
+    settings$has_cos2 <- FALSE
+    settings$has_var_eta2 <- FALSE
+    settings$has_varsup_eta2 <- FALSE
+
+    
+    ## Launch interface
+    explor_multi_pca(res, settings)
+    
+}
+
 
 ##' @rdname explor
 ##' @aliases explor.pca

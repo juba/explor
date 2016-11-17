@@ -184,3 +184,17 @@ pca$supi <- predict(pca, USArrests[1:5,])
 detach(package:explor, unload=TRUE); library(explor)
 explor(pca)
 
+# prcomp
+
+tmp <- USArrests
+pca <- prcomp(tmp, scale. = FALSE)
+detach(package:explor, unload=TRUE); library(explor)
+explor(pca)
+
+tmp <- USArrests[6:50,]
+pca <- prcomp(tmp, scale. = TRUE)
+pca$supi <- predict(pca, USArrests[1:5,])
+detach(package:explor, unload=TRUE); library(explor)
+explor(pca)
+
+

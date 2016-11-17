@@ -21,6 +21,7 @@ Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-p
 Multiple Correspondance Analysis | mca | [MASS](https://cran.r-project.org/package=MASS) | Supplementary variables
 are not supported
 Principal Component Analysis  | princomp  | stats | Supplementary variables are ignored
+Principal Component Analysis  | prcomp  | stats | Supplementary variables are ignored
 
 ## Features
 

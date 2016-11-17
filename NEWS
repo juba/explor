@@ -2,10 +2,12 @@ explor 0.3
 ----------
 
 * Add a "Get R code" button which allows to get the R code to reproduce the displayed plot (minus custom labels positions)
-* Add support for `GDAtools::speMCA`
+* Add support for `princomp` and `prcomp`
 * Add support for `MASS::mca`
+* Add support for `GDAtools::speMCA`
 * Qualitative supplementary variables are now displayed with `FactoMineR::PCA` results
 * `explor.MCA` now works if MCA has been called with an `excl` argument
+* Code refactoring
 
 
 explor 0.2.1
