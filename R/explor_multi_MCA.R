@@ -186,7 +186,7 @@ explor_multi_mca <- function(res, settings) {
                                                                    4, 20, 10),
                                                        sliderInput("var_point_size", 
                                                                    gettext("Points size", domain = "R-explor"),
-                                                                   4, 128, 56),                                      
+                                                                   4, 128, 56),
                                                        if (settings$has_contrib) {
                                                            numericInput("var_lab_min_contrib",
                                                                     gettext("Minimum contribution to show label", domain = "R-explor"),
