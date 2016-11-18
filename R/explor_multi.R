@@ -101,7 +101,6 @@ order_option <- function(table, name, order="desc") {
 }
 
 ## Generate a DataTable for numerical results
-#' @import DT
 explor_multi_table <- function(tab, options, sort_column) {
     dt <- DT::datatable(tab,
                         options = c(options, order_option(tab, sort_column)),
