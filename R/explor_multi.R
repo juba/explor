@@ -101,11 +101,18 @@ order_option <- function(table, name, order="desc") {
 }
 
 ## Generate a DataTable for numerical results
+#' @import DT
 explor_multi_table <- function(tab, options, sort_column) {
-            DT::datatable(tab,
-                          options = c(options, order_option(tab, sort_column)),
-                          rownames = FALSE)
+    dt <- DT::datatable(tab,
+                        options = c(options, order_option(tab, sort_column)),
+                        rownames = FALSE)
+    indices_3 <- which(names(tab) %in% c("Coord", "Cos2", "V.test", "eta2", "P.value"))
+    indices_2 <- which(names(tab) %in% c("Contrib"))
+    dt %>%
+        DT::formatRound(indices_3, digits = 3) %>%
+        DT::formatRound(indices_2, digits = 2)
 }
+
 
 
 ## Generate the xlim and ylim from a zoom range for R code export
