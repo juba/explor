@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.3\n"
-"POT-Creation-Date: 2016-11-15 11:38\n"
+"POT-Creation-Date: 2016-11-21 10:54\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
-msgid "Cos2:"
+msgid "Squared cosinus"
 msgstr ""
 
 msgid "Contribution:"
@@ -25,13 +25,13 @@ msgstr ""
 msgid "Variable"
 msgstr ""
 
-msgid "Squared cosinus"
-msgstr ""
-
-msgid "Cos2"
+msgid "Level"
 msgstr ""
 
 msgid "Animations"
+msgstr ""
+
+msgid "Lasso selection"
 msgstr ""
 
 msgid "Get R code"
@@ -53,6 +53,33 @@ msgid "Supplementary individuals"
 msgstr ""
 
 msgid "None"
+msgstr ""
+
+msgid "Contribution"
+msgstr ""
+
+msgid "Count"
+msgstr ""
+
+msgid "Points size :"
+msgstr ""
+
+msgid "Variable name"
+msgstr ""
+
+msgid "Variable type"
+msgstr ""
+
+msgid "Variable position"
+msgstr ""
+
+msgid "Points color :"
+msgstr ""
+
+msgid "Points symbol :"
+msgstr ""
+
+msgid "Individual type"
 msgstr ""
 
 msgid "Rows"
@@ -100,27 +127,6 @@ msgstr ""
 msgid "obj must be of class dudi and coa"
 msgstr ""
 
-msgid "Variable position"
-msgstr ""
-
-msgid "Variable type"
-msgstr ""
-
-msgid "Points color :"
-msgstr ""
-
-msgid "Points symbol :"
-msgstr ""
-
-msgid "Contribution"
-msgstr ""
-
-msgid "Count"
-msgstr ""
-
-msgid "Points size :"
-msgstr ""
-
 msgid "CA"
 msgstr ""
 
@@ -148,19 +154,19 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
+msgid "Export R code"
+msgstr ""
+
 msgid "obj must be of class MCA"
 msgstr ""
 
 msgid "obj must be of class speMCA"
 msgstr ""
 
+msgid "obj must be of class mca"
+msgstr ""
+
 msgid "obj must be of class dudi and acm"
-msgstr ""
-
-msgid "Variable name"
-msgstr ""
-
-msgid "Individual type"
 msgstr ""
 
 msgid "MCA"
@@ -188,6 +194,12 @@ msgid "Individuals data"
 msgstr ""
 
 msgid "obj must be of class PCA"
+msgstr ""
+
+msgid "obj must be of class princomp"
+msgstr ""
+
+msgid "obj must be of class prcomp"
 msgstr ""
 
 msgid "obj must be of class dudi and pca"

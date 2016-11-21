@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2016-11-15 11:38\n"
-"PO-Revision-Date: 2016-11-15 11:38+0100\n"
+"POT-Creation-Date: 2016-11-21 10:54\n"
+"PO-Revision-Date: 2016-11-21 10:55+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,8 +16,8 @@ msgstr ""
 msgid "Position"
 msgstr "Position"
 
-msgid "Cos2:"
-msgstr "Cosinus carré:"
+msgid "Squared cosinus"
+msgstr "Cosinus carré"
 
 msgid "Contribution:"
 msgstr "Contribution:"
@@ -28,14 +28,14 @@ msgstr "Effectif:"
 msgid "Variable"
 msgstr "Variable"
 
-msgid "Squared cosinus"
-msgstr "Cosinus carré"
-
-msgid "Cos2"
-msgstr "Cosinus carré"
+msgid "Level"
+msgstr "Modalité"
 
 msgid "Animations"
 msgstr "Animations"
+
+msgid "Lasso selection"
+msgstr "Sélection lasso"
 
 msgid "Get R code"
 msgstr "Obtenir le code R"
@@ -66,6 +66,33 @@ msgstr "Individus supplémentaires"
 
 msgid "None"
 msgstr "Aucun"
+
+msgid "Contribution"
+msgstr "Contribution"
+
+msgid "Count"
+msgstr "Effectif"
+
+msgid "Points size :"
+msgstr "Taille :"
+
+msgid "Variable name"
+msgstr "Nom de variable"
+
+msgid "Variable type"
+msgstr "Type de variable"
+
+msgid "Variable position"
+msgstr "Position"
+
+msgid "Points color :"
+msgstr "Couleur :"
+
+msgid "Points symbol :"
+msgstr "Symboles :"
+
+msgid "Individual type"
+msgstr "Type d'individu"
 
 msgid "Rows"
 msgstr "Lignes"
@@ -112,27 +139,6 @@ msgstr "obj doit être de classe CA"
 msgid "obj must be of class dudi and coa"
 msgstr "obj doit être de classes dudi et coa"
 
-msgid "Variable position"
-msgstr "Position"
-
-msgid "Variable type"
-msgstr "Type de variable"
-
-msgid "Points color :"
-msgstr "Couleur :"
-
-msgid "Points symbol :"
-msgstr "Symboles :"
-
-msgid "Contribution"
-msgstr "Contribution"
-
-msgid "Count"
-msgstr "Effectif"
-
-msgid "Points size :"
-msgstr "Taille :"
-
 msgid "CA"
 msgstr "CA"
 
@@ -160,20 +166,20 @@ msgstr "Contribution min pour afficher l'étiquette"
 msgid "Data"
 msgstr "Données"
 
+msgid "Export R code"
+msgstr "Obtenir le code R"
+
 msgid "obj must be of class MCA"
 msgstr "obj doit être de classe MCA"
 
 msgid "obj must be of class speMCA"
 msgstr "obj doit être de classe speMCA"
 
+msgid "obj must be of class mca"
+msgstr "obj doit être de classe mca"
+
 msgid "obj must be of class dudi and acm"
 msgstr "obj doit être de classes dudi et acm"
-
-msgid "Variable name"
-msgstr "Nom de variable"
-
-msgid "Individual type"
-msgstr "Type d'individu"
 
 msgid "MCA"
 msgstr "ACM"
@@ -202,6 +208,12 @@ msgstr "Individus - données"
 msgid "obj must be of class PCA"
 msgstr "obj doit être de classe PCA"
 
+msgid "obj must be of class princomp"
+msgstr "obj doit être de classe princomp"
+
+msgid "obj must be of class prcomp"
+msgstr "obj doit être de classe prcomp"
+
 msgid "obj must be of class dudi and pca"
 msgstr "obj doit être de classes dudi et pca"
 
@@ -213,6 +225,12 @@ msgstr "obj doit être de classe coa"
 
 msgid "the ade4 package is needed for this function to work."
 msgstr "le package ade4 doit être installé pour utiliser cette fonction."
+
+#~ msgid "Cos2:"
+#~ msgstr "Cosinus carré:"
+
+#~ msgid "Cos2"
+#~ msgstr "Cosinus carré"
 
 #~ msgid "Identifiers"
 #~ msgstr "Identifiants"
