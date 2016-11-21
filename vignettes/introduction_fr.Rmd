@@ -46,6 +46,7 @@ Pour chaque méthode, `explor` lance une interface Web interactive qui s'affiche
 - étiquettes déplaçables
 - sélection de points à l'aide d'un outil de type "lasso"
 - possibilité d'export du graphique actuel au format SVG
+- possibilité de récupérer le code R permettant de reproduire le graphique actuel dans un script ou un document
 - les modifications du graphique se font sous la forme de transitions animées
 
 À noter que les interfaces sont traduites en français.

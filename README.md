@@ -1,7 +1,7 @@
 # explor
 
 [![Travis-CI Build Status](https://travis-ci.org/juba/explor.svg?branch=master)](https://travis-ci.org/juba/explor)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/explor)](http://cran.r-project.org/package=explor)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/explor)](https://cran.r-project.org/package=explor)
 ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/explor) 
 
 
@@ -24,11 +24,11 @@ Principal Component Analysis  | prcomp  | stats | Supplementary variables are ig
 
 ## Features
 
-For each type of analysis, `explor` launches a `shiny` interactive Web interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the `DT` package) and interactive graphics thanks to the [scatterD3](https://github.com/juba/scatterD3) package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file.
+For each type of analysis, `explor` launches a `shiny` interactive Web interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the `DT` package) and interactive graphics thanks to the [scatterD3](https://github.com/juba/scatterD3) package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file or get the R code to reproduce it later in a script or document.
 
-Here is a preview of what you will get (note that real colors are much better than those in this GIF) :
+Here is a preview of what you will get :
 
-![example](https://raw.github.com/juba/explor/master/resources/screencast_0.1.gif) 
+![example](https://raw.github.com/juba/explor/master/resources/screencast_0.3.gif) 
 
 
 ## Installation
