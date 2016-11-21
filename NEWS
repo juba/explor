@@ -1,5 +1,11 @@
-explor 0.3
-----------
+explor 0.3.1
+------------
+
+
+
+
+explor 0.3.0
+------------
 
 * Add a "Get R code" button which allows to get the R code to reproduce the displayed plot (minus custom labels positions)
 * Add support for `princomp` and `prcomp`
