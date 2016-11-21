@@ -160,7 +160,7 @@ explor_multi_ca <- function(res, settings) {
                               "    col_var = ", deparse(substitute(col_var)), ", ", 
                               "symbol_var = ", deparse(substitute(symbol_var)), ", ",
                               "size_var = ", deparse(substitute(size_var)), ",\n",
-                              "    size_range = ", deparse(dput(size_range)), ", ",
+                              "    size_range = ", deparse(size_range), ", ",
                               "labels_size = ", input$var_lab_size, ", ",
                               "point_size = ", input$var_point_size, ",\n",
                               "    transitions = ", input$var_transitions,

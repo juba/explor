@@ -268,7 +268,7 @@ explor_multi_mca <- function(res, settings) {
                               "    col_var = ", deparse(substitute(col_var)),
                               ", symbol_var = ", deparse(substitute(symbol_var)), ",\n",
                               "    size_var = ", deparse(substitute(size_var)),
-                              ", size_range = ", deparse(dput(size_range)), ",\n",
+                              ", size_range = ", deparse(size_range), ",\n",
                               "    labels_size = ", input$var_lab_size,
                               ", point_size = ", input$var_point_size, ",\n",
                               "    transitions = ", input$var_transitions,
