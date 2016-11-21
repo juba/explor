@@ -180,7 +180,7 @@ explor_multi_ca <- function(res, settings) {
                        code <- paste0(code, explor_multi_zoom_code(input$var_zoom_range), ")")
 
                        showModal(modalDialog(
-                           title = "Export R code",
+                           title = gettext("Export R code", domain="R-explor"),
                            HTML(paste0(explor_multi_export_code_message(),
                                        "<pre><code>",
                                        paste(highr::hi_html(code), collapse="\n"),
@@ -197,9 +197,9 @@ explor_multi_ca <- function(res, settings) {
                    ## Lasso modal dialog
                    observeEvent(input$show_lasso_modal, {
                        showModal(modalDialog(
-                           title = "Lasso selection",
-                           HTML(input$show_lasso_modal),
-                           easyClose = TRUE
+                         title = gettext("Lasso selection", domain="R-explor"),
+                         HTML(input$show_lasso_modal),
+                         easyClose = TRUE
                        ))
                    })
                    
