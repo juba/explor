@@ -26,7 +26,7 @@ Principal Component Analysis  | prcomp  | stats | Supplementary variables are ig
 
 For each type of analysis, `explor` launches a `shiny` interactive Web interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the `DT` package) and interactive graphics thanks to the [scatterD3](https://github.com/juba/scatterD3) package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file or get the R code to reproduce it later in a script or document.
 
-Here is a preview of what you will get :
+Here is a preview of what you will get. Note that the interface is available both in english and french, depending on your locale :
 
 ![example](https://raw.github.com/juba/explor/master/resources/screencast_0.3.gif) 
 
@@ -77,4 +77,4 @@ Two vignettes are provided for more detailed documentation :
 - [English introduction vignette](https://github.com/juba/explor/blob/master/vignettes/introduction_en.Rmd)
 - [French introduction vignette](https://github.com/juba/explor/blob/master/vignettes/introduction_fr.Rmd)
 
-Depending on your system locale settings, the interface is displayed in english or french (other languages can be easily added).
+Depending on your system locale settings, the interface is displayed either in english or in french (other languages can be easily added).
