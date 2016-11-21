@@ -82,14 +82,15 @@ explor_multi_sidebar_footer <- function(type = "var") {
         checkboxInput(paste0(type, "_transitions"), 
                       HTML(gettext("Animations", domain = "R-explor")),
                       value = TRUE),
-        tags$p(actionLink(paste0("explor_", type, "_plot_code"), href = "#",
-                          title = gettext("Get R code", domain = "R-explor"),
-                          class = "btn btn-default", 
-                          label = HTML("<span class='glyphicon glyphicon-open-file' aria-hidden='true'></span> Get R code"))),
-        tags$p(tags$a(id = paste0("explor-", type, "-svg-export"), href = "#",
-                      class = "btn btn-default", 
-                  title = gettext("Export as SVG", domain = "R-explor"),
-                  HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Export as SVG"))))
+        tags$p(actionButton(paste0("explor-", type, "-lasso-toggle"),
+                          icon = icon("crosshairs"),
+                          label = gettext("Lasso selection", domain = "R-explor"))),
+        tags$p(actionButton(paste0("explor_", type, "_plot_code"),
+                          icon = icon("code"),
+                          label = gettext("Get R code", domain = "R-explor"))),
+        tags$p(tags$a(id = paste0("explor-", type, "-svg-export"),
+                          class = "btn btn-default",
+                          HTML(paste(icon("file-image-o"), gettext("Export as SVG", domain = "R-explor"))))))
                
 }
 

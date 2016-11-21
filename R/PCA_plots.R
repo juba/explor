@@ -77,6 +77,7 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
     ## Settings changed if not run in explor
     html_id <- if(in_explor) "explor_var" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-var-svg-export" else NULL
+    dom_id_lasso_toggle <- if(in_explor) "explor-var-lasso-toggle" else NULL    
     lasso <- if(in_explor) TRUE else FALSE 
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
@@ -101,6 +102,7 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
                    fixed = TRUE,
                    html_id = html_id,
                    dom_id_svg_export = dom_id_svg_export,
+                   dom_id_lasso_toggle = dom_id_lasso_toggle,
                    lasso = lasso,
                    lasso_callback = lasso_callback,
                    zoom_callback = zoom_callback,
@@ -175,6 +177,7 @@ PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
 
     html_id <- if(in_explor) "explor_ind" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-ind-svg-export" else NULL
+    dom_id_lasso_toggle <- if(in_explor) "explor-ind-lasso-toggle" else NULL
     lasso <- if(in_explor) TRUE else FALSE 
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "ind") else NULL
@@ -194,6 +197,7 @@ PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
                    fixed = TRUE,
                    html_id = html_id,
                    dom_id_svg_export = dom_id_svg_export,
+                   dom_id_lasso_toggle = dom_id_lasso_toggle,                   
                    lasso = lasso,
                    lasso_callback = lasso_callback,
                    zoom_callback = zoom_callback,

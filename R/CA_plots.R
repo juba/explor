@@ -80,6 +80,7 @@ CA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
     ## Settings changed if not run in explor
     html_id <- if(in_explor) "explor_var" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-var-svg-export" else NULL
+    dom_id_lasso_toggle <- if(in_explor) "explor-var-lasso-toggle" else NULL    
     lasso <- if(in_explor) TRUE else FALSE 
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
@@ -108,6 +109,7 @@ CA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
                    fixed = TRUE,
                    html_id = html_id,
                    dom_id_svg_export = dom_id_svg_export,
+                   dom_id_lasso_toggle = dom_id_lasso_toggle,                   
                    lasso = lasso,
                    lasso_callback = lasso_callback,
                    zoom_callback = zoom_callback,
