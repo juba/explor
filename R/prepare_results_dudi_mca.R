@@ -26,7 +26,7 @@ prepare_results.acm <- function(obj) {
     }
     
     
-    vars <- data.frame(obj$co)
+    vars <- obj$co
     ## Axes names and inertia
     axes <- seq_len(ncol(vars))
     eig <- obj$eig / sum(obj$eig) * 100
@@ -59,25 +59,24 @@ prepare_results.acm <- function(obj) {
                Coord = round(Coord, 3))
 
     ## Contributions
-    tmp <- data.frame(inertia$col.abs / 100)
+    tmp <- inertia$col.abs
     tmp <- tmp %>% mutate(varname = extract_var(tmp),
                           modname = extract_mod(tmp), 
                           Type = "Active", Class = "Qualitative") %>%
-        gather(Axis, Contrib, starts_with("Comp")) %>%
-        mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
+        gather(Axis, Contrib, starts_with("Axis")) %>%
+        mutate(Axis = gsub("^Axis([0-9]+)\\(%\\)$", "\\1", Axis),
                Contrib = round(Contrib, 3))
     
     vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
     
     ## Cos2
-    tmp <- data.frame(inertia$col.rel / 10000)
+    tmp <- inertia$col.rel / 100
     tmp <- tmp %>% mutate(varname = extract_var(tmp),
                           modname = extract_mod(tmp), 
-                          Type = "Active", Class = "Qualitative") %>%
-        select(-con.tra)
+                          Type = "Active", Class = "Qualitative")
 
-    tmp <- tmp %>% gather(Axis, Cos2, starts_with("Comp")) %>%
-        mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
+    tmp <- tmp %>% gather(Axis, Cos2, starts_with("Axis")) %>%
+        mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     
     vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
@@ -86,7 +85,7 @@ prepare_results.acm <- function(obj) {
         rename(Variable = varname, Level = modname)
     
     ## Variables eta2
-    vareta2 <- data.frame(obj$cr)
+    vareta2 <- obj$cr
     vareta2$Variable <- rownames(vareta2)
     vareta2$Type <- "Active"
     vareta2$Class <- "Qualitative"
@@ -96,7 +95,7 @@ prepare_results.acm <- function(obj) {
     vareta2$eta2 <- format(vareta2$eta2, scientific = FALSE, nsmall = 3, digits = 0)
 
     ## Individuals coordinates
-    ind <- data.frame(obj$li)
+    ind <- obj$li
     ind$Name <- rownames(ind)
     ind$Type <- "Active"
     if (!is.null(obj$supi)) {
@@ -110,19 +109,19 @@ prepare_results.acm <- function(obj) {
                Coord = round(Coord, 3))
 
     ## Individuals contrib
-    tmp <- data.frame(inertia$row.abs / 100)
+    tmp <- inertia$row.abs
     tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
-        gather(Axis, Contrib, starts_with("Axis")) %>%
-        mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
-               Contrib = round(Contrib, 3))
+      gather(Axis, Contrib, starts_with("Axis")) %>%
+      mutate(Axis = gsub("^Axis([0-9]+)\\(%\\)$", "\\1", Axis),
+             Contrib = round(Contrib, 3))
     
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
     
     ## Individuals Cos2
-    tmp <- data.frame(inertia$row.rel / 10000)
+    tmp <- inertia$row.rel / 100
     tmp$Name <- rownames(tmp)
     tmp$Type <- "Active"
-    tmp <- tmp %>% select(-con.tra) %>%
+    tmp <- tmp %>% 
         gather(Axis, Cos2, starts_with("Axis")) %>%
         mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
@@ -132,7 +131,7 @@ prepare_results.acm <- function(obj) {
     ## Qualitative data for individuals plot color mapping
     tmp <- obj$tab
     row_names <- rownames(tmp)
-                                        # Rebuild original data from `tab` slot
+    # Rebuild original data from `tab` slot
     tmp <- as.data.frame(vapply(names(tmp), function(name) {
         value <- sub("^.*?\\.", "", name)
         v <- rep("", nrow(tmp))
