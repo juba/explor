@@ -167,7 +167,7 @@ pca$supv <- supv$cosup
 explor(pca)
 ```
 
-Il est nécessaire de faire la même chose en cas d'éléments supplémentaires pour une analyse des correspondances multiples, mais le calcul des coordonnées des variables supplémentaires est un peu plus compliqué :
+Il est nécessaire de faire la même chose en cas d'éléments supplémentaires pour une analyse des correspondances multiples :
 
 ```r
 data(banque)
@@ -177,12 +177,8 @@ var_sup <- banque[-(1:100),19:21]
 acm <- dudi.acm(d, scannf = FALSE, nf = 5)
 ## Variables supplémentaires
 acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
-colw <- acm$cw*ncol(d)
-X <- acm.disjonctif(ind_sup)
-X <- t(t(X)/colw) - 1
-X <- data.frame(X)
 ## Individus supplémentaires
-acm$supi <- suprow(acm, X)$lisup
+acm$supi <- suprow(acm, ind_sup)$lisup
 explor(acm)
 ```
 
