@@ -22,7 +22,7 @@ Imports:
     scatterD3 (>= 0.8)
 Suggests: 
     FactoMineR,
-    ade4,
+    ade4 (>= 1.7-5),
     GDAtools,
     MASS,
     testthat,
