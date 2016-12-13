@@ -102,7 +102,6 @@ var_sup <- banque[-(1:100),19:21]
 acm <- dudi.acm(d, scannf = FALSE, nf = 5)
 ## Supplementary variables
 acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
-colw <- acm$cw*ncol(d)
 ## Supplementary individuals
 acm$supi <- suprow(acm, ind_sup)$lisup
 detach(package:explor, unload=TRUE); library(explor)
