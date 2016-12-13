@@ -15,7 +15,7 @@ prepare_results.pca <- function(obj) {
     stop("the ade4 package is needed for this function to work.")
   }
 
-  vars <- data.frame(obj$co)
+  vars <- obj$co
   ## Axes names and inertia
   axes <- seq_len(ncol(vars))
   eig <- obj$eig / sum(obj$eig) * 100
@@ -32,7 +32,7 @@ prepare_results.pca <- function(obj) {
   
   ## Supplementary variables coordinates
   if (!is.null(obj$supv)) {
-    vars.quanti.sup <- data.frame(obj$supv)
+    vars.quanti.sup <- obj$supv
     vars.quanti.sup$varname <- rownames(vars.quanti.sup)
     vars.quanti.sup$Type <- "Supplementary"
     vars.quanti.sup$Class <- "Quantitative"
@@ -44,22 +44,21 @@ prepare_results.pca <- function(obj) {
            Coord = round(Coord, 3))
 
   ## Contributions
-  tmp <- data.frame(inertia$col.abs / 100)
+  tmp <- inertia$col.abs
   tmp <- tmp %>% mutate(varname = rownames(tmp),
                         Type = "Active", Class = "Quantitative") %>%
-    gather(Axis, Contrib, starts_with("Comp")) %>%
-    mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
+    gather(Axis, Contrib, starts_with("Axis")) %>%
+    mutate(Axis = gsub("^Axis([0-9]+)\\(%\\)$", "\\1", Axis),
            Contrib = round(Contrib, 3))
     
   vars <- vars %>% left_join(tmp, by = c("varname", "Type", "Class", "Axis"))
   
   ## Cos2
-  tmp <- data.frame(inertia$col.rel / 10000)
+  tmp <- inertia$col.rel / 100
   tmp <- tmp %>% mutate(varname = rownames(tmp),
-                        Type = "Active", Class = "Quantitative") %>%
-    select(-con.tra)
-  tmp <- tmp %>% gather(Axis, Cos2, starts_with("Comp")) %>%
-    mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
+                        Type = "Active", Class = "Quantitative")
+  tmp <- tmp %>% gather(Axis, Cos2, starts_with("Axis")) %>%
+    mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
            Cos2 = round(Cos2, 3))
   
   vars <- vars %>% left_join(tmp, by = c("varname", "Type", "Class", "Axis"))
@@ -70,11 +69,11 @@ prepare_results.pca <- function(obj) {
     
 
   ## Individuals coordinates
-  ind <- data.frame(obj$li)
+  ind <- obj$li
   ind$Name <- rownames(ind)
   ind$Type <- "Active"
   if (!is.null(obj$supi)) {
-    tmp_sup <- data.frame(obj$supi)
+    tmp_sup <- obj$supi
     tmp_sup$Name <- rownames(tmp_sup)
     tmp_sup$Type <- "Supplementary"
     ind <- ind %>% bind_rows(tmp_sup)
@@ -84,19 +83,19 @@ prepare_results.pca <- function(obj) {
            Coord = round(Coord, 3))
 
   ## Individuals contrib
-  tmp <- data.frame(inertia$row.abs / 100)
+  tmp <- inertia$row.abs
   tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
     gather(Axis, Contrib, starts_with("Axis")) %>%
-    mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
+    mutate(Axis = gsub("^Axis([0-9]+)\\(%\\)$", "\\1", Axis),
            Contrib = round(Contrib, 3))
   
   ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
   
   ## Individuals Cos2
-  tmp <- data.frame(inertia$row.rel / 10000)
+  tmp <- inertia$row.rel / 100
   tmp$Name <- rownames(tmp)
   tmp$Type <- "Active"
-  tmp <- tmp %>% select(-con.tra) %>%
+  tmp <- tmp %>%
     gather(Axis, Cos2, starts_with("Axis")) %>%
     mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
            Cos2 = round(Cos2, 3))
