@@ -24,9 +24,9 @@ test_that("Eigenvalues are equals", {
 test_that("Variables results are equal", {
   expect_equal(as.vector(round(pca$co[,1],3)),
                res$vars[res$vars$Type == "Active" & res$vars$Axis == "1", "Coord"])
-  expect_equal(as.vector(round(iner$col.rel[,2]/10000,3)),
+  expect_equal(as.vector(round(iner$col.rel[,2]/100,3)),
                res$vars[res$vars$Type == "Active" & res$vars$Axis == "2", "Cos2"])
-  expect_equal(as.vector(round(iner$col.abs[,3]/100,3)),
+  expect_equal(as.vector(round(iner$col.abs[,3],3)),
                res$vars[res$vars$Type == "Active" & res$vars$Axis == "3", "Contrib"])
 })
 
@@ -40,9 +40,9 @@ test_that("Qualitative supplementary variables results are equal", {
 test_that("Individuals results are equal", {
   expect_equal(as.vector(round(pca$li[,1],3)),
                data.frame(res$ind)[res$ind$Type == "Active" & res$ind$Axis == "1", "Coord"])
-  expect_equal(as.vector(round(iner$row.abs[,3]/100,3)),
+  expect_equal(as.vector(round(iner$row.abs[,3],3)),
                data.frame(res$ind)[res$ind$Type == "Active" & res$ind$Axis == "3", "Contrib"])
-  expect_equal(as.vector(round(iner$row.rel[,5]/10000,3)),
+  expect_equal(as.vector(round(iner$row.rel[,5]/100,3)),
                data.frame(res$ind)[res$ind$Type == "Active" & res$ind$Axis == "5", "Cos2"])
 })  
   

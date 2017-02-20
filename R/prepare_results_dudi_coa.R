@@ -25,10 +25,10 @@ prepare_results.coa <- function(obj) {
     inertia <- ade4::inertia.dudi(obj, row.inertia = TRUE, col.inertia = TRUE)
     
     ## Variables coordinates
-    vars <- data.frame(obj$co)
+    vars <- obj$co
     vars$name <- rownames(vars)
     vars$pos <- "Column"
-    tmp <- data.frame(obj$li)
+    tmp <- obj$li
     tmp$name <- rownames(tmp)
     tmp$pos <- "Row"
     names(tmp) <- gsub("Axis", "Comp", names(tmp), fixed = TRUE)
@@ -39,7 +39,7 @@ prepare_results.coa <- function(obj) {
     
     ## Supplementary rows coordinates
     if (!is.null(obj$supr)) {
-        tmp <- data.frame(obj$supr)
+        tmp <- obj$supr
         tmp$name <- rownames(tmp)
         tmp$pos <- "Row"
         tmp$Type <- "Supplementary"
@@ -51,7 +51,7 @@ prepare_results.coa <- function(obj) {
 
     ## Supplementary columns coordinates
     if (!is.null(obj$supc)) {
-        tmp <-  tmp <- data.frame(obj$supc)
+        tmp <- obj$supc
         tmp$name <- rownames(tmp)
         tmp$pos <- "Column"
         tmp$Type <- "Supplementary"
@@ -65,17 +65,18 @@ prepare_results.coa <- function(obj) {
                Coord = round(Coord, 3))
 
     ## Contributions
-    tmp_row <- data.frame(inertia$row.abs / 100)
+    tmp_row <- inertia$row.abs
     tmp_row <- tmp_row %>% mutate(name = rownames(tmp_row),
                                   pos = "Row",
                                   Type = "Active",
                                   Class = "Qualitative")
-    names(tmp_row) <- gsub("Axis", "Comp", names(tmp_row), fixed = TRUE)      
-    tmp_col <- data.frame(inertia$col.abs / 100)
+    names(tmp_row) <- gsub("^Axis([0-9]+)\\(%\\)$", "Comp\\1", names(tmp_row))
+    tmp_col <- inertia$col.abs
     tmp_col <- tmp_col %>% mutate(name = rownames(tmp_col),
                                   pos = "Column",
                                   Type = "Active",
                                   Class = "Qualitative")
+    names(tmp_col) <- gsub("^Axis([0-9]+)\\(%\\)$", "Comp\\1", names(tmp_col))
     tmp <- tmp_col %>% bind_rows(tmp_row) %>%
         gather(Axis, Contrib, starts_with("Comp")) %>%
         mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
@@ -84,24 +85,24 @@ prepare_results.coa <- function(obj) {
     vars <- vars %>% left_join(tmp, by = c("name", "pos", "Type", "Class", "Axis"))
     
     ## Cos2
-    tmp_row <- data.frame(inertia$row.rel / 10000)
+    tmp_row <- inertia$row.rel / 100
     tmp_row <- tmp_row %>% mutate(name = rownames(tmp_row),
                                   pos = "Row",
                                   Type = "Active",
                                   Class = "Qualitative")
     names(tmp_row) <- gsub("Axis", "Comp", names(tmp_row), fixed = TRUE)      
-    tmp_col <- data.frame(inertia$col.rel / 10000)
+    tmp_col <- inertia$col.rel / 100
     tmp_col <- tmp_col %>% mutate(name = rownames(tmp_col),
                                   pos = "Column",
                                   Type = "Active",
                                   Class = "Qualitative")
+    names(tmp_col) <- gsub("Axis", "Comp", names(tmp_col), fixed = TRUE)
     tmp <- tmp_col %>% bind_rows(tmp_row) %>%
         gather(Axis, Cos2, starts_with("Comp")) %>%
         mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     
     vars <- vars %>% left_join(tmp, by = c("name", "pos", "Type", "Class", "Axis")) %>%
-        select(-con.tra) %>%
         rename(Level = name, Position = pos) %>%
         as.data.frame()
 
