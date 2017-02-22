@@ -284,6 +284,28 @@ explor_multi_ind_col_input <- function(settings, res) {
                 selected = "None")
 }
 
+## Individuals opacity input
+explor_multi_ind_opacity_input <- function(settings) {
+  ind_opacity_choices <- "Fixed"
+  names <- gettext("Fixed", domain = "R-explor")
+  if (settings$has_contrib) {
+    ind_opacity_choices <- append(ind_opacity_choices, "Contrib")
+    names <- append(names, gettext("Contribution", domain = "R-explor"))
+  }
+  if (settings$has_cos2) {
+    ind_opacity_choices <- append(ind_opacity_choices, "Cos2")
+    names <- append(names, gettext("Squared cosinus", domain = "R-explor"))
+  }
+  names(ind_opacity_choices) <- names
+  ind_opacity_input <- if (length(ind_opacity_choices) > 1) {
+    selectInput("ind_opacity_var", 
+                gettext("Points opacity :", domain = "R-explor"),
+                choices = ind_opacity_choices,
+                selected = "Fixed")
+  } else NULL
+  return(ind_opacity_input)
+}
+
 
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 

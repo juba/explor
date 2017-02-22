@@ -112,7 +112,7 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 }
 
 ## PCA individuals plot data
-PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL) {
+PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, opacity_var = NULL) {
     tmp_x <- res$ind %>% 
         filter(Axis == xax) %>%
         select(Name, Type, Coord, Contrib, Cos2)
@@ -139,7 +139,7 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL) 
                                          gettext("Contribution:", domain = "R-explor"),
                                          "</strong> ", Contrib, "<br />"))))
     if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
-        tmp_data <- res$quali_data %>% select_("Name", col_var)
+        tmp_data <- res$quali_data %>% select_("Name", col_var, opacity_var)
         tmp <- tmp %>%
             left_join(tmp_data, by = "Name")
     }
@@ -156,6 +156,7 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL) 
 ##' @param ind_sup TRUE to display supplementary individuals
 ##' @param col_var variable to be used for points color
 ##' @param symbol_var name of the variable for points symbol
+##' @param opacity_var name of the variable for points opacity
 ##' @param lab_var variable to be used for points names
 ##' @param size_var name of the variable for points size
 ##' @param size_range points size range with format c(minimum, maximum)
@@ -168,6 +169,7 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL) 
 PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
                          col_var = NULL,
                          symbol_var = NULL,
+                         opacity_var = NULL,
                          size_var = NULL,
                          size_range = c(10,300),
                          lab_var = NULL,
@@ -182,8 +184,8 @@ PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "ind") else NULL
     
-    ind_data <- PCA_ind_data(res, xax, yax, ind_sup, col_var)
-    
+    ind_data <- PCA_ind_data(res, xax, yax, ind_sup, col_var, opacity_var)
+
     scatterD3::scatterD3(
                    x = ind_data[, "Coord.x"],
                    y = ind_data[, "Coord.y"],
@@ -192,6 +194,7 @@ PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
                    lab = if (is.null(lab_var)) NULL else ind_data[,lab_var],
                    col_var = if (is.null(col_var)) NULL else ind_data[,col_var],
                    col_lab = col_var,
+                   opacity_var = if (is.null(opacity_var)) NULL else ind_data[,opacity_var],
                    tooltip_text = ind_data[, "tooltip"],
                    key_var = ind_data[, "Name"],
                    fixed = TRUE,
