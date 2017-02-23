@@ -34,7 +34,7 @@ prepare_results.CA <- function(obj) {
     tmp$pos <- "Row"
     # Counts
     row.mods <- rownames(obj$row$coord)
-    counts.rows <- sapply(data.frame(t(obj$call$Xtot))[, row.mods, drop = FALSE], sum, na.rm = TRUE)
+    counts.rows <- sapply(data.frame(t(obj$call$Xtot))[, make.names(row.mods), drop = FALSE], sum, na.rm = TRUE)
     tmp$Count <- counts.rows
 
     vars <- rbind(vars, tmp)
