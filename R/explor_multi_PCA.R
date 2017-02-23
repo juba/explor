@@ -168,8 +168,9 @@ explor_multi_pca <- function(res, settings) {
                ui = navbarPage(gettext("PCA", domain = "R-explor"),
                                header = tags$head(
                                                  tags$style(explor_multi_css())),
+
                                tabPanel(gettext("Eigenvalues", domain = "R-explor"),
-                                        explor_multi_eigenplotUI("eigenplot", res$eig)),
+                                        explor_multi_eigenUI("eigen", res$eig)),
                                
                                tabPanel(gettext("Variables plot", domain = "R-explor"),
                                         fluidRow(
@@ -251,10 +252,9 @@ explor_multi_pca <- function(res, settings) {
                server = function(input, output) {
 
                    ## Eigenvalues
-                   callModule(explor_multi_eigenplot,
-                              "eigenplot",
+                   callModule(explor_multi_eigen,
+                              "eigen",
                               reactive(res$eig))
-
                    
                    ## Variables plot code
                    varplot_code <- reactive({

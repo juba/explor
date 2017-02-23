@@ -445,7 +445,8 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
 
 ## EIGENPLOT MODULE ------------------------------------------------------------------
 
-explor_multi_eigenplotUI <- function(id, eig) {
+
+explor_multi_eigenUI <- function(id, eig) {
     ns <- NS(id)
     fluidRow(
         column(2,
@@ -453,18 +454,35 @@ explor_multi_eigenplotUI <- function(id, eig) {
                                       gettext("Dimensions to plot", domain = "R-explor"), 
                                       min = 2, max = max(eig$dim), value = max(eig$dim), 
                                       step = 1))),
-        column(10,
-               plotOutput(ns("eigplot"), height = "600px"))
-    )
+        column(5,
+               h4(gettext("Eigenvalues histogram", domain = "R-explor")),
+               plotOutput(ns("eigplot"), height = "500px")),
+        column(3, offset = 1,
+               h4(gettext("Eigenvalues table", domain = "R-explor")),
+               DT::dataTableOutput(ns("eigtab"))))
 }
 
-explor_multi_eigenplot <- function(input, output, session, eig) {
+
+explor_multi_eigen <- function(input, output, session, eig) {
+    nb <- reactive({ifelse(is.null(input$eig_nb), nrow(eig()), input$eig_nb)})
+    ## Histogram
     output$eigplot <- renderPlot({
-        tmp <- eig()[1:input$eig_nb,]
+        tmp <- eig()[1:nb(),]
         tmp$dim <- factor(tmp$dim)
         ggplot(data = tmp) +
           geom_bar(aes_string(x = "dim", y = "percent"), stat = "identity") +
           scale_x_discrete(gettext("Axis", domain = "R-explor")) +
           scale_y_continuous(gettext("Percentage of inertia", domain = "R-explor"))
-      })
+    })
+    ## Table
+    output$eigtab <- DT::renderDataTable({
+        tmp <- eig()[1:nb(),]
+        tmp$cumpercent <- cumsum(tmp$percent)
+        names(tmp) <- c(gettext("Axis", domain = "R-explor"), "%", "Cum. %")
+        dt <- DT::datatable(tmp, rownames = FALSE,
+                            options = list(dom = 't', pageLength = nb()))
+        dt %>% DT::formatRound(c("%", "Cum. %"), digits = 1)
+    })
 }
+
+
