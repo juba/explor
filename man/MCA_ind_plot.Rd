@@ -5,8 +5,9 @@
 \title{Interactive MCA indivuals plot}
 \usage{
 MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL,
-  symbol_var = NULL, size_var = NULL, size_range = c(10, 300),
-  lab_var = NULL, zoom_callback = NULL, in_explor = FALSE, ...)
+  symbol_var = NULL, opacity_var = NULL, size_var = NULL,
+  size_range = c(10, 300), lab_var = NULL, zoom_callback = NULL,
+  in_explor = FALSE, ...)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}
@@ -20,6 +21,8 @@ MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL,
 \item{col_var}{variable to be used for points color}
 
 \item{symbol_var}{name of the variable for points symbol}
+
+\item{opacity_var}{name of the variable for points opacity}
 
 \item{size_var}{name of the variable for points size}
 
