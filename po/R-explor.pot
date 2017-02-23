@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: explor 0.3\n"
-"POT-Creation-Date: 2016-11-21 10:54\n"
+"Project-Id-Version: explor 0.3.2\n"
+"POT-Creation-Date: 2017-02-23 11:24\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,6 +80,12 @@ msgid "Points symbol :"
 msgstr ""
 
 msgid "Individual type"
+msgstr ""
+
+msgid "Fixed"
+msgstr ""
+
+msgid "Points opacity :"
 msgstr ""
 
 msgid "Rows"
@@ -181,7 +187,7 @@ msgstr ""
 msgid "Individuals plot"
 msgstr ""
 
-msgid "Points opacity"
+msgid "Fixed points opacity"
 msgstr ""
 
 msgid "Show labels"
