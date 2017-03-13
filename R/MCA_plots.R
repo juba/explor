@@ -139,7 +139,7 @@ MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity
                                          gettext("Contribution:", domain = "R-explor"),
                                          "</strong> ", Contrib, "<br />"))))
     if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
-        tmp_data <- res$quali_data %>% select_("Name", col_var, opacity_var)
+        tmp_data <- res$quali_data %>% select_("Name", col_var)
         tmp <- tmp %>%
             left_join(tmp_data, by = "Name")
     }
