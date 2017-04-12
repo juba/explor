@@ -232,9 +232,9 @@ explor_multi_pca <- function(res, settings) {
                                                                        gettext("Labels size", domain = "R-explor"),
                                                                        5, 20, 9)
                                                        ),
-                                                       if (settings$has_sup_ind) 
+                                                       if (settings$has_sup_ind || settings$has_quali_sup_vars) 
                                                            explor_multi_ind_col_input(settings, res),
-                                                       if (settings$has_sup_ind) 
+                                                       if (settings$has_sup_ind || settings$has_quali_sup_vars) 
                                                            checkboxInput("ind_ellipses", 
                                                                          HTML(gettext("Ellipses", domain = "R-explor")),
                                                                          value = FALSE),
