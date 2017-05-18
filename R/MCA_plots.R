@@ -112,7 +112,7 @@ MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 }
 
 ## MCA individuals plot data
-MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity_var = NULL) {
+MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity_var = NULL, ind_lab_min_contrib = 0) {
     tmp_x <- res$ind %>% 
         filter(Axis == xax) %>%
         select(Name, Type, Coord, Contrib, Cos2)
@@ -137,7 +137,9 @@ MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity
                                ifelse(is.na(Contrib), "",
                                   paste0("<strong>",
                                          gettext("Contribution:", domain = "R-explor"),
-                                         "</strong> ", Contrib, "<br />"))))
+                                         "</strong> ", Contrib, "<br />"))),
+               Lab = ifelse(Contrib >= as.numeric(ind_lab_min_contrib) | 
+                              (is.na(Contrib) & as.numeric(ind_lab_min_contrib) == 0), Name, ""))
     if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
         tmp_data <- res$quali_data %>% select_("Name", col_var)
         tmp <- tmp %>%
@@ -154,6 +156,7 @@ MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity
 ##' @param xax Horizontal axis number
 ##' @param yax Vertical axis number
 ##' @param ind_sup TRUE to display supplementary individuals
+##' @param ind_lab_min_contrib Contribution threshold to display points labels
 ##' @param col_var variable to be used for points color
 ##' @param symbol_var name of the variable for points symbol
 ##' @param opacity_var name of the variable for points opacity
@@ -166,13 +169,13 @@ MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity
 ##'
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
-MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
+MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_contrib = 0,
+                         lab_var = NULL,
                          col_var = NULL,
                          symbol_var = NULL,
                          opacity_var = NULL,
                          size_var = NULL,
                          size_range = c(10,300),
-                         lab_var = NULL,
                          zoom_callback = NULL,
                          in_explor = FALSE,
                          ...) {
@@ -184,7 +187,7 @@ MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "ind") else NULL
     
-    ind_data <- MCA_ind_data(res, xax, yax, ind_sup, col_var)
+    ind_data <- MCA_ind_data(res, xax, yax, ind_sup, col_var, opacity_var, ind_lab_min_contrib)
     
     scatterD3::scatterD3(
                    x = ind_data[, "Coord.x"],
