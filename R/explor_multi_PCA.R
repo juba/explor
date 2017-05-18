@@ -230,8 +230,11 @@ explor_multi_pca <- function(res, settings) {
                                                            condition = 'input.ind_labels_show == true',
                                                            sliderInput("ind_labels_size", 
                                                                        gettext("Labels size", domain = "R-explor"),
-                                                                       5, 20, 9)
-                                                       ),
+                                                                       5, 20, 9),
+                                                           if (settings$has_contrib) {
+                                                             numericInput("ind_lab_min_contrib",
+                                                                          gettext("Minimum contribution to show label", domain = "R-explor"),
+                                                                          min = 0, max = ceiling(2*max(res$ind$Contrib, na.rm = TRUE)), value = 0) }),
                                                        if (settings$has_sup_ind || settings$has_quali_sup_vars) 
                                                            explor_multi_ind_col_input(settings, res),
                                                        if (settings$has_sup_ind || settings$has_quali_sup_vars) 
@@ -296,14 +299,18 @@ explor_multi_pca <- function(res, settings) {
                    ## Indidivuals plot code
                    indplot_code <- reactive({
                        col_var <- if (!is.null(input$ind_col) && input$ind_col == "None") NULL else input$ind_col
-                       lab_var <- if (input$ind_labels_show) "Name" else NULL
+                       lab_var <- if (input$ind_labels_show) "Lab" else NULL
                        opacity_var <- if (!is.null(input$ind_opacity_var) && input$ind_opacity_var == "Fixed") NULL else input$ind_opacity_var
                        ellipses <- !is.null(input$ind_ellipses) && input$ind_ellipses
+                       ind_lab_min_contrib <- if (settings$has_contrib) input$ind_lab_min_contrib else 0
+                       
+                       
                        paste0("explor::PCA_ind_plot(res, ",
                               "xax = ", input$ind_x, ", yax = ", input$ind_y, ", ",
                               "ind_sup = ", settings$has_sup_ind && input$ind_sup, ",\n",
+                              "    lab_var = ", deparse(substitute(lab_var)), ", ",
+                              ", ind_lab_min_contrib = ", ind_lab_min_contrib, ",\n",
                               "    col_var = ", deparse(substitute(col_var)), ", ",
-                              "lab_var = ", deparse(substitute(lab_var)), ", ",
                               "labels_size = ", input$ind_labels_size, ",\n",
                               "    point_opacity = ", input$ind_opacity, ", ",
                               "opacity_var = ", deparse(substitute(opacity_var)), ", ",

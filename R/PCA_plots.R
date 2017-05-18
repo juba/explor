@@ -112,7 +112,7 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 }
 
 ## PCA individuals plot data
-PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, opacity_var = NULL) {
+PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, opacity_var = NULL, ind_lab_min_contrib = 0) {
     tmp_x <- res$ind %>% 
         filter(Axis == xax) %>%
         select(Name, Type, Coord, Contrib, Cos2)
@@ -137,7 +137,9 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, 
                                ifelse(is.na(Contrib), "",
                                   paste0("<strong>",
                                          gettext("Contribution:", domain = "R-explor"),
-                                         "</strong> ", Contrib, "<br />"))))
+                                         "</strong> ", Contrib, "<br />"))),
+               Lab = ifelse(Contrib >= as.numeric(ind_lab_min_contrib) | 
+                              (is.na(Contrib) & as.numeric(ind_lab_min_contrib) == 0), Name, ""))
     if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
         tmp_data <- res$quali_data %>% select_("Name", col_var)
         tmp <- tmp %>%
@@ -158,6 +160,7 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, 
 ##' @param symbol_var name of the variable for points symbol
 ##' @param opacity_var name of the variable for points opacity
 ##' @param lab_var variable to be used for points names
+##' @param ind_lab_min_contrib Contribution threshold to display points labels
 ##' @param size_var name of the variable for points size
 ##' @param size_range points size range with format c(minimum, maximum)
 ##' @param zoom_callback scatterD3 zoom callback JavaScript body
@@ -166,7 +169,7 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, 
 ##'
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
-PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
+PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_contrib = 0,
                          col_var = NULL,
                          symbol_var = NULL,
                          opacity_var = NULL,
@@ -184,7 +187,7 @@ PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE,
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "ind") else NULL
     
-    ind_data <- PCA_ind_data(res, xax, yax, ind_sup, col_var, opacity_var)
+    ind_data <- PCA_ind_data(res, xax, yax, ind_sup, col_var, opacity_var, ind_lab_min_contrib)
 
     scatterD3::scatterD3(
                    x = ind_data[, "Coord.x"],
