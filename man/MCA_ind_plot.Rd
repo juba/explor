@@ -4,10 +4,10 @@
 \alias{MCA_ind_plot}
 \title{Interactive MCA indivuals plot}
 \usage{
-MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL,
+MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE,
+  ind_lab_min_contrib = 0, lab_var = NULL, col_var = NULL,
   symbol_var = NULL, opacity_var = NULL, size_var = NULL,
-  size_range = c(10, 300), lab_var = NULL, zoom_callback = NULL,
-  in_explor = FALSE, ...)
+  size_range = c(10, 300), zoom_callback = NULL, in_explor = FALSE, ...)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}
@@ -18,6 +18,10 @@ MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL,
 
 \item{ind_sup}{TRUE to display supplementary individuals}
 
+\item{ind_lab_min_contrib}{Contribution threshold to display points labels}
+
+\item{lab_var}{variable to be used for points names}
+
 \item{col_var}{variable to be used for points color}
 
 \item{symbol_var}{name of the variable for points symbol}
@@ -27,8 +31,6 @@ MCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL,
 \item{size_var}{name of the variable for points size}
 
 \item{size_range}{points size range with format c(minimum, maximum)}
-
-\item{lab_var}{variable to be used for points names}
 
 \item{zoom_callback}{scatterD3 zoom callback JavaScript body}
 

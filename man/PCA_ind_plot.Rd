@@ -4,10 +4,10 @@
 \alias{PCA_ind_plot}
 \title{Interactive PCA indivuals plot}
 \usage{
-PCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL,
-  symbol_var = NULL, opacity_var = NULL, size_var = NULL,
-  size_range = c(10, 300), lab_var = NULL, zoom_callback = NULL,
-  in_explor = FALSE, ...)
+PCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE,
+  ind_lab_min_contrib = 0, col_var = NULL, symbol_var = NULL,
+  opacity_var = NULL, size_var = NULL, size_range = c(10, 300),
+  lab_var = NULL, zoom_callback = NULL, in_explor = FALSE, ...)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}
@@ -17,6 +17,8 @@ PCA_ind_plot(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL,
 \item{yax}{Vertical axis number}
 
 \item{ind_sup}{TRUE to display supplementary individuals}
+
+\item{ind_lab_min_contrib}{Contribution threshold to display points labels}
 
 \item{col_var}{variable to be used for points color}
 
