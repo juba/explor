@@ -20,7 +20,7 @@ prepare_results.PCA <- function(obj) {
     
     ## Variables data coordinates
     vars$varname <- rownames(vars)
-    vars$modname <- NA_character_
+    vars$modname <- ""
     vars$Type <- "Active"
     vars$Class <- "Quantitative"
     
@@ -30,7 +30,7 @@ prepare_results.PCA <- function(obj) {
         vars.quanti.sup$varname <- rownames(obj$quanti.sup$coord)
         vars.quanti.sup$Type <- "Supplementary"
         vars.quanti.sup$Class <- "Quantitative"
-        vars.quanti.sup$modname <- NA_character_
+        vars.quanti.sup$modname <- ""
         vars <- rbind(vars, vars.quanti.sup)
     }
 
@@ -54,7 +54,7 @@ prepare_results.PCA <- function(obj) {
     ## Contributions
     tmp <- data.frame(obj$var$contrib)
     tmp <- tmp %>% mutate(varname = rownames(tmp),
-                          modname = NA_character_,
+                          modname = "",
                           Type = "Active",
                           Class = "Quantitative") %>%
         gather(Axis, Contrib, starts_with("Dim.")) %>%
@@ -66,13 +66,13 @@ prepare_results.PCA <- function(obj) {
     ## Cos2
     tmp <- data.frame(obj$var$cos2)
     tmp$varname <- rownames(tmp)
-    tmp$modname <- NA_character_
+    tmp$modname <- ""
     tmp$Type <- "Active"
     tmp$Class <- "Quantitative"
     if (!is.null(obj$quanti.sup)) {
         tmp_sup <- data.frame(obj$quanti.sup$cos2)
         tmp_sup$varname <- rownames(tmp_sup)
-        tmp_sup$modname <- NA_character_
+        tmp_sup$modname <- ""
         tmp_sup$Type <- "Supplementary"
         tmp_sup$Class <- "Quantitative"
         tmp <- tmp %>% bind_rows(tmp_sup)
@@ -94,13 +94,13 @@ prepare_results.PCA <- function(obj) {
     ## Cor  
     tmp <- data.frame(obj$var$cor)
     tmp$varname <- rownames(tmp)
-    tmp$modname <- NA_character_
+    tmp$modname <- ""
     tmp$Type <- "Active"
     tmp$Class <- "Quantitative"  
     if (!is.null(obj$quanti.sup)) {
         tmp_sup <- data.frame(obj$quanti.sup$cor)
         tmp_sup$varname <- rownames(tmp_sup)
-        tmp_sup$modname <- NA_character_        
+        tmp_sup$modname <- ""
         tmp_sup$Type <- "Supplementary"
         tmp_sup$Class <- "Quantitative"    
         tmp <- tmp %>% bind_rows(tmp_sup)
