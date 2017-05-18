@@ -156,11 +156,11 @@ MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity
 ##' @param xax Horizontal axis number
 ##' @param yax Vertical axis number
 ##' @param ind_sup TRUE to display supplementary individuals
-##' @param ind_lab_min_contrib Contribution threshold to display points labels
 ##' @param col_var variable to be used for points color
 ##' @param symbol_var name of the variable for points symbol
 ##' @param opacity_var name of the variable for points opacity
 ##' @param lab_var variable to be used for points names
+##' @param ind_lab_min_contrib Contribution threshold to display points labels
 ##' @param size_var name of the variable for points size
 ##' @param size_range points size range with format c(minimum, maximum)
 ##' @param zoom_callback scatterD3 zoom callback JavaScript body
