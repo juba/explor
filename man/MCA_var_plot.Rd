@@ -42,4 +42,3 @@ This function generates an HTML widget displaying the variables plot of an MCA r
 \author{
 Julien Barnier <julien.barnier@ens-lyon.fr>
 }
-

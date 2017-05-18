@@ -42,4 +42,3 @@ This function generates an HTML widget displaying the individuals plot of an MCA
 \author{
 Julien Barnier <julien.barnier@ens-lyon.fr>
 }
-

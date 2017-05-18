@@ -44,4 +44,3 @@ This function generates an HTML widget displaying the variables plot of a CA res
 \author{
 Julien Barnier <julien.barnier@ens-lyon.fr>
 }
-
