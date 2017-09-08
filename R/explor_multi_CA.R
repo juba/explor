@@ -2,7 +2,7 @@
 ##' @aliases explor.CA
 ##' @export
 
-explor.CA <- function(obj) {
+explor.CA <- function(obj, ...) {
     
     if (!inherits(obj, "CA")) stop("obj must be of class CA")
     
@@ -52,7 +52,7 @@ explor.CA <- function(obj) {
 ##' }
 
 
-explor.coa <- function(obj) {
+explor.coa <- function(obj, ...) {
     
     if (!inherits(obj, "coa") || !inherits(obj, "dudi"))
         stop("obj must be of class dudi and coa")

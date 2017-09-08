@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-example.R
+^example_.*\.R
 ggcrosstab.R
 resources
 ^\.travis\.yml$

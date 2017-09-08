@@ -4,6 +4,7 @@
 ##' interactive visualisation and exploration of an analysis results.
 ##'
 ##' @param obj object containing analysis results
+##' @param ... arguments passed to other methods
 ##' @return
 ##' The function launches a shiny app in the system web browser.
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
@@ -26,7 +27,7 @@
 ##' explor(pca)
 ##' }
 
-explor <- function(obj) {
+explor <- function(obj, ...) {
   UseMethod("explor")
 }
 

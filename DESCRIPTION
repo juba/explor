@@ -19,7 +19,9 @@ Imports:
     tidyr,
     ggplot2,
     highr,
-    scatterD3 (>= 0.8.1)
+    scatterD3 (>= 0.8.1),
+    quanteda,
+    stringi
 Suggests: 
     FactoMineR,
     ade4 (>= 1.7-5),

@@ -2,7 +2,7 @@
 ##' @aliases explor.MCA
 ##' @export
 
-explor.MCA <- function(obj) {
+explor.MCA <- function(obj, ...) {
     
     if (!inherits(obj, "MCA")) stop("obj must be of class MCA")
     
@@ -34,7 +34,7 @@ explor.MCA <- function(obj) {
 ##' @aliases explor.speMCA
 ##' @export
 
-explor.speMCA <- function(obj) {
+explor.speMCA <- function(obj, ...) {
     
     if (!inherits(obj, "speMCA")) stop("obj must be of class speMCA")
 
@@ -66,7 +66,7 @@ explor.speMCA <- function(obj) {
 ##' @aliases explor.mca
 ##' @export
 
-explor.mca <- function(obj) {
+explor.mca <- function(obj, ...) {
     
     if (!inherits(obj, "mca")) stop("obj must be of class mca")
 
@@ -119,7 +119,7 @@ explor.mca <- function(obj) {
 ##' }
 
 
-explor.acm <- function(obj) {
+explor.acm <- function(obj, ...) {
     
     if (!inherits(obj, "acm") || !inherits(obj, "dudi")) stop("obj must be of class dudi and acm")
     

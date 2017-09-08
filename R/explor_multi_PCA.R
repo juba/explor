@@ -2,7 +2,7 @@
 ##' @aliases explor.PCA
 ##' @export
 
-explor.PCA <- function(obj) {
+explor.PCA <- function(obj, ...) {
     
     if (!inherits(obj, "PCA")) stop("obj must be of class PCA")
 
@@ -35,7 +35,7 @@ explor.PCA <- function(obj) {
 ##' @aliases explor.princomp
 ##' @export
 
-explor.princomp <- function(obj) {
+explor.princomp <- function(obj, ...) {
     
     if (!inherits(obj, "princomp")) stop("obj must be of class princomp")
 
@@ -67,7 +67,7 @@ explor.princomp <- function(obj) {
 ##' @aliases explor.prcomp
 ##' @export
 
-explor.prcomp <- function(obj) {
+explor.prcomp <- function(obj, ...) {
     
     if (!inherits(obj, "prcomp")) stop("obj must be of class prcomp")
 
@@ -121,7 +121,7 @@ explor.prcomp <- function(obj) {
 ##' }
 
 
-explor.pca <- function(obj) {
+explor.pca <- function(obj, ...) {
     
     if (!inherits(obj, "pca") || !inherits(obj, "dudi")) stop("obj must be of class dudi and pca")
     
