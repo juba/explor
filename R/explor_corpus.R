@@ -3,25 +3,29 @@ if (getRversion() >= "2.15.1")
 
 ##' @rdname explor
 ##' @param obj_brut optional raw documents corpus
+##' @param stopwords stopwords character vector
+##' @param thesaurus quanteda thesaurus list
 ##' @aliases explor.Corpus
 ##' @export
 
-explor.Corpus <- function(obj, obj_brut = NULL, ...) {
+explor.Corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NULL, ...) {
     
-    if (!inherits(obj, "Corpus")) stop("obj must be of class Corpus")
+    if (!inherits(obj, "Corpus")) stop(gettext("obj must be of class Corpus", domain = "R-explor"))
     
     ## corpus preparation
     corpus <- prepare_results(obj)
     if (!is.null(obj_brut)) {
-      if (!inherits(obj_brut, "Corpus")) stop("obj must be of class Corpus")
+      if (!inherits(obj_brut, "Corpus")) stop(gettext("obj must be of class Corpus", domain = "R-explor"))
       obj_brut <- prepare_results(obj_brut)
     }
     
     ## Settings
-    settings <- list()
+    settings <- list(obj_brut = obj_brut,
+                     stopwords = stopwords,
+                     thesaurus = thesaurus)
 
     ## Launch interface
-    explor_corpus(corpus, settings, obj_brut)
+    explor_corpus(corpus, settings)
     
 }
 
@@ -29,22 +33,24 @@ explor.Corpus <- function(obj, obj_brut = NULL, ...) {
 ##' @aliases explor.corpus
 ##' @export
 
-explor.corpus <- function(obj, obj_brut = NULL, ...) {
+explor.corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NULL, ...) {
     
-    if (!inherits(obj, "corpus")) stop("obj must be of class corpus")
+    if (!inherits(obj, "corpus")) stop(gettext("obj must be of class corpus", domain = "R-explor"))
 
     ## corpus preparation
     corpus <- prepare_results(obj)
     if (!is.null(obj_brut)) {
-      if (!inherits(obj_brut, "corpus")) stop("obj must be of class corpus")
+      if (!inherits(obj_brut, "corpus")) stop(gettext("obj must be of class corpus", domain = "R-explor"))
       obj_brut <- prepare_results(obj_brut)
     }
     
     ## Settings
-    settings <- list()
+    settings <- list(obj_brut = obj_brut,
+                     stopwords = stopwords,
+                     thesaurus = thesaurus)
 
     ## Launch interface
-    explor_corpus(corpus, settings, obj_brut)
+    explor_corpus(corpus, settings)
     
 }
 
@@ -190,7 +196,7 @@ explor_corpus_highlight <- function(x, str) {
 ##' @import quanteda
 ##' @importFrom highr hi_html
 
-explor_corpus <- function(qco, settings, qco_brut = NULL) { 
+explor_corpus <- function(qco, settings) { 
     
 
     ## Document level variables
@@ -227,110 +233,119 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
       ui = navbarPage(gettext("Corpus", domain = "R-explor"),
                       header = tags$head(
                         tags$style(explor_corpus_css())),
-                      tabPanel("Termes",
+                      tabPanel(gettext("Terms", domain = "R-explor"),
                          sidebarLayout(
                            sidebarPanel(id = "sidebar",
-                                        h4("Sélection du corpus"),
-                                        p("Si rien n'est coché, tout est sélectionné."),
+                                        h4(gettext("Corpus treatment", domain = "R-explor")),
+                                        checkboxInput("treat_tolower", gettext("Convert to lowercase", domain = "R-explor"), value = TRUE),
+                                        checkboxInput("treat_removepunct", gettext("Remove punctuation", domain = "R-explor"), value = TRUE),
+                                        checkboxInput("treat_rmnum", gettext("Remove numbers", domain = "R-explor"), value = TRUE),
+                                        if (!is.null(settings$stopwords)) 
+                                          checkboxInput("treat_stopwords", gettext("Remove stopwords", domain = "R-explor"), value = TRUE),
+                                        if (!is.null(settings$thesaurus)) 
+                                          checkboxInput("treat_thesaurus", gettext("Apply thesaurus", domain = "R-explor"), value = TRUE),
+                                        checkboxInput("treat_stem", gettext("Stem words", domain = "R-explor"), value = FALSE),                                        
+                                        h4(gettext("Corpus filtering", domain = "R-explor")),
+                                        p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),
-                                        numericInput("term_min_occurrences", "Occurrence minimale des termes retenus", 0, 0, 1000, 1)
+                                        numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1)
                            ),
                            mainPanel(
                              tabsetPanel(
                                
                                ## "Frequent terms" tab
-                               tabPanel("Termes fréquents",
-                                        h3("Termes les plus fréquents"),
+                               tabPanel(gettext("Frequent terms", domain = "R-explor"),
+                                        h3(gettext("Most frequent terms", domain = "R-explor")),
                                         checkboxGroupInput("ngrams",
-                                                           "Ngrams",
+                                                           gettext("Ngrams", domain = "R-explor"),
                                                            m_ngrams,
                                                            selected = 1),
-                                        p(HTML("<strong>Nombre de documents&nbsp;:</strong>"), textOutput("nbdocs", inline = TRUE)),
+                                        p(HTML("<strong>", gettext("Number of documents", domain = "R-explor"), "&nbsp;:</strong>"), textOutput("nbdocs", inline = TRUE)),
                                         DT::dataTableOutput("freqtable")),
                                
                                ## "Documents" tab                      
-                               tabPanel("Recherche de termes",
-                                        h3("Choix des termes"),
-                                        HTML("<p>Saisir un ou plusieurs termes. Vous pouvez utiliser les connecteurs logiques <code>&</code> (\"et\"), <code>|</code> (\"ou\") <code>!</code> (\"not\") ainsi que des parenthèses :</p>"),
+                               tabPanel(gettext("Terms search", domain = "R-explor"),
+                                        h3(gettext("Terms selection", domain = "R-explor")),
+                                        HTML("<p>", gettext('Enter one or more terms. You can use logical operators like <code>&</code> ("and"), <code>|</code> ("or"), <code>!</code> ("not") and parentheses :', domain = "R-explor"), "</p>"),
                                         fluidRow(
-                                          column(8, textInput("terms", "Termes", width = "100%")),
+                                          column(8, textInput("terms", gettext("Terms", domain = "R-explor"), width = "100%")),
                                           column(4, selectInput("term_group",
-                                                                "Grouper par",
+                                                                gettext("Group by", domain = "R-explor"),
                                                                 choices = names(vars)))
                                         ),
-                                        tags$p(actionButton("launch_search", "Rechercher")),
+                                        tags$p(actionButton("launch_search", gettext("Search", domain = "R-explor"))),
                                         uiOutput("termsAlert"),
                                         uiOutput("evalAlert"),
-                                        h3("Fréquence des termes choisis"),
+                                        h3(gettext("Selected terms frequency", domain = "R-explor")),
                                         htmlOutput("freqterm_query"),
                                         htmlOutput("freqterm_total"),
                                         DT::dataTableOutput("freqtermtable"),
-                                        h3("Documents comportant les termes"),
+                                        h3(gettext("Corresponding documents", domain = "R-explor")),
                                         div(style = "display: none;",
-                                            numericInput("start_documents", "À partir de", value = 1)),
+                                            numericInput("start_documents", gettext("From", domain = "R-explor"), value = 1)),
                                         div(class = "inline-small form-inline",
-                                            actionButton("prev_documents", "Précédent", icon("arrow-left")),
+                                            actionButton("prev_documents", gettext("Previous", domain = "R-explor"), icon("arrow-left")),
                                             textOutput("documents_pagination"),
                                             #numericInput("nb_documents", "Nombre", 10, min = 1, width = "4em"),
-                                            actionButton("next_documents", "Suivant", icon("arrow-right")),
-                                            numericInput("nb_documents_display", "Afficher : ", 
+                                            actionButton("next_documents", gettext("Next", domain = "R-explor"), icon("arrow-right")),
+                                            numericInput("nb_documents_display", gettext("Display : ", domain = "R-explor"), 
                                                          value = 10, min = 1, max = 100, step = 1, width = "auto")),  
                                         htmlOutput("documenttable")
                                ),
                                
                                ## "Similarities" tab
-                               tabPanel("Similarités",
-                                        h3("Choix du terme"),
-                                        HTML("<p>Saisir un terme dans le champ ci-dessous :</p>"),
+                               tabPanel(gettext("Similarities", domain = "R-explor"),
+                                        h3(gettext("Term", domain = "R-explor")),
+                                        HTML("<p>", gettext("Enter a term :</p>", domain = "R-explor"), "</p>"),
                                         fluidRow(
-                                          column(6, textInput("termsim", "Terme")),
-                                          column(6,  selectInput("simmethod", "Type de similarité",
+                                          column(6, textInput("termsim", gettext("Term", domain = "R-explor"))),
+                                          column(6,  selectInput("simmethod", gettext("Similarity", domain = "R-explor"),
                                                                  choices = c("correlation", "cosine", "phi", "Jaccard"),
                                                                  selected = "correlation"))),
                                         uiOutput("termsimAlert"),
-                                        h3("Termes associés"),
+                                        h3(gettext("Associated terms", domain = "R-explor")),
                                         DT::dataTableOutput("simtermtable")
                                ),
                                
                                ## "Help" tab
-                               tabPanel("Aide",
-                                        h2("Aide"),
+                               tabPanel(gettext("Help", domain = "R-explor"),
+                                        h2(gettext("Help", domain = "R-explor")),
                                         
-                                        h3("Termes les plus fréquents"),
-                                        p(HTML("Lecture du tableau :")),
+                                        h3(gettext("Most frequent terms", domain = "R-explor")),
+                                        p(HTML(gettext("How to read the table :", domain = "R-explor"))),
                                         tags$ul(
-                                          tags$li(HTML("<code>nb_terms</code> : nombre de fois où le terme apparaît dans le corpus sélectionné")),
-                                          tags$li(HTML("<code>nb_docs</code> : nombre de documents du corpus sélectionné dans lesquels le terme apparaît au moins une fois")),
-                                          tags$li(HTML("<code>prop_docs</code> : pourcentages de documents du corpus sélectionné dans lesquels le terme apparaît au moins une fois"))
+                                          tags$li(HTML(gettext("<code>Term frequency</code> : number of times this term is found in the selected corpus", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>Documents frequency</code> : number of documents in the selected corpus in which this term appears at least once", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>Documents proportion</code> : percentage of documents in the selected corpus in which this term appears at least once", domain = "R-explor")))
                                         ),
                                         
-                                        h3("Recherche de termes"),
-                                        p(HTML("Permet de rechercher la fréquence de certains termes ou combinaisons de termes dans le corpus sélectionné, et de visualiser les documents correspondant. À noter que la recherche de termes se fait sur le corpus \"nettoyé\", après lemmatisation, suppression des majuscules, etc. À noter aussi que le surlignement des termes de recherche dans les documents affichés en intégralité est imparfait du fait de cette lemmatisation préalable : par exemple, si la recherche est <code>i</code>, tous les \"i\" des documents seront surlignés, mais la recherche aura bien été effectuée sur le mot \"i\".")),
-                                        p("Exemples de requêtes :"),
+                                        h3(gettext("Tearms search", domain = "R-explor")),
+                                        p(HTML(gettext("Allows to search for terms or terms combinations in the selected corpus, and to display both frequencies and the corresponding documents. Note that the search is made on the cleaned corpus (after filtering, stemming, removing of stopwords, etc.). Also note that highlighting is not perfect : for example, if searching for <code>I</code>, every \"i\" in the documents will be highlighted, but the search has been made only on the word \"I\".", domain = "R-explor"))),
+                                        p("Query examples :"),
                                         tags$ul(
-                                          tags$li(HTML("<code>i</code> : recherche des documents comportant le mot \"i\" (ou \"I\")")),
-                                          tags$li(HTML("<code>!i</code> : recherche des documents ne comportant pas le mot \"i\"")),
-                                          tags$li(HTML("<code>i | me | we</code> : recherche des documents comportant \"i\", \"me\" ou \"we\" (ou plusieurs d'entre eux)")),
-                                          tags$li(HTML("<code>i & we</code> : recherche des documents comportant à la fois \"i\" et \"we\"")),
-                                          tags$li(HTML("<code>sky & (sea | ocean)</code> : recherche des documents comportant à la fois \"sky\" et les termes \"sea\" ou \"ocean\" (ou les deux)"))
+                                          tags$li(HTML(gettext("<code>I</code> : search for documents with the term \"I\" (or \"i\")", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>!i</code> : search for documents without the term \"I\"", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>i | me | we</code> : search for documents with \"i\", \"me\" or \"we\" (or any combination)", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>i & we</code> : search for documents with both \"i\" and \"we\"", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>sky & (sea | ocean)</code> : search for documents with \"sky\" and the terms \"sea\" or \"ocean\" (or both)", domain = "R-explor")))
                                         ),
                                         
-                                        h3("Similarités"),
-                                        p("Permet de rechercher les termes les plus associés à un mot donné, selon différentes statistiques :"),
+                                        h3(gettext("Similarities", domain = "R-explor")),
+                                        p(gettext("Allow to search for terms associated to a given word. Several similarities measures can be used :", domain = "R-explor")),
                                         tags$ul(
-                                          tags$li(HTML("<code>correlation</code> : Corrélation entre les deux vecteurs d'occurrences par document.")),
-                                          tags$li(HTML("<code>cosine</code> : Cosinus entre les deux vecteurs d'occurrences par document. Le cosinus sur les vecteurs centrés équivaut )à la corrélation.")),
-                                          tags$li(HTML("<code>phi</code> : Mesure d'association entre deux variables binaires. Utilise les vecteurs de présence/absence, pas les vecteurs de nombre d'occurrences. Racine carrée du φ² du tableau croisé des vecteurs de présence/absence.")),
-                                          tags$li(HTML("<code>Jaccard</code> : Mesure d'association entre deux variables binaires. Utilise les vecteurs de présence/absence, pas les vecteurs de nombre d'occurrences. On divise le nombre d'occurrences communes par le nombre total d'occurrences, en excluant les couples absence/absence."))
+                                          tags$li(HTML(gettext("<code>correlation</code> : correlation between the two vectors of frequencies by document.", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>cosine</code> : cosinus between the two vectors of frequencies by document. Cosinus on the centred vectors is equal to the correlation.", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>phi</code> : Association measure between two binary vectors. Use binary presence/absence vectors instead of frequencies. Phi is the squared root of the φ² of the cross tabulation of the two binary vectors.", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>Jaccard</code> : Association measure between two binary vectors. Use binary presence/absence vectors instead of frequencies. Total number of occurences divided by the number of common occurrences, excluding absence/absence couples.", domain = "R-explor")))
                                         ),
-                                        tags$p(HTML("Avec certaines statistiques (notamment <code>correlation</code> et <code>cosine</code>), il peut être intéressant de limiter les termes retenus selon une occurrence minimale, faut de quoi des termes n'apparaissant qu'une fois, par exemple, peuvent apparaître fortement associés."))
+                                        tags$p(HTML(gettext("With some similarities (notably <code>correlation</code> and <code>cosine</code>), it can be interesting to filter terms on a minimal frequency, otherwise terms that would only appear once could appear as highly associated.", domain = "R-explor")))
                                )
-                               
                              )
                            )
-                         ),
-                         tags$script(explor_corpus_js()))
-      ),
+                         )
+                      ),
+                      tags$script(explor_corpus_js())),
+      
 
                server = function(input, output, session) {
 
@@ -390,9 +405,25 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                    if (length(input$ngrams) == 0 || is.null(co()) || ndoc(co()) == 0) { 
                      return(NULL)
                    }
+                   if (!is.null(input$treat_stopwords) && input$treat_stopwords) {
+                     remove <- settings$stopwords
+                   } else {
+                     remove <- NULL
+                   }
+                   if (!is.null(input$treat_thesaurus) && input$treat_thesaurus) {
+                     thesaurus <- settings$thesaurus
+                   } else {
+                     thesaurus <- NULL
+                   }
                    dtm <- dfm(co(), what = "fastestword", 
-                              verbose = FALSE, tolower = FALSE, remove_punct = FALSE,
-                              ngrams = input$ngrams, groups = NULL)
+                              verbose = FALSE, groups = NULL,
+                              tolower = input$treat_tolower, 
+                              remove_punct = input$treat_removepunct,
+                              remove_numbers = input$treat_rmnum,
+                              stem = input$treat_stem,
+                              remove = remove,
+                              thesaurus = thesaurus,
+                              ngrams = input$ngrams)
                    dtm <- dfm_trim(dtm, min_count = input$term_min_occurrences)
                    dtm
                  })  
@@ -438,7 +469,7 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                    if (length(invalid_terms() > 0) && invalid_terms() != "") {
                      tmp_terms <- paste(invalid_terms(), collapse = ", ")
                      div(class = "alert alert-warning",
-                         HTML(paste("<strong>Attention :</strong> les termes suivants sont absents du corpus : <i>", tmp_terms, "</i>")))
+                         HTML(paste(gettext("<strong>Warning :</strong> the following terms are missing from the corpus : <i>", domain = "R-explor"), tmp_terms, "</i>")))
                    }
                  })
                  
@@ -448,7 +479,7 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                    e <- terms_query()$error
                    if (!is.null(e)) {
                      div(class = "alert alert-danger",
-                         HTML(paste("<strong>Attention :</strong> Erreur dans l'expression : <i>", e, "</i>")))
+                         HTML(paste(gettext("<strong>Warning :</strong> Query error : <i>", domain = "R-explor"), e, "</i>")))
                    }
                  })
                  
@@ -477,6 +508,9 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                    names(docf) <- "nb_docs"
                    docf$term <- rownames(docf)
                    docf$prop_docs <- (round(docf$nb_docs / ndoc(dtm()) * 100, 2))
+                   # names(docf) <- c(gettext("Term frequency", domain = "R-explor"),
+                   #                  gettext("Documents frequency", domain = "R-explor"),
+                   #                  gettext("Documents proportion", domain = "R-explor"))
                    tab <- frq %>% left_join(docf, by = "term") %>% select(term, nb_terms, nb_docs, prop_docs)
                    DT::datatable(tab, 
                                  options = c(tableOptions, order_option(tab, "nb_terms")), rownames = FALSE)
@@ -488,8 +522,8 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                    if (is.null(tmp_dtm)) return(NULL)
                    updateNumericInput(session, "start_documents", value = 1)
                    tmp_dtm <- docvars(co()) %>% select_(input$term_group) %>% bind_cols(tmp_dtm)
-                   names(tmp_dtm) <- c("group", "n")
-                   res <- tmp_dtm %>% group_by(group) %>% summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1))
+                   names(tmp_dtm) <- c("Group", "n")
+                   res <- tmp_dtm %>% group_by(Group) %>% summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1))
                    res
                  })
                  
@@ -501,7 +535,7 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                    names(tmp_dtm) <- "n"
                    res <- tmp_dtm %>% 
                      summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1)) %>%
-                     mutate(nom = "Ensemble") %>% select(nom, nb_docs, prop_docs)
+                     mutate(nom = gettext("Total", domain = "R-explor")) %>% select(nom, nb_docs, prop_docs)
                    res
                  })
                  
@@ -518,7 +552,7 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                      if (input$terms == "") {
                        return("")
                      }
-                     res <- paste0("<p><strong>Requête :</strong> <code>", input$terms, "</code>.</p>")
+                     res <- paste0(gettext("<p><strong>Query :</strong> <code>", domain = "R-explor"), input$terms, "</code>.</p>")
                      return(HTML(res))
                    })
                  })
@@ -532,7 +566,7 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                        return("")
                      }
                      tab <- tab_term_tot()
-                     res <- paste0("<p><strong>Ensemble du corpus :</strong> ", tab$nb_docs, " documents, soit ", tab$prop_docs, "%.</p>")
+                     res <- paste0(gettext("<p><strong>Whole corpus :</strong> ", domain = "R-explor"), tab$nb_docs, gettext(" documents (", domain = "R-explor"), tab$prop_docs, "%).</p>")
                      return(HTML(res))
                    })
                  })
@@ -572,7 +606,7 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                    start <- input$start_documents
                    nb_documents <- input$nb_documents_display
                    isolate({
-                     if (is.null(terms_query()$res)) return("<div class='document-content'>Aucun document trouvé.</p>")
+                     if (is.null(terms_query()$res)) return(gettext("<div class='document-content'>No document found.</p>", domain = "R-explor"))
                      indexes <- which(as.vector(terms_query()$res) > 0)
                      end <- min(start + nb_documents - 1, nb_docs_term())
                      indexes <- indexes[start:end]
@@ -595,7 +629,7 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                    isolate({
                      end <- min(start + nb_documents - 1, nb_docs_term())
                      if (end == 0) start <- 0
-                     paste(start, "à", end, "sur", nb_docs_term())
+                     paste(start, gettext("à", domain = "R-explor"), end, gettext("sur", domain = "R-explor"), nb_docs_term())
                    })
                  })
                  
@@ -618,7 +652,7 @@ explor_corpus <- function(qco, settings, qco_brut = NULL) {
                  output$termsimAlert <- renderUI({
                    if (input$termsim != "" && invalid_sim_term()) {
                      div(class = "alert alert-warning",
-                         HTML(paste("<strong>Attention :</strong> le terme est absent du corpus : <i>", input$termsim, "</i>")))
+                         HTML(paste(gettext("<strong>Warning :</strong> term not found in the corpus : <i>", domain = "R-explor"), input$termsim, "</i>")))
                    }
                  })
                  
