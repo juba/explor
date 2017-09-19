@@ -20,7 +20,7 @@ explor.Corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NU
     }
     
     ## Settings
-    settings <- list(obj_brut = obj_brut,
+    settings <- list(qco_brut = obj_brut,
                      stopwords = stopwords,
                      thesaurus = thesaurus)
 
@@ -45,7 +45,7 @@ explor.corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NU
     }
     
     ## Settings
-    settings <- list(obj_brut = obj_brut,
+    settings <- list(qco_brut = obj_brut,
                      stopwords = stopwords,
                      thesaurus = thesaurus)
 
@@ -248,7 +248,8 @@ explor_corpus <- function(qco, settings) {
                                         h4(gettext("Corpus filtering", domain = "R-explor")),
                                         p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),
-                                        numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1)
+                                        numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1),
+                                        tags$script(explor_corpus_js())
                            ),
                            mainPanel(
                              tabsetPanel(
@@ -263,7 +264,7 @@ explor_corpus <- function(qco, settings) {
                                         p(HTML("<strong>", gettext("Number of documents", domain = "R-explor"), "&nbsp;:</strong>"), textOutput("nbdocs", inline = TRUE)),
                                         DT::dataTableOutput("freqtable")),
                                
-                               ## "Documents" tab                      
+                               ## "Terms search" tab                      
                                tabPanel(gettext("Terms search", domain = "R-explor"),
                                         h3(gettext("Terms selection", domain = "R-explor")),
                                         HTML("<p>", gettext('Enter one or more terms. You can use logical operators like <code>&</code> ("and"), <code>|</code> ("or"), <code>!</code> ("not") and parentheses :', domain = "R-explor"), "</p>"),
@@ -279,18 +280,26 @@ explor_corpus <- function(qco, settings) {
                                         h3(gettext("Selected terms frequency", domain = "R-explor")),
                                         htmlOutput("freqterm_query"),
                                         htmlOutput("freqterm_total"),
-                                        DT::dataTableOutput("freqtermtable"),
-                                        h3(gettext("Corresponding documents", domain = "R-explor")),
-                                        div(style = "display: none;",
-                                            numericInput("start_documents", gettext("From", domain = "R-explor"), value = 1)),
-                                        div(class = "inline-small form-inline",
-                                            actionButton("prev_documents", gettext("Previous", domain = "R-explor"), icon("arrow-left")),
-                                            textOutput("documents_pagination"),
-                                            #numericInput("nb_documents", "Nombre", 10, min = 1, width = "4em"),
-                                            actionButton("next_documents", gettext("Next", domain = "R-explor"), icon("arrow-right")),
-                                            numericInput("nb_documents_display", gettext("Display : ", domain = "R-explor"), 
-                                                         value = 10, min = 1, max = 100, step = 1, width = "auto")),  
-                                        htmlOutput("documenttable")
+                                        tabsetPanel(type = "pills",
+                                                    tabPanel(gettext("Table", domain = "R-explor"),
+                                                             DT::dataTableOutput("freqtermtable")
+                                                    ),
+                                                    tabPanel(gettext("Plot", domain = "R-explor"),
+                                                             plotOutput("freqtermplot")
+                                                    ),
+                                                    tabPanel(gettext("Documents", domain = "R-explor"),
+                                                             div(style = "display: none;",
+                                                                 numericInput("start_documents", gettext("From", domain = "R-explor"), value = 1)),
+                                                             div(class = "inline-small form-inline",
+                                                                 actionButton("prev_documents", gettext("Previous", domain = "R-explor"), icon("arrow-left")),
+                                                                 textOutput("documents_pagination"),
+                                                                 #numericInput("nb_documents", "Nombre", 10, min = 1, width = "4em"),
+                                                                 actionButton("next_documents", gettext("Next", domain = "R-explor"), icon("arrow-right")),
+                                                                 numericInput("nb_documents_display", gettext("Display : ", domain = "R-explor"), 
+                                                                              value = 10, min = 1, max = 100, step = 1, width = "auto")),  
+                                                             htmlOutput("documenttable")
+                                                    )
+                                        )
                                ),
                                
                                ## "Similarities" tab
@@ -300,7 +309,7 @@ explor_corpus <- function(qco, settings) {
                                         fluidRow(
                                           column(6, textInput("termsim", gettext("Term", domain = "R-explor"))),
                                           column(6,  selectInput("simmethod", gettext("Similarity", domain = "R-explor"),
-                                                                 choices = c("correlation", "cosine", "phi", "Jaccard"),
+                                                                 choices = c("correlation", "cosine", "jaccard"),
                                                                  selected = "correlation"))),
                                         uiOutput("termsimAlert"),
                                         h3(gettext("Associated terms", domain = "R-explor")),
@@ -315,8 +324,8 @@ explor_corpus <- function(qco, settings) {
                                         p(HTML(gettext("How to read the table :", domain = "R-explor"))),
                                         tags$ul(
                                           tags$li(HTML(gettext("<code>Term frequency</code> : number of times this term is found in the selected corpus", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>Documents frequency</code> : number of documents in the selected corpus in which this term appears at least once", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>Documents proportion</code> : percentage of documents in the selected corpus in which this term appears at least once", domain = "R-explor")))
+                                          tags$li(HTML(gettext("<code>Number of documents</code> : number of documents in the selected corpus in which this term appears at least once", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>Percentage of documents</code> : percentage of documents in the selected corpus in which this term appears at least once", domain = "R-explor")))
                                         ),
                                         
                                         h3(gettext("Tearms search", domain = "R-explor")),
@@ -343,8 +352,7 @@ explor_corpus <- function(qco, settings) {
                              )
                            )
                          )
-                      ),
-                      tags$script(explor_corpus_js())),
+                      )),
       
 
                server = function(input, output, session) {
@@ -390,8 +398,8 @@ explor_corpus <- function(qco, settings) {
                  
                  ## Brut corpus filtered
                  co_brut <- reactive({
-                   if (is.null(qco_brut)) return(co())
-                   tmp <- qco_brut
+                   if (is.null(settings$qco_brut)) return(co())
+                   tmp <- settings$qco_brut
                    metas <- grep("^meta_", names(input), value = TRUE)
                    for (meta in metas) {
                      if (is.null(input[[meta]])) next()
@@ -512,8 +520,12 @@ explor_corpus <- function(qco, settings) {
                    #                  gettext("Documents frequency", domain = "R-explor"),
                    #                  gettext("Documents proportion", domain = "R-explor"))
                    tab <- frq %>% left_join(docf, by = "term") %>% select(term, nb_terms, nb_docs, prop_docs)
+                   names(tab) <- c(gettext("Term", domain = "R-explor"),
+                                   gettext("Term frequency", domain = "R-explor"),
+                                   gettext("Number of documents", domain = "R-explor"),
+                                   gettext("Percentage of documents", domain = "R-explor"))
                    DT::datatable(tab, 
-                                 options = c(tableOptions, order_option(tab, "nb_terms")), rownames = FALSE)
+                                 options = c(tableOptions, order_option(tab, gettext("Term frequency", domain = "R-explor"))), rownames = FALSE)
                  })
                  
                  ## Search term frequency table
@@ -522,8 +534,8 @@ explor_corpus <- function(qco, settings) {
                    if (is.null(tmp_dtm)) return(NULL)
                    updateNumericInput(session, "start_documents", value = 1)
                    tmp_dtm <- docvars(co()) %>% select_(input$term_group) %>% bind_cols(tmp_dtm)
-                   names(tmp_dtm) <- c("Group", "n")
-                   res <- tmp_dtm %>% group_by(Group) %>% summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1))
+                   names(tmp_dtm) <- c("group", "n")
+                   res <- tmp_dtm %>% group_by(group) %>% summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1))
                    res
                  })
                  
@@ -566,7 +578,7 @@ explor_corpus <- function(qco, settings) {
                        return("")
                      }
                      tab <- tab_term_tot()
-                     res <- paste0(gettext("<p><strong>Whole corpus :</strong> ", domain = "R-explor"), tab$nb_docs, gettext(" documents (", domain = "R-explor"), tab$prop_docs, "%).</p>")
+                     res <- paste0(gettext("<p><strong>Corpus :</strong> ", domain = "R-explor"), tab$nb_docs, gettext(" documents (", domain = "R-explor"), tab$prop_docs, "%).</p>")
                      return(HTML(res))
                    })
                  })
@@ -579,13 +591,48 @@ explor_corpus <- function(qco, settings) {
                      if (is.null(tab_term())) {
                        return(DT::datatable(data.frame(table = character())))
                      }
-                     tab <- DT::datatable(tab_term(), 
-                                   options = c(tableOptions, order_option(tab_term(), "prop_docs")), rownames = FALSE)
+                     tab <- tab_term()
+                     names(tab) <- c(gettext("Group", domain = "R-explor"),
+                                     gettext("Number of documents", domain = "R-explor"),
+                                     gettext("Percentage of documents", domain = "R-explor"))
+                     tab <- DT::datatable(tab, 
+                                   options = c(tableOptions, order_option(tab, gettext("Percentage of documents", domain = "R-explor"))), rownames = FALSE)
                    })
                    tab
                  })
 
-               
+                output$freqtermplot <- renderPlot({
+                  input$launch_search
+                  isolate({
+                    if (is.null(tab_term())) {
+                      return()
+                    }
+                    tab <- tab_term()
+                    group <- quo(input$term_group)
+                    var <- docvars(co()) %>% pull(!!group)
+                    g <- NULL
+                    if (is.character(var)) {
+                      tab <- tab %>% 
+                        filter(prop_docs > 0) %>%
+                        mutate(group = reorder(group, prop_docs))
+                      g <- ggplot(tab) + 
+                        geom_bar(aes(x = reorder(group, prop_docs), y = prop_docs), stat = "identity") +
+                        xlab(input$term_group) +
+                        ylab(gettext("Percentage of documents", domain = "R-explor")) +
+                        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+                    } 
+                    if (is.numeric(var) || inherits(var, "Date")) {
+                      g <- ggplot(tab, aes(x = group, y = prop_docs)) + 
+                        geom_line() +
+                        geom_smooth() +
+                        xlab(input$term_group) +
+                        ylab(gettext("Percentage of documents", domain = "R-explor"))
+                    }
+                    
+                  })
+                  g
+                })
+                 
                  
                  ## Observers on pagination events
                  observeEvent(input$prev_documents, {
@@ -629,7 +676,7 @@ explor_corpus <- function(qco, settings) {
                    isolate({
                      end <- min(start + nb_documents - 1, nb_docs_term())
                      if (end == 0) start <- 0
-                     paste(start, gettext("à", domain = "R-explor"), end, gettext("sur", domain = "R-explor"), nb_docs_term())
+                     sprintf(gettext("%s to %s of %s", domain = "R-explor"), start, end, nb_docs_term())
                    })
                  })
                  
@@ -639,12 +686,17 @@ explor_corpus <- function(qco, settings) {
                  })
                  sim_term <- reactive({
                    if (is.null(input$termsim) || input$termsim == "" || invalid_sim_term()) return(NULL)
-                   sim <- textstat_simil(dtm(), selection = input$termsim, margin = "features", method = input$simmethod)
-                   sim <- sim[[input$termsim]]
-                   res <- data.frame(term = names(sim), similarity = round(sim,4))
-                   for (i in 1:nrow(res)) {
-                     res$nb_docs_commun[i] <- sum(dtm()[, res$term[i]] & dtm()[, input$termsim])
-                   }
+                   sim <- as.matrix(textstat_simil(dtm(), selection = input$termsim, margin = "features", method = input$simmethod))
+                   sim_nb <- as.matrix(textstat_simil(dtm(), selection = input$termsim, margin = "features", method = "simple matching"))
+                   res <- data.frame(term = rownames(sim), similarity = round(as.vector(sim),4), nb_docs_commun = as.vector(sim_nb))
+                   # for (i in 1:nrow(res)) {
+                   #   print(i)
+                   #   print(dtm()[, res$term[i]])
+                   #   res$nb_docs_commun[i] <- sum(dtm()[, res$term[i]] & dtm()[, input$termsim])
+                   # }
+                   tmp <- dtm()
+                   tmp[tmp > 0] <- 1
+                   res$nb_docs_communs <- as.vector(t(tmp) %*% tmp[, input$termsim])
                    res
                  })
                  
