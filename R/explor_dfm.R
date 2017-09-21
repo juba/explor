@@ -258,41 +258,8 @@ explor_dfm <- function(dfm, settings) {
                                         uiOutput("termsimAlert"),
                                         h3(gettext("Associated terms", domain = "R-explor")),
                                         DT::dataTableOutput("simtermtable")
-                               ),
-                               
-                               ## "Help" tab
-                               tabPanel(gettext("Help", domain = "R-explor"),
-                                        h2(gettext("Help", domain = "R-explor")),
-                                        
-                                        h3(gettext("Most frequent terms", domain = "R-explor")),
-                                        p(HTML(gettext("How to read the table :", domain = "R-explor"))),
-                                        tags$ul(
-                                          tags$li(HTML(gettext("<code>Term frequency</code> : number of times this term is found in the selected corpus", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>Number of documents</code> : number of documents in the selected corpus in which this term appears at least once", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>Percentage of documents</code> : percentage of documents in the selected corpus in which this term appears at least once", domain = "R-explor")))
-                                        ),
-                                        
-                                        h3(gettext("Tearms search", domain = "R-explor")),
-                                        p(HTML(gettext("Allows to search for terms or terms combinations in the selected corpus, and to display both frequencies and the corresponding documents. Note that the search is made on the cleaned corpus (after filtering, stemming, removing of stopwords, etc.). Also note that highlighting is not perfect : for example, if searching for <code>I</code>, every \"i\" in the documents will be highlighted, but the search has been made only on the word \"I\".", domain = "R-explor"))),
-                                        p("Query examples :"),
-                                        tags$ul(
-                                          tags$li(HTML(gettext("<code>I</code> : search for documents with the term \"I\" (or \"i\")", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>!i</code> : search for documents without the term \"I\"", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>i | me | we</code> : search for documents with \"i\", \"me\" or \"we\" (or any combination)", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>i & we</code> : search for documents with both \"i\" and \"we\"", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>sky & (sea | ocean)</code> : search for documents with \"sky\" and the terms \"sea\" or \"ocean\" (or both)", domain = "R-explor")))
-                                        ),
-                                        
-                                        h3(gettext("Similarities", domain = "R-explor")),
-                                        p(gettext("Allow to search for terms associated to a given word. Several similarities measures can be used :", domain = "R-explor")),
-                                        tags$ul(
-                                          tags$li(HTML(gettext("<code>correlation</code> : correlation between the two vectors of frequencies by document.", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>cosine</code> : cosinus between the two vectors of frequencies by document. Cosinus on the centred vectors is equal to the correlation.", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>phi</code> : Association measure between two binary vectors. Use binary presence/absence vectors instead of frequencies. Phi is the squared root of the φ² of the cross tabulation of the two binary vectors.", domain = "R-explor"))),
-                                          tags$li(HTML(gettext("<code>Jaccard</code> : Association measure between two binary vectors. Use binary presence/absence vectors instead of frequencies. Total number of occurences divided by the number of common occurrences, excluding absence/absence couples.", domain = "R-explor")))
-                                        ),
-                                        tags$p(HTML(gettext("With some similarities (notably <code>correlation</code> and <code>cosine</code>), it can be interesting to filter terms on a minimal frequency, otherwise terms that would only appear once could appear as highly associated.", domain = "R-explor")))
                                )
+                               
                              )
                            )
                          )
