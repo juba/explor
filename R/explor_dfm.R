@@ -2,62 +2,24 @@ if (getRversion() >= "2.15.1")
   utils::globalVariables(c("group", "nb_docs", "nb_terms", "nom", "prop_docs", "term"))
 
 ##' @rdname explor
-##' @param obj_brut optional raw documents corpus
-##' @param stopwords stopwords character vector
-##' @param thesaurus quanteda thesaurus list
-##' @aliases explor.Corpus
+##' @aliases explor.dfm
 ##' @export
 
-explor.Corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NULL, ...) {
+explor.dfm <- function(obj, ...) {
     
-    if (!inherits(obj, "Corpus")) stop(gettext("obj must be of class Corpus", domain = "R-explor"))
-    
-    ## corpus preparation
-    corpus <- prepare_results(obj)
-    if (!is.null(obj_brut)) {
-      if (!inherits(obj_brut, "Corpus")) stop(gettext("obj must be of class Corpus", domain = "R-explor"))
-      obj_brut <- prepare_results(obj_brut)
-    }
+    if (!inherits(obj, "dfm")) stop(gettext("obj must be of class dfm", domain = "R-explor"))
     
     ## Settings
-    settings <- list(qco_brut = obj_brut,
-                     stopwords = stopwords,
-                     thesaurus = thesaurus)
+    settings <- list()
 
     ## Launch interface
-    explor_corpus(corpus, settings)
+    explor_dfm(obj)
     
 }
-
-##' @rdname explor
-##' @aliases explor.corpus
-##' @export
-
-explor.corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NULL, ...) {
-    
-    if (!inherits(obj, "corpus")) stop(gettext("obj must be of class corpus", domain = "R-explor"))
-
-    ## corpus preparation
-    corpus <- prepare_results(obj)
-    if (!is.null(obj_brut)) {
-      if (!inherits(obj_brut, "corpus")) stop(gettext("obj must be of class corpus", domain = "R-explor"))
-      obj_brut <- prepare_results(obj_brut)
-    }
-    
-    ## Settings
-    settings <- list(qco_brut = obj_brut,
-                     stopwords = stopwords,
-                     thesaurus = thesaurus)
-
-    ## Launch interface
-    explor_corpus(corpus, settings)
-    
-}
-
 
 
 ## Custom CSS
-explor_corpus_css <- function() {
+explor_dfm_css <- function() {
   shiny::HTML("
               body {margin: 0 15px;}
               
@@ -169,7 +131,7 @@ explor_corpus_css <- function() {
     }
 
 # Custom JavaScript
-explor_corpus_js <- function() {
+explor_dfm_js <- function() {
   shiny::HTML("
 (function($) {
 
@@ -201,23 +163,16 @@ $('#filters').on('shiny:visualchange', function(event) {
 }
 
 
-##' @import stringi
-explor_corpus_highlight <- function(x, str) {
-  stringi::stri_replace_all_fixed(x, pattern = str,  replacement = paste0("<span class='highlight'>",str,"</span>"),
-                         vectorize_all = FALSE,
-                         opts_fixed = stri_opts_fixed(case_insensitive = TRUE))
-}
-
 
 ##' @import shiny
 ##' @import quanteda
 ##' @importFrom highr hi_html
 
-explor_corpus <- function(qco, settings) { 
+explor_dfm <- function(dfm, settings) { 
     
 
     ## Document level variables
-    vars <- lapply(docvars(qco), unique)
+    vars <- lapply(docvars(dfm), unique)
     nvalues <- lapply(vars, length)
     vars <- vars[nvalues > 1 & nvalues < 100]
 
@@ -242,26 +197,14 @@ explor_corpus <- function(qco, settings) {
       }
     })
     
-    ## n-grams
-    m_ngrams <- 1:5
-    names(m_ngrams) <- paste0(1:5, "-gram")
-    
+
     shiny::shinyApp(
-      ui = navbarPage(gettext("Corpus", domain = "R-explor"),
+      ui = navbarPage(gettext("Dfm", domain = "R-explor"),
                       header = tags$head(
                         tags$style(explor_corpus_css())),
                       tabPanel(gettext("Terms", domain = "R-explor"),
                          sidebarLayout(
                            sidebarPanel(id = "sidebar",
-                                        h4(gettext("Corpus treatment", domain = "R-explor")),
-                                        checkboxInput("treat_tolower", gettext("Convert to lowercase", domain = "R-explor"), value = TRUE),
-                                        checkboxInput("treat_removepunct", gettext("Remove punctuation", domain = "R-explor"), value = TRUE),
-                                        checkboxInput("treat_rmnum", gettext("Remove numbers", domain = "R-explor"), value = TRUE),
-                                        if (!is.null(settings$stopwords)) 
-                                          checkboxInput("treat_stopwords", gettext("Remove stopwords", domain = "R-explor"), value = TRUE),
-                                        if (!is.null(settings$thesaurus)) 
-                                          checkboxInput("treat_thesaurus", gettext("Apply thesaurus", domain = "R-explor"), value = TRUE),
-                                        checkboxInput("treat_stem", gettext("Stem words", domain = "R-explor"), value = FALSE),                                        
                                         h4(gettext("Corpus filtering", domain = "R-explor")),
                                         p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),
@@ -274,10 +217,6 @@ explor_corpus <- function(qco, settings) {
                                ## "Frequent terms" tab
                                tabPanel(gettext("Frequent terms", domain = "R-explor"),
                                         h3(gettext("Most frequent terms", domain = "R-explor")),
-                                        checkboxGroupInput("ngrams",
-                                                           gettext("Ngrams", domain = "R-explor"),
-                                                           m_ngrams,
-                                                           selected = 1),
                                         p(HTML("<strong>", gettext("Number of documents", domain = "R-explor"), "&nbsp;:</strong>"), textOutput("nbdocs", inline = TRUE)),
                                         DT::dataTableOutput("freqtable")),
                                
@@ -303,23 +242,24 @@ explor_corpus <- function(qco, settings) {
                                                     ),
                                                     tabPanel(gettext("Plot", domain = "R-explor"),
                                                              plotOutput("freqtermplot")
-                                                    ),
-                                                    tabPanel(gettext("Documents", domain = "R-explor"),
-                                                             div(style = "display: none;",
-                                                                 numericInput("start_documents", gettext("From", domain = "R-explor"), value = 1)),
-                                                             div(class = "inline-small form-inline",
-                                                                 actionButton("prev_documents", gettext("Previous", domain = "R-explor"), icon("arrow-left")),
-                                                                 textOutput("documents_pagination"),
-                                                                 #numericInput("nb_documents", "Nombre", 10, min = 1, width = "4em"),
-                                                                 actionButton("next_documents", gettext("Next", domain = "R-explor"), icon("arrow-right")),
-                                                                 numericInput("nb_documents_display", gettext(" Number : ", domain = "R-explor"), 
-                                                                              value = 10, min = 1, max = 100, step = 1, width = "auto")),
-                                                             htmlOutput("documenttable")
                                                     )
                                         )
                                ),
                                
-
+                               ## "Similarities" tab
+                               tabPanel(gettext("Similarities", domain = "R-explor"),
+                                        h3(gettext("Term", domain = "R-explor")),
+                                        HTML("<p>", gettext("Enter a term :</p>", domain = "R-explor"), "</p>"),
+                                        fluidRow(
+                                          column(6, textInput("termsim", gettext("Term", domain = "R-explor"))),
+                                          column(6,  selectInput("simmethod", gettext("Similarity", domain = "R-explor"),
+                                                                 choices = c("correlation", "cosine", "jaccard"),
+                                                                 selected = "correlation"))),
+                                        uiOutput("termsimAlert"),
+                                        h3(gettext("Associated terms", domain = "R-explor")),
+                                        DT::dataTableOutput("simtermtable")
+                               ),
+                               
                                ## "Help" tab
                                tabPanel(gettext("Help", domain = "R-explor"),
                                         h2(gettext("Help", domain = "R-explor")),
@@ -341,8 +281,17 @@ explor_corpus <- function(qco, settings) {
                                           tags$li(HTML(gettext("<code>i | me | we</code> : search for documents with \"i\", \"me\" or \"we\" (or any combination)", domain = "R-explor"))),
                                           tags$li(HTML(gettext("<code>i & we</code> : search for documents with both \"i\" and \"we\"", domain = "R-explor"))),
                                           tags$li(HTML(gettext("<code>sky & (sea | ocean)</code> : search for documents with \"sky\" and the terms \"sea\" or \"ocean\" (or both)", domain = "R-explor")))
-                                        )
+                                        ),
                                         
+                                        h3(gettext("Similarities", domain = "R-explor")),
+                                        p(gettext("Allow to search for terms associated to a given word. Several similarities measures can be used :", domain = "R-explor")),
+                                        tags$ul(
+                                          tags$li(HTML(gettext("<code>correlation</code> : correlation between the two vectors of frequencies by document.", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>cosine</code> : cosinus between the two vectors of frequencies by document. Cosinus on the centred vectors is equal to the correlation.", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>phi</code> : Association measure between two binary vectors. Use binary presence/absence vectors instead of frequencies. Phi is the squared root of the φ² of the cross tabulation of the two binary vectors.", domain = "R-explor"))),
+                                          tags$li(HTML(gettext("<code>Jaccard</code> : Association measure between two binary vectors. Use binary presence/absence vectors instead of frequencies. Total number of occurences divided by the number of common occurrences, excluding absence/absence couples.", domain = "R-explor")))
+                                        ),
+                                        tags$p(HTML(gettext("With some similarities (notably <code>correlation</code> and <code>cosine</code>), it can be interesting to filter terms on a minimal frequency, otherwise terms that would only appear once could appear as highly associated.", domain = "R-explor")))
                                )
                              )
                            )
@@ -380,54 +329,15 @@ explor_corpus <- function(qco, settings) {
                    }
                  }
                  
-                 ## Clean corpus filtered
-                 co <- reactive({
-                   tmp <- qco
-                   metas <- grep("^meta_", names(input), value = TRUE)
-                   for (meta in metas) {
-                     if (is.null(input[[meta]])) next()
-                     tmp <- corpus_subset(tmp, selected_elements(tmp, meta))
-                   }
-                   tmp
-                 })
-                 
-                 ## Brut corpus filtered
-                 co_brut <- reactive({
-                   if (is.null(settings$qco_brut)) return(co())
-                   tmp <- settings$qco_brut
-                   metas <- grep("^meta_", names(input), value = TRUE)
-                   for (meta in metas) {
-                     if (is.null(input[[meta]])) next()
-                     tmp <- corpus_subset(tmp, selected_elements(tmp, meta))
-                   }
-                   tmp
-                 })
-                 
-                 ## Clean corpus DTM filtered by n-grams
+                 ## Filtered DTM
                  dtm <- reactive({
-                   if (length(input$ngrams) == 0 || is.null(co()) || ndoc(co()) == 0) { 
-                     return(NULL)
+                   metas <- grep("^meta_", names(input), value = TRUE)
+                   tmp <- dfm
+                   for (meta in metas) {
+                     if (is.null(input[[meta]])) next()
+                     tmp <- dfm_subset(tmp, selected_elements(tmp, meta))
                    }
-                   if (!is.null(input$treat_stopwords) && input$treat_stopwords) {
-                     remove <- settings$stopwords
-                   } else {
-                     remove <- NULL
-                   }
-                   if (!is.null(input$treat_thesaurus) && input$treat_thesaurus) {
-                     thesaurus <- settings$thesaurus
-                   } else {
-                     thesaurus <- NULL
-                   }
-                   dtm <- dfm(co(), what = "fastestword", 
-                              verbose = FALSE, groups = NULL,
-                              tolower = input$treat_tolower, 
-                              remove_punct = input$treat_removepunct,
-                              remove_numbers = input$treat_rmnum,
-                              stem = input$treat_stem,
-                              remove = remove,
-                              thesaurus = thesaurus,
-                              ngrams = input$ngrams)
-                   dtm <- dfm_trim(dtm, min_count = input$term_min_occurrences)
+                   dtm <- dfm_trim(tmp, min_count = input$term_min_occurrences)
                    dtm
                  })  
                  
@@ -488,7 +398,7 @@ explor_corpus <- function(qco, settings) {
                  
                  ## Number of documents
                  output$nbdocs <- renderText({
-                   ndoc(co())
+                   ndoc(dtm())
                  })
                  
                  ## Global table options
@@ -528,7 +438,7 @@ explor_corpus <- function(qco, settings) {
                    tmp_dtm <- terms_query()$res
                    if (is.null(tmp_dtm)) return(NULL)
                    updateNumericInput(session, "start_documents", value = 1)
-                   tmp_dtm <- docvars(co()) %>% select_(input$term_group) %>% bind_cols(tmp_dtm)
+                   tmp_dtm <- docvars(dtm()) %>% select_(input$term_group) %>% bind_cols(tmp_dtm)
                    names(tmp_dtm) <- c("group", "n")
                    res <- tmp_dtm %>% group_by(group) %>% summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1))
                    res
@@ -604,7 +514,7 @@ explor_corpus <- function(qco, settings) {
                     }
                     tab <- tab_term()
                     group <- quo(input$term_group)
-                    var <- docvars(co()) %>% pull(!!group)
+                    var <- docvars(dtm()) %>% pull(!!group)
                     g <- NULL
                     if (is.character(var)) {
                       tab <- tab %>% 
@@ -628,53 +538,43 @@ explor_corpus <- function(qco, settings) {
                   g
                 })
                  
-                 
-                 ## Observers on pagination events
-                 observeEvent(input$prev_documents, {
-                   updateNumericInput(session, "start_documents", value = max(1, isolate(input$start_documents) - isolate(input$nb_documents_display)), min = 1)
+
+                 ## Similarities
+                 invalid_sim_term <- reactive({
+                   !(input$termsim %in% colnames(dtm()))
                  })
-                 observeEvent(input$next_documents, {
-                   val <- isolate(input$start_documents) + isolate(input$nb_documents_display)
-                   if (val <= nb_docs_term()) {
-                     print("obs")
-                     updateNumericInput(session, "start_documents", value = val)
+                 sim_term <- reactive({
+                   if (is.null(input$termsim) || input$termsim == "" || invalid_sim_term()) return(NULL)
+                   sim <- as.matrix(textstat_simil(dtm(), selection = input$termsim, margin = "features", method = input$simmethod))
+                   sim_nb <- as.matrix(textstat_simil(dtm(), selection = input$termsim, margin = "features", method = "simple matching"))
+                   res <- data.frame(term = rownames(sim), similarity = round(as.vector(sim),4), nb_docs_commun = as.vector(sim_nb))
+                   # for (i in 1:nrow(res)) {
+                   #   print(i)
+                   #   print(dtm()[, res$term[i]])
+                   #   res$nb_docs_commun[i] <- sum(dtm()[, res$term[i]] & dtm()[, input$termsim])
+                   # }
+                   tmp <- dtm()
+                   tmp[tmp > 0] <- 1
+                   res$nb_docs_communs <- as.vector(t(tmp) %*% tmp[, input$termsim])
+                   res
+                 })
+                 
+                 ## Alert if term in similarity term is missing from corpus
+                 output$termsimAlert <- renderUI({
+                   if (input$termsim != "" && invalid_sim_term()) {
+                     div(class = "alert alert-warning",
+                         HTML(paste(gettext("<strong>Warning :</strong> term not found in the corpus : <i>", domain = "R-explor"), input$termsim, "</i>")))
                    }
                  })
                  
-                 ## Documents list
-                 output$documenttable <- renderText({
-                   ## Acquire dependencies
-                   input$launch_search
-                   start <- input$start_documents
-                   nb_documents <- input$nb_documents_display
-                   isolate({
-                     if (is.null(terms_query()$res)) return(gettext("<div class='document-content'>No document found.</p>", domain = "R-explor"))
-                     indexes <- which(as.vector(terms_query()$res) > 0)
-                     end <- min(start + nb_documents - 1, nb_docs_term())
-                     indexes <- indexes[start:end]
-                     out <- ""
-                     for (i in indexes) {
-                       out <- paste(out, "<div class='document-content'>")
-                       out <- paste(out, "<p><strong>", docvars(co())$orientation[i] ,"</strong><br />")
-                       out <- paste(out, explor_corpus_highlight(co_brut()[i], terms()))
-                       out <- paste(out, "</p></div>")
-                     }
-                     HTML(out)
-                   })
+                 ## Similarities table
+                 output$simtermtable <- DT::renderDataTable({
+                   if (is.null(sim_term())) {
+                     return(DT::datatable(data.frame(table = character())))
+                   }
+                   DT::datatable(sim_term(), 
+                                 options = c(tableOptions, order_option(sim_term(), "similarity")), rownames = FALSE)
                  })
-                 
-                 ## documents list pagination text
-                 output$documents_pagination <- renderText({
-                   input$launch_search
-                   start <- input$start_documents
-                   nb_documents <- input$nb_documents_display
-                   isolate({
-                     end <- min(start + nb_documents - 1, nb_docs_term())
-                     if (end == 0) start <- 0
-                     sprintf(gettext("%s to %s of %s", domain = "R-explor"), start, end, nb_docs_term())
-                   })
-                 })
-
                  
                })
 }
