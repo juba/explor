@@ -15,14 +15,18 @@ explor.Corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NU
     ## corpus preparation
     corpus <- prepare_results(obj)
     if (!is.null(obj_brut)) {
-      if (!inherits(obj_brut, "Corpus")) stop(gettext("obj must be of class Corpus", domain = "R-explor"))
+      if (!inherits(obj_brut, "Corpus")) stop(gettext("obj_brut must be of class Corpus", domain = "R-explor"))
       obj_brut <- prepare_results(obj_brut)
     }
     
     ## Settings
     settings <- list(qco_brut = obj_brut,
                      stopwords = stopwords,
-                     thesaurus = thesaurus)
+                     thesaurus = thesaurus,
+                     corpus_name = deparse(substitute(obj)),
+                     corpus_brut_name = deparse(substitute(obj_brut)),
+                     stopwords_name = deparse(substitute(stopwords)),
+                     thesaurus_name = deparse(substitute(thesaurus)))
 
     ## Launch interface
     explor_corpus(corpus, settings)
@@ -40,14 +44,18 @@ explor.corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NU
     ## corpus preparation
     corpus <- prepare_results(obj)
     if (!is.null(obj_brut)) {
-      if (!inherits(obj_brut, "corpus")) stop(gettext("obj must be of class corpus", domain = "R-explor"))
+      if (!inherits(obj_brut, "corpus")) stop(gettext("obj_brut must be of class corpus", domain = "R-explor"))
       obj_brut <- prepare_results(obj_brut)
     }
     
     ## Settings
     settings <- list(qco_brut = obj_brut,
                      stopwords = stopwords,
-                     thesaurus = thesaurus)
+                     thesaurus = thesaurus,
+                     corpus_name = deparse(substitute(obj)),
+                     corpus_brut_name = deparse(substitute(obj_brut)),
+                     stopwords_name = deparse(substitute(stopwords)),
+                     thesaurus_name = deparse(substitute(thesaurus)))
 
     ## Launch interface
     explor_corpus(corpus, settings)
@@ -84,6 +92,10 @@ explor_corpus_css <- function() {
 
               #sidebar .shiny-input-container {
                   margin-bottom: 0px;
+              }
+
+              #sidebar p {
+                  margin-top: 10px;
               }
 
               #filters .shiny-input-checkboxgroup .shiny-options-group,
@@ -165,6 +177,13 @@ explor_corpus_css <- function() {
               .inline-small .btn {
                   padding: 3px 5px;
               }
+
+              /* Syntax highlighting */
+              span.hl.str { color: #d14;}
+              span.hl.kwa { color: #099;}
+              span.hl.num { color: #099;}
+              span.hl.kwd { color: #333; font-weight: bold;}
+              span.hl.com { color: #888; font-style: italic;}
               ")
     }
 
@@ -266,6 +285,9 @@ explor_corpus <- function(qco, settings) {
                                         p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),
                                         numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1),
+                                        tags$p(actionButton("get_r_code",
+                                                            icon = icon("code"),
+                                                            label = gettext("Get R code", domain = "R-explor"))),
                                         tags$script(explor_corpus_js())
                            ),
                            mainPanel(
@@ -358,7 +380,50 @@ explor_corpus <- function(qco, settings) {
                    filter_inputs  
                  })
                  
-                 # Create logical vector from selected filter elements
+                 
+                 ## Corpus filtering R Code
+                 filtering_code <- reactive({
+                   code <- ""
+                   metas <- grep("^meta_", names(input), value = TRUE)
+                   for (meta in metas) {
+                     if (is.null(input[[meta]])) next()
+                     varname <- gsub("^meta_", "", meta)
+                     var <- docvars(qco)[[varname]]
+                     selected_values <- input[[meta]]
+                     test <- ""
+                     ## Date variables (date range)
+                     if (inherits(var, "Date")) {
+                       if (selected_values[1] != min(var) || selected_values[2] != max(var)) {
+                         test <- sprintf("%s >= %s & %s <= %s", varname, selected_values[1], varname, selected_values[2])
+                       }
+                     }
+                     ## Character variables (checkboxes)
+                     if (is.character(selected_values)) {
+                       selected_values[selected_values == "NA"] <- NA
+                       selected_values <- utils::capture.output(dput(selected_values))
+                       test <- paste0(varname, " %in% ", selected_values)
+                     }
+                     ## Numeric variables (range)
+                     if (is.numeric(selected_values)) {
+                       if (selected_values[1] != min(var) || selected_values[2] != max(var)) {
+                         test <- sprintf("%s >= %s & %s <= %s", varname, selected_values[1], varname, selected_values[2])
+                       }
+                     } 
+                     if (test != "") {
+                       code <- paste0(code, sprintf("tmp_corpus <- corpus_subset(tmp_corpus, %s)\n", test))
+                     }
+                   }
+                   code
+                 })
+                 corpus_filtering_code <- function(corpus_name) {
+                   code <- filtering_code()
+                   if (code != "") {
+                     code <- paste0("tmp_corpus <- ", corpus_name, "\n", code)
+                   }
+                   return(code)
+                 }   
+                                  
+                 ## Create logical vector from selected filter elements
                  selected_elements <- function(corpus, meta) {
                    varname <- gsub("^meta_", "", meta)
                    var <- docvars(corpus)[[varname]]
@@ -382,52 +447,60 @@ explor_corpus <- function(qco, settings) {
                  
                  ## Clean corpus filtered
                  co <- reactive({
-                   tmp <- qco
-                   metas <- grep("^meta_", names(input), value = TRUE)
-                   for (meta in metas) {
-                     if (is.null(input[[meta]])) next()
-                     tmp <- corpus_subset(tmp, selected_elements(tmp, meta))
+                   code <- corpus_filtering_code(settings$corpus_name)
+                   if (code != "") {
+                     eval(parse(text = code))
+                     return(tmp_corpus)
+                   } else {
+                     return(qco)
                    }
-                   tmp
                  })
                  
                  ## Brut corpus filtered
                  co_brut <- reactive({
-                   if (is.null(settings$qco_brut)) return(co())
-                   tmp <- settings$qco_brut
-                   metas <- grep("^meta_", names(input), value = TRUE)
-                   for (meta in metas) {
-                     if (is.null(input[[meta]])) next()
-                     tmp <- corpus_subset(tmp, selected_elements(tmp, meta))
+                   code <- corpus_filtering_code(settings$corpus_brut_name)
+                   if (code != "") {
+                     eval(parse(text = code))
+                     return(tmp_corpus)
+                   } else {
+                     return(qco_brut)
                    }
-                   tmp
                  })
+                 
+                 ## DTM computation code
+                 dtm_code <- reactive({
+                   if (!is.null(input$treat_stopwords) && input$treat_stopwords) {
+                     remove <- settings$stopwords_name
+                   } else {
+                     remove <- "NULL"
+                   }
+                   if (!is.null(input$treat_thesaurus) && input$treat_thesaurus) {
+                     thesaurus <- settings$thesaurus_name
+                   } else {
+                     thesaurus <- "NULL"
+                   }
+                   code <- paste0("dtm <- dfm(%s, what = 'fastestword',\n", 
+                                  "           tolower = ", input$treat_tolower, ", remove_punct = ", input$treat_removepunct, ",\n",
+                                  "           remove_numbers = ", input$treat_rmnum, ", stem = ", input$treat_stem, ",\n",
+                                  "           remove = ", remove, ",\n",
+                                  "           thesaurus = ", thesaurus, ",\n",
+                                  "           ngrams = ", input$ngrams, ")\n")
+                   if (input$term_min_occurrences > 0) {
+                     code <- paste0(code, "dtm <- dfm_trim(dtm, min_count = ", input$term_min_occurrences, ")")
+                   }
+                   code
+                 })
+                 corpus_dtm_code <- function(corpus_name) {
+                   sprintf(dtm_code(), corpus_name)
+                 }
                  
                  ## Clean corpus DTM filtered by n-grams
                  dtm <- reactive({
                    if (length(input$ngrams) == 0 || is.null(co()) || ndoc(co()) == 0) { 
                      return(NULL)
                    }
-                   if (!is.null(input$treat_stopwords) && input$treat_stopwords) {
-                     remove <- settings$stopwords
-                   } else {
-                     remove <- NULL
-                   }
-                   if (!is.null(input$treat_thesaurus) && input$treat_thesaurus) {
-                     thesaurus <- settings$thesaurus
-                   } else {
-                     thesaurus <- NULL
-                   }
-                   dtm <- dfm(co(), what = "fastestword", 
-                              verbose = FALSE, groups = NULL,
-                              tolower = input$treat_tolower, 
-                              remove_punct = input$treat_removepunct,
-                              remove_numbers = input$treat_rmnum,
-                              stem = input$treat_stem,
-                              remove = remove,
-                              thesaurus = thesaurus,
-                              ngrams = input$ngrams)
-                   dtm <- dfm_trim(dtm, min_count = input$term_min_occurrences)
+                   code <- corpus_dtm_code("co()")
+                   eval(parse(text = code))
                    dtm
                  })  
                  
@@ -675,6 +748,27 @@ explor_corpus <- function(qco, settings) {
                    })
                  })
 
+                 
+                 ## Code export modal dialog
+                 observeEvent(input$get_r_code, {
+                   code <- ""
+                   corpus_name <- settings$corpus_name
+                   filter_code <- corpus_filtering_code(corpus_name)
+                   if (filter_code != "") {
+                     code <- paste0("## ", gettext("Corpus filtering", domain = "R-explor"), "\n")
+                     code <- paste0(code, filter_code, "\n")
+                     corpus_name <- "tmp_corpus"
+                   }
+                   code <- paste0(code, "## ", gettext("Document term matrix computation", domain = "R-explor"), "\n")
+                   code <- paste0(code, corpus_dtm_code(corpus_name))
+                   showModal(modalDialog(
+                     title = gettext("Export R code", domain = "R-explor"),
+                     HTML(paste0(gettext("Copy, paste and run the following code in your script to compute the corresponding document-term matrix (DTM) :", domain = "R-explor"),
+                                 "<pre><code>",
+                                 paste(highr::hi_html(code), collapse = "\n"),
+                                 "</code></pre>")),
+                     easyClose = TRUE))
+                 })
                  
                })
 }
