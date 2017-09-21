@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2017-02-23 16:29\n"
-"PO-Revision-Date: 2017-02-23 16:30+0100\n"
+"POT-Creation-Date: 2017-09-21 17:00\n"
+"PO-Revision-Date: 2017-09-21 16:59+0200\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -31,14 +31,261 @@ msgstr "Variable"
 msgid "Level"
 msgstr "Modalité"
 
+msgid "obj must be of class Corpus"
+msgstr "obj doit être de classe Corpus"
+
+msgid "obj_brut must be of class Corpus"
+msgstr "obj_brut doit être de classe Corpus"
+
+msgid "obj must be of class corpus"
+msgstr "obj doit être de classe corpus"
+
+msgid "obj_brut must be of class corpus"
+msgstr "obj_brut doit être de classe corpus"
+
+msgid "Corpus"
+msgstr "Corpus"
+
+msgid "Terms"
+msgstr "Termes"
+
+msgid "Corpus treatment"
+msgstr "Traitement du corpus"
+
+msgid "Convert to lowercase"
+msgstr "Convertir en minuscules"
+
+msgid "Remove punctuation"
+msgstr "Supprimer la ponctuation"
+
+msgid "Remove numbers"
+msgstr "Supprimer les nombres"
+
+msgid "Remove stopwords"
+msgstr "Supprimer les mots-outils"
+
+msgid "Apply thesaurus"
+msgstr "Appliquer le thesaurus"
+
+msgid "Stem words"
+msgstr "Lemmatiser les termes"
+
+msgid "Corpus filtering"
+msgstr "Filtrage du corpus"
+
+msgid "If nothing is selected, no filter is applied."
+msgstr "Si rien n'est coché, tout est sélectionné."
+
+msgid "Filter terms on minimal frequency"
+msgstr "Occurrence minimale des termes retenus"
+
+msgid "Get R code"
+msgstr "Obtenir le code R"
+
+msgid "Frequent terms"
+msgstr "Termes fréquents"
+
+msgid "Most frequent terms"
+msgstr "Termes les plus fréquents"
+
+msgid "Ngrams"
+msgstr "N-grams"
+
+msgid "Number of documents"
+msgstr "Nombre de documents"
+
+msgid "Terms search"
+msgstr "Recherche de termes"
+
+msgid "Terms selection"
+msgstr "Sélection des termes"
+
+msgid ""
+"Enter one or more terms. You can use logical operators like <code>&</code> "
+"(\"and\"), <code>|</code> (\"or\"), <code>!</code> (\"not\") and "
+"parentheses :"
+msgstr ""
+"Saisir un ou plusieurs termes. Vous pouvez utiliser des opérateurs logiques "
+"comme <code>&</code> (\"et\"), <code>|</code> (\"ou\"), <code>!</code> (\"non"
+"\") et des parenthèses :"
+
+msgid "Group by"
+msgstr "Grouper par"
+
+msgid "Search"
+msgstr "Rechercher"
+
+msgid "Selected terms frequency"
+msgstr "Occurrences des termes sélectionnés"
+
+msgid "Table"
+msgstr "Tableau"
+
+msgid "Plot"
+msgstr "Graphique"
+
+msgid "Documents"
+msgstr "Documents"
+
+msgid "From"
+msgstr "De"
+
+msgid "Previous"
+msgstr "Précédent"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "Number :"
+msgstr "Nombre :"
+
+msgid "Help"
+msgstr "Aide"
+
+msgid "How to read the table :"
+msgstr "Lecture du tableau :"
+
+msgid ""
+"<code>Term frequency</code> : number of times this term is found in the "
+"selected corpus"
+msgstr ""
+"<code>Fréquence du terme</code> : nombre d'occurences du terme dans le "
+"corpus sélectionné"
+
+msgid ""
+"<code>Number of documents</code> : number of documents in the selected "
+"corpus in which this term appears at least once"
+msgstr ""
+"<code>Nombre de documents</code> : Nombre de documents du corpus dans "
+"lesquels le terme apparaît au moins une fois"
+
+msgid ""
+"<code>Percentage of documents</code> : percentage of documents in the "
+"selected corpus in which this term appears at least once"
+msgstr ""
+"<code>Pourcentage de documents</code> : pourcentages de documents du corpus "
+"dans lesquels le terme apparaît au moins une fois"
+
+msgid ""
+"Allows to search for terms or terms combinations in the selected corpus, and "
+"to display both frequencies and the corresponding documents. Note that the "
+"search is made on the cleaned corpus (after filtering, stemming, removing of "
+"stopwords, etc.). Also note that highlighting is not perfect : for example, "
+"if searching for <code>I</code>, every \"i\" in the documents will be "
+"highlighted, but the search has been made only on the word \"I\"."
+msgstr ""
+"Permet d'effectuer une recherche sur des termes ou des combinaisons de "
+"termes dans le corpus sélectionné, et d'afficher les nombres d'occurrences "
+"ainsi que les documents correspondants. À noter que la recherche s'effectue "
+"sur le corpus \"nettoyé\" (après filtrage, lemmatisation, suppression des "
+"mots-outils, etc.). À noter également que le surlignement est approximatif : "
+"par exemple, pour une recherche sur <code>je</code>, toutes les occurrences "
+"des lettres \"je\" seront surlignées, mais la recherche aura bien été "
+"effectuée sur le terme \"je\"."
+
+msgid "<code>I</code> : search for documents with the term \"I\" (or \"i\")"
+msgstr "<code>je</code> : rechercher les documents avec le terme \"je\" "
+
+msgid "<code>!i</code> : search for documents without the term \"I\""
+msgstr "<code>!je</code> : rechercher les documents ne comportant pas \"je\""
+
+msgid ""
+"<code>i | me | we</code> : search for documents with \"i\", \"me\" or \"we"
+"\" (or any combination)"
+msgstr ""
+"<code>je | moi | nous</code> : rechercher les documents comportants \"je\", "
+"\"moi\" ou \"nous\" (ou plusieurs d'entre eux)"
+
+msgid "<code>i & we</code> : search for documents with both \"i\" and \"we\""
+msgstr ""
+"<code>je & nous</code> : rechercher les documents comportant à la fois \"je"
+"\" et \"nous\""
+
+msgid ""
+"<code>sky & (sea | ocean)</code> : search for documents with \"sky\" and the "
+"terms \"sea\" or \"ocean\" (or both)"
+msgstr ""
+"<code>ciel & (mer | océan)</code> : recherche les documents avec \"ciel\" et "
+"les termes \"mer\" ou \"océan\" (ou les deux)"
+
+msgid ""
+"<strong>Warning :</strong> the following terms are missing from the corpus : "
+"<i>"
+msgstr ""
+"<strong>Attention :</strong> les termes suivants sont absents du corpus : <i>"
+
+msgid "<strong>Warning :</strong> Query error : <i>"
+msgstr "<strong>Attention :</strong> Erreur dans la requête : <i>"
+
+msgid "Term"
+msgstr "Terme"
+
+msgid "Term frequency"
+msgstr "Fréquence de termes"
+
+msgid "Percentage of documents"
+msgstr "Pourcentage de documents"
+
+msgid "Total"
+msgstr "Ensemble"
+
+msgid "<p><strong>Query :</strong> <code>"
+msgstr "<p><strong>Requête :</strong> <code>"
+
+msgid "<p><strong>Frequency in corpus :</strong>"
+msgstr "<p><strong>Occurrences dans le corpus :</strong>"
+
+msgid "documents ("
+msgstr "documents ("
+
+msgid "Group"
+msgstr "Groupe"
+
+msgid "<div class='document-content'>No document found.</p>"
+msgstr "<div class='document-content'>Aucun document trouvé.</p>"
+
+msgid "%s to %s of %s"
+msgstr "%s à %s sur %s"
+
+msgid "Document term matrix computation"
+msgstr "Calcul de la matrice termes-documents"
+
+msgid "Export R code"
+msgstr "Obtenir le code R"
+
+msgid ""
+"Copy, paste and run the following code in your script to compute the "
+"corresponding document-term matrix (DTM) :"
+msgstr ""
+"Copier, coller et exécuter le code suivant dans votre script pour calculer "
+"la matrice termes-documents (DTM) correspondante :"
+
+msgid "obj must be of class dfm"
+msgstr "obj doit être de classe dfm"
+
+msgid "Dfm"
+msgstr "Dfm"
+
+msgid "Similarities"
+msgstr "Similarités"
+
+msgid "Enter a term :</p>"
+msgstr "Saisir un terme :</p>"
+
+msgid "Similarity"
+msgstr "Similarité"
+
+msgid "Associated terms"
+msgstr "Termes associés"
+
+msgid "<strong>Warning :</strong> term not found in the corpus : <i>"
+msgstr "<strong>Attention :</strong> le terme est absent du corpus : <i>"
+
 msgid "Animations"
 msgstr "Animations"
 
 msgid "Lasso selection"
 msgstr "Sélection lasso"
-
-msgid "Get R code"
-msgstr "Obtenir le code R"
 
 msgid "Export as SVG"
 msgstr "Exporter en SVG"
@@ -157,9 +404,6 @@ msgstr "CA"
 msgid "Eigenvalues"
 msgstr "Valeurs propres"
 
-msgid "Plot"
-msgstr "Graphique"
-
 msgid "X axis"
 msgstr "Axe X"
 
@@ -177,9 +421,6 @@ msgstr "Contribution min pour afficher l'étiquette"
 
 msgid "Data"
 msgstr "Données"
-
-msgid "Export R code"
-msgstr "Obtenir le code R"
 
 msgid "obj must be of class MCA"
 msgstr "obj doit être de classe MCA"
@@ -237,6 +478,9 @@ msgstr "obj doit être de classe coa"
 
 msgid "the ade4 package is needed for this function to work."
 msgstr "le package ade4 doit être installé pour utiliser cette fonction."
+
+#~ msgid "Tearms search"
+#~ msgstr "Recherche de termes"
 
 #~ msgid "Cos2:"
 #~ msgstr "Cosinus carré:"
