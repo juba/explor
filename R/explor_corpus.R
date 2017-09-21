@@ -354,7 +354,7 @@ explor_corpus <- function(qco, settings) {
                                           tags$li(HTML(gettext("<code>Percentage of documents</code> : percentage of documents in the selected corpus in which this term appears at least once", domain = "R-explor")))
                                         ),
                                         
-                                        h3(gettext("Tearms search", domain = "R-explor")),
+                                        h3(gettext("Terms search", domain = "R-explor")),
                                         p(HTML(gettext("Allows to search for terms or terms combinations in the selected corpus, and to display both frequencies and the corresponding documents. Note that the search is made on the cleaned corpus (after filtering, stemming, removing of stopwords, etc.). Also note that highlighting is not perfect : for example, if searching for <code>I</code>, every \"i\" in the documents will be highlighted, but the search has been made only on the word \"I\".", domain = "R-explor"))),
                                         p("Query examples :"),
                                         tags$ul(
