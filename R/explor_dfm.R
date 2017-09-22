@@ -127,6 +127,13 @@ explor_dfm_css <- function() {
               .inline-small .btn {
                   padding: 3px 5px;
               }
+
+              /* Syntax highlighting */
+              span.hl.str { color: #d14;}
+              span.hl.kwa { color: #099;}
+              span.hl.num { color: #099;}
+              span.hl.kwd { color: #333; font-weight: bold;}
+              span.hl.com { color: #888; font-style: italic;}
               ")
     }
 
@@ -176,27 +183,6 @@ explor_dfm <- function(dfm, settings) {
     nvalues <- lapply(vars, length)
     vars <- vars[nvalues > 1 & nvalues < 100]
 
-    ## Document level variables filters
-    filter_inputs <- lapply(names(vars), function(name) {
-      v <- vars[[name]]
-      input_name <- paste0("meta_", name)
-      if (class(v) == "numeric") {
-        return(sliderInput(input_name, name, min(v), max(v), value = c(min(v), max(v))))
-      }
-      if (class(v) == "factor") {
-        v <- as.character(v)
-      }
-      if (class(v) == "character") {
-        levels <- unique(v)
-        if (length(levels) == 1) return(NULL)
-        levels[is.na(levels)] <- "NA"
-        return(checkboxGroupInput(input_name, name, choices = levels))
-      }
-      if (class(v) == "Date") {
-        return(dateRangeInput(input_name, name, start = min(v), end = max(v))) 
-      }
-    })
-    
 
     shiny::shinyApp(
       ui = navbarPage(gettext("Dfm", domain = "R-explor"),
@@ -205,9 +191,6 @@ explor_dfm <- function(dfm, settings) {
                       tabPanel(gettext("Terms", domain = "R-explor"),
                          sidebarLayout(
                            sidebarPanel(id = "sidebar",
-                                        h4(gettext("Corpus filtering", domain = "R-explor")),
-                                        p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
-                                        uiOutput("filters"),
                                         numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1),
                                         tags$script(explor_corpus_js())
                            ),
@@ -269,42 +252,11 @@ explor_dfm <- function(dfm, settings) {
                server = function(input, output, session) {
 
                  
-                 ## Variable inputs
-                 output$filters <- renderUI({
-                   filter_inputs  
-                 })
-                 
-                 # Create logical vector from selected filter elements
-                 selected_elements <- function(corpus, meta) {
-                   varname <- gsub("^meta_", "", meta)
-                   var <- docvars(corpus)[[varname]]
-                   selected_values <- input[[meta]]
-                   ## Date variables (date range)
-                   if (inherits(var, "Date")) {
-                     return(var >= selected_values[1] &
-                              var <= selected_values[2])
-                   }
-                   ## Character variables (checkboxes)
-                   if (is.character(selected_values)) {
-                     selected_values[selected_values == "NA"] <- NA
-                     return(var %in% selected_values)
-                   }
-                   ## Numeric variables (range)
-                   if (is.numeric(selected_values)) {
-                     return(var >= selected_values[1] &
-                              var <= selected_values[2])
-                   }
-                 }
+ 
                  
                  ## Filtered DTM
                  dtm <- reactive({
-                   metas <- grep("^meta_", names(input), value = TRUE)
-                   tmp <- dfm
-                   for (meta in metas) {
-                     if (is.null(input[[meta]])) next()
-                     tmp <- dfm_subset(tmp, selected_elements(tmp, meta))
-                   }
-                   dtm <- dfm_trim(tmp, min_count = input$term_min_occurrences)
+                   dtm <- dfm_trim(dfm, min_count = input$term_min_occurrences)
                    dtm
                  })  
                  
@@ -388,9 +340,6 @@ explor_dfm <- function(dfm, settings) {
                    names(docf) <- "nb_docs"
                    docf$term <- rownames(docf)
                    docf$prop_docs <- (round(docf$nb_docs / ndoc(dtm()) * 100, 2))
-                   # names(docf) <- c(gettext("Term frequency", domain = "R-explor"),
-                   #                  gettext("Documents frequency", domain = "R-explor"),
-                   #                  gettext("Documents proportion", domain = "R-explor"))
                    tab <- frq %>% left_join(docf, by = "term") %>% select(term, nb_terms, nb_docs, prop_docs)
                    names(tab) <- c(gettext("Term", domain = "R-explor"),
                                    gettext("Term frequency", domain = "R-explor"),
@@ -515,11 +464,6 @@ explor_dfm <- function(dfm, settings) {
                    sim <- as.matrix(textstat_simil(dtm(), selection = input$termsim, margin = "features", method = input$simmethod))
                    sim_nb <- as.matrix(textstat_simil(dtm(), selection = input$termsim, margin = "features", method = "simple matching"))
                    res <- data.frame(term = rownames(sim), similarity = round(as.vector(sim),4), nb_docs_commun = as.vector(sim_nb))
-                   # for (i in 1:nrow(res)) {
-                   #   print(i)
-                   #   print(dtm()[, res$term[i]])
-                   #   res$nb_docs_commun[i] <- sum(dtm()[, res$term[i]] & dtm()[, input$termsim])
-                   # }
                    tmp <- dtm()
                    tmp[tmp > 0] <- 1
                    res$nb_docs_communs <- as.vector(t(tmp) %*% tmp[, input$termsim])
