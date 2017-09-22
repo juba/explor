@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2017-09-21 17:00\n"
-"PO-Revision-Date: 2017-09-21 16:59+0200\n"
+"POT-Creation-Date: 2017-09-22 15:15\n"
+"PO-Revision-Date: 2017-09-22 15:16+0200\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -97,9 +97,6 @@ msgstr "Nombre de documents"
 msgid "Terms search"
 msgstr "Recherche de termes"
 
-msgid "Terms selection"
-msgstr "Sélection des termes"
-
 msgid ""
 "Enter one or more terms. You can use logical operators like <code>&</code> "
 "(\"and\"), <code>|</code> (\"or\"), <code>!</code> (\"not\") and "
@@ -138,6 +135,21 @@ msgstr "Suivant"
 
 msgid "Number :"
 msgstr "Nombre :"
+
+msgid "Terms location"
+msgstr "Position des termes"
+
+msgid "Enter one or more terms :"
+msgstr "Saisir un ou plusieurs termes :"
+
+msgid "Words"
+msgstr "Mots"
+
+msgid "Phrase"
+msgstr "Phrase"
+
+msgid "Selected terms location"
+msgstr "Position des termes sélectionnés"
 
 msgid "Help"
 msgstr "Aide"
@@ -208,15 +220,6 @@ msgstr ""
 "<code>ciel & (mer | océan)</code> : recherche les documents avec \"ciel\" et "
 "les termes \"mer\" ou \"océan\" (ou les deux)"
 
-msgid ""
-"<strong>Warning :</strong> the following terms are missing from the corpus : "
-"<i>"
-msgstr ""
-"<strong>Attention :</strong> les termes suivants sont absents du corpus : <i>"
-
-msgid "<strong>Warning :</strong> Query error : <i>"
-msgstr "<strong>Attention :</strong> Erreur dans la requête : <i>"
-
 msgid "Term"
 msgstr "Terme"
 
@@ -225,6 +228,15 @@ msgstr "Fréquence de termes"
 
 msgid "Percentage of documents"
 msgstr "Pourcentage de documents"
+
+msgid ""
+"<strong>Warning :</strong> the following terms are missing from the corpus : "
+"<i>"
+msgstr ""
+"<strong>Attention :</strong> les termes suivants sont absents du corpus : <i>"
+
+msgid "<strong>Warning :</strong> Query error : <i>"
+msgstr "<strong>Attention :</strong> Erreur dans la requête : <i>"
 
 msgid "Total"
 msgstr "Ensemble"
@@ -247,6 +259,9 @@ msgstr "<div class='document-content'>Aucun document trouvé.</p>"
 msgid "%s to %s of %s"
 msgstr "%s à %s sur %s"
 
+msgid "<strong>Warning :</strong> terms not found in corpus"
+msgstr "<strong>Attention :</strong> les termes sont absents du corpus"
+
 msgid "Document term matrix computation"
 msgstr "Calcul de la matrice termes-documents"
 
@@ -265,6 +280,9 @@ msgstr "obj doit être de classe dfm"
 
 msgid "Dfm"
 msgstr "Dfm"
+
+msgid "Terms selection"
+msgstr "Sélection des termes"
 
 msgid "Similarities"
 msgstr "Similarités"

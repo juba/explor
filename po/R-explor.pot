@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: explor 0.3.3\n"
-"POT-Creation-Date: 2017-09-21 17:00\n"
+"Project-Id-Version: explor 0.4.0\n"
+"POT-Creation-Date: 2017-09-22 15:15\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,9 +94,6 @@ msgstr ""
 msgid "Terms search"
 msgstr ""
 
-msgid "Terms selection"
-msgstr ""
-
 msgid "Enter one or more terms. You can use logical operators like <code>&</code> (\"and\"), <code>|</code> (\"or\"), <code>!</code> (\"not\") and parentheses :"
 msgstr ""
 
@@ -128,6 +125,21 @@ msgid "Next"
 msgstr ""
 
 msgid "Number :"
+msgstr ""
+
+msgid "Terms location"
+msgstr ""
+
+msgid "Enter one or more terms :"
+msgstr ""
+
+msgid "Words"
+msgstr ""
+
+msgid "Phrase"
+msgstr ""
+
+msgid "Selected terms location"
 msgstr ""
 
 msgid "Help"
@@ -163,12 +175,6 @@ msgstr ""
 msgid "<code>sky & (sea | ocean)</code> : search for documents with \"sky\" and the terms \"sea\" or \"ocean\" (or both)"
 msgstr ""
 
-msgid "<strong>Warning :</strong> the following terms are missing from the corpus : <i>"
-msgstr ""
-
-msgid "<strong>Warning :</strong> Query error : <i>"
-msgstr ""
-
 msgid "Term"
 msgstr ""
 
@@ -176,6 +182,12 @@ msgid "Term frequency"
 msgstr ""
 
 msgid "Percentage of documents"
+msgstr ""
+
+msgid "<strong>Warning :</strong> the following terms are missing from the corpus : <i>"
+msgstr ""
+
+msgid "<strong>Warning :</strong> Query error : <i>"
 msgstr ""
 
 msgid "Total"
@@ -199,6 +211,9 @@ msgstr ""
 msgid "%s to %s of %s"
 msgstr ""
 
+msgid "<strong>Warning :</strong> terms not found in corpus"
+msgstr ""
+
 msgid "Document term matrix computation"
 msgstr ""
 
@@ -212,6 +227,9 @@ msgid "obj must be of class dfm"
 msgstr ""
 
 msgid "Dfm"
+msgstr ""
+
+msgid "Terms selection"
 msgstr ""
 
 msgid "Similarities"
