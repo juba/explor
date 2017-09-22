@@ -21,21 +21,18 @@ explor(qacq)
 ## From quanteda
 library(quanteda)
 data("data_corpus_inaugural")
-class(data_corpus_inaugural)
 res <- data_corpus_inaugural
-explor(res)
-
 thesau <- list(country = c("country", "nation", "governement"))
-explor(res, stopwords = stopwords("english"), thesaurus = thesau)
+stop <- c(stopwords("english"), stopwords("french"))
+stop <- stopwords("english")
+explor(res, stopwords = stop, thesaurus = thesau)
 
-dfm <- dfm(corpus)
 
 
 ## dfm
 library(quanteda)
 data("data_corpus_inaugural")
 dtm <- dfm(data_corpus_inaugural)
-docvars(dtm)
 explor(dtm)
 
 
