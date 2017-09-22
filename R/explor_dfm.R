@@ -486,9 +486,9 @@ explor_dfm <- function(dfm, settings) {
                     if (is.character(var)) {
                       tab <- tab %>% 
                         filter(prop_docs > 0) %>%
-                        mutate(group = reorder(group, prop_docs))
+                        mutate(group = stats::reorder(group, prop_docs))
                       g <- ggplot(tab) + 
-                        geom_bar(aes(x = reorder(group, prop_docs), y = prop_docs), stat = "identity") +
+                        geom_bar(aes(x = stats::reorder(group, prop_docs), y = prop_docs), stat = "identity") +
                         xlab(input$term_group) +
                         ylab(gettext("Percentage of documents", domain = "R-explor")) +
                         theme(axis.text.x = element_text(angle = 45, hjust = 1))

@@ -1,5 +1,5 @@
 if (getRversion() >= "2.15.1")  
-  utils::globalVariables(c("group", "nb_docs", "nb_terms", "nom", "prop_docs", "term"))
+  utils::globalVariables(c("group", "nb_docs", "nb_terms", "nom", "prop_docs", "term", "tmp_corpus"))
 
 ##' @rdname explor
 ##' @param obj_brut optional raw documents corpus
@@ -463,7 +463,7 @@ explor_corpus <- function(qco, settings) {
                      eval(parse(text = code))
                      return(tmp_corpus)
                    } else {
-                     return(qco_brut)
+                     return(settings$qco_brut)
                    }
                  })
                  
@@ -682,9 +682,9 @@ explor_corpus <- function(qco, settings) {
                     if (is.character(var)) {
                       tab <- tab %>% 
                         filter(prop_docs > 0) %>%
-                        mutate(group = reorder(group, prop_docs))
+                        mutate(group = stats::reorder(group, prop_docs))
                       g <- ggplot(tab) + 
-                        geom_bar(aes(x = reorder(group, prop_docs), y = prop_docs), stat = "identity") +
+                        geom_bar(aes(x = stats::reorder(group, prop_docs), y = prop_docs), stat = "identity") +
                         xlab(input$term_group) +
                         ylab(gettext("Percentage of documents", domain = "R-explor")) +
                         theme(axis.text.x = element_text(angle = 45, hjust = 1))
