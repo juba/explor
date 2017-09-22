@@ -1,8 +1,8 @@
 Package: explor
 Type: Package
 Title: Interactive Interfaces for Results Exploration
-Version: 0.3.3
-Date: 2017-06-23
+Version: 0.4
+Date: 2017-09-23
 Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
     role=c("aut","cre")))
 Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
@@ -13,14 +13,14 @@ URL: https://github.com/juba/explor
 BugReports: https://github.com/juba/explor/issues
 Encoding: UTF-8
 Imports: 
-    shiny (>= 0.14),
+    shiny (>= 1.0.5),
     DT,
-    dplyr (>= 0.5),
+    dplyr (>= 0.7.3),
     tidyr,
     ggplot2,
     highr,
     scatterD3 (>= 0.8.1),
-    quanteda,
+    quanteda (>= 0.99),
     stringi
 Suggests: 
     FactoMineR,
