@@ -266,11 +266,15 @@ explor_corpus <- function(qco, settings) {
     names(m_ngrams) <- paste0(1:5, "-gram")
     
     shiny::shinyApp(
+      
       ui = navbarPage(gettext("Corpus", domain = "R-explor"),
                       header = tags$head(
                         tags$style(explor_corpus_css())),
                       tabPanel(gettext("Terms", domain = "R-explor"),
                          sidebarLayout(
+                           
+                           ## Sidebar ---------------------------------------------------------------
+                           
                            sidebarPanel(id = "sidebar",
                                         h4(gettext("Corpus treatment", domain = "R-explor")),
                                         checkboxInput("treat_tolower", gettext("Convert to lowercase", domain = "R-explor"), value = TRUE),
@@ -293,7 +297,8 @@ explor_corpus <- function(qco, settings) {
                            mainPanel(
                              tabsetPanel(
                                
-                               ## "Frequent terms" tab
+                               ## "Frequent terms" tab -----------------------------------------------
+                               
                                tabPanel(gettext("Frequent terms", domain = "R-explor"),
                                         h3(gettext("Most frequent terms", domain = "R-explor")),
                                         checkboxGroupInput("ngrams",
@@ -303,9 +308,10 @@ explor_corpus <- function(qco, settings) {
                                         p(HTML("<strong>", gettext("Number of documents", domain = "R-explor"), "&nbsp;:</strong>"), textOutput("nbdocs", inline = TRUE)),
                                         DT::dataTableOutput("freqtable")),
                                
-                               ## "Terms search" tab                      
+                               ## "Terms search" tab --------------------------------------------------   
+                               
                                tabPanel(gettext("Terms search", domain = "R-explor"),
-                                        h3(gettext("Terms selection", domain = "R-explor")),
+                                        h3(gettext("Terms search", domain = "R-explor")),
                                         HTML("<p>", gettext('Enter one or more terms. You can use logical operators like <code>&</code> ("and"), <code>|</code> ("or"), <code>!</code> ("not") and parentheses :', domain = "R-explor"), "</p>"),
                                         fluidRow(
                                           column(8, textInput("terms", gettext("Terms", domain = "R-explor"), width = "100%"))),
@@ -341,8 +347,33 @@ explor_corpus <- function(qco, settings) {
                                         )
                                ),
                                
+                               ## "Terms location" tab --------------------------------------------
+                               
+                               tabPanel(gettext("Terms location", domain = "R-explor"),
+                                        h3(gettext("Terms location", domain = "R-explor")),
+                                        HTML("<p>", gettext('Enter one or more terms :', domain = "R-explor"), "</p>"),
+                                        fluidRow(
+                                          column(8, textInput("location_terms", gettext("Terms", domain = "R-explor"), width = "100%")),
+                                          column(4, radioButtons("location_terms_type", label = NULL,
+                                                                 choices = c(gettext("Words", domain = "R-explor"),
+                                                                             gettext("Phrase", domain = "R-explor"))))),
+                                        tags$p(actionButton("launch_location_search", gettext("Search", domain = "R-explor"))),
+                                        uiOutput("loctermsAlert"),
+                                        h3(gettext("Selected terms location", domain = "R-explor")),
+                                        tabsetPanel(type = "pills",
+                                                    tabPanel(gettext("Plot", domain = "R-explor"),
+                                                             plotOutput("loctermplot")
+                                                    ),
+                                                    tabPanel(gettext("Table", domain = "R-explor"),
+                                                             DT::dataTableOutput("loctermtable")
+                                                    )
+                                        )
+                               ),
+                               
 
-                               ## "Help" tab
+                                                              
+                               ## "Help" tab -----------------------------------------------
+                               
                                tabPanel(gettext("Help", domain = "R-explor"),
                                         h2(gettext("Help", domain = "R-explor")),
                                         
@@ -504,13 +535,59 @@ explor_corpus <- function(qco, settings) {
                    dtm
                  })  
                  
+
+                 ## Number of documents
+                 output$nbdocs <- renderText({
+                   ndoc(co())
+                 })
+                 
+                 ## Global table options
+                 tableOptions <- list(lengthMenu =  c(10,20,50,100), 
+                                      pageLength = 20, orderClasses = TRUE, 
+                                      autoWidth = TRUE, searching = TRUE)
+                 ## Generate correct datatable order option from a column name
+                 order_option <- function(table, name, order="desc") {
+                   index <- which(names(table) == name) - 1
+                   list(order = list(list(index, order)))
+                 }
+                 
+                 ### FREQUENT TERMS -----------------------------------------------------------
+                 
+                 ## Most frequent terms table
+                 output$freqtable <- DT::renderDataTable({
+                   if (is.null(dtm())) return(NULL)
+                   frq <- data.frame(topfeatures(dtm(), n = 10000))
+                   names(frq) <- "nb_terms"
+                   frq$term <- rownames(frq)
+                   docf <- data.frame(docfreq(dtm(), scheme = "count"))
+                   names(docf) <- "nb_docs"
+                   docf$term <- rownames(docf)
+                   docf$prop_docs <- (round(docf$nb_docs / ndoc(dtm()) * 100, 2))
+                   # names(docf) <- c(gettext("Term frequency", domain = "R-explor"),
+                   #                  gettext("Documents frequency", domain = "R-explor"),
+                   #                  gettext("Documents proportion", domain = "R-explor"))
+                   tab <- frq %>% left_join(docf, by = "term") %>% select(term, nb_terms, nb_docs, prop_docs)
+                   names(tab) <- c(gettext("Term", domain = "R-explor"),
+                                   gettext("Term frequency", domain = "R-explor"),
+                                   gettext("Number of documents", domain = "R-explor"),
+                                   gettext("Percentage of documents", domain = "R-explor"))
+                   DT::datatable(tab, 
+                                 options = c(tableOptions, order_option(tab, gettext("Term frequency", domain = "R-explor"))), rownames = FALSE)
+                 })
+                 
+                 ### TERMS SEARCH ---------------------------------------------------------------------
+                 
                  ## Terms input
                  terms <- reactive({
                    tmp <- unlist(stri_extract_all_words(input$terms))
                    if (length(tmp) == 1 && is.na(tmp)) return(NULL)
                    tmp <- tolower(tmp[tmp != ""])
                  })
-                 
+                 ## Invalid terms in terms input
+                 invalid_terms <- reactive({
+                   tmp_terms <- terms()
+                   tmp_terms[!(tmp_terms %in% colnames(dtm()))]    
+                 })
                  
                  ## Run the query on the document term matrix as environment,
                  ## and returns the result
@@ -535,11 +612,6 @@ explor_corpus <- function(qco, settings) {
                    list(res = res, error = error)
                  })
                  
-                 ## Invalid terms in terms input
-                 invalid_terms <- reactive({
-                   tmp_terms <- terms()
-                   tmp_terms[!(tmp_terms %in% colnames(dtm()))]    
-                 })
                  ## Alert if term is missing from corpus
                  output$termsAlert <- renderUI({
                    if (length(invalid_terms() > 0) && invalid_terms() != "") {
@@ -557,43 +629,6 @@ explor_corpus <- function(qco, settings) {
                      div(class = "alert alert-danger",
                          HTML(paste(gettext("<strong>Warning :</strong> Query error : <i>", domain = "R-explor"), e, "</i>")))
                    }
-                 })
-                 
-                 ## Number of documents
-                 output$nbdocs <- renderText({
-                   ndoc(co())
-                 })
-                 
-                 ## Global table options
-                 tableOptions <- list(lengthMenu =  c(10,20,50,100), 
-                                      pageLength = 20, orderClasses = TRUE, 
-                                      autoWidth = TRUE, searching = TRUE)
-                 ## Generate correct datatable order option from a column name
-                 order_option <- function(table, name, order="desc") {
-                   index <- which(names(table) == name) - 1
-                   list(order = list(list(index, order)))
-                 }
-                 
-                 ## Most frequent terms table
-                 output$freqtable <- DT::renderDataTable({
-                   if (is.null(dtm())) return(NULL)
-                   frq <- data.frame(topfeatures(dtm(), n = 10000))
-                   names(frq) <- "nb_terms"
-                   frq$term <- rownames(frq)
-                   docf <- data.frame(docfreq(dtm(), scheme = "count"))
-                   names(docf) <- "nb_docs"
-                   docf$term <- rownames(docf)
-                   docf$prop_docs <- (round(docf$nb_docs / ndoc(dtm()) * 100, 2))
-                   # names(docf) <- c(gettext("Term frequency", domain = "R-explor"),
-                   #                  gettext("Documents frequency", domain = "R-explor"),
-                   #                  gettext("Documents proportion", domain = "R-explor"))
-                   tab <- frq %>% left_join(docf, by = "term") %>% select(term, nb_terms, nb_docs, prop_docs)
-                   names(tab) <- c(gettext("Term", domain = "R-explor"),
-                                   gettext("Term frequency", domain = "R-explor"),
-                                   gettext("Number of documents", domain = "R-explor"),
-                                   gettext("Percentage of documents", domain = "R-explor"))
-                   DT::datatable(tab, 
-                                 options = c(tableOptions, order_option(tab, gettext("Term frequency", domain = "R-explor"))), rownames = FALSE)
                  })
                  
                  ## Search term frequency table
@@ -669,6 +704,7 @@ explor_corpus <- function(qco, settings) {
                    tab
                  })
 
+                ## Searched terms frequency plot
                 output$freqtermplot <- renderPlot({
                   input$launch_search
                   isolate({
@@ -748,6 +784,65 @@ explor_corpus <- function(qco, settings) {
                    })
                  })
 
+                 
+                 ### TERMS LOCATION ---------------------------------------------------------------------
+                 
+                 ## Location terms
+                 loc_terms <- reactive({
+                   tmp <- unlist(stri_extract_all_words(input$location_terms))
+                   if (length(tmp) == 1 && is.na(tmp)) return(NULL)
+                   tmp <- tolower(tmp[tmp != ""])
+                 })
+               
+                 ## Location terms kwic object
+                 kwic_loc_terms <- reactive({
+                   terms <- loc_terms()
+                   if (is.null(terms)) {
+                     return(NULL)
+                   }
+                   if (input$location_terms_type == "Phrase") {
+                     terms <- phrase(input$location_terms)
+                   }
+                   kwic(co(), terms, window = 7)
+                 })
+                 ## Alert if location term is missing from corpus
+                 output$loctermsAlert <- renderUI({
+                   input$launch_location_search
+                   isolate({
+                     if (length(loc_terms()) > 0  && nrow(kwic_loc_terms()) == 0) {
+                       div(class = "alert alert-warning",
+                           HTML(paste(gettext("<strong>Warning :</strong> terms not found in corpus", domain = "R-explor"))))
+                     }
+                   })
+                 })
+
+                 ## Terms location table
+                 output$loctermtable <- DT::renderDataTable({
+                   input$launch_location_search
+                   isolate({
+                     if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0) {
+                       return(DT::datatable(data.frame(table = character())))
+                     }
+                     tab <- data.frame(kwic_loc_terms())
+                     tab$text <- paste(tab$pre, strong(tab$keyword), tab$post)
+                     tab <- tab %>% select("docname", "from", "to", "text") 
+                     tab <- DT::datatable(tab, options = c(tableOptions), rownames = FALSE, escape = FALSE)
+                   })
+                   tab
+                 })
+                 
+                 ## Terms location plot
+                 output$loctermplot <- renderPlot({
+                   input$launch_location_search
+                   isolate({
+                     if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0) return(NULL)
+                     g <- textplot_xray(kwic_loc_terms())
+                   })
+                   g
+                 }, height = 650)
+                 
+                 
+                 ### CODE EXPORT ---------------------------------------------------------------------
                  
                  ## Code export modal dialog
                  observeEvent(input$get_r_code, {
