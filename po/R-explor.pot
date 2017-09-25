@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.4.0\n"
-"POT-Creation-Date: 2017-09-22 15:15\n"
+"POT-Creation-Date: 2017-09-25 15:54\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,13 +31,19 @@ msgstr ""
 msgid "obj must be of class Corpus"
 msgstr ""
 
-msgid "obj_brut must be of class Corpus"
+msgid "raw_corpus must be of class Corpus"
 msgstr ""
 
 msgid "obj must be of class corpus"
 msgstr ""
 
-msgid "obj_brut must be of class corpus"
+msgid "raw_corpus must be of class corpus"
+msgstr ""
+
+msgid "Filtered corpus"
+msgstr ""
+
+msgid "Raw corpus"
 msgstr ""
 
 msgid "Corpus"
@@ -64,7 +70,7 @@ msgstr ""
 msgid "Apply thesaurus"
 msgstr ""
 
-msgid "Stem words"
+msgid "Stem words (english only)"
 msgstr ""
 
 msgid "Corpus filtering"
@@ -116,6 +122,15 @@ msgid "Documents"
 msgstr ""
 
 msgid "From"
+msgstr ""
+
+msgid "Display documents from"
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+msgid "Display metadata"
 msgstr ""
 
 msgid "Previous"
@@ -212,6 +227,12 @@ msgid "%s to %s of %s"
 msgstr ""
 
 msgid "<strong>Warning :</strong> terms not found in corpus"
+msgstr ""
+
+msgid "No document found"
+msgstr ""
+
+msgid "Too many documents :"
 msgstr ""
 
 msgid "Document term matrix computation"

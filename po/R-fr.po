@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2017-09-22 15:15\n"
-"PO-Revision-Date: 2017-09-22 15:16+0200\n"
+"POT-Creation-Date: 2017-09-25 15:54\n"
+"PO-Revision-Date: 2017-09-25 15:56+0200\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -34,14 +34,20 @@ msgstr "Modalité"
 msgid "obj must be of class Corpus"
 msgstr "obj doit être de classe Corpus"
 
-msgid "obj_brut must be of class Corpus"
-msgstr "obj_brut doit être de classe Corpus"
+msgid "raw_corpus must be of class Corpus"
+msgstr "row_corpus doit être de classe Corpus"
 
 msgid "obj must be of class corpus"
 msgstr "obj doit être de classe corpus"
 
-msgid "obj_brut must be of class corpus"
-msgstr "obj_brut doit être de classe corpus"
+msgid "raw_corpus must be of class corpus"
+msgstr "raw_corpus doit être de classe corpus"
+
+msgid "Filtered corpus"
+msgstr "Corpus filtré"
+
+msgid "Raw corpus"
+msgstr "Corpus brut"
 
 msgid "Corpus"
 msgstr "Corpus"
@@ -67,8 +73,8 @@ msgstr "Supprimer les mots-outils"
 msgid "Apply thesaurus"
 msgstr "Appliquer le thesaurus"
 
-msgid "Stem words"
-msgstr "Lemmatiser les termes"
+msgid "Stem words (english only)"
+msgstr "Lemmatiser les termes (anglais seulement)"
 
 msgid "Corpus filtering"
 msgstr "Filtrage du corpus"
@@ -126,6 +132,15 @@ msgstr "Documents"
 
 msgid "From"
 msgstr "De"
+
+msgid "Display documents from"
+msgstr "Afficher les documents depuis"
+
+msgid "Display"
+msgstr "Afficher"
+
+msgid "Display metadata"
+msgstr "Afficher les métadonnés"
 
 msgid "Previous"
 msgstr "Précédent"
@@ -261,6 +276,12 @@ msgstr "%s à %s sur %s"
 
 msgid "<strong>Warning :</strong> terms not found in corpus"
 msgstr "<strong>Attention :</strong> les termes sont absents du corpus"
+
+msgid "No document found"
+msgstr "Aucun document trouvé"
+
+msgid "Too many documents :"
+msgstr "Documents trop nombreux :"
 
 msgid "Document term matrix computation"
 msgstr "Calcul de la matrice termes-documents"
@@ -496,6 +517,15 @@ msgstr "obj doit être de classe coa"
 
 msgid "the ade4 package is needed for this function to work."
 msgstr "le package ade4 doit être installé pour utiliser cette fonction."
+
+#~ msgid "obj_brut must be of class Corpus"
+#~ msgstr "obj_brut doit être de classe Corpus"
+
+#~ msgid "obj_brut must be of class corpus"
+#~ msgstr "obj_brut doit être de classe corpus"
+
+#~ msgid "Stem words"
+#~ msgstr "Lemmatiser les termes"
 
 #~ msgid "Tearms search"
 #~ msgstr "Recherche de termes"
