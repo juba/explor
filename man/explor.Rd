@@ -20,10 +20,10 @@
 \usage{
 explor(obj, ...)
 
-\method{explor}{Corpus}(obj, obj_brut = NULL, stopwords = NULL,
+\method{explor}{Corpus}(obj, raw_corpus = NULL, stopwords = NULL,
   thesaurus = NULL, ...)
 
-\method{explor}{corpus}(obj, obj_brut = NULL, stopwords = NULL,
+\method{explor}{corpus}(obj, raw_corpus = NULL, stopwords = NULL,
   thesaurus = NULL, ...)
 
 \method{explor}{dfm}(obj, ...)
@@ -53,7 +53,7 @@ explor(obj, ...)
 
 \item{...}{arguments passed to other methods}
 
-\item{obj_brut}{optional raw documents corpus}
+\item{raw_corpus}{optional raw documents corpus}
 
 \item{stopwords}{stopwords character vector}
 

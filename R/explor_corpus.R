@@ -2,29 +2,29 @@ if (getRversion() >= "2.15.1")
   utils::globalVariables(c("group", "nb_docs", "nb_terms", "nom", "prop_docs", "term", "tmp_corpus"))
 
 ##' @rdname explor
-##' @param obj_brut optional raw documents corpus
+##' @param raw_corpus optional raw documents corpus
 ##' @param stopwords stopwords character vector
 ##' @param thesaurus quanteda thesaurus list
 ##' @aliases explor.Corpus
 ##' @export
 
-explor.Corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NULL, ...) {
+explor.Corpus <- function(obj, raw_corpus = NULL, stopwords = NULL, thesaurus = NULL, ...) {
     
     if (!inherits(obj, "Corpus")) stop(gettext("obj must be of class Corpus", domain = "R-explor"))
     
     ## corpus preparation
     corpus <- prepare_results(obj)
-    if (!is.null(obj_brut)) {
-      if (!inherits(obj_brut, "Corpus")) stop(gettext("obj_brut must be of class Corpus", domain = "R-explor"))
-      obj_brut <- prepare_results(obj_brut)
+    if (!is.null(raw_corpus)) {
+      if (!inherits(raw_corpus, "Corpus")) stop(gettext("raw_corpus must be of class Corpus", domain = "R-explor"))
+      raw_corpus <- prepare_results(raw_corpus)
     }
     
     ## Settings
-    settings <- list(qco_brut = obj_brut,
+    settings <- list(raw_corpus = raw_corpus,
                      stopwords = stopwords,
                      thesaurus = thesaurus,
                      corpus_name = deparse(substitute(obj)),
-                     corpus_brut_name = deparse(substitute(obj_brut)),
+                     raw_courpus_name = deparse(substitute(raw_corpus)),
                      stopwords_name = deparse(substitute(stopwords)),
                      thesaurus_name = deparse(substitute(thesaurus)))
 
@@ -37,23 +37,23 @@ explor.Corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NU
 ##' @aliases explor.corpus
 ##' @export
 
-explor.corpus <- function(obj, obj_brut = NULL, stopwords = NULL, thesaurus = NULL, ...) {
+explor.corpus <- function(obj, raw_corpus = NULL, stopwords = NULL, thesaurus = NULL, ...) {
     
     if (!inherits(obj, "corpus")) stop(gettext("obj must be of class corpus", domain = "R-explor"))
 
     ## corpus preparation
     corpus <- prepare_results(obj)
-    if (!is.null(obj_brut)) {
-      if (!inherits(obj_brut, "corpus")) stop(gettext("obj_brut must be of class corpus", domain = "R-explor"))
-      obj_brut <- prepare_results(obj_brut)
+    if (!is.null(raw_corpus)) {
+      if (!inherits(raw_corpus, "corpus")) stop(gettext("raw_corpus must be of class corpus", domain = "R-explor"))
+      raw_corpus <- prepare_results(raw_corpus)
     }
     
     ## Settings
-    settings <- list(qco_brut = obj_brut,
+    settings <- list(raw_corpus = raw_corpus,
                      stopwords = stopwords,
                      thesaurus = thesaurus,
                      corpus_name = deparse(substitute(obj)),
-                     corpus_brut_name = deparse(substitute(obj_brut)),
+                     raw_corpus_name = deparse(substitute(raw_corpus)),
                      stopwords_name = deparse(substitute(stopwords)),
                      thesaurus_name = deparse(substitute(thesaurus)))
 
@@ -168,6 +168,12 @@ explor_corpus_css <- function() {
                   padding: 10px;
                   margin: 20px 5px;
               }
+              .document-content .metadata {
+                  margin-top: 10px;
+                  border-left: 2px solid #BBB;
+                  padding-left: 5px;
+                  font-size: 90%;
+              }
               .highlight {background-color: yellow;}
               
               .inline-small * {
@@ -265,6 +271,15 @@ explor_corpus <- function(qco, settings) {
     m_ngrams <- 1:5
     names(m_ngrams) <- paste0(1:5, "-gram")
     
+    ## Document corpus choices
+    doc_corpus_choices <- "filtered"
+    names(doc_corpus_choices) <- gettext("Filtered corpus", domain = "R-explor")
+    if (!is.null(settings$raw_corpus)) {
+      doc_corpus_choices <- c(doc_corpus_choices, "raw")
+      names(doc_corpus_choices) <- c(names(doc_corpus_choices), gettext("Raw corpus", domain = "R-explor"))
+    }
+
+    
     shiny::shinyApp(
       
       ui = navbarPage(gettext("Corpus", domain = "R-explor"),
@@ -335,10 +350,21 @@ explor_corpus <- function(qco, settings) {
                                                     tabPanel(gettext("Documents", domain = "R-explor"),
                                                              div(style = "display: none;",
                                                                  numericInput("start_documents", gettext("From", domain = "R-explor"), value = 1)),
+                                                             fluidRow(
+                                                               column(4,
+                                                                selectInput("doc_corpus", 
+                                                                            gettext("Display documents from", domain = "R-explor"), 
+                                                                            choices = doc_corpus_choices)),
+                                                               column(4,
+                                                                      selectInput("doc_display", 
+                                                                                  gettext("Display", domain = "R-explor"),
+                                                                                  choices = c("Documents", "Kwics"))),
+                                                               column(4,
+                                                                      checkboxInput("doc_metadata", gettext("Display metadata", domain = "R-explor"), value = TRUE))
+                                                             ),
                                                              div(class = "inline-small form-inline",
                                                                  actionButton("prev_documents", gettext("Previous", domain = "R-explor"), icon("arrow-left")),
                                                                  textOutput("documents_pagination"),
-                                                                 #numericInput("nb_documents", "Nombre", 10, min = 1, width = "4em"),
                                                                  actionButton("next_documents", gettext("Next", domain = "R-explor"), icon("arrow-right")),
                                                                  numericInput("nb_documents_display", gettext(" Number : ", domain = "R-explor"), 
                                                                               value = 10, min = 1, max = 100, step = 1, width = "auto")),
@@ -488,14 +514,15 @@ explor_corpus <- function(qco, settings) {
                    }
                  })
                  
-                 ## Brut corpus filtered
-                 co_brut <- reactive({
-                   code <- corpus_filtering_code(settings$corpus_brut_name)
+                 ## Raw corpus filtered
+                 raw_co <- reactive({
+                   if (is.null(settings$raw_corpus)) return(co())
+                   code <- corpus_filtering_code(settings$raw_corpus_name)
                    if (code != "") {
                      eval(parse(text = code))
                      return(tmp_corpus)
                    } else {
-                     return(settings$qco_brut)
+                     return(settings$raw_corpus)
                    }
                  })
                  
@@ -716,7 +743,7 @@ explor_corpus <- function(qco, settings) {
                     group <- quo(input$term_group)
                     var <- docvars(co()) %>% pull(!!group)
                     g <- NULL
-                    if (is.character(var)) {
+                    if (is.character(var) || is.factor(var)) {
                       tab <- tab %>% 
                         filter(prop_docs > 0) %>%
                         mutate(group = stats::reorder(group, prop_docs))
@@ -746,7 +773,6 @@ explor_corpus <- function(qco, settings) {
                  observeEvent(input$next_documents, {
                    val <- isolate(input$start_documents) + isolate(input$nb_documents_display)
                    if (val <= nb_docs_term()) {
-                     print("obs")
                      updateNumericInput(session, "start_documents", value = val)
                    }
                  })
@@ -755,6 +781,9 @@ explor_corpus <- function(qco, settings) {
                  output$documenttable <- renderText({
                    ## Acquire dependencies
                    input$launch_search
+                   input$doc_metadata
+                   input$doc_corpus
+                   input$doc_display
                    start <- input$start_documents
                    nb_documents <- input$nb_documents_display
                    isolate({
@@ -765,9 +794,33 @@ explor_corpus <- function(qco, settings) {
                      out <- ""
                      for (i in indexes) {
                        out <- paste(out, "<div class='document-content'>")
-                       out <- paste(out, "<p><strong>", docvars(co())$orientation[i] ,"</strong><br />")
-                       out <- paste(out, explor_corpus_highlight(co_brut()[i], terms()))
-                       out <- paste(out, "</p></div>")
+                       out <- paste(out, "<p><strong>", rownames(docvars(co()))[i] ,"</strong></p>")
+                       if (input$doc_corpus == "filtered") {
+                         tmp_corp <- co()
+                       } 
+                       if (input$doc_corpus == "raw") {
+                         tmp_corp <- raw_co()
+                       }
+                       if (input$doc_display == "Documents") {                        
+                        out <- paste(out, explor_corpus_highlight(tmp_corp[i], terms()))                       
+                       }
+                       if (input$doc_display == "Kwics") {
+                         kwics <- kwic(tmp_corp[i], pattern = terms(), window = 7, valuetype = "fixed")
+                         kwics$text <- paste("...", kwics$pre, strong(kwics$keyword), kwics$post, "...")
+                         kwics <- paste(kwics$text, collapse = "<br />")
+                         out <- paste(out, kwics)
+                       }
+                       
+                       if (input$doc_metadata) {
+                         meta <- docvars(co())[i,]
+                         metadata <- character(0)
+                         for (m in colnames(meta)) {
+                           metadata <- append(metadata, paste0("<span>", m, "</span>: <code>", meta[, m], "</code>"))
+                         }
+                         metadata <- paste(metadata, collapse = "<br />")
+                         out <- paste(out, HTML("<p class='metadata'>", metadata, "</p>"))
+                       }
+                       out <- paste(out, "</div>")
                      }
                      HTML(out)
                    })
