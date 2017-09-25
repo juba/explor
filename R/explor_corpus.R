@@ -596,7 +596,7 @@ explor_corpus <- function(qco, settings) {
                    error <- NULL
                    if (length(terms()) == 0) return(list(res = NULL, error = NULL))
                    dtm_terms <- dtm() %>% 
-                     dfm_select(features = terms(), selection = "keep") %>% 
+                     dfm_select(pattern = terms(), valuetype = "fixed", selection = "keep") %>% 
                      as.data.frame()
                    ## Convert count to presence / absence
                    if (ncol(dtm_terms) > 0) {
