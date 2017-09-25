@@ -362,6 +362,7 @@ explor_corpus <- function(qco, settings) {
                                         h3(gettext("Selected terms location", domain = "R-explor")),
                                         tabsetPanel(type = "pills",
                                                     tabPanel(gettext("Plot", domain = "R-explor"),
+                                                             textOutput("loctermplottext"),
                                                              plotOutput("loctermplot")
                                                     ),
                                                     tabPanel(gettext("Table", domain = "R-explor"),
@@ -831,11 +832,25 @@ explor_corpus <- function(qco, settings) {
                    tab
                  })
                  
+                 ## Terms location plot text
+                 output$loctermplottext <- renderText({
+                   input$launch_location_search
+                   isolate({
+                     if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0) {
+                       return(gettext("No document found", domain = "R-explor"))
+                     }
+                     if (nrow(kwic_loc_terms()) > 80) {
+                       return(paste0(gettext("Too many documents : ", domain = "R-explor"), nrow(kwic_loc_terms())))
+                     }
+                     return("")
+                   })
+                 })
+                 
                  ## Terms location plot
                  output$loctermplot <- renderPlot({
                    input$launch_location_search
                    isolate({
-                     if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0) return(NULL)
+                     if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0 || nrow(kwic_loc_terms()) > 60) return(NULL)
                      g <- textplot_xray(kwic_loc_terms())
                    })
                    g
