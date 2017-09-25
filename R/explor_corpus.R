@@ -299,7 +299,7 @@ explor_corpus <- function(qco, settings) {
                                           checkboxInput("treat_stopwords", gettext("Remove stopwords", domain = "R-explor"), value = TRUE),
                                         if (!is.null(settings$thesaurus)) 
                                           checkboxInput("treat_thesaurus", gettext("Apply thesaurus", domain = "R-explor"), value = TRUE),
-                                        checkboxInput("treat_stem", gettext("Stem words", domain = "R-explor"), value = FALSE),                                        
+                                        checkboxInput("treat_stem", gettext("Stem words (english only)", domain = "R-explor"), value = FALSE),                                        
                                         h4(gettext("Corpus filtering", domain = "R-explor")),
                                         p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),
@@ -538,7 +538,7 @@ explor_corpus <- function(qco, settings) {
                    } else {
                      thesaurus <- "NULL"
                    }
-                   code <- paste0("dtm <- dfm(%s, what = 'fastestword',\n", 
+                   code <- paste0("dtm <- dfm(%s, what = 'word',\n", 
                                   "           tolower = ", input$treat_tolower, ", remove_punct = ", input$treat_removepunct, ",\n",
                                   "           remove_numbers = ", input$treat_rmnum, ", stem = ", input$treat_stem, ",\n",
                                   "           remove = ", remove, ",\n",
