@@ -285,7 +285,7 @@ explor_corpus <- function(qco, settings) {
       ui = navbarPage(gettext("Corpus", domain = "R-explor"),
                       header = tags$head(
                         tags$style(explor_corpus_css())),
-                      tabPanel(gettext("Terms", domain = "R-explor"),
+                      tabPanel(gettext("Exploration", domain = "R-explor"),
                          sidebarLayout(
                            
                            ## Sidebar ---------------------------------------------------------------
@@ -299,7 +299,10 @@ explor_corpus <- function(qco, settings) {
                                           checkboxInput("treat_stopwords", gettext("Remove stopwords", domain = "R-explor"), value = TRUE),
                                         if (!is.null(settings$thesaurus)) 
                                           checkboxInput("treat_thesaurus", gettext("Apply thesaurus", domain = "R-explor"), value = TRUE),
-                                        checkboxInput("treat_stem", gettext("Stem words (english only)", domain = "R-explor"), value = FALSE),                                        
+                                        checkboxInput("treat_stem", gettext("Stem words", domain = "R-explor"), value = FALSE),
+                                        conditionalPanel("input.treat_stem",
+                                                         selectInput("treat_stem_lang", gettext("Stemming language", domain = "R-explor"),                                           
+                                                                     choices = getStemLanguages(), selected = "english"), width = "50%"),
                                         h4(gettext("Corpus filtering", domain = "R-explor")),
                                         p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),
@@ -544,6 +547,9 @@ explor_corpus <- function(qco, settings) {
                                   "           remove = ", remove, ",\n",
                                   "           thesaurus = ", thesaurus, ",\n",
                                   "           ngrams = ", input$ngrams, ")\n")
+                   if (input$treat_stem) {
+                     code <- paste0(code, "dtm <- dfm_wordstem(dtm, language = '", input$treat_stem_lang, "')\n")
+                   }
                    if (input$term_min_occurrences > 0) {
                      code <- paste0(code, "dtm <- dfm_trim(dtm, min_count = ", input$term_min_occurrences, ")")
                    }
