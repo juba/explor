@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.4.0\n"
-"POT-Creation-Date: 2017-09-25 15:54\n"
+"POT-Creation-Date: 2017-09-28 10:37\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Corpus"
 msgstr ""
 
-msgid "Terms"
+msgid "Exploration"
 msgstr ""
 
 msgid "Corpus treatment"
@@ -70,7 +70,10 @@ msgstr ""
 msgid "Apply thesaurus"
 msgstr ""
 
-msgid "Stem words (english only)"
+msgid "Stem words"
+msgstr ""
+
+msgid "Stemming language"
 msgstr ""
 
 msgid "Corpus filtering"
@@ -101,6 +104,9 @@ msgid "Terms search"
 msgstr ""
 
 msgid "Enter one or more terms. You can use logical operators like <code>&</code> (\"and\"), <code>|</code> (\"or\"), <code>!</code> (\"not\") and parentheses :"
+msgstr ""
+
+msgid "Terms"
 msgstr ""
 
 msgid "Group by"

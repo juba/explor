@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2017-09-25 15:54\n"
-"PO-Revision-Date: 2017-09-25 15:56+0200\n"
+"POT-Creation-Date: 2017-09-28 10:37\n"
+"PO-Revision-Date: 2017-09-28 10:37+0200\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -52,8 +52,8 @@ msgstr "Corpus brut"
 msgid "Corpus"
 msgstr "Corpus"
 
-msgid "Terms"
-msgstr "Termes"
+msgid "Exploration"
+msgstr "Exploration"
 
 msgid "Corpus treatment"
 msgstr "Traitement du corpus"
@@ -73,8 +73,11 @@ msgstr "Supprimer les mots-outils"
 msgid "Apply thesaurus"
 msgstr "Appliquer le thesaurus"
 
-msgid "Stem words (english only)"
-msgstr "Lemmatiser les termes (anglais seulement)"
+msgid "Stem words"
+msgstr "Lemmatiser les termes"
+
+msgid "Stemming language"
+msgstr "Langue pour la lemmatisation"
 
 msgid "Corpus filtering"
 msgstr "Filtrage du corpus"
@@ -111,6 +114,9 @@ msgstr ""
 "Saisir un ou plusieurs termes. Vous pouvez utiliser des opérateurs logiques "
 "comme <code>&</code> (\"et\"), <code>|</code> (\"ou\"), <code>!</code> (\"non"
 "\") et des parenthèses :"
+
+msgid "Terms"
+msgstr "Termes"
 
 msgid "Group by"
 msgstr "Grouper par"
@@ -518,14 +524,14 @@ msgstr "obj doit être de classe coa"
 msgid "the ade4 package is needed for this function to work."
 msgstr "le package ade4 doit être installé pour utiliser cette fonction."
 
+#~ msgid "Stem words (english only)"
+#~ msgstr "Lemmatiser les termes (anglais seulement)"
+
 #~ msgid "obj_brut must be of class Corpus"
 #~ msgstr "obj_brut doit être de classe Corpus"
 
 #~ msgid "obj_brut must be of class corpus"
 #~ msgstr "obj_brut doit être de classe corpus"
-
-#~ msgid "Stem words"
-#~ msgstr "Lemmatiser les termes"
 
 #~ msgid "Tearms search"
 #~ msgstr "Recherche de termes"
@@ -553,9 +559,6 @@ msgstr "le package ade4 doit être installé pour utiliser cette fonction."
 
 #~ msgid "Max p-value"
 #~ msgstr "p-value maximale"
-
-#~ msgid "Correlation:"
-#~ msgstr "Corrélation :"
 
 #~ msgid "explor - MCA"
 #~ msgstr "explor - ACM"
