@@ -110,16 +110,7 @@ explor_dfm_css <- function() {
               .dataTables_filter, .dataTables_paginate {
                   font-size: 11px !important;
               }
-              
-              .document-content {
-                  font-size: 12px !important;
-                  background-color: #EEE;
-                  border-radius: 8px;
-                  padding: 10px;
-                  margin: 20px 5px;
-              }
-              .highlight {background-color: yellow;}
-              
+
               .inline-small * {
                   display: inline;    
                   font-size: 80% !important;
