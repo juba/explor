@@ -8,7 +8,7 @@ mca <- MCA(hobbies[1:1000,c(1:8,21:23)], quali.sup = 9:10,
 res <- prepare_results(mca)
 
 test_that("Eigenvalues are equals", {
-  expect_equal(mca$eig$`percentage of variance`, res$eig$percent)
+  expect_equal(unname(mca$eig[, "percentage of variance"]), res$eig$percent)
 })
 
 test_that("Variables results are equal", {
