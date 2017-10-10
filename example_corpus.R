@@ -5,8 +5,9 @@ library(quanteda)
 data("acq")
 class(acq)
 res_brut <- acq
+res <- tm_map(acq, tolower)
 res <- tm_map(acq, removeWords, stopwords('english'))
-explor(res, res_brut)
+explor(res, obj_brut = res_brut)
 explor(acq)
 
 
@@ -42,6 +43,8 @@ docs <- c("This is a text.", "This is another one.", "And this is yet another te
 co <- corpus(Corpus(VectorSource(docs)))
 dtm <- dfm(co)
 dtm
-textstat_simil(dtm, margin="features", select="this")
+textstat_simil(dtm, margin = "features", selection = "this")
 dtm
 t(dtm) %*% dtm[,"this"]
+
+
