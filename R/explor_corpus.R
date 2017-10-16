@@ -237,6 +237,7 @@ explor_corpus_highlight <- function(x, str) {
 ##' @import shiny
 ##' @import quanteda
 ##' @importFrom highr hi_html
+##' @importFrom SnowballC getStemLanguages 
 
 explor_corpus <- function(qco, settings) { 
     
@@ -302,7 +303,7 @@ explor_corpus <- function(qco, settings) {
                                         checkboxInput("treat_stem", gettext("Stem words", domain = "R-explor"), value = FALSE),
                                         conditionalPanel("input.treat_stem",
                                                          selectInput("treat_stem_lang", gettext("Stemming language", domain = "R-explor"),                                           
-                                                                     choices = getStemLanguages(), selected = "english"), width = "50%"),
+                                                                     choices = SnowballC::getStemLanguages(), selected = "english"), width = "50%"),
                                         h4(gettext("Corpus filtering", domain = "R-explor")),
                                         p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),

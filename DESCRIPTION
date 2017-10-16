@@ -21,6 +21,7 @@ Imports:
     highr,
     scatterD3 (>= 0.8.1),
     quanteda (>= 0.99),
+    SnowballC,
     stringi
 Suggests: 
     FactoMineR,
