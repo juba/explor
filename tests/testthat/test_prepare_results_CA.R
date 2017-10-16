@@ -7,7 +7,7 @@ ca <- CA(children[,1:5], row.sup = 1:3,
 res <- prepare_results(ca)
 
 test_that("Eigenvalues are equals", {
-  expect_equal(ca$eig$`percentage of variance`, res$eig$percent)
+  expect_equal(unname(ca$eig[, "percentage of variance"]), res$eig$percent)
 })
 
 test_that("Levels results are equal", {

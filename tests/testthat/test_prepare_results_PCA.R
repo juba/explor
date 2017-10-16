@@ -6,7 +6,7 @@ pca <- PCA(decathlon, ind.sup = 1:5, quanti.sup = 11:12, quali.sup = 13, graph =
 res <- prepare_results(pca)
 
 test_that("Eigenvalues are equals", {
-  expect_equal(pca$eig$`percentage of variance`, res$eig$percent)
+  expect_equal(unname(pca$eig[, "percentage of variance"]), res$eig$percent)
 })
 
 test_that("Variables results are equal", {
