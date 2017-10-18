@@ -38,8 +38,15 @@ prepare_results.PCA <- function(obj) {
     if (!is.null(obj$quali.sup)) {
         vars.quali.sup <- data.frame(obj$quali.sup$coord)
         quali_varnames <- names(obj$call$quali.sup$quali.sup)
-        quali_nlevels <- sapply(obj$call$X[, obj$call$quali.sup$numero, drop = FALSE],
-                          function(v) nlevels(factor(v)))
+        ## Get the number of levels in quali sup results
+        ## For factor : number of levels in original data
+        ## Else : number of unique values when ind sup removed
+        quali_data <- obj$call$X[, obj$call$quali.sup$numero, drop = FALSE]
+        if (!is.null(obj$call$ind.sup)) quali_data <- quali_data[-(obj$call$ind.sup), , drop = FALSE]
+        quali_nlevels <- sapply(quali_data, function(v) {
+          if (!is.factor(v)) v <- factor(v)
+          nlevels(v)
+        })
         vars.quali.sup$varname <- rep(quali_varnames, quali_nlevels)
         vars.quali.sup$modname <- rownames(vars.quali.sup)
         vars.quali.sup$Type <- "Supplementary"
