@@ -1,7 +1,7 @@
 explor 0.4.0
 ------------
 
-
+* Fix improper computation in levels number in FactoMineR::PCA (thanks @Bhavanight)
 
 explor 0.3.3
 ------------
