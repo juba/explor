@@ -542,12 +542,13 @@ explor_corpus <- function(qco, settings) {
                    } else {
                      thesaurus <- "NULL"
                    }
+                   ngrams <- utils::capture.output(dput(as.numeric(input$ngrams)))
                    code <- paste0("dtm <- dfm(%s, what = 'word',\n", 
                                   "           tolower = ", input$treat_tolower, ", remove_punct = ", input$treat_removepunct, ",\n",
                                   "           remove_numbers = ", input$treat_rmnum, ", stem = ", input$treat_stem, ",\n",
                                   "           remove = ", remove, ",\n",
                                   "           thesaurus = ", thesaurus, ",\n",
-                                  "           ngrams = ", input$ngrams, ")\n")
+                                  "           ngrams = ", ngrams, ")\n")
                    if (input$treat_stem) {
                      code <- paste0(code, "dtm <- dfm_wordstem(dtm, language = '", input$treat_stem_lang, "')\n")
                    }
