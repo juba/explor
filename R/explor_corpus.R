@@ -277,8 +277,8 @@ explor_corpus <- function(qco, settings) {
     names(m_ngrams) <- paste0(1:5, "-gram")
     
     ## Document corpus choices
-    doc_corpus_choices <- "filtered"
-    names(doc_corpus_choices) <- gettext("Filtered corpus", domain = "R-explor")
+    doc_corpus_choices <- "clean"
+    names(doc_corpus_choices) <- gettext("Clean corpus", domain = "R-explor")
     if (!is.null(settings$raw_corpus)) {
       doc_corpus_choices <- c(doc_corpus_choices, "raw")
       names(doc_corpus_choices) <- c(names(doc_corpus_choices), gettext("Raw corpus", domain = "R-explor"))
@@ -343,9 +343,8 @@ explor_corpus <- function(qco, settings) {
                                         h3(gettext("Terms search", domain = "R-explor")),
                                         HTML("<p>", gettext('Enter one or more terms. You can use logical operators like <code>&</code> ("and"), <code>|</code> ("or"), <code>!</code> ("not") and parentheses :', domain = "R-explor"), "</p>"),
                                         fluidRow(
-                                          column(8, textInput("terms", gettext("Terms", domain = "R-explor"), width = "100%"))),
-                                        fluidRow(
-                                            column(4, selectInput("term_group",
+                                          column(5, textInput("terms", gettext("Terms", domain = "R-explor"), width = "100%")),
+                                          column(3, selectInput("term_group",
                                                                 gettext("Group by", domain = "R-explor"),
                                                                 choices = names(vars)))),
                                         tags$p(actionButton("launch_search", gettext("Search", domain = "R-explor"))),
@@ -365,14 +364,18 @@ explor_corpus <- function(qco, settings) {
                                                              div(style = "display: none;",
                                                                  numericInput("start_documents", gettext("From", domain = "R-explor"), value = 1)),
                                                              fluidRow(
-                                                               column(4,
-                                                                selectInput("doc_corpus", 
+                                                               if (!is.null(settings$raw_corpus)) {
+                                                                 column(4,
+                                                                        selectInput("doc_corpus", 
                                                                             gettext("Display documents from", domain = "R-explor"), 
-                                                                            choices = doc_corpus_choices)),
+                                                                            choices = doc_corpus_choices))
+                                                               },
                                                                column(4,
                                                                       selectInput("doc_display", 
                                                                                   gettext("Display", domain = "R-explor"),
-                                                                                  choices = c("Documents", "Kwics"))),
+                                                                                  choices = c("Documents", "Kwics")))
+                                                             ),
+                                                             fluidRow(
                                                                column(4,
                                                                       checkboxInput("doc_metadata", gettext("Display metadata", domain = "R-explor"), value = TRUE))
                                                              ),
@@ -402,7 +405,7 @@ explor_corpus <- function(qco, settings) {
                                         h3(gettext("Selected terms location", domain = "R-explor")),
                                         tabsetPanel(type = "pills",
                                                     tabPanel(gettext("Plot", domain = "R-explor"),
-                                                             textOutput("loctermplottext"),
+                                                             p(htmlOutput("loctermplottext")),
                                                              plotOutput("loctermplot")
                                                     ),
                                                     tabPanel(gettext("Table", domain = "R-explor"),
@@ -829,14 +832,13 @@ explor_corpus <- function(qco, settings) {
                      for (i in indexes) {
                        out <- paste(out, "<div class='document-content'>")
                        out <- paste(out, "<p><strong>", rownames(docvars(co()))[i] ,"</strong></p>")
-                       if (input$doc_corpus == "filtered") {
+                       if (is.null(input$doc_corpus) || req(input$doc_corpus) == "clean") {
                          tmp_corp <- co()
-                       } 
-                       if (input$doc_corpus == "raw") {
+                       } else { 
                          tmp_corp <- raw_co()
                        }
-                       if (input$doc_display == "Documents") {                        
-                        out <- paste(out, explor_corpus_highlight(tmp_corp[i], terms()))                       
+                       if (input$doc_display == "Documents") {
+                         out <- paste(out, explor_corpus_highlight(tmp_corp[i], terms()))                       
                        }
                        if (input$doc_display == "Kwics") {
                          kwics <- kwic(tmp_corp[i], pattern = terms(), window = 7, valuetype = "fixed")
@@ -844,7 +846,6 @@ explor_corpus <- function(qco, settings) {
                          kwics <- paste(kwics$text, collapse = "<br />")
                          out <- paste(out, kwics)
                        }
-                       
                        if (input$doc_metadata) {
                          meta <- docvars(co())[i,]
                          metadata <- character(0)
@@ -919,26 +920,34 @@ explor_corpus <- function(qco, settings) {
                    tab
                  })
                  
+                 ## Maximum number of documents to display location plot
+                 kwic_loc_nb_max <- 80
                  ## Terms location plot text
                  output$loctermplottext <- renderText({
                    input$launch_location_search
                    isolate({
-                     if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0) {
+                     text <- ""
+                     kw <- kwic_loc_terms()
+                     if (is.null(kw) || nrow(kw) == 0) {
                        return(gettext("No document found", domain = "R-explor"))
+                     } else {
+                       text <- paste0(nrow(kw), gettext(" documents found. ", domain = "R-explor"))
                      }
-                     if (nrow(kwic_loc_terms()) > 80) {
-                       return(paste0(gettext("Too many documents : ", domain = "R-explor"), nrow(kwic_loc_terms())))
+                     if (nrow(kw) > kwic_loc_nb_max) {
+                       text <- paste0(text,
+                                     sprintf(gettext("<strong>Only the first %s ones are displayed.</strong>", domain = "R-explor"), kwic_loc_nb_max))
                      }
-                     return("")
+                     return(HTML(text))
                    })
                  })
-                 
                  ## Terms location plot
                  output$loctermplot <- renderPlot({
                    input$launch_location_search
                    isolate({
-                     if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0 || nrow(kwic_loc_terms()) > 60) return(NULL)
-                     g <- textplot_xray(kwic_loc_terms())
+                     kw <- kwic_loc_terms()
+                     if (is.null(kw) || nrow(kw) == 0) return(NULL)
+                     if (nrow(kw) > kwic_loc_nb_max) kw <- head(kw, kwic_loc_nb_max)
+                     g <- textplot_xray(kw)
                    })
                    g
                  }, height = 650)
