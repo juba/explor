@@ -278,10 +278,11 @@ explor_corpus <- function(qco, settings) {
     
     ## Document corpus choices
     doc_corpus_choices <- "clean"
-    names(doc_corpus_choices) <- gettext("Clean corpus", domain = "R-explor")
+    tmp_names <- gettext("Clean corpus", domain = "R-explor")
     if (!is.null(settings$raw_corpus)) {
       doc_corpus_choices <- c(doc_corpus_choices, "raw")
-      names(doc_corpus_choices) <- c(names(doc_corpus_choices), gettext("Raw corpus", domain = "R-explor"))
+      tmp_names <- c(tmp_names, gettext("Raw corpus", domain = "R-explor"))
+      names(doc_corpus_choices) <- tmp_names
     }
 
     
