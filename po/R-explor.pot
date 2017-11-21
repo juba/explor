@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.4.0\n"
-"POT-Creation-Date: 2017-09-28 10:37\n"
+"POT-Creation-Date: 2017-11-21 17:05\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "raw_corpus must be of class corpus"
 msgstr ""
 
-msgid "Filtered corpus"
+msgid "Clean corpus"
 msgstr ""
 
 msgid "Raw corpus"
@@ -58,10 +58,22 @@ msgstr ""
 msgid "Convert to lowercase"
 msgstr ""
 
+msgid "Remove numbers"
+msgstr ""
+
 msgid "Remove punctuation"
 msgstr ""
 
-msgid "Remove numbers"
+msgid "Remove symbols"
+msgstr ""
+
+msgid "Remove Twitter"
+msgstr ""
+
+msgid "Remove hyphens"
+msgstr ""
+
+msgid "Remove URLs"
 msgstr ""
 
 msgid "Remove stopwords"
@@ -238,7 +250,10 @@ msgstr ""
 msgid "No document found"
 msgstr ""
 
-msgid "Too many documents :"
+msgid "documents found."
+msgstr ""
+
+msgid "<strong>Only the first %s ones are displayed.</strong>"
 msgstr ""
 
 msgid "Document term matrix computation"
