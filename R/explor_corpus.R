@@ -97,6 +97,11 @@ explor_corpus_css <- function() {
               #sidebar p {
                   margin-top: 10px;
               }
+  
+              #get_r_code { 
+                font-size: 14px !important; 
+                margin-top: 15px;
+              }
 
               #treatment .checkbox { margin: 0; }
 
@@ -207,7 +212,7 @@ $('#filters').on('shiny:visualchange', function(event) {
 
   triggered += 1;
 
-  if (triggered == 3) {
+  if (triggered == 5) {
     $('#filters .shiny-options-group').hide();
     $('#filters .shiny-input-container > .irs').hide();
     $('#filters .shiny-input-container > .input-daterange').hide();
@@ -251,27 +256,6 @@ explor_corpus <- function(qco, settings) {
     nvalues <- lapply(vars, length)
     vars <- vars[nvalues > 1 & nvalues < 100]
 
-    ## Document level variables filters
-    filter_inputs <- lapply(names(vars), function(name) {
-      v <- vars[[name]]
-      input_name <- paste0("meta_", name)
-      if (class(v) == "numeric") {
-        return(sliderInput(input_name, name, min(v), max(v), value = c(min(v), max(v))))
-      }
-      if (class(v) == "factor") {
-        v <- as.character(v)
-      }
-      if (class(v) == "character") {
-        levels <- unique(v)
-        if (length(levels) == 1) return(NULL)
-        levels[is.na(levels)] <- "NA"
-        return(checkboxGroupInput(input_name, name, choices = levels))
-      }
-      if (class(v) == "Date") {
-        return(dateRangeInput(input_name, name, start = min(v), end = max(v))) 
-      }
-    })
-    
     ## n-grams
     m_ngrams <- 1:5
     names(m_ngrams) <- paste0(1:5, "-gram")
@@ -320,6 +304,7 @@ explor_corpus <- function(qco, settings) {
                                         uiOutput("filters"),
                                         numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1),
                                         tags$p(actionButton("get_r_code",
+                                                            class = "btn-success",
                                                             icon = icon("code"),
                                                             label = gettext("Get R code", domain = "R-explor"))),
                                         tags$script(explor_corpus_js())
@@ -348,7 +333,6 @@ explor_corpus <- function(qco, settings) {
                                           column(3, selectInput("term_group",
                                                                 gettext("Group by", domain = "R-explor"),
                                                                 choices = names(vars)))),
-                                        tags$p(actionButton("launch_search", gettext("Search", domain = "R-explor"))),
                                         uiOutput("termsAlert"),
                                         uiOutput("evalAlert"),
                                         h3(gettext("Selected terms frequency", domain = "R-explor")),
@@ -406,7 +390,7 @@ explor_corpus <- function(qco, settings) {
                                         h3(gettext("Selected terms location", domain = "R-explor")),
                                         tabsetPanel(type = "pills",
                                                     tabPanel(gettext("Plot", domain = "R-explor"),
-                                                             p(htmlOutput("loctermplottext")),
+                                                             tags$p(htmlOutput("loctermplottext")),
                                                              plotOutput("loctermplot")
                                                     ),
                                                     tabPanel(gettext("Table", domain = "R-explor"),
@@ -450,10 +434,31 @@ explor_corpus <- function(qco, settings) {
 
                server = function(input, output, session) {
 
-                 
+             
                  ## Variable inputs
                  output$filters <- renderUI({
-                   filter_inputs  
+
+                   ## Document level variables filters
+                   filter_inputs <- lapply(names(vars), function(name) {
+                     v <- vars[[name]]
+                     input_name <- paste0("meta_", name)
+                     if (class(v) == "numeric") {
+                       return(sliderInput(input_name, name, min(v), max(v), value = c(min(v), max(v))))
+                     }
+                     if (class(v) == "factor") {
+                       v <- as.character(v)
+                     }
+                     if (class(v) == "character") {
+                       levels <- unique(v)
+                       if (length(levels) == 1) return(NULL)
+                       levels[is.na(levels)] <- "NA"
+                       return(checkboxGroupInput(input_name, name, choices = levels))
+                     }
+                     if (class(v) == "Date") {
+                       return(dateRangeInput(input_name, name, start = min(v), end = max(v))) 
+                     }
+                   }) 
+                   return(filter_inputs)
                  })
                  
                  
@@ -597,7 +602,10 @@ explor_corpus <- function(qco, settings) {
                      return(NULL)
                    }
                    code <- corpus_dtm_code("co()", "settings$stopwords", "settings$thesaurus")
-                   eval(parse(text = code))
+                   withProgress(message = "Recomputing dtm", value = 0.3, {
+                     eval(parse(text = code))
+                     incProgress(0.7)
+                   })
                    dtm
                  })  
                  
@@ -658,19 +666,28 @@ explor_corpus <- function(qco, settings) {
                  ## Run the query on the document term matrix as environment,
                  ## and returns the result
                  terms_query <- reactive({
+
+                   ## Progress
+                   query_progress <- shiny::Progress$new()
+                   on.exit(query_progress$close())
+                   query_progress$set(message = "Running query", value = 0)
+
                    error <- NULL
                    if (length(terms()) == 0) return(list(res = NULL, error = NULL))
                    dtm_terms <- dtm() %>% 
                      dfm_select(pattern = terms(), valuetype = "fixed", selection = "keep") %>% 
                      as.data.frame()
+                   query_progress$inc(0.3)
                    ## Convert count to presence / absence
                    if (ncol(dtm_terms) > 0) {
                      dtm_terms[dtm_terms > 0] <- 1
                    }
+                   query_progress$inc(0.1)
                    res <- try(
                      eval(parse(text = input$terms), envir = dtm_terms) %>% 
                        data.frame()
                      , silent = TRUE)
+                   query_progress$inc(0.6)
                    if (inherits(res, "try-error")) {
                      res <- NULL
                      error <- geterrmessage()
@@ -689,7 +706,6 @@ explor_corpus <- function(qco, settings) {
                  
                  ## Alert if error in search expression
                  output$evalAlert <- renderUI({
-                   input$launch_search
                    e <- terms_query()$error
                    if (!is.null(e)) {
                      div(class = "alert alert-danger",
@@ -727,79 +743,63 @@ explor_corpus <- function(qco, settings) {
                  
                  ## Searched terms query text
                  output$freqterm_query <- renderText({
-                   ## Dependency on search button
-                   input$launch_search
-                   isolate({
-                     if (input$terms == "") {
-                       return("")
-                     }
-                     res <- paste0(gettext("<p><strong>Query :</strong> <code>", domain = "R-explor"), input$terms, "</code>.</p>")
-                     return(HTML(res))
-                   })
+                   if (input$terms == "") {
+                     return("")
+                   }
+                   res <- paste0(gettext("<p><strong>Query :</strong> <code>", domain = "R-explor"), input$terms, "</code>.</p>")
+                   return(HTML(res))
                  })
                  
                  ## Total searched terms frequency text
                  output$freqterm_total <- renderText({
-                   ## Dependency on search button
-                   input$launch_search
-                   isolate({
-                     if (is.null(tab_term_tot())) {
-                       return("")
-                     }
-                     tab <- tab_term_tot()
-                     res <- paste0(gettext("<p><strong>Frequency in corpus :</strong> ", domain = "R-explor"), tab$nb_docs, gettext(" documents (", domain = "R-explor"), tab$prop_docs, "%).</p>")
-                     return(HTML(res))
-                   })
+                   if (is.null(tab_term_tot())) {
+                     return("")
+                   }
+                   tab <- tab_term_tot()
+                   res <- paste0(gettext("<p><strong>Frequency in corpus :</strong> ", domain = "R-explor"), tab$nb_docs, gettext(" documents (", domain = "R-explor"), tab$prop_docs, "%).</p>")
+                   return(HTML(res))
                  })
                  
                  ## Searched terms frequency table
                  output$freqtermtable <- DT::renderDataTable({
-                   ## Dependency on search button
-                   input$launch_search
-                   isolate({
-                     if (is.null(tab_term())) {
-                       return(DT::datatable(data.frame(table = character())))
-                     }
-                     tab <- tab_term()
-                     names(tab) <- c(gettext("Group", domain = "R-explor"),
-                                     gettext("Number of documents", domain = "R-explor"),
-                                     gettext("Percentage of documents", domain = "R-explor"))
-                     tab <- DT::datatable(tab, 
-                                   options = c(tableOptions, order_option(tab, gettext("Percentage of documents", domain = "R-explor"))), rownames = FALSE)
-                   })
+                   if (is.null(tab_term()) || nb_docs_term() == 0) {
+                     return(DT::datatable(data.frame(table = character())))
+                   }
+                   tab <- tab_term()
+                   names(tab) <- c(gettext("Group", domain = "R-explor"),
+                                   gettext("Number of documents", domain = "R-explor"),
+                                   gettext("Percentage of documents", domain = "R-explor"))
+                   tab <- DT::datatable(tab, 
+                                        options = c(tableOptions, order_option(tab, gettext("Percentage of documents", domain = "R-explor"))), rownames = FALSE)
                    tab
                  })
 
                 ## Searched terms frequency plot
                 output$freqtermplot <- renderPlot({
-                  input$launch_search
-                  isolate({
-                    if (is.null(tab_term())) {
-                      return()
-                    }
-                    tab <- tab_term()
-                    group <- quo(input$term_group)
-                    var <- docvars(co()) %>% pull(!!group)
-                    g <- NULL
-                    if (is.character(var) || is.factor(var)) {
-                      tab <- tab %>% 
-                        filter(prop_docs > 0) %>%
-                        mutate(group = stats::reorder(group, prop_docs))
-                      g <- ggplot(tab) + 
-                        geom_bar(aes(x = stats::reorder(group, prop_docs), y = prop_docs), stat = "identity") +
-                        xlab(input$term_group) +
-                        ylab(gettext("Percentage of documents", domain = "R-explor")) +
-                        theme(axis.text.x = element_text(angle = 45, hjust = 1))
-                    } 
-                    if (is.numeric(var) || inherits(var, "Date")) {
-                      g <- ggplot(tab, aes(x = group, y = prop_docs)) + 
-                        geom_line() +
-                        geom_smooth() +
-                        xlab(input$term_group) +
-                        ylab(gettext("Percentage of documents", domain = "R-explor"))
-                    }
-                    
-                  })
+                  if (is.null(tab_term()) || nb_docs_term() == 0) {
+                    return()
+                  }
+                  tab <- tab_term()
+                  group <- quo(input$term_group)
+                  var <- docvars(co()) %>% pull(!!group)
+                  g <- NULL
+                  if (is.character(var) || is.factor(var)) {
+                    tab <- tab %>% 
+                      filter(prop_docs > 0) %>%
+                      mutate(group = stats::reorder(group, prop_docs))
+                    g <- ggplot(tab) + 
+                      geom_bar(aes(x = stats::reorder(group, prop_docs), y = prop_docs), stat = "identity") +
+                      xlab(input$term_group) +
+                      ylab(gettext("Percentage of documents", domain = "R-explor")) +
+                      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+                  } 
+                  if (is.numeric(var) || inherits(var, "Date")) {
+                    g <- ggplot(tab, aes(x = group, y = prop_docs)) + 
+                      geom_line() +
+                      geom_smooth() +
+                      xlab(input$term_group) +
+                      ylab(gettext("Percentage of documents", domain = "R-explor"))
+                  }
                   g
                 })
                  
@@ -818,60 +818,51 @@ explor_corpus <- function(qco, settings) {
                  ## Documents list
                  output$documenttable <- renderText({
                    ## Acquire dependencies
-                   input$launch_search
-                   input$doc_metadata
-                   input$doc_corpus
-                   input$doc_display
                    start <- input$start_documents
                    nb_documents <- input$nb_documents_display
-                   isolate({
-                     if (is.null(terms_query()$res)) return(gettext("<div class='document-content'>No document found.</p>", domain = "R-explor"))
-                     indexes <- which(as.vector(terms_query()$res) > 0)
-                     end <- min(start + nb_documents - 1, nb_docs_term())
-                     indexes <- indexes[start:end]
-                     out <- ""
-                     for (i in indexes) {
-                       out <- paste(out, "<div class='document-content'>")
-                       out <- paste(out, "<p><strong>", rownames(docvars(co()))[i] ,"</strong></p>")
-                       if (is.null(input$doc_corpus) || req(input$doc_corpus) == "clean") {
-                         tmp_corp <- co()
-                       } else { 
-                         tmp_corp <- raw_co()
-                       }
-                       if (input$doc_display == "Documents") {
-                         out <- paste(out, explor_corpus_highlight(tmp_corp[i], terms()))                       
-                       }
-                       if (input$doc_display == "Kwics") {
-                         kwics <- kwic(tmp_corp[i], pattern = terms(), window = 7, valuetype = "fixed")
-                         kwics$text <- paste("...", kwics$pre, strong(kwics$keyword), kwics$post, "...")
-                         kwics <- paste(kwics$text, collapse = "<br />")
-                         out <- paste(out, kwics)
-                       }
-                       if (input$doc_metadata) {
-                         meta <- docvars(co())[i,]
-                         metadata <- character(0)
-                         for (m in colnames(meta)) {
-                           metadata <- append(metadata, paste0("<span>", m, "</span>: <code>", meta[, m], "</code>"))
-                         }
-                         metadata <- paste(metadata, collapse = "<br />")
-                         out <- paste(out, HTML("<p class='metadata'>", metadata, "</p>"))
-                       }
-                       out <- paste(out, "</div>")
+                   if (is.null(terms_query()$res) || nb_docs_term() == 0) return(gettext("<div class='document-content'>No document found.</p>", domain = "R-explor"))
+                   indexes <- which(as.vector(terms_query()$res) > 0)
+                   end <- min(start + nb_documents - 1, nb_docs_term())
+                   indexes <- indexes[start:end]
+                   out <- ""
+                   for (i in indexes) {
+                     out <- paste(out, "<div class='document-content'>")
+                     out <- paste(out, "<p><strong>", rownames(docvars(co()))[i] ,"</strong></p>")
+                     if (is.null(input$doc_corpus) || req(input$doc_corpus) == "clean") {
+                       tmp_corp <- co()
+                     } else { 
+                       tmp_corp <- raw_co()
                      }
-                     HTML(out)
-                   })
+                     if (input$doc_display == "Documents") {
+                       out <- paste(out, explor_corpus_highlight(tmp_corp[i], terms()))                       
+                     }
+                     if (input$doc_display == "Kwics") {
+                       kwics <- kwic(tmp_corp[i], pattern = terms(), window = 7, valuetype = "fixed")
+                       kwics$text <- paste("...", kwics$pre, strong(kwics$keyword), kwics$post, "...")
+                       kwics <- paste(kwics$text, collapse = "<br />")
+                       out <- paste(out, kwics)
+                     }
+                     if (input$doc_metadata) {
+                       meta <- docvars(co())[i,]
+                       metadata <- character(0)
+                       for (m in colnames(meta)) {
+                         metadata <- append(metadata, paste0("<span>", m, "</span>: <code>", meta[, m], "</code>"))
+                       }
+                       metadata <- paste(metadata, collapse = "<br />")
+                       out <- paste(out, HTML("<p class='metadata'>", metadata, "</p>"))
+                     }
+                     out <- paste(out, "</div>")
+                   }
+                   HTML(out)
                  })
                  
                  ## documents list pagination text
                  output$documents_pagination <- renderText({
-                   input$launch_search
                    start <- input$start_documents
                    nb_documents <- input$nb_documents_display
-                   isolate({
-                     end <- min(start + nb_documents - 1, nb_docs_term())
-                     if (end == 0) start <- 0
-                     sprintf(gettext("%s to %s of %s", domain = "R-explor"), start, end, nb_docs_term())
-                   })
+                   end <- min(start + nb_documents - 1, nb_docs_term())
+                   if (end == 0) start <- 0
+                   sprintf(gettext("%s to %s of %s", domain = "R-explor"), start, end, nb_docs_term())
                  })
 
                  
