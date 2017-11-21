@@ -75,7 +75,6 @@ explor_corpus_css <- function() {
               #sidebar input, 
               #sidebar select, 
               #sidebar option,
-              #sidebar button,
               #sidebar a,
               div.option,
               input, label, select, option, .selectize-input {
