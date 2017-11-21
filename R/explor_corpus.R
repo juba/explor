@@ -98,6 +98,8 @@ explor_corpus_css <- function() {
                   margin-top: 10px;
               }
 
+              #treatment .checkbox { margin: 0; }
+
               #filters .shiny-input-checkboxgroup .shiny-options-group,
               #filters .shiny-input-container > .irs,
               #filters .shiny-input-container > .input-daterange {
@@ -145,6 +147,7 @@ explor_corpus_css <- function() {
               }
 
               .checkbox { margin-bottom: 3px;}
+              input[type=checkbox] { margin: 0;}
               
               .dataTable th, 
               .dataTable td {
@@ -237,7 +240,8 @@ explor_corpus_highlight <- function(x, str) {
 ##' @import shiny
 ##' @import quanteda
 ##' @importFrom highr hi_html
-##' @importFrom SnowballC getStemLanguages 
+##' @importFrom SnowballC getStemLanguages
+##' @importFrom formatR tidy_source
 
 explor_corpus <- function(qco, settings) { 
     
@@ -293,17 +297,23 @@ explor_corpus <- function(qco, settings) {
                            
                            sidebarPanel(id = "sidebar",
                                         h4(gettext("Corpus treatment", domain = "R-explor")),
-                                        checkboxInput("treat_tolower", gettext("Convert to lowercase", domain = "R-explor"), value = TRUE),
-                                        checkboxInput("treat_removepunct", gettext("Remove punctuation", domain = "R-explor"), value = TRUE),
-                                        checkboxInput("treat_rmnum", gettext("Remove numbers", domain = "R-explor"), value = TRUE),
-                                        if (!is.null(settings$stopwords)) 
-                                          checkboxInput("treat_stopwords", gettext("Remove stopwords", domain = "R-explor"), value = TRUE),
-                                        if (!is.null(settings$thesaurus)) 
-                                          checkboxInput("treat_thesaurus", gettext("Apply thesaurus", domain = "R-explor"), value = TRUE),
-                                        checkboxInput("treat_stem", gettext("Stem words", domain = "R-explor"), value = FALSE),
-                                        conditionalPanel("input.treat_stem",
-                                                         selectInput("treat_stem_lang", gettext("Stemming language", domain = "R-explor"),                                           
-                                                                     choices = SnowballC::getStemLanguages(), selected = "english"), width = "50%"),
+                                        div(id = "treatment",
+                                            checkboxInput("treat_tolower", gettext("Convert to lowercase", domain = "R-explor"), value = TRUE),
+                                            checkboxInput("treat_remove_numbers", gettext("Remove numbers", domain = "R-explor"), value = TRUE),
+                                            checkboxInput("treat_remove_punct", gettext("Remove punctuation", domain = "R-explor"), value = TRUE),
+                                            checkboxInput("treat_remove_symbols", gettext("Remove symbols", domain = "R-explor"), value = TRUE),
+                                            checkboxInput("treat_remove_twitter", gettext("Remove Twitter", domain = "R-explor"), value = TRUE),
+                                            checkboxInput("treat_remove_hyphens", gettext("Remove hyphens", domain = "R-explor"), value = TRUE),
+                                            checkboxInput("treat_remove_url", gettext("Remove URLs", domain = "R-explor"), value = TRUE),
+                                            if (!is.null(settings$stopwords)) 
+                                              checkboxInput("treat_stopwords", gettext("Remove stopwords", domain = "R-explor"), value = TRUE),
+                                            if (!is.null(settings$thesaurus)) 
+                                              checkboxInput("treat_thesaurus", gettext("Apply thesaurus", domain = "R-explor"), value = TRUE),
+                                            checkboxInput("treat_stem", gettext("Stem words", domain = "R-explor"), value = FALSE),
+                                            conditionalPanel("input.treat_stem",
+                                                             selectInput("treat_stem_lang", gettext("Stemming language", domain = "R-explor"),
+                                                                         choices = SnowballC::getStemLanguages(), selected = "english"), width = "50%")
+                                        ),
                                         h4(gettext("Corpus filtering", domain = "R-explor")),
                                         p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),
@@ -443,6 +453,7 @@ explor_corpus <- function(qco, settings) {
                  })
                  
                  
+                 
                  ## Corpus filtering R Code
                  filtering_code <- reactive({
                    code <- ""
@@ -509,7 +520,7 @@ explor_corpus <- function(qco, settings) {
                  
                  ## Clean corpus filtered
                  co <- reactive({
-                   code <- corpus_filtering_code(settings$corpus_name)
+                   code <- corpus_filtering_code("qco")
                    if (code != "") {
                      eval(parse(text = code))
                      return(tmp_corpus)
@@ -521,7 +532,7 @@ explor_corpus <- function(qco, settings) {
                  ## Raw corpus filtered
                  raw_co <- reactive({
                    if (is.null(settings$raw_corpus)) return(co())
-                   code <- corpus_filtering_code(settings$raw_corpus_name)
+                   code <- corpus_filtering_code(settings$raw_corpus)
                    if (code != "") {
                      eval(parse(text = code))
                      return(tmp_corpus)
@@ -530,25 +541,38 @@ explor_corpus <- function(qco, settings) {
                    }
                  })
                  
-                 ## DTM computation code
-                 dtm_code <- reactive({
-                   if (!is.null(input$treat_stopwords) && input$treat_stopwords) {
-                     remove <- settings$stopwords_name
-                   } else {
-                     remove <- "NULL"
+                 ## Tokenization code
+                 tokens_code <- reactive({
+                   code <- paste0("corpus_tokens <- tokens(%s, what='word'",
+                                  ", remove_punct = ", input$treat_remove_punct, 
+                                  ", remove_symbols = ", input$treat_remove_symbols, 
+                                  ", remove_twitter = ", input$treat_remove_twitter, 
+                                  ", remove_hyphens = ", input$treat_remove_hyphens, 
+                                  ", remove_url = ", input$treat_remove_url, 
+                                  ", remove_numbers = ", input$treat_remove_numbers, ")")
+                   if (input$treat_tolower) {
+                     code <- paste0(code, "\n", 
+                                    "corpus_tokens <- tokens_tolower(corpus_tokens)")
                    }
                    if (!is.null(input$treat_thesaurus) && input$treat_thesaurus) {
-                     thesaurus <- settings$thesaurus_name
-                   } else {
-                     thesaurus <- "NULL"
+                     code <- paste0(code, "\n", 
+                                    "corpus_tokens <- tokens_lookup(corpus_tokens, dictionary(%s), exclusive = FALSE)")
+                   }
+                   if (!is.null(input$treat_stopwords) && input$treat_stopwords) {
+                     code <- paste0(code, "\n", 
+                                   "corpus_tokens <- tokens_remove(corpus_tokens, %s)")
                    }
                    ngrams <- utils::capture.output(dput(as.numeric(input$ngrams)))
-                   code <- paste0("dtm <- dfm(%s, what = 'word',\n", 
-                                  "           tolower = ", input$treat_tolower, ", remove_punct = ", input$treat_removepunct, ",\n",
-                                  "           remove_numbers = ", input$treat_rmnum, ", stem = ", input$treat_stem, ",\n",
-                                  "           remove = ", remove, ",\n",
-                                  "           thesaurus = ", thesaurus, ",\n",
-                                  "           ngrams = ", ngrams, ")\n")
+                   if (ngrams != 1) {
+                     code <- paste0(code, "\n", 
+                                    "corpus_tokens <- tokens_ngrams(corpus_tokens, n = ", ngrams, ")")
+                   }
+                   code
+                 })
+                 ## DTM computation code
+                 dtm_code <- reactive({
+                   ngrams <- utils::capture.output(dput(as.numeric(input$ngrams)))
+                   code <- paste0("dtm <- dfm(corpus_tokens, tolower = FALSE)\n")
                    if (input$treat_stem) {
                      code <- paste0(code, "dtm <- dfm_wordstem(dtm, language = '", input$treat_stem_lang, "')\n")
                    }
@@ -557,8 +581,10 @@ explor_corpus <- function(qco, settings) {
                    }
                    code
                  })
-                 corpus_dtm_code <- function(corpus_name) {
-                   sprintf(dtm_code(), corpus_name)
+                 corpus_dtm_code <- function(corpus_name, stopwords_name, thesaurus_name) {
+                   out <- sprintf(tokens_code(), corpus_name, thesaurus_name, stopwords_name)
+                   out <- paste(out, dtm_code(), sep = "\n")
+                   out
                  }
                  
                  ## Clean corpus DTM filtered by n-grams
@@ -566,7 +592,7 @@ explor_corpus <- function(qco, settings) {
                    if (length(input$ngrams) == 0 || is.null(co()) || ndoc(co()) == 0) { 
                      return(NULL)
                    }
-                   code <- corpus_dtm_code("co()")
+                   code <- corpus_dtm_code("co()", "settings$stopwords", "settings$thesaurus")
                    eval(parse(text = code))
                    dtm
                  })  
@@ -931,9 +957,12 @@ explor_corpus <- function(qco, settings) {
                      corpus_name <- "tmp_corpus"
                    }
                    code <- paste0(code, "## ", gettext("Document term matrix computation", domain = "R-explor"), "\n")
-                   code <- paste0(code, corpus_dtm_code(corpus_name))
+                   code <- paste0(code, corpus_dtm_code(corpus_name, settings$stopwords_name, settings$thesaurus_name))
+                   code <- formatR::tidy_source(text = code, 
+                                                width.cutoff = 75, 
+                                                output = FALSE)$text.tidy
                    showModal(modalDialog(
-                     title = gettext("Export R code", domain = "R-explor"),
+                     title = gettext("Export R code", domain = "R-explor"), size = "l", 
                      HTML(paste0(gettext("Copy, paste and run the following code in your script to compute the corresponding document-term matrix (DTM) :", domain = "R-explor"),
                                  "<pre><code>",
                                  paste(highr::hi_html(code), collapse = "\n"),
