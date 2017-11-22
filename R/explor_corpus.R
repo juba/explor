@@ -268,7 +268,11 @@ explor_corpus <- function(qco, settings) {
       names(doc_corpus_choices) <- tmp_names
     }
 
-    
+    ## Location terms type choices
+    loc_type_choices <- c("words", "sentence")
+    names(loc_type_choices) <- c(gettext("Words", domain = "R-explor"),
+                                 gettext("Sentence", domain = "R-explor"))
+
     shiny::shinyApp(
       
       ui = navbarPage(gettext("Corpus", domain = "R-explor"),
@@ -342,6 +346,7 @@ explor_corpus <- function(qco, settings) {
                                                              DT::dataTableOutput("freqtermtable")
                                                     ),
                                                     tabPanel(gettext("Plot", domain = "R-explor"),
+                                                             tags$p(htmlOutput("freqtermplottext")),
                                                              plotOutput("freqtermplot")
                                                     ),
                                                     tabPanel(gettext("Documents", domain = "R-explor"),
@@ -382,9 +387,7 @@ explor_corpus <- function(qco, settings) {
                                         fluidRow(
                                           column(8, textInput("location_terms", gettext("Terms", domain = "R-explor"), width = "100%")),
                                           column(4, radioButtons("location_terms_type", label = NULL,
-                                                                 choices = c(gettext("Words", domain = "R-explor"),
-                                                                             gettext("Phrase", domain = "R-explor"))))),
-                                        tags$p(actionButton("launch_location_search", gettext("Search", domain = "R-explor"))),
+                                                                 choices = loc_type_choices))),
                                         uiOutput("loctermsAlert"),
                                         h3(gettext("Selected terms location", domain = "R-explor")),
                                         tabsetPanel(type = "pills",
@@ -601,7 +604,7 @@ explor_corpus <- function(qco, settings) {
                      return(NULL)
                    }
                    code <- corpus_dtm_code("co()", "settings$stopwords", "settings$thesaurus")
-                   withProgress(message = "Recomputing dtm", value = 0.3, {
+                   withProgress(message = gettext("Recomputing dtm", domain = "R-explor"), value = 0.3, {
                      eval(parse(text = code))
                      incProgress(0.7)
                    })
@@ -669,7 +672,7 @@ explor_corpus <- function(qco, settings) {
                    ## Progress
                    query_progress <- shiny::Progress$new()
                    on.exit(query_progress$close())
-                   query_progress$set(message = "Running query", value = 0)
+                   query_progress$set(message = gettext("Running query", domain = "R-explor"), value = 0)
 
                    error <- NULL
                    if (length(terms()) == 0) return(list(res = NULL, error = NULL))
@@ -773,6 +776,15 @@ explor_corpus <- function(qco, settings) {
                    tab
                  })
 
+                 output$freqtermplottext <- renderText({
+                   if (is.null(tab_term()) || nb_docs_term() == 0) {
+                     return(gettext("No document found", domain = "R-explor"))
+                   } else {
+                     text <- paste0(nb_docs_term(), gettext(" documents found. ", domain = "R-explor"))
+                   }
+                   return(HTML(text))
+                 })
+                 
                 ## Searched terms frequency plot
                 output$freqtermplot <- renderPlot({
                   if (is.null(tab_term()) || nb_docs_term() == 0) {
@@ -871,43 +883,41 @@ explor_corpus <- function(qco, settings) {
                  loc_terms <- reactive({
                    tmp <- unlist(stri_extract_all_words(input$location_terms))
                    if (length(tmp) == 1 && is.na(tmp)) return(NULL)
-                   tmp <- tolower(tmp[tmp != ""])
+                   tmp <- tmp[tmp != ""]
                  })
                
                  ## Location terms kwic object
                  kwic_loc_terms <- reactive({
-                   terms <- loc_terms()
-                   if (is.null(terms)) {
-                     return(NULL)
-                   }
-                   if (input$location_terms_type == "Phrase") {
-                     terms <- phrase(input$location_terms)
-                   }
-                   kwic(co(), terms, window = 7)
+                   withProgress(message = gettext("Computing Kwics", domain = "R-explor"), value = 0.3, {
+                     terms <- loc_terms()
+                     if (is.null(terms)) {
+                       return(NULL)
+                     }
+                     if (input$location_terms_type == "sentence") {
+                       terms <- phrase(input$location_terms)
+                     }
+                     kw <- kwic(co(), terms, window = 7)
+                     incProgress(0.7)
+                     return(kw)
+                   })
                  })
                  ## Alert if location term is missing from corpus
                  output$loctermsAlert <- renderUI({
-                   input$launch_location_search
-                   isolate({
-                     if (length(loc_terms()) > 0  && nrow(kwic_loc_terms()) == 0) {
-                       div(class = "alert alert-warning",
-                           HTML(paste(gettext("<strong>Warning :</strong> terms not found in corpus", domain = "R-explor"))))
-                     }
-                   })
+                   if (length(loc_terms()) > 0  && nrow(kwic_loc_terms()) == 0) {
+                     div(class = "alert alert-warning",
+                         HTML(paste(gettext("<strong>Warning :</strong> terms not found in corpus", domain = "R-explor"))))
+                   }
                  })
 
                  ## Terms location table
                  output$loctermtable <- DT::renderDataTable({
-                   input$launch_location_search
-                   isolate({
-                     if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0) {
-                       return(DT::datatable(data.frame(table = character())))
-                     }
-                     tab <- data.frame(kwic_loc_terms())
-                     tab$text <- paste(tab$pre, strong(tab$keyword), tab$post)
-                     tab <- tab %>% select("docname", "from", "to", "text") 
-                     tab <- DT::datatable(tab, options = c(tableOptions), rownames = FALSE, escape = FALSE)
-                   })
+                   if (is.null(kwic_loc_terms()) || nrow(kwic_loc_terms()) == 0) {
+                     return(DT::datatable(data.frame(table = character())))
+                   }
+                   tab <- data.frame(kwic_loc_terms())
+                   tab$text <- paste0(tab$pre, " <strong>", tab$keyword, "</strong> ", tab$post)
+                   tab <- tab %>% select("docname", "from", "to", "text") 
+                   tab <- DT::datatable(tab, options = c(tableOptions), rownames = FALSE, escape = FALSE)
                    tab
                  })
                  
@@ -915,32 +925,29 @@ explor_corpus <- function(qco, settings) {
                  kwic_loc_nb_max <- 80
                  ## Terms location plot text
                  output$loctermplottext <- renderText({
-                   input$launch_location_search
-                   isolate({
-                     text <- ""
-                     kw <- kwic_loc_terms()
-                     if (is.null(kw) || nrow(kw) == 0) {
-                       return(gettext("No document found", domain = "R-explor"))
-                     } else {
-                       text <- paste0(nrow(kw), gettext(" documents found. ", domain = "R-explor"))
-                     }
-                     if (nrow(kw) > kwic_loc_nb_max) {
-                       text <- paste0(text,
-                                     sprintf(gettext("<strong>Only the first %s ones are displayed.</strong>", domain = "R-explor"), kwic_loc_nb_max))
-                     }
-                     return(HTML(text))
-                   })
+                   text <- ""
+                   kw <- kwic_loc_terms()
+                   if (is.null(kw) || nrow(kw) == 0) {
+                     return(gettext("No document found", domain = "R-explor"))
+                   } else {
+                     text <- paste0(nrow(kw), gettext(" documents found. ", domain = "R-explor"))
+                   }
+                   if (nrow(kw) > kwic_loc_nb_max) {
+                     text <- paste0(text,
+                                    sprintf(gettext("<strong>Only the first %s ones are displayed.</strong>", domain = "R-explor"), kwic_loc_nb_max))
+                   }
+                   return(HTML(text))
                  })
                  ## Terms location plot
                  output$loctermplot <- renderPlot({
-                   input$launch_location_search
-                   isolate({
-                     kw <- kwic_loc_terms()
-                     if (is.null(kw) || nrow(kw) == 0) return(NULL)
-                     if (nrow(kw) > kwic_loc_nb_max) kw <- head(kw, kwic_loc_nb_max)
+                   kw <- kwic_loc_terms()
+                   if (is.null(kw) || nrow(kw) == 0) return(NULL)
+                   if (nrow(kw) > kwic_loc_nb_max) kw <- head(kw, kwic_loc_nb_max)
+                   withProgress(message = gettext("Creating x-ray plot", domain = "R-explor"), value = 0.3, {
                      g <- textplot_xray(kw)
+                     incProgress(0.7)
+                     return(g)
                    })
-                   g
                  }, height = 650)
                  
                  
