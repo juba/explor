@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2017-11-21 17:05\n"
-"PO-Revision-Date: 2017-11-21 17:07+0100\n"
+"POT-Creation-Date: 2017-11-22 16:57\n"
+"PO-Revision-Date: 2017-11-22 17:00+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -48,6 +48,12 @@ msgstr "Corpus nettoyé"
 
 msgid "Raw corpus"
 msgstr "Corpus brut"
+
+msgid "Words"
+msgstr "Mots"
+
+msgid "Sentence"
+msgstr "Phrase"
 
 msgid "Corpus"
 msgstr "Corpus"
@@ -133,9 +139,6 @@ msgstr "Termes"
 msgid "Group by"
 msgstr "Grouper par"
 
-msgid "Search"
-msgstr "Rechercher"
-
 msgid "Selected terms frequency"
 msgstr "Occurrences des termes sélectionnés"
 
@@ -174,12 +177,6 @@ msgstr "Position des termes"
 
 msgid "Enter one or more terms :"
 msgstr "Saisir un ou plusieurs termes :"
-
-msgid "Words"
-msgstr "Mots"
-
-msgid "Phrase"
-msgstr "Phrase"
 
 msgid "Selected terms location"
 msgstr "Position des termes sélectionnés"
@@ -253,6 +250,9 @@ msgstr ""
 "<code>ciel & (mer | océan)</code> : recherche les documents avec \"ciel\" et "
 "les termes \"mer\" ou \"océan\" (ou les deux)"
 
+msgid "Recomputing dtm"
+msgstr "Calcul de la DTM"
+
 msgid "Term"
 msgstr "Terme"
 
@@ -261,6 +261,9 @@ msgstr "Fréquence de termes"
 
 msgid "Percentage of documents"
 msgstr "Pourcentage de documents"
+
+msgid "Running query"
+msgstr "Exécution de la requête"
 
 msgid ""
 "<strong>Warning :</strong> the following terms are missing from the corpus : "
@@ -286,23 +289,29 @@ msgstr "documents ("
 msgid "Group"
 msgstr "Groupe"
 
-msgid "<div class='document-content'>No document found.</p>"
-msgstr "<div class='document-content'>Aucun document trouvé.</p>"
-
-msgid "%s to %s of %s"
-msgstr "%s à %s sur %s"
-
-msgid "<strong>Warning :</strong> terms not found in corpus"
-msgstr "<strong>Attention :</strong> les termes sont absents du corpus"
-
 msgid "No document found"
 msgstr "Aucun document trouvé"
 
 msgid "documents found."
 msgstr "documents trouvés."
 
+msgid "<div class='document-content'>No document found.</p>"
+msgstr "<div class='document-content'>Aucun document trouvé.</p>"
+
+msgid "%s to %s of %s"
+msgstr "%s à %s sur %s"
+
+msgid "Computing Kwics"
+msgstr "Calcul des Kwics"
+
+msgid "<strong>Warning :</strong> terms not found in corpus"
+msgstr "<strong>Attention :</strong> les termes sont absents du corpus"
+
 msgid "<strong>Only the first %s ones are displayed.</strong>"
 msgstr "<strong>Seulement les %s premiers sont affichés.</strong>"
+
+msgid "Creating x-ray plot"
+msgstr "Création du graphique"
 
 msgid "Document term matrix computation"
 msgstr "Calcul de la matrice termes-documents"
@@ -325,6 +334,9 @@ msgstr "Dfm"
 
 msgid "Terms selection"
 msgstr "Sélection des termes"
+
+msgid "Search"
+msgstr "Rechercher"
 
 msgid "Similarities"
 msgstr "Similarités"
@@ -538,6 +550,9 @@ msgstr "obj doit être de classe coa"
 
 msgid "the ade4 package is needed for this function to work."
 msgstr "le package ade4 doit être installé pour utiliser cette fonction."
+
+#~ msgid "Phrase"
+#~ msgstr "Phrase"
 
 #~ msgid "Filtered corpus"
 #~ msgstr "Corpus filtré"

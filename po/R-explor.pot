@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.4.0\n"
-"POT-Creation-Date: 2017-11-21 17:05\n"
+"POT-Creation-Date: 2017-11-22 16:57\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,6 +44,12 @@ msgid "Clean corpus"
 msgstr ""
 
 msgid "Raw corpus"
+msgstr ""
+
+msgid "Words"
+msgstr ""
+
+msgid "Sentence"
 msgstr ""
 
 msgid "Corpus"
@@ -124,9 +130,6 @@ msgstr ""
 msgid "Group by"
 msgstr ""
 
-msgid "Search"
-msgstr ""
-
 msgid "Selected terms frequency"
 msgstr ""
 
@@ -166,12 +169,6 @@ msgstr ""
 msgid "Enter one or more terms :"
 msgstr ""
 
-msgid "Words"
-msgstr ""
-
-msgid "Phrase"
-msgstr ""
-
 msgid "Selected terms location"
 msgstr ""
 
@@ -208,6 +205,9 @@ msgstr ""
 msgid "<code>sky & (sea | ocean)</code> : search for documents with \"sky\" and the terms \"sea\" or \"ocean\" (or both)"
 msgstr ""
 
+msgid "Recomputing dtm"
+msgstr ""
+
 msgid "Term"
 msgstr ""
 
@@ -215,6 +215,9 @@ msgid "Term frequency"
 msgstr ""
 
 msgid "Percentage of documents"
+msgstr ""
+
+msgid "Running query"
 msgstr ""
 
 msgid "<strong>Warning :</strong> the following terms are missing from the corpus : <i>"
@@ -238,22 +241,28 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-msgid "<div class='document-content'>No document found.</p>"
-msgstr ""
-
-msgid "%s to %s of %s"
-msgstr ""
-
-msgid "<strong>Warning :</strong> terms not found in corpus"
-msgstr ""
-
 msgid "No document found"
 msgstr ""
 
 msgid "documents found."
 msgstr ""
 
+msgid "<div class='document-content'>No document found.</p>"
+msgstr ""
+
+msgid "%s to %s of %s"
+msgstr ""
+
+msgid "Computing Kwics"
+msgstr ""
+
+msgid "<strong>Warning :</strong> terms not found in corpus"
+msgstr ""
+
 msgid "<strong>Only the first %s ones are displayed.</strong>"
+msgstr ""
+
+msgid "Creating x-ray plot"
 msgstr ""
 
 msgid "Document term matrix computation"
@@ -272,6 +281,9 @@ msgid "Dfm"
 msgstr ""
 
 msgid "Terms selection"
+msgstr ""
+
+msgid "Search"
 msgstr ""
 
 msgid "Similarities"
