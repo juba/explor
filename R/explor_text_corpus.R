@@ -512,11 +512,6 @@ explor_corpus <- function(qco, settings) {
                  })  
                  
 
-                 ## Number of documents
-                 output$nbdocs <- renderText({
-                   ndoc(co())
-                 })
-                 
                  ## Global table options
                  tableOptions <- list(lengthMenu =  c(10,20,50,100), 
                                       pageLength = 20, orderClasses = TRUE, 
@@ -528,6 +523,11 @@ explor_corpus <- function(qco, settings) {
                  }
                  
                  ### FREQUENT TERMS -----------------------------------------------------------
+             
+                 ## Number of documents
+                 output$nbdocs <- renderText({
+                   ndoc(co())
+                 })
                  
                  ## Most frequent terms table
                  output$freqtable <- DT::renderDataTable({
