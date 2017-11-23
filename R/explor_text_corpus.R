@@ -702,14 +702,16 @@ explor_corpus <- function(qco, settings) {
                       geom_bar(aes(x = stats::reorder(group, prop_docs), y = prop_docs), stat = "identity") +
                       xlab(input$term_group) +
                       ylab(gettext("Percentage of documents", domain = "R-explor")) +
-                      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+                      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+                      expand_limits(y = 0)
                   } 
                   if (is.numeric(var) || inherits(var, "Date")) {
                     g <- ggplot(tab, aes(x = group, y = prop_docs)) + 
                       geom_line() +
                       geom_smooth() +
                       xlab(input$term_group) +
-                      ylab(gettext("Percentage of documents", domain = "R-explor"))
+                      ylab(gettext("Percentage of documents", domain = "R-explor")) +
+                      expand_limits(y = 0)
                   }
                   g
                 })
