@@ -1,5 +1,4 @@
-if (getRversion() >= "2.15.1")  
-  utils::globalVariables(c("group", "nb_docs", "nb_terms", "nom", "prop_docs", "term"))
+
 
 ##' @rdname explor
 ##' @aliases explor.dfm
@@ -18,150 +17,6 @@ explor.dfm <- function(obj, ...) {
 }
 
 
-## Custom CSS
-explor_dfm_css <- function() {
-  shiny::HTML("
-              body {margin: 0 15px;}
-              
-              #sidebar {padding: 5px 10px;}
-
-              #sidebar label, 
-              #sidebar input, 
-              #sidebar select, 
-              #sidebar option,
-              #sidebar button,
-              #sidebar a,
-              div.option,
-              input, label, select, option, .selectize-input {
-                  font-size: 12px !important;
-                  height: auto !important;
-              }
-
-              #sidebar .btn { padding: 6px 10px; }
-
-              #sidebar .shiny-input-checkboxgroup .shiny-options-group {
-                  max-height: 200px; 
-                  overflow-y: scroll; 
-              }
-
-              #sidebar .shiny-input-container {
-                  margin-bottom: 0px;
-              }
-
-              #filters .shiny-input-checkboxgroup .shiny-options-group,
-              #filters .shiny-input-container > .irs,
-              #filters .shiny-input-container > .input-daterange {
-                  margin: 8px 5px;
-              }
-
-              #filters .shiny-input-container {
-                  border-bottom: 1px solid #BBB;
-                  margin: 0px;
-                  padding: 5px 4px;
-                  background-color: #FAFAFA;
-              }
-
-              #filters .shiny-input-container:first-child {
-                  border-top: 1px solid #BBB;
-                  margin-top: 30px;
-              }
-
-              #filters {
-                  margin-bottom: 30px;
-              }
-
-              #filters .shiny-input-container > label {
-                  cursor: pointer;
-                  font-size: 14px !important;
-                  font-weight: normal;
-                  width: 100%;
-              }
-
-              #filters .shiny-input-container label  i {
-                  min-width: 1.3em;
-              }
-
-              #sidebar h4 {
-                  margin-top: 30px;
-              }
-
-              #sidebar h4:first-child {
-                  margin-top: 10px;
-              }
-
-              ul.nav-pills {
-                  margin-top: 15px;
-                  margin-bottom: 30px;
-              }
-
-              .checkbox { margin-bottom: 3px;}
-              
-              .dataTable th, 
-              .dataTable td {
-                  font-size: 11px !important;
-                  padding: 3px 5px !important; 
-              }
-              .dataTable th { padding-right: 18px !important }
-              .dataTables_wrapper {
-                  max-width: 850px;
-                  margin-bottom: 2em;
-                }
-              .dataTables_info, .dataTables_length, 
-              .dataTables_filter, .dataTables_paginate {
-                  font-size: 11px !important;
-              }
-
-              .inline-small * {
-                  display: inline;    
-                  font-size: 80% !important;
-              }
-              .inline-small .btn {
-                  padding: 3px 5px;
-              }
-
-              /* Syntax highlighting */
-              span.hl.str { color: #d14;}
-              span.hl.kwa { color: #099;}
-              span.hl.num { color: #099;}
-              span.hl.kwd { color: #333; font-weight: bold;}
-              span.hl.com { color: #888; font-style: italic;}
-              ")
-    }
-
-# Custom JavaScript
-explor_dfm_js <- function() {
-  shiny::HTML("
-(function($) {
-
-var triggered = 0;
-
-$('#filters').on('shiny:visualchange', function(event) {
-
-  triggered += 1;
-
-  if (triggered == 3) {
-    $('#filters .shiny-options-group').hide();
-    $('#filters .shiny-input-container > .irs').hide();
-    $('#filters .shiny-input-container > .input-daterange').hide();
-
-    $('#filters .shiny-input-container > label').prepend('<i class=\"fa fa-chevron-right\"></i> ');
-
-    $('#filters .shiny-input-container > label').click(function() {
-      $(this).next().toggle('fast');
-      $(this).find('i').toggleClass('fa-chevron-right');
-      $(this).find('i').toggleClass('fa-chevron-down');
-    });
-  };
-
-});
-    
-
-})(jQuery);
-  ")
-}
-
-
-
 ##' @import shiny
 ##' @import quanteda
 ##' @importFrom highr hi_html
@@ -178,12 +33,11 @@ explor_dfm <- function(dfm, settings) {
     shiny::shinyApp(
       ui = navbarPage(gettext("Dfm", domain = "R-explor"),
                       header = tags$head(
-                        tags$style(explor_corpus_css())),
-                      tabPanel(gettext("Terms", domain = "R-explor"),
+                        tags$style(explor_text_css())),
+                      tabPanel(gettext("Document-feature matrix", domain = "R-explor"),
                          sidebarLayout(
                            sidebarPanel(id = "sidebar",
-                                        numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1),
-                                        tags$script(explor_corpus_js())
+                                        numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1)
                            ),
                            mainPanel(
                              tabsetPanel(
