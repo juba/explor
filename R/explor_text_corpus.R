@@ -480,35 +480,35 @@ explor_corpus <- function(qco, settings) {
                    }
                    code
                  })
-                 ## DTM computation code
-                 dtm_code <- reactive({
+                 ## dfm computation code
+                 dfm_code <- reactive({
                    ngrams <- utils::capture.output(dput(as.numeric(input$ngrams)))
-                   code <- paste0("dtm <- dfm(corpus_tokens, tolower = FALSE)\n")
+                   code <- paste0("dfm <- dfm(corpus_tokens, tolower = FALSE)\n")
                    if (input$treat_stem) {
-                     code <- paste0(code, "dtm <- dfm_wordstem(dtm, language = '", input$treat_stem_lang, "')\n")
+                     code <- paste0(code, "dfm <- dfm_wordstem(dfm, language = '", input$treat_stem_lang, "')\n")
                    }
                    if (input$term_min_occurrences > 0) {
-                     code <- paste0(code, "dtm <- dfm_trim(dtm, min_count = ", input$term_min_occurrences, ")")
+                     code <- paste0(code, "dfm <- dfm_trim(dfm, min_count = ", input$term_min_occurrences, ")")
                    }
                    code
                  })
-                 corpus_dtm_code <- function(corpus_name, stopwords_name, thesaurus_name) {
+                 corpus_dfm_code <- function(corpus_name, stopwords_name, thesaurus_name) {
                    out <- sprintf(tokens_code(), corpus_name, thesaurus_name, stopwords_name)
-                   out <- paste(out, dtm_code(), sep = "\n")
+                   out <- paste(out, dfm_code(), sep = "\n")
                    out
                  }
                  
-                 ## Clean corpus DTM filtered by n-grams
+                 ## Clean corpus dfm
                  dtm <- reactive({
                    if (length(input$ngrams) == 0 || is.null(co()) || ndoc(co()) == 0) { 
                      return(NULL)
                    }
-                   code <- corpus_dtm_code("co()", "settings$stopwords", "settings$thesaurus")
-                   withProgress(message = gettext("Recomputing dtm", domain = "R-explor"), value = 0.3, {
+                   code <- corpus_dfm_code("co()", "settings$stopwords", "settings$thesaurus")
+                   withProgress(message = gettext("Recomputing dfm", domain = "R-explor"), value = 0.3, {
                      eval(parse(text = code))
                      incProgress(0.7)
                    })
-                   dtm
+                   dfm
                  })  
                  
 
@@ -565,7 +565,7 @@ explor_corpus <- function(qco, settings) {
                    tmp_terms[!(tmp_terms %in% colnames(dtm()))]    
                  })
                  
-                 ## Run the query on the document term matrix as environment,
+                 ## Run the query on the document-feature matrix as environment,
                  ## and returns the result
                  terms_query <- reactive({
 
@@ -576,17 +576,17 @@ explor_corpus <- function(qco, settings) {
 
                    error <- NULL
                    if (length(terms()) == 0) return(list(res = NULL, error = NULL))
-                   dtm_terms <- dtm() %>% 
+                   dfm_terms <- dtm() %>% 
                      dfm_select(pattern = terms(), valuetype = "fixed", selection = "keep") %>% 
                      as.data.frame()
                    query_progress$inc(0.3)
                    ## Convert count to presence / absence
-                   if (ncol(dtm_terms) > 0) {
-                     dtm_terms[dtm_terms > 0] <- 1
+                   if (ncol(dfm_terms) > 0) {
+                     dfm_terms[dfm_terms > 0] <- 1
                    }
                    query_progress$inc(0.1)
                    res <- try(
-                     eval(parse(text = input$terms), envir = dtm_terms) %>% 
+                     eval(parse(text = input$terms), envir = dfm_terms) %>% 
                        data.frame()
                      , silent = TRUE)
                    query_progress$inc(0.6)
@@ -617,22 +617,22 @@ explor_corpus <- function(qco, settings) {
                  
                  ## Search term frequency table
                  tab_term <- reactive({
-                   tmp_dtm <- terms_query()$res
-                   if (is.null(tmp_dtm)) return(NULL)
+                   tmp_dfm <- terms_query()$res
+                   if (is.null(tmp_dfm)) return(NULL)
                    updateNumericInput(session, "start_documents", value = 1)
-                   tmp_dtm <- docvars(co()) %>% select_(input$term_group) %>% bind_cols(tmp_dtm)
-                   names(tmp_dtm) <- c("group", "n")
-                   res <- tmp_dtm %>% group_by(group) %>% summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1))
+                   tmp_dfm <- docvars(co()) %>% select_(input$term_group) %>% bind_cols(tmp_dfm)
+                   names(tmp_dfm) <- c("group", "n")
+                   res <- tmp_dfm %>% group_by(group) %>% summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1))
                    res
                  })
                  
                  
                  ## Search term total frequency
                  tab_term_tot <- reactive({
-                   tmp_dtm <- terms_query()$res
-                   if (is.null(tmp_dtm)) return(NULL)
-                   names(tmp_dtm) <- "n"
-                   res <- tmp_dtm %>% 
+                   tmp_dfm <- terms_query()$res
+                   if (is.null(tmp_dfm)) return(NULL)
+                   names(tmp_dfm) <- "n"
+                   res <- tmp_dfm %>% 
                      summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1)) %>%
                      mutate(nom = gettext("Total", domain = "R-explor")) %>% select(nom, nb_docs, prop_docs)
                    res
@@ -863,14 +863,14 @@ explor_corpus <- function(qco, settings) {
                      code <- paste0(code, filter_code, "\n")
                      corpus_name <- "tmp_corpus"
                    }
-                   code <- paste0(code, "## ", gettext("Document term matrix computation", domain = "R-explor"), "\n")
-                   code <- paste0(code, corpus_dtm_code(corpus_name, settings$stopwords_name, settings$thesaurus_name))
+                   code <- paste0(code, "## ", gettext("Document-feature matrix computation", domain = "R-explor"), "\n")
+                   code <- paste0(code, corpus_dfm_code(corpus_name, settings$stopwords_name, settings$thesaurus_name))
                    code <- formatR::tidy_source(text = code, 
                                                 width.cutoff = 75, 
                                                 output = FALSE)$text.tidy
                    showModal(modalDialog(
                      title = gettext("Export R code", domain = "R-explor"), size = "l", 
-                     HTML(paste0(gettext("Copy, paste and run the following code in your script to compute the corresponding document-term matrix (DTM) :", domain = "R-explor"),
+                     HTML(paste0(gettext("Copy, paste and run the following code in your script to compute the corresponding document-feature matrix (dfm) :", domain = "R-explor"),
                                  "<pre><code>",
                                  paste(highr::hi_html(code), collapse = "\n"),
                                  "</code></pre>")),
