@@ -232,8 +232,8 @@ explor_corpus <- function(qco, settings) {
                                         h3(gettext("Terms search", domain = "R-explor")),
                                         HTML("<p>", gettext('Enter one or more terms. You can use logical operators like <code>&</code> ("and"), <code>|</code> ("or"), <code>!</code> ("not") and parentheses :', domain = "R-explor"), "</p>"),
                                         fluidRow(
-                                          column(5, textInput("terms", gettext("Terms", domain = "R-explor"), width = "100%")),
-                                          column(3, selectInput("term_group",
+                                          column(8, textInput("terms", gettext("Terms", domain = "R-explor"), width = "100%")),
+                                          column(4, selectInput("term_group",
                                                                 gettext("Group by", domain = "R-explor"),
                                                                 choices = names(vars)))),
                                         uiOutput("termsAlert"),
