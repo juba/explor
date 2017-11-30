@@ -9,10 +9,10 @@ explor.dfm <- function(obj, ...) {
     if (!inherits(obj, "dfm")) stop(gettext("obj must be of class dfm", domain = "R-explor"))
     
     ## Settings
-    settings <- list(dfm_name = deparse(substitute(dfm)))
+    settings <- list(dfm_name = deparse(substitute(obj)))
 
     ## Launch interface
-    explor_dfm(obj)
+    explor_dfm(obj, settings)
     
 }
 
@@ -43,18 +43,57 @@ explor_dfm <- function(dfm, settings) {
                            
                            sidebarPanel(id = "sidebar",
                                         selectInput("doc_group", gettext("Group documents by", domain = "R-explor"), choices = c("none", vars)),
-                                        numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), 0, 0, 1000, 1)
+                                        selectInput("dfm_weight", gettext("Weight dfm by", domain = "R-explor"), choices = c(
+                                          "Count" = "frequency", 
+                                          "tf-idf" = "tfidf",
+                                          "Relative frequency" = "relfreq",
+                                          "Maximum relative frequency" = "relmaxfreq",
+                                          "Frequency logarithm" = "logfreq")),
+                                        numericInput("term_min_occurrences", gettext("Filter terms on minimal frequency", domain = "R-explor"), value = 0, min = 0)
                            ),
                            mainPanel(
                              tabsetPanel(
                                
-                               ## "Terms frequency" tab --------------------------------
+                               ## Wordcloud tab ----------------------------------------
                                
-                               tabPanel(gettext("Terms frequency", domain = "R-explor"),
-                                        h3(gettext("Terms frequency", domain = "R-explor")),
+                               tabPanel(gettext("Wordcloud", domain = "R-explor"),
+                                        h3(gettext("Wordcloud", domain = "R-explor")),
+                                        numericInput("wordcloud_maxwords", gettext("Maximum number of words per plot", domain = "R-explor"), min = 5, max = 1000, value = 30),
+                                        checkboxInput("wordcloud_compare", gettext("Compare by documents", domain = "R-explor"), value = FALSE),
+                                        plotOutput("plot_wordcloud")
+                               ),
+                               
+
+                               
+                               ## "Top features" tab --------------------------------
+                               
+                               tabPanel(gettext("Top features", domain = "R-explor"),
+                                        h3(gettext("Top features", domain = "R-explor")),
+                                        checkboxInput("topfeat_scheme", gettext("Compare by documents", domain = "R-explor"), value = FALSE),
+                                        selectInput("topfeat_group", gettext("Group by", domain = "R-explor"), choices = c("none", vars)),
+                                        numericInput("topfeat_n", gettext("Number of features to keep", domain = "R-explor"), value = 20, min = 10, max = 1000),
                                         p(HTML("<strong>", gettext("Number of documents", domain = "R-explor"), "&nbsp;:</strong>"), textOutput("nbdocs", inline = TRUE)),
-                                        selectInput("freq_choices", "Frequency type", choices = freq_choices),
-                                        DT::dataTableOutput("freqtable")),
+                                        tabsetPanel(type = "pills",
+                                                    tabPanel(gettext("Table", domain = "R-explor"),
+                                                             DT::dataTableOutput("topfeat_table"),
+                                                             tags$p(actionButton("code_topfeat_table",
+                                                                                 class = "btn-success",
+                                                                                 icon = icon("code"),
+                                                                                 label = gettext("Get R code", domain = "R-explor")))
+                                                    ),
+                                                    tabPanel(gettext("Plot", domain = "R-explor"),
+                                                             tags$p(htmlOutput("topfeat_plot_text")),
+                                                             plotOutput("topfeat_plot"),
+                                                             tags$p(actionButton("code_topfeat_plot",
+                                                                                 class = "btn-success",
+                                                                                 icon = icon("code"),
+                                                                                 label = gettext("Get R code", domain = "R-explor")))
+                                                             
+                                                    )
+                                        )
+                               ),
+                                        
+                                        
                                
                                ## "Terms search" tab ----------------------------------
                                
@@ -111,13 +150,16 @@ explor_dfm <- function(dfm, settings) {
                  dfm_code <- reactive({
                    code <- ""
                    if (!is.na(input$term_min_occurrences) && input$term_min_occurrences > 0) {
-                     code <- paste0("filtered_dfm <- dfm_trim(filtered_dfm, min_count = ", input$term_min_occurences, ")")
+                     code <- paste0("tmp_dfm <- dfm_trim(tmp_dfm, min_count = ", input$term_min_occurrences, ")\n")
                    }
                    if (input$doc_group != "none") {
-                     code <- paste0(code, "filtered_dfm <- dfm_group(filtered_dfm, groups = '", input$doc_group, "')\n")
+                     code <- paste0(code, "tmp_dfm <- dfm_group(tmp_dfm, groups = '", input$doc_group, "')\n")
+                   }
+                   if (input$dfm_weight != "frequency") {
+                     code <- paste0(code, "tmp_dfm <- dfm_weight(tmp_dfm, type = '", input$dfm_weight, "')\n")
                    }
                    if (code != "") {
-                      code <- paste("filtered_dfm <- %s", code, sep = "\n")
+                      code <- paste("tmp_dfm <- %s", code, sep = "\n")
                    }
                    code
                  })
@@ -134,7 +176,7 @@ explor_dfm <- function(dfm, settings) {
                      withProgress(message = gettext("Recomputing dfm", domain = "R-explor"), value = 0.3, {
                        eval(parse(text = code))
                        incProgress(0.7)
-                       return(filtered_dfm)
+                       return(tmp_dfm)
                      })
                    } else {
                      return(dfm)
@@ -152,7 +194,15 @@ explor_dfm <- function(dfm, settings) {
                    list(order = list(list(index, order)))
                  }
                  
-                 ## FREQUENT TERMS -----------------------------------------------------
+                 
+                 ## WORDCLOUD ----------------------------------------------------------
+                 
+                 output$plot_wordcloud <- renderPlot({
+                   textplot_wordcloud(dtm(), comparison = input$wordcloud_compare, max.words = input$wordcloud_maxwords)
+                 })
+                 
+                 
+                 ## TOP FEATURES -----------------------------------------------------
                  
                  ## Number of documents
                  output$nbdocs <- renderText({
@@ -160,31 +210,54 @@ explor_dfm <- function(dfm, settings) {
                  })
                  
                  
-                 freqtable_code <- reactive({
-                   
+                 topfeat_tab_code <- reactive({
+                   scheme <- ifelse(input$topfeat_scheme, "docfreq", "count")
+                   group <- input$topfeat_group
+                   if (!is.na(input$topfeat_n) && input$topfeat_n > 0) {
+                     n <- input$topfeat_n
+                   } else {
+                     n <- 10
+                   }
+                   if (group == "none") group <- NULL
+                   code <- paste0("topf_tab <- topfeatures(%s, scheme = '", scheme, "', n = ", n)
+                   if (!is.null(group)) {
+                     code <- paste0(code, ", groups = '", group, "'")
+                   }
+                   code <- paste0(code, ")")
+                   code <- paste(code,
+                                 "topf_tab <- data.frame(topf_tab)", sep="\n")
+                   code
                  })
-                 get_freqtable_code <- function(dtm_name) {
-                   
+                 get_topfeat_tab_code <- function(dtm_name) {
+                   code <- sprintf(topfeat_tab_code(), dtm_name)
+                   code
                  }
                  
-                 ## Most frequent terms table
-                 output$freqtable <- DT::renderDataTable({
+                 output$topfeat_table <- DT::renderDataTable(({
                    if (is.null(dtm())) return(NULL)
-                   frq <- data.frame(topfeatures(dtm(), n = 10000))
-                   names(frq) <- "nb_terms"
-                   frq$term <- rownames(frq)
-                   docf <- data.frame(docfreq(dtm(), scheme = "count"))
-                   names(docf) <- "nb_docs"
-                   docf$term <- rownames(docf)
-                   docf$prop_docs <- (round(docf$nb_docs / ndoc(dtm()) * 100, 2))
-                   tab <- frq %>% left_join(docf, by = "term") %>% select(term, nb_terms, nb_docs, prop_docs)
-                   names(tab) <- c(gettext("Term", domain = "R-explor"),
-                                   gettext("Term frequency", domain = "R-explor"),
-                                   gettext("Number of documents", domain = "R-explor"),
-                                   gettext("Percentage of documents", domain = "R-explor"))
-                   DT::datatable(tab, 
-                                 options = c(tableOptions, order_option(tab, gettext("Term frequency", domain = "R-explor"))), rownames = FALSE)
+                   code <- get_topfeat_tab_code("dtm()")
+                   code <- paste(
+                     "tableOptions <- list(lengthMenu =  c(10,20,50,100), pageLength = 20, orderClasses = TRUE, autoWidth = TRUE, searching = TRUE)",
+                     code,
+                     "DT::datatable(topf_tab, options = c(tableOptions), rownames = TRUE)",
+                     sep = "\n")
+                   eval(parse(text = code))
+                 }))
+                 
+                 output$topfeat_plot_text <- renderText({
+                   if (is.null(dtm())) return("No data")
+                   return("")
                  })
+                 
+                 output$topfeat_plot <- renderPlot({
+                   if (is.null(dtm())) return(NULL)
+                   scheme <- ifelse(input$topfeat_scheme, "docfreq", "count")
+                   group <- input$topfeat_group
+                   if (group == "none") group <- NULL
+                   tab <- data.frame(topfeatures(dtm(), scheme = scheme, groups = group, n = input$topfeat_n))
+                   
+                 })
+                 
                  
                  ## SEARCH TERMS --------------------------------------------
                  
@@ -385,6 +458,36 @@ explor_dfm <- function(dfm, settings) {
                    }
                    DT::datatable(sim_term(), 
                                  options = c(tableOptions, order_option(sim_term(), "similarity")), rownames = FALSE)
+                 })
+                 
+                 ### CODE EXPORT ---------------------------------------------------------------------
+                 
+                 ## Code export modal dialog
+                 show_code <- function(code) {
+                   code <- formatR::tidy_source(text = code, 
+                                                width.cutoff = 75, 
+                                                output = FALSE)$text.tidy
+                   showModal(modalDialog(
+                     title = gettext("Export R code", domain = "R-explor"), size = "l", 
+                     HTML(paste0(gettext("Copy, paste and run the following code in your script to compute the displayed results :", domain = "R-explor"),
+                                 "<pre><code>",
+                                 paste(highr::hi_html(code), collapse = "\n"),
+                                 "</code></pre>")),
+                     easyClose = TRUE))
+                 }
+                 observeEvent(input$code_topfeat_table, {
+                   code <- ""
+                   dfm_name <- settings$dfm_name
+                   dfm_code <- get_dfm_code(dfm_name)
+                   if (dfm_code != "") {
+                     code <- paste0("## ", gettext("Dfm treatment", domain = "R-explor"), "\n")
+                     code <- paste0(code, dfm_code, "\n")
+                     dfm_name <- "tmp_dfm"
+                   }
+                   code <- paste0(code, "## ", gettext("Top features", domain = "R-explor"), "\n")
+                   code <- paste0(code, get_topfeat_tab_code(dfm_name))
+                   code <- paste0(code, "## ", gettext("Optional DT::datable output", domain = "R-explor"), "\n")
+                   show_code(code)
                  })
                  
                })
