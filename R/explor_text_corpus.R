@@ -605,10 +605,13 @@ explor_corpus <- function(qco, settings) {
           #  dfm_terms[dfm_terms > 0] <- 1
           #}
           query_progress$inc(0.1)
-          res <- try(
-            eval(parse(text = input$terms), envir = dfm_terms) %>% 
+          res <- try({
+            code <- input$terms
+            ## Add backquotes to words with quote
+            code <- stringi::stri_replace_all_regex(code, pattern="(\\b)(\\w*'\\w*)(\\b)", replacement = "$1`$2`$3" )
+            eval(parse(text = code), envir = dfm_terms) %>% 
               data.frame()
-            , silent = TRUE)
+          }, silent = TRUE)
           query_progress$inc(0.6)
           if (inherits(res, "try-error")) {
             res <- NULL
