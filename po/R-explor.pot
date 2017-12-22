@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.4.0\n"
-"POT-Creation-Date: 2017-11-22 16:57\n"
+"POT-Creation-Date: 2017-12-22 15:30\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,283 +28,13 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-msgid "obj must be of class Corpus"
-msgstr ""
-
-msgid "raw_corpus must be of class Corpus"
-msgstr ""
-
-msgid "obj must be of class corpus"
-msgstr ""
-
-msgid "raw_corpus must be of class corpus"
-msgstr ""
-
-msgid "Clean corpus"
-msgstr ""
-
-msgid "Raw corpus"
-msgstr ""
-
-msgid "Words"
-msgstr ""
-
-msgid "Sentence"
-msgstr ""
-
-msgid "Corpus"
-msgstr ""
-
-msgid "Exploration"
-msgstr ""
-
-msgid "Corpus treatment"
-msgstr ""
-
-msgid "Convert to lowercase"
-msgstr ""
-
-msgid "Remove numbers"
-msgstr ""
-
-msgid "Remove punctuation"
-msgstr ""
-
-msgid "Remove symbols"
-msgstr ""
-
-msgid "Remove Twitter"
-msgstr ""
-
-msgid "Remove hyphens"
-msgstr ""
-
-msgid "Remove URLs"
-msgstr ""
-
-msgid "Remove stopwords"
-msgstr ""
-
-msgid "Apply thesaurus"
-msgstr ""
-
-msgid "Stem words"
-msgstr ""
-
-msgid "Stemming language"
-msgstr ""
-
-msgid "Corpus filtering"
-msgstr ""
-
-msgid "If nothing is selected, no filter is applied."
-msgstr ""
-
-msgid "Filter terms on minimal frequency"
-msgstr ""
-
-msgid "Get R code"
-msgstr ""
-
-msgid "Frequent terms"
-msgstr ""
-
-msgid "Most frequent terms"
-msgstr ""
-
-msgid "Ngrams"
-msgstr ""
-
-msgid "Number of documents"
-msgstr ""
-
-msgid "Terms search"
-msgstr ""
-
-msgid "Enter one or more terms. You can use logical operators like <code>&</code> (\"and\"), <code>|</code> (\"or\"), <code>!</code> (\"not\") and parentheses :"
-msgstr ""
-
-msgid "Terms"
-msgstr ""
-
-msgid "Group by"
-msgstr ""
-
-msgid "Selected terms frequency"
-msgstr ""
-
-msgid "Table"
-msgstr ""
-
-msgid "Plot"
-msgstr ""
-
-msgid "Documents"
-msgstr ""
-
-msgid "From"
-msgstr ""
-
-msgid "Display documents from"
-msgstr ""
-
-msgid "Display"
-msgstr ""
-
-msgid "Display metadata"
-msgstr ""
-
-msgid "Previous"
-msgstr ""
-
-msgid "Next"
-msgstr ""
-
-msgid "Number :"
-msgstr ""
-
-msgid "Terms location"
-msgstr ""
-
-msgid "Enter one or more terms :"
-msgstr ""
-
-msgid "Selected terms location"
-msgstr ""
-
-msgid "Help"
-msgstr ""
-
-msgid "How to read the table :"
-msgstr ""
-
-msgid "<code>Term frequency</code> : number of times this term is found in the selected corpus"
-msgstr ""
-
-msgid "<code>Number of documents</code> : number of documents in the selected corpus in which this term appears at least once"
-msgstr ""
-
-msgid "<code>Percentage of documents</code> : percentage of documents in the selected corpus in which this term appears at least once"
-msgstr ""
-
-msgid "Allows to search for terms or terms combinations in the selected corpus, and to display both frequencies and the corresponding documents. Note that the search is made on the cleaned corpus (after filtering, stemming, removing of stopwords, etc.). Also note that highlighting is not perfect : for example, if searching for <code>I</code>, every \"i\" in the documents will be highlighted, but the search has been made only on the word \"I\"."
-msgstr ""
-
-msgid "<code>I</code> : search for documents with the term \"I\" (or \"i\")"
-msgstr ""
-
-msgid "<code>!i</code> : search for documents without the term \"I\""
-msgstr ""
-
-msgid "<code>i | me | we</code> : search for documents with \"i\", \"me\" or \"we\" (or any combination)"
-msgstr ""
-
-msgid "<code>i & we</code> : search for documents with both \"i\" and \"we\""
-msgstr ""
-
-msgid "<code>sky & (sea | ocean)</code> : search for documents with \"sky\" and the terms \"sea\" or \"ocean\" (or both)"
-msgstr ""
-
-msgid "Recomputing dtm"
-msgstr ""
-
-msgid "Term"
-msgstr ""
-
-msgid "Term frequency"
-msgstr ""
-
-msgid "Percentage of documents"
-msgstr ""
-
-msgid "Running query"
-msgstr ""
-
-msgid "<strong>Warning :</strong> the following terms are missing from the corpus : <i>"
-msgstr ""
-
-msgid "<strong>Warning :</strong> Query error : <i>"
-msgstr ""
-
-msgid "Total"
-msgstr ""
-
-msgid "<p><strong>Query :</strong> <code>"
-msgstr ""
-
-msgid "<p><strong>Frequency in corpus :</strong>"
-msgstr ""
-
-msgid "documents ("
-msgstr ""
-
-msgid "Group"
-msgstr ""
-
-msgid "No document found"
-msgstr ""
-
-msgid "documents found."
-msgstr ""
-
-msgid "<div class='document-content'>No document found.</p>"
-msgstr ""
-
-msgid "%s to %s of %s"
-msgstr ""
-
-msgid "Computing Kwics"
-msgstr ""
-
-msgid "<strong>Warning :</strong> terms not found in corpus"
-msgstr ""
-
-msgid "<strong>Only the first %s ones are displayed.</strong>"
-msgstr ""
-
-msgid "Creating x-ray plot"
-msgstr ""
-
-msgid "Document term matrix computation"
-msgstr ""
-
-msgid "Export R code"
-msgstr ""
-
-msgid "Copy, paste and run the following code in your script to compute the corresponding document-term matrix (DTM) :"
-msgstr ""
-
-msgid "obj must be of class dfm"
-msgstr ""
-
-msgid "Dfm"
-msgstr ""
-
-msgid "Terms selection"
-msgstr ""
-
-msgid "Search"
-msgstr ""
-
-msgid "Similarities"
-msgstr ""
-
-msgid "Enter a term :</p>"
-msgstr ""
-
-msgid "Similarity"
-msgstr ""
-
-msgid "Associated terms"
-msgstr ""
-
-msgid "<strong>Warning :</strong> term not found in the corpus : <i>"
-msgstr ""
-
 msgid "Animations"
 msgstr ""
 
 msgid "Lasso selection"
+msgstr ""
+
+msgid "Get R code"
 msgstr ""
 
 msgid "Export as SVG"
@@ -415,6 +145,9 @@ msgstr ""
 msgid "Eigenvalues"
 msgstr ""
 
+msgid "Plot"
+msgstr ""
+
 msgid "X axis"
 msgstr ""
 
@@ -431,6 +164,9 @@ msgid "Minimum contribution to show label"
 msgstr ""
 
 msgid "Data"
+msgstr ""
+
+msgid "Export R code"
 msgstr ""
 
 msgid "obj must be of class MCA"
@@ -482,6 +218,294 @@ msgid "obj must be of class dudi and pca"
 msgstr ""
 
 msgid "PCA"
+msgstr ""
+
+msgid "obj must be of class Corpus"
+msgstr ""
+
+msgid "raw_corpus must be of class Corpus"
+msgstr ""
+
+msgid "obj must be of class corpus"
+msgstr ""
+
+msgid "raw_corpus must be of class corpus"
+msgstr ""
+
+msgid "Clean corpus"
+msgstr ""
+
+msgid "Raw corpus"
+msgstr ""
+
+msgid "Terms frequency"
+msgstr ""
+
+msgid "Number of documents"
+msgstr ""
+
+msgid "Percentage of documents"
+msgstr ""
+
+msgid "Words"
+msgstr ""
+
+msgid "Sentence"
+msgstr ""
+
+msgid "Corpus"
+msgstr ""
+
+msgid "DTM exploration"
+msgstr ""
+
+msgid "Corpus treatment"
+msgstr ""
+
+msgid "Convert to lowercase"
+msgstr ""
+
+msgid "Remove numbers"
+msgstr ""
+
+msgid "Remove punctuation"
+msgstr ""
+
+msgid "Remove symbols"
+msgstr ""
+
+msgid "Remove Twitter"
+msgstr ""
+
+msgid "Remove hyphens"
+msgstr ""
+
+msgid "Remove URLs"
+msgstr ""
+
+msgid "Remove stopwords"
+msgstr ""
+
+msgid "Apply thesaurus"
+msgstr ""
+
+msgid "Stem words"
+msgstr ""
+
+msgid "Stemming language"
+msgstr ""
+
+msgid "Ngrams"
+msgstr ""
+
+msgid "Corpus filtering"
+msgstr ""
+
+msgid "If nothing is selected, no filter is applied."
+msgstr ""
+
+msgid "Filter terms on minimal frequency"
+msgstr ""
+
+msgid "Frequent terms"
+msgstr ""
+
+msgid "Most frequent terms"
+msgstr ""
+
+msgid "Terms search"
+msgstr ""
+
+msgid "Enter one or more terms. You can use logical operators like <code>&</code> (\"and\"), <code>|</code> (\"or\"), <code>!</code> (\"not\") and parentheses :"
+msgstr ""
+
+msgid "Terms"
+msgstr ""
+
+msgid "Group by"
+msgstr ""
+
+msgid "Selected terms frequency"
+msgstr ""
+
+msgid "Table"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "Display documents from"
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+msgid "Display metadata"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Number :"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "How to read the table :"
+msgstr ""
+
+msgid "<code>Term frequency</code> : number of times this term is found in the selected corpus"
+msgstr ""
+
+msgid "<code>Number of documents</code> : number of documents in the selected corpus in which this term appears at least once"
+msgstr ""
+
+msgid "<code>Percentage of documents</code> : percentage of documents in the selected corpus in which this term appears at least once"
+msgstr ""
+
+msgid "Allows to search for terms or terms combinations in the selected corpus, and to display both frequencies and the corresponding documents. Note that the search is made on the cleaned corpus (after filtering, stemming, removing of stopwords, etc.). Also note that highlighting is not perfect : for example, if searching for <code>I</code>, every \"i\" in the documents will be highlighted, but the search has been made only on the word \"I\"."
+msgstr ""
+
+msgid "<code>I</code> : search for documents with the term \"I\" (or \"i\")"
+msgstr ""
+
+msgid "<code>!i</code> : search for documents without the term \"I\""
+msgstr ""
+
+msgid "<code>i | me | we</code> : search for documents with \"i\", \"me\" or \"we\" (or any combination)"
+msgstr ""
+
+msgid "<code>i & we</code> : search for documents with both \"i\" and \"we\""
+msgstr ""
+
+msgid "<code>sky & (sea | ocean)</code> : search for documents with \"sky\" and the terms \"sea\" or \"ocean\" (or both)"
+msgstr ""
+
+msgid "Terms location"
+msgstr ""
+
+msgid "Enter one or more terms :"
+msgstr ""
+
+msgid "Kwics"
+msgstr ""
+
+msgid "Position plot"
+msgstr ""
+
+msgid "Recomputing dfm"
+msgstr ""
+
+msgid "Term"
+msgstr ""
+
+msgid "Term frequency"
+msgstr ""
+
+msgid "Running query"
+msgstr ""
+
+msgid "<strong>Warning :</strong> the following terms are missing from the corpus : <i>"
+msgstr ""
+
+msgid "<strong>Warning :</strong> Query error : <i>"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "<p><strong>Query :</strong> <code>"
+msgstr ""
+
+msgid "<p><strong>Frequency in corpus :</strong>"
+msgstr ""
+
+msgid "documents ("
+msgstr ""
+
+msgid "No document found"
+msgstr ""
+
+msgid "documents found."
+msgstr ""
+
+msgid "<div class='document-content'>No document found.</p>"
+msgstr ""
+
+msgid "%s to %s of %s"
+msgstr ""
+
+msgid "Computing Kwics"
+msgstr ""
+
+msgid "<strong>Only the first %s ones are displayed.</strong>"
+msgstr ""
+
+msgid "Creating x-ray plot"
+msgstr ""
+
+msgid "Document-feature matrix computation"
+msgstr ""
+
+msgid "Copy, paste and run the following code in your script to compute the corresponding document-feature matrix (dfm) :"
+msgstr ""
+
+msgid "obj must be of class dfm"
+msgstr ""
+
+msgid "Dfm"
+msgstr ""
+
+msgid "Document-feature matrix"
+msgstr ""
+
+msgid "Group documents by"
+msgstr ""
+
+msgid "Weight dfm by"
+msgstr ""
+
+msgid "Wordcloud"
+msgstr ""
+
+msgid "Maximum number of words per plot"
+msgstr ""
+
+msgid "Compare by documents"
+msgstr ""
+
+msgid "Top features"
+msgstr ""
+
+msgid "Number of features to keep"
+msgstr ""
+
+msgid "Similarities"
+msgstr ""
+
+msgid "Enter a term :</p>"
+msgstr ""
+
+msgid "Similarity"
+msgstr ""
+
+msgid "Associated terms"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "<strong>Warning :</strong> term not found in the corpus : <i>"
+msgstr ""
+
+msgid "Copy, paste and run the following code in your script to compute the displayed results :"
+msgstr ""
+
+msgid "Dfm treatment"
 msgstr ""
 
 msgid "obj must be of class coa"
