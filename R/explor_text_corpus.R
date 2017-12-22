@@ -751,7 +751,8 @@ explor_corpus <- function(qco, settings) {
         })
         observeEvent(input$next_documents, {
           val <- isolate(input$start_documents) + isolate(input$nb_documents_display)
-          if (val <= nrow(terms_query()$res)) {
+          nb_docs <- tab_term_tot()$nb_docs
+          if (val <= nb_docs) {
             updateNumericInput(session, "start_documents", value = val)
           }
         })
@@ -759,12 +760,15 @@ explor_corpus <- function(qco, settings) {
         ## Documents list
         output$documenttable <- renderText({
           ## Acquire dependencies
+          nb_docs <- tab_term_tot()$nb_docs
           start <- input$start_documents
           nb_documents <- input$nb_documents_display
           if (is.null(terms_query()$res)) return(gettext("<div class='document-content'>No document found.</p>", domain = "R-explor"))
           indexes <- which(as.vector(terms_query()$res) > 0)
-          end <- min(start + nb_documents - 1, nrow(terms_query()$res))
+          end <- min(start + nb_documents - 1, nb_docs)
+          print(indexes)
           indexes <- indexes[start:end]
+          print(indexes)
           out <- ""
           for (i in indexes) {
             out <- paste(out, "<div class='document-content'>")
@@ -805,10 +809,11 @@ explor_corpus <- function(qco, settings) {
         ## documents list pagination text
         output$documents_pagination <- renderText({
           start <- input$start_documents
-          nb_documents <- input$nb_documents_display
-          end <- min(start + nb_documents - 1, nrow(terms_query()$res))
+          nb_documents_display <- input$nb_documents_display
+          nb_docs <- tab_term_tot()$nb_docs
+          end <- min(start + nb_documents_display - 1, nb_docs)
           if (end == 0) start <- 0
-          sprintf(gettext("%s to %s of %s", domain = "R-explor"), start, end, nrow(terms_query()$res))
+          sprintf(gettext("%s to %s of %s", domain = "R-explor"), start, end, nb_docs)
         })
         
         
