@@ -557,7 +557,7 @@ explor_corpus <- function(qco, settings) {
                  terms <- reactive({
                    tmp <- unlist(stri_extract_all_words(input$terms))
                    if (length(tmp) == 1 && is.na(tmp)) return(NULL)
-                   tmp <- tolower(tmp[tmp != ""])
+                   tmp <- tmp[tmp != ""]
                  })
                  ## Invalid terms in terms input
                  invalid_terms <- reactive({
