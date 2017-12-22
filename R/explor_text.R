@@ -22,7 +22,7 @@ explor_text_css <- function() {
               
               #sidebar .btn { padding: 6px 10px; }
               
-              #sidebar .shiny-input-checkboxgroup .shiny-options-group {
+              #filters .shiny-input-checkboxgroup .shiny-options-group {
                   max-height: 200px; 
                   overflow-y: scroll; 
               }
@@ -76,7 +76,6 @@ explor_text_css <- function() {
               .dataTables_filter, .dataTables_paginate {
                   font-size: 11px !important;
               }
-              
               .document-content {
                   font-size: 12px !important;
                   background-color: #EEE;
