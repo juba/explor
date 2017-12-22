@@ -68,6 +68,10 @@ explor_text_css <- function() {
                   max-width: 850px;
                   margin-bottom: 2em;
               }
+              .dataTables_wrapper label {
+                  font-weight: normal;
+                  font-size: 90%;
+              }
               .dataTables_info, .dataTables_length, 
               .dataTables_filter, .dataTables_paginate {
                   font-size: 11px !important;
