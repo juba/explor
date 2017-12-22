@@ -152,6 +152,8 @@ explor_corpus_highlight <- function(x, str, ngrams) {
 explor_corpus <- function(qco, settings) { 
     
 
+    ## Choices -----------------------------
+  
     ## Document level variables
     vars <- lapply(docvars(qco), unique)
     nvalues <- lapply(vars, length)
@@ -170,6 +172,11 @@ explor_corpus <- function(qco, settings) {
       names(doc_corpus_choices) <- tmp_names
     }
 
+    freqtermplot_y_choices <- c("freq", "nb_docs", "prop_docs")
+    names(freqtermplot_y_choices) <- c(gettext("Terms frequency", domain = "R-explor"),
+                                       gettext("Number of documents", domain = "R-explor"),
+                                       gettext("Percentage of documents", domain = "R-explor"))
+    
     ## Location terms type choices
     loc_type_choices <- c("words", "sentence")
     names(loc_type_choices) <- c(gettext("Words", domain = "R-explor"),
@@ -253,6 +260,8 @@ explor_corpus <- function(qco, settings) {
                                                                                 DT::dataTableOutput("freqtermtable")
                                                                        ),
                                                                        tabPanel(gettext("Plot", domain = "R-explor"),
+                                                                                selectInput("freqtermplot_y", "Y-axis", 
+                                                                                            choices = freqtermplot_y_choices, selected = "prop_docs"),
                                                                                 tags$p(htmlOutput("freqtermplottext")),
                                                                                 plotOutput("freqtermplot")
                                                                        )
@@ -592,9 +601,9 @@ explor_corpus <- function(qco, settings) {
             as.data.frame()
           query_progress$inc(0.3)
           ## Convert count to presence / absence
-          if (ncol(dfm_terms) > 0) {
-            dfm_terms[dfm_terms > 0] <- 1
-          }
+          #if (ncol(dfm_terms) > 0) {
+          #  dfm_terms[dfm_terms > 0] <- 1
+          #}
           query_progress$inc(0.1)
           res <- try(
             eval(parse(text = input$terms), envir = dfm_terms) %>% 
@@ -633,11 +642,11 @@ explor_corpus <- function(qco, settings) {
           tmp_dfm <- terms_query()$res
           if (is.null(tmp_dfm)) return(NULL)
           updateNumericInput(session, "start_documents", value = 1)
-          tmp_dfm <- docvars(co()) %>% select_(input$term_group) %>% bind_cols(tmp_dfm)
+          tmp_dfm <- docvars(co()) %>% select(!!!input$term_group) %>% bind_cols(tmp_dfm)
           names(tmp_dfm) <- c("group", "n")
           res <- tmp_dfm %>% 
             group_by(group) %>% 
-            summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1)) 
+            summarise(freq = sum(n), nb_docs = sum(n > 0), prop_docs = round(nb_docs / n() * 100, 1))
           res
         })
         
@@ -648,7 +657,7 @@ explor_corpus <- function(qco, settings) {
           if (is.null(tmp_dfm)) return(NULL)
           names(tmp_dfm) <- "n"
           res <- tmp_dfm %>% 
-            summarise(nb_docs = sum(n), prop_docs = round(nb_docs / n() * 100, 1)) %>%
+            summarise(nb_docs = sum(n > 0), prop_docs = round(nb_docs / n() * 100, 1)) %>%
             mutate(nom = gettext("Total", domain = "R-explor")) %>% select(nom, nb_docs, prop_docs)
           res
         })
@@ -684,6 +693,7 @@ explor_corpus <- function(qco, settings) {
           }
           tab <- tab_term()
           names(tab) <- c(input$term_group,
+                          gettext("Terms frequency", domain = "R-explor"),
                           gettext("Number of documents", domain = "R-explor"),
                           gettext("Percentage of documents", domain = "R-explor"))
           tab <- DT::datatable(tab, 
@@ -709,23 +719,23 @@ explor_corpus <- function(qco, settings) {
           group <- quo(input$term_group)
           var <- docvars(co()) %>% pull(!!group)
           g <- NULL
+          y_label <- names(freqtermplot_y_choices)[which(freqtermplot_y_choices == input$freqtermplot_y)]
           if (is.character(var) || is.factor(var)) {
-            tab <- tab %>% 
-              filter(prop_docs > 0) %>%
-              mutate(group = stats::reorder(group, prop_docs))
+            tab <- tab %>% filter(prop_docs > 0) 
+            tab$group <- stats::reorder(tab$group, tab %>% pull(!!input$freqtermplot_y))
             g <- ggplot(tab) + 
-              geom_bar(aes(x = stats::reorder(group, prop_docs), y = prop_docs), stat = "identity") +
+              geom_bar(aes_string(x = "group", y = input$freqtermplot_y), stat = "identity") +
               xlab(input$term_group) +
-              ylab(gettext("Percentage of documents", domain = "R-explor")) +
+              ylab(y_label) +
               theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
               expand_limits(y = 0)
           } 
           if (is.numeric(var) || inherits(var, "Date")) {
-            g <- ggplot(tab, aes(x = group, y = prop_docs)) + 
+            g <- ggplot(tab, aes_string(x = "group", y = input$freqtermplot_y)) + 
               geom_line() +
               geom_smooth() +
               xlab(input$term_group) +
-              ylab(gettext("Percentage of documents", domain = "R-explor")) +
+              ylab(y_label) +
               expand_limits(y = 0)
           }
           g
@@ -762,7 +772,7 @@ explor_corpus <- function(qco, settings) {
               tmp_corp <- raw_co()
             }
             tmp_terms <- terms()
-            if (!identical(ngrams, 1)) {
+            if (!identical(input$ngrams, 1)) {
               tmp_terms <- stri_replace_all_fixed(tmp_terms, pattern = "_", replacement = " ")
             }
             if (input$doc_display == "Documents") {
