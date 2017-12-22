@@ -750,12 +750,17 @@ explor_corpus <- function(qco, settings) {
                      } else { 
                        tmp_corp <- raw_co()
                      }
+                     tmp_terms <- terms()
+                     if (!identical(ngrams, 1)) {
+                       tmp_terms <- stri_replace_all_fixed(tmp_terms, pattern = "_", replacement = " ")
+                     }
                      if (input$doc_display == "Documents") {
-                       out <- paste(out, explor_corpus_highlight(tmp_corp[i], terms(), input$ngrams))                       
+                       out <- paste(out, explor_corpus_highlight(tmp_corp[i], tmp_terms, input$ngrams))                       
                      }
                      if (input$doc_display == "Kwics") {
-                       kwics <- kwic(tmp_corp[i], pattern = terms(), window = 7, valuetype = "fixed")
-                       kwics$text <- paste("...", kwics$pre, strong(kwics$keyword), kwics$post, "...")
+                       tmp_terms <- phrase(tmp_terms)
+                       kwics <- kwic(tmp_corp[i], pattern = tmp_terms, window = 7, valuetype = "fixed")
+                       kwics$text <- paste0("...", kwics$pre, " <strong>", kwics$keyword, "</strong> ", kwics$post, "...")
                        kwics <- paste(kwics$text, collapse = "<br />")
                        out <- paste(out, kwics)
                      }
