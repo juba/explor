@@ -202,6 +202,10 @@ explor_corpus <- function(qco, settings) {
                                                              selectInput("treat_stem_lang", gettext("Stemming language", domain = "R-explor"),
                                                                          choices = SnowballC::getStemLanguages(), selected = "english"), width = "50%")
                                         ),
+                                        checkboxGroupInput("ngrams",
+                                                           gettext("Ngrams", domain = "R-explor"),
+                                                           m_ngrams,
+                                                           selected = 1),
                                         h4(gettext("Corpus filtering", domain = "R-explor")),
                                         p(gettext("If nothing is selected, no filter is applied.", domain = "R-explor")),
                                         uiOutput("filters"),
@@ -219,10 +223,6 @@ explor_corpus <- function(qco, settings) {
                                
                                tabPanel(gettext("Frequent terms", domain = "R-explor"),
                                         h3(gettext("Most frequent terms", domain = "R-explor")),
-                                        checkboxGroupInput("ngrams",
-                                                           gettext("Ngrams", domain = "R-explor"),
-                                                           m_ngrams,
-                                                           selected = 1),
                                         p(HTML("<strong>", gettext("Number of documents", domain = "R-explor"), "&nbsp;:</strong>"), textOutput("nbdocs", inline = TRUE)),
                                         DT::dataTableOutput("freqtable")),
                                
