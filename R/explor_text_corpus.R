@@ -133,7 +133,10 @@ $('#filters').on('shiny:visualchange', function(event) {
 
 
 ##' @import stringi
-explor_corpus_highlight <- function(x, str) {
+explor_corpus_highlight <- function(x, str, ngrams) {
+  if (!identical(ngrams, 1)) {
+    str <- stri_replace_all_fixed(str, pattern = "_", replacement = " ")
+  }
   stringi::stri_replace_all_fixed(x, pattern = str,  replacement = paste0("<span class='highlight'>",str,"</span>"),
                          vectorize_all = FALSE,
                          opts_fixed = stri_opts_fixed(case_insensitive = TRUE))
@@ -747,7 +750,7 @@ explor_corpus <- function(qco, settings) {
                        tmp_corp <- raw_co()
                      }
                      if (input$doc_display == "Documents") {
-                       out <- paste(out, explor_corpus_highlight(tmp_corp[i], terms()))                       
+                       out <- paste(out, explor_corpus_highlight(tmp_corp[i], terms(), input$ngrams))                       
                      }
                      if (input$doc_display == "Kwics") {
                        kwics <- kwic(tmp_corp[i], pattern = terms(), window = 7, valuetype = "fixed")
