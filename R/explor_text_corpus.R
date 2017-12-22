@@ -604,13 +604,14 @@ explor_corpus <- function(qco, settings) {
                  output$termsAlert <- renderUI({
                    if (length(invalid_terms() > 0) && invalid_terms() != "") {
                      tmp_terms <- paste(invalid_terms(), collapse = ", ")
-                     div(class = "alert alert-warning",
+                     div(class = "alert alert-danger",
                          HTML(paste(gettext("<strong>Warning :</strong> the following terms are missing from the corpus : <i>", domain = "R-explor"), tmp_terms, "</i>")))
                    }
                  })
                  
                  ## Alert if error in search expression
                  output$evalAlert <- renderUI({
+                   if (length(invalid_terms() > 0) && invalid_terms() != "") { return(NULL) }
                    e <- terms_query()$error
                    if (!is.null(e)) {
                      div(class = "alert alert-danger",
