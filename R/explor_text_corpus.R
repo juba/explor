@@ -21,7 +21,7 @@ explor.Corpus <- function(obj, raw_corpus = NULL, stopwords = NULL, thesaurus = 
                      stopwords = stopwords,
                      thesaurus = thesaurus,
                      corpus_name = deparse(substitute(obj)),
-                     raw_courpus_name = deparse(substitute(raw_corpus)),
+                     raw_corpus_name = deparse(substitute(raw_corpus)),
                      stopwords_name = deparse(substitute(stopwords)),
                      thesaurus_name = deparse(substitute(thesaurus)))
 
