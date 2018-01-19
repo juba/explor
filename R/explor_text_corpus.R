@@ -474,8 +474,21 @@ explor_corpus <- function(qco, settings) {
         })
         
         ## Tokenization code
-        tokens_code <- reactive({
-          code <- paste0("corpus_tokens <- tokens(%s, what='word'",
+        # corpus_thesaurus_code <- function(thesaurus_name) {
+        #   paste0("corpus_tokens <- tokens_lookup(corpus_tokens, dictionary(", thesaurus_name,"), exclusive = FALSE)")
+        # }
+        # corpus_tolower_code <- function() {
+        #   "corpus_tokens <- tokens_tolower(corpus_tokens)"
+        # }
+        # corpus_stopwords_code <- function(stopwords_name) {
+        #   paste0("corpus_tokens <- tokens_remove(corpus_tokens, ", stopwords_name,")")
+        # }
+        # corpus_ngrams_code <- function(ngrams) {
+        #   paste0("corpus_tokens <- tokens_ngrams(corpus_tokens, n = ", ngrams, ")")
+        # }
+        
+        tokens_code <- function(corpus_name, thesaurus_name, stopwords_name) {
+          code <- paste0("corpus_tokens <- tokens(", corpus_name, ", what='word'",
                          ", remove_punct = ", input$treat_remove_punct, 
                          ", remove_symbols = ", input$treat_remove_symbols, 
                          ", remove_twitter = ", input$treat_remove_twitter, 
@@ -488,11 +501,11 @@ explor_corpus <- function(qco, settings) {
           }
           if (!is.null(input$treat_thesaurus) && input$treat_thesaurus) {
             code <- paste0(code, "\n", 
-                           "corpus_tokens <- tokens_lookup(corpus_tokens, dictionary(%s), exclusive = FALSE)")
+                           "corpus_tokens <- tokens_lookup(corpus_tokens, dictionary(", thesaurus_name, "), exclusive = FALSE)")
           }
           if (!is.null(input$treat_stopwords) && input$treat_stopwords) {
             code <- paste0(code, "\n", 
-                           "corpus_tokens <- tokens_remove(corpus_tokens, %s)")
+                           "corpus_tokens <- tokens_remove(corpus_tokens, ", stopwords_name, ")")
           }
           ngrams <- utils::capture.output(dput(as.numeric(input$ngrams)))
           if (ngrams != 1) {
@@ -500,7 +513,7 @@ explor_corpus <- function(qco, settings) {
                            "corpus_tokens <- tokens_ngrams(corpus_tokens, n = ", ngrams, ")")
           }
           code
-        })
+        }
         ## dfm computation code
         dfm_code <- reactive({
           ngrams <- utils::capture.output(dput(as.numeric(input$ngrams)))
@@ -514,7 +527,7 @@ explor_corpus <- function(qco, settings) {
           code
         })
         corpus_dfm_code <- function(corpus_name, stopwords_name, thesaurus_name) {
-          out <- sprintf(tokens_code(), corpus_name, thesaurus_name, stopwords_name)
+          out <- tokens_code(corpus_name, thesaurus_name, stopwords_name)
           out <- paste(out, dfm_code(), sep = "\n")
           out
         }
