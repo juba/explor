@@ -157,7 +157,8 @@ explor_corpus <- function(qco, settings) {
     ## Document level variables
     vars <- lapply(docvars(qco), unique)
     nvalues <- lapply(vars, length)
-    vars <- vars[nvalues > 1 & nvalues < 100]
+    classes <- lapply(vars, class)
+    vars <- vars[(nvalues > 1 & nvalues < 100) | classes %in% c("numeric", "Date")]
 
     ## n-grams
     m_ngrams <- 1:5
