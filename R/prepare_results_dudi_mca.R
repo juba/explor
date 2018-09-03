@@ -64,7 +64,7 @@ prepare_results.acm <- function(obj) {
                           modname = extract_mod(tmp), 
                           Type = "Active", Class = "Qualitative") %>%
         gather(Axis, Contrib, starts_with("Axis")) %>%
-        mutate(Axis = gsub("^Axis([0-9]+)\\(%\\)$", "\\1", Axis),
+        mutate(Axis = gsub("^Axis([0-9]+)$", "\\1", Axis),
                Contrib = round(Contrib, 3))
     
     vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
@@ -112,7 +112,7 @@ prepare_results.acm <- function(obj) {
     tmp <- inertia$row.abs
     tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
       gather(Axis, Contrib, starts_with("Axis")) %>%
-      mutate(Axis = gsub("^Axis([0-9]+)\\(%\\)$", "\\1", Axis),
+      mutate(Axis = gsub("^Axis([0-9]+)$", "\\1", Axis),
              Contrib = round(Contrib, 3))
     
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))

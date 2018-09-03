@@ -70,13 +70,13 @@ prepare_results.coa <- function(obj) {
                                   pos = "Row",
                                   Type = "Active",
                                   Class = "Qualitative")
-    names(tmp_row) <- gsub("^Axis([0-9]+)\\(%\\)$", "Comp\\1", names(tmp_row))
+    names(tmp_row) <- gsub("^Axis([0-9]+)$", "Comp\\1", names(tmp_row))
     tmp_col <- inertia$col.abs
     tmp_col <- tmp_col %>% mutate(name = rownames(tmp_col),
                                   pos = "Column",
                                   Type = "Active",
                                   Class = "Qualitative")
-    names(tmp_col) <- gsub("^Axis([0-9]+)\\(%\\)$", "Comp\\1", names(tmp_col))
+    names(tmp_col) <- gsub("^Axis([0-9]+)$", "Comp\\1", names(tmp_col))
     tmp <- tmp_col %>% bind_rows(tmp_row) %>%
         gather(Axis, Contrib, starts_with("Comp")) %>%
         mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
