@@ -4,10 +4,11 @@
 \alias{CA_var_plot}
 \title{Interactive CA variables plot}
 \usage{
-CA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None",
-  var_lab_min_contrib = 0, point_size = 64, col_var = NULL,
-  symbol_var = NULL, size_var = NULL, size_range = c(10, 300),
-  zoom_callback = NULL, in_explor = FALSE, ...)
+CA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
+  var_hide = "None", var_lab_min_contrib = 0, point_size = 64,
+  col_var = NULL, symbol_var = NULL, size_var = NULL,
+  size_range = c(10, 300), zoom_callback = NULL, in_explor = FALSE,
+  ...)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}

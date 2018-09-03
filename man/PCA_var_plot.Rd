@@ -6,8 +6,8 @@
 \usage{
 PCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
   var_lab_min_contrib = 0, scale_unit = FALSE, col_var = NULL,
-  size_var = NULL, zoom_callback = NULL, in_explor = FALSE, xlim = NULL,
-  ylim = NULL, ...)
+  size_var = NULL, zoom_callback = NULL, in_explor = FALSE,
+  xlim = NULL, ylim = NULL, ...)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}
