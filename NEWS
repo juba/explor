@@ -1,7 +1,8 @@
-explor 0.4.0
+explor 0.3.4
 ------------
 
 * Fix improper computation in levels number in FactoMineR::PCA (thanks @Bhavanight)
+* Fox compatibility with ade4 1.7-13
 
 
 explor 0.3.3
