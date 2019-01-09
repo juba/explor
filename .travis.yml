@@ -2,12 +2,8 @@
 
 language: r
 warnings_are_errors: true
-sudo: required
+sudo: false
 cache: package
-r_binary_packages: 
-  - ggplot2
-  - FactoMineR
-
 r:
   - oldrel
   - release
