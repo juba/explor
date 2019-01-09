@@ -1,7 +1,7 @@
 # explor
 
 [![Travis-CI Build Status](https://travis-ci.org/juba/explor.svg?branch=master)](https://travis-ci.org/juba/explor)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/explor)](https://cran.r-project.org/package=explor)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-ago/explor)](https://cran.r-project.org/package=explor)
 ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/explor) 
 
 
