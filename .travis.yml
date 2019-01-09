@@ -8,3 +8,11 @@ r_binary_packages:
   - ggplot2
   - FactoMineR
 
+matrix: 
+  include:
+  - os: linux
+    r: release
+    dist: bionic
+  - os: linux
+    r: devel
+    dist: bionic
