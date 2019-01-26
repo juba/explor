@@ -1,6 +1,4 @@
-# explor 
-
-<img src="man/figures/logo.png width="200" align="right" />
+# explor  <img src="man/figures/logo.png" width="200" align="right" />
 
 
 [![Travis-CI Build Status](https://travis-ci.org/juba/explor.svg?branch=master)](https://travis-ci.org/juba/explor)
