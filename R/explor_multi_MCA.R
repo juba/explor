@@ -160,9 +160,6 @@ explor_multi_mca <- function(res, settings) {
     settings$has_sup_vars <- "Supplementary" %in% res$vars$Type
     settings$has_sup_ind <- "Supplementary" %in% res$ind$Type
     settings$type <- "MCA"
-    
-
-
 
     shiny::shinyApp(
                ui = navbarPage(gettext("MCA", domain = "R-explor"),
@@ -185,6 +182,10 @@ explor_multi_mca <- function(res, settings) {
                                                        sliderInput("var_lab_size", 
                                                                    gettext("Labels size", domain = "R-explor"),
                                                                    4, 20, 10),
+                                                       if (sum(res$vars$Axis == 1) < 100) {
+                                                           checkboxInput("var_auto_labels",
+                                                              gettext("Automatic labels position"), value=FALSE)
+                                                       },
                                                        sliderInput("var_point_size", 
                                                                    gettext("Points size", domain = "R-explor"),
                                                                    4, 128, 56),
@@ -235,6 +236,10 @@ explor_multi_mca <- function(res, settings) {
                                                            sliderInput("ind_labels_size", 
                                                                        gettext("Labels size", domain = "R-explor"),
                                                                        5, 20, 9),
+                                                           if (sum(res$ind$Axis == 1) < 100) {
+                                                             checkboxInput("ind_auto_labels",
+                                                                    gettext("Automatic labels position"), value=FALSE)
+                                                           },
                                                            if (settings$has_contrib) {
                                                              numericInput("ind_lab_min_contrib",
                                                                           gettext("Minimum contribution to show label", domain = "R-explor"),
@@ -268,6 +273,7 @@ explor_multi_mca <- function(res, settings) {
                        size_var <- if (!is.null(input$var_size) && input$var_size != "None") input$var_size else NULL
                        size_range <- if (!is.null(input$var_size) && input$var_size != "None") c(30,400) * input$var_point_size / 32 else c(10,300)
                        var_lab_min_contrib <- if(settings$has_contrib) input$var_lab_min_contrib else 0
+                       var_auto_labels <- if (!is.null(input$var_auto_labels) && input$var_auto_labels) "\"auto\"" else "NULL"
                        
                        paste0("explor::MCA_var_plot(res",
                               ", xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
@@ -280,7 +286,7 @@ explor_multi_mca <- function(res, settings) {
                               "    labels_size = ", input$var_lab_size,
                               ", point_size = ", input$var_point_size, ",\n",
                               "    transitions = ", input$var_transitions,
-                              ", labels_positions = NULL")
+                              ", labels_positions = ", var_auto_labels)
                    })
                    
                    ## Variables plot
@@ -311,6 +317,7 @@ explor_multi_mca <- function(res, settings) {
                        lab_var <- if (input$ind_labels_show) "Lab" else NULL
                        opacity_var <- if (!is.null(input$ind_opacity_var) && input$ind_opacity_var == "Fixed") NULL else input$ind_opacity_var
                        ind_lab_min_contrib <- if (settings$has_contrib) input$ind_lab_min_contrib else 0
+                       ind_auto_labels <- if (!is.null(input$ind_auto_labels) && input$ind_auto_labels) "\"auto\"" else "NULL"
                        
                        
                        paste0("explor::MCA_ind_plot(res, ",
@@ -325,7 +332,7 @@ explor_multi_mca <- function(res, settings) {
                               "point_size = ", input$ind_point_size, ",\n",
                               "    ellipses = ", input$ind_ellipses, ", ",
                               "transitions = ", input$ind_transitions,
-                              ", labels_positions = NULL")
+                              ", labels_positions = ", ind_auto_labels)
                    })
                    
                    ## Indidivuals plot
