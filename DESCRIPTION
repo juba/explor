@@ -1,8 +1,8 @@
 Package: explor
 Type: Package
 Title: Interactive Interfaces for Results Exploration
-Version: 0.3.4
-Date: 2018-09-03
+Version: 0.3.5
+Date: 2019-04-05
 Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
     role=c("aut","cre")))
 Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
@@ -19,7 +19,7 @@ Imports:
     tidyr,
     ggplot2,
     highr,
-    scatterD3 (>= 0.8.2)
+    scatterD3 (>= 0.9)
 Suggests: 
     FactoMineR,
     ade4 (>= 1.7-13),
