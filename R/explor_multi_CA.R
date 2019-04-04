@@ -92,49 +92,49 @@ explor_multi_ca <- function(res, settings) {
     settings$type <- "CA"
     
     shiny::shinyApp(
-               ui = navbarPage(gettext("CA", domain = "R-explor"),
+               ui = navbarPage(gettext("CA"),
                                header = tags$head(
                                                  tags$style(explor_multi_css())),
                                
-                               tabPanel(gettext("Eigenvalues", domain = "R-explor"),
+                               tabPanel(gettext("Eigenvalues"),
                                         explor_multi_eigenUI("eigen", res$eig)),
 
-                               tabPanel(gettext("Plot", domain = "R-explor"),
+                               tabPanel(gettext("Plot"),
                                         fluidRow(
                                             column(2,
                                                    wellPanel(
                                                        selectInput("var_x", 
-                                                                   gettext("X axis", domain = "R-explor"), 
+                                                                   gettext("X axis"), 
                                                                    choices = res$axes, selected = "1"),
                                                        selectInput("var_y", 
-                                                                   gettext("Y axis", domain = "R-explor"), 
+                                                                   gettext("Y axis"), 
                                                                    choices = res$axes, selected = "2"),
                                                        sliderInput("var_lab_size", 
-                                                                   gettext("Labels size", domain = "R-explor"),
+                                                                   gettext("Labels size"),
                                                                    0, 20, 10),
                                                        sliderInput("var_point_size", 
-                                                                   gettext("Points size", domain = "R-explor"),
+                                                                   gettext("Points size"),
                                                                    4, 128, 56),                                       
                                                        numericInput("var_lab_min_contrib",
-                                                                    gettext("Minimum contribution to show label", domain = "R-explor"),
+                                                                    gettext("Minimum contribution to show label"),
                                                                     min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0),
                                                        explor_multi_var_col_input(settings),
                                                        explor_multi_var_symbol_input(settings),
                                                        explor_multi_var_size_input(settings),
                                                        selectInput("var_hide", 
-                                                                   gettext("Hide :", domain = "R-explor"),
+                                                                   gettext("Hide :"),
                                                                    choices = explor_multi_hide_choices(),
                                                                    selected = "None"),
                                                        if(settings$has_sup_vars)
                                                            checkboxInput("var_sup", 
-                                                                         HTML(gettext("Supplementary levels", domain = "R-explor")),
+                                                                         HTML(gettext("Supplementary levels")),
                                                                          value = TRUE),
                                                        explor_multi_sidebar_footer(type = "var"))),
                                             column(10,
                                                    scatterD3Output("varplot", height = "auto"))
                                         )),
                                
-                               tabPanel(gettext("Data", domain = "R-explor"),
+                               tabPanel(gettext("Data"),
                                         explor_multi_var_dataUI("var_data", settings, res$axes))
                                ),
                
@@ -181,7 +181,7 @@ explor_multi_ca <- function(res, settings) {
                        code <- paste0(code, explor_multi_zoom_code(input$var_zoom_range), ")")
 
                        showModal(modalDialog(
-                           title = gettext("Export R code", domain="R-explor"),
+                           title = gettext("Export R code"),
                            HTML(paste0(explor_multi_export_code_message(),
                                        "<pre><code>",
                                        paste(highr::hi_html(code), collapse="\n"),
@@ -198,7 +198,7 @@ explor_multi_ca <- function(res, settings) {
                    ## Lasso modal dialog
                    observeEvent(input$show_lasso_modal, {
                        showModal(modalDialog(
-                         title = gettext("Lasso selection", domain="R-explor"),
+                         title = gettext("Lasso selection"),
                          HTML(input$show_lasso_modal),
                          easyClose = TRUE
                        ))

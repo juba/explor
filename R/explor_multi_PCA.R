@@ -165,90 +165,90 @@ explor_multi_pca <- function(res, settings) {
     settings$type <- "PCA"
 
     shiny::shinyApp(
-               ui = navbarPage(gettext("PCA", domain = "R-explor"),
+               ui = navbarPage(gettext("PCA"),
                                header = tags$head(
                                                  tags$style(explor_multi_css())),
 
-                               tabPanel(gettext("Eigenvalues", domain = "R-explor"),
+                               tabPanel(gettext("Eigenvalues"),
                                         explor_multi_eigenUI("eigen", res$eig)),
                                
-                               tabPanel(gettext("Variables plot", domain = "R-explor"),
+                               tabPanel(gettext("Variables plot"),
                                         fluidRow(
                                             column(2,
                                                    wellPanel(
                                                        selectInput("var_x", 
-                                                                   gettext("X axis", domain = "R-explor"), 
+                                                                   gettext("X axis"), 
                                                                    choices = res$axes, selected = "1"),
                                                        selectInput("var_y", 
-                                                                   gettext("Y axis", domain = "R-explor"), 
+                                                                   gettext("Y axis"), 
                                                                    choices = res$axes, selected = "2"),
                                                        sliderInput("var_lab_size", 
-                                                                   gettext("Labels size", domain = "R-explor"),
+                                                                   gettext("Labels size"),
                                                                    4, 20, 10),
                                                        if (settings$has_contrib) {
                                                            numericInput("var_lab_min_contrib",
-                                                                        gettext("Minimum contribution to show label", domain = "R-explor"),
+                                                                        gettext("Minimum contribution to show label"),
                                                                         min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0)
                                                        },
                                                        if (settings$has_sup_vars) explor_multi_var_col_input(settings),
                                                        if (settings$has_sup_vars)
                                                            checkboxInput("var_sup", 
-                                                                         HTML(gettext("Supplementary variables", domain = "R-explor")), 
+                                                                         HTML(gettext("Supplementary variables")), 
                                                                          value = TRUE),
                                                        explor_multi_sidebar_footer(type = "var"))),
                                             column(10,
                                                    scatterD3Output("varplot", height = "auto"))
                                         )),
                                
-                               tabPanel(gettext("Variables data", domain = "R-explor"),
+                               tabPanel(gettext("Variables data"),
                                         explor_multi_var_dataUI("var_data", settings, res$axes)),
 
-                               tabPanel(gettext("Individuals plot", domain = "R-explor"),
+                               tabPanel(gettext("Individuals plot"),
                                         fluidRow(
                                             column(2,
                                                    wellPanel(
                                                        selectInput("ind_x", 
-                                                                   gettext("X axis", domain = "R-explor"),
+                                                                   gettext("X axis"),
                                                                    choices = res$axes, selected = "1"),
                                                        selectInput("ind_y", 
-                                                                   gettext("Y axis", domain = "R-explor"),
+                                                                   gettext("Y axis"),
                                                                    choices = res$axes, selected = "2"),
                                                        sliderInput("ind_point_size", 
-                                                                   gettext("Points size", domain = "R-explor"),
+                                                                   gettext("Points size"),
                                                                    8, 128, 64),
                                                        explor_multi_ind_opacity_input(settings),
                                                        conditionalPanel(
                                                          condition = 'input.ind_opacity_var == "Fixed"',
                                                          sliderInput("ind_opacity", 
-                                                                     gettext("Fixed points opacity", domain = "R-explor"),
+                                                                     gettext("Fixed points opacity"),
                                                                      0, 1, 0.5)
                                                        ),
                                                        checkboxInput("ind_labels_show", 
-                                                                     HTML(gettext("Show labels", domain = "R-explor")),
+                                                                     HTML(gettext("Show labels")),
                                                                      value = FALSE),
                                                        conditionalPanel(
                                                            condition = 'input.ind_labels_show == true',
                                                            sliderInput("ind_labels_size", 
-                                                                       gettext("Labels size", domain = "R-explor"),
+                                                                       gettext("Labels size"),
                                                                        5, 20, 9),
                                                            if (settings$has_contrib) {
                                                              numericInput("ind_lab_min_contrib",
-                                                                          gettext("Minimum contribution to show label", domain = "R-explor"),
+                                                                          gettext("Minimum contribution to show label"),
                                                                           min = 0, max = ceiling(2*max(res$ind$Contrib, na.rm = TRUE)), value = 0) }),
                                                        if (settings$has_sup_ind || settings$has_quali_sup_vars) 
                                                            explor_multi_ind_col_input(settings, res),
                                                        if (settings$has_sup_ind || settings$has_quali_sup_vars) 
                                                            checkboxInput("ind_ellipses", 
-                                                                         HTML(gettext("Ellipses", domain = "R-explor")),
+                                                                         HTML(gettext("Ellipses")),
                                                                          value = FALSE),
                                                        if (settings$has_sup_ind)
                                                            checkboxInput("ind_sup", 
-                                                                         HTML(gettext("Supplementary individuals", domain = "R-explor")),
+                                                                         HTML(gettext("Supplementary individuals")),
                                                                          value = TRUE),
                                                        explor_multi_sidebar_footer(type = "ind"))),
                                             column(10,
                                                    scatterD3Output("indplot")))),
-                               tabPanel(gettext("Individuals data", domain = "R-explor"),
+                               tabPanel(gettext("Individuals data"),
                                         explor_multi_ind_dataUI("ind_data", settings, res$axes))
                                ),
                
@@ -287,7 +287,7 @@ explor_multi_pca <- function(res, settings) {
                        code <- paste0(code, explor_multi_zoom_code(input$var_zoom_range), ")")
 
                        showModal(modalDialog(
-                           title = gettext("Export R code", domain="R-explor"),
+                           title = gettext("Export R code"),
                            HTML(explor_multi_export_code_message(),
                                 paste0("<pre><code>",
                                        paste(highr::hi_html(code), collapse="\n"),
@@ -333,7 +333,7 @@ explor_multi_pca <- function(res, settings) {
                        code <- paste0(code, explor_multi_zoom_code(input$ind_zoom_range), ")")
 
                        showModal(modalDialog(
-                           title = gettext("Export R code", domain="R-explor"),
+                           title = gettext("Export R code"),
                            HTML(paste0(explor_multi_export_code_message(),
                                        "<pre><code>",
                                        paste(highr::hi_html(code), collapse="\n"),
@@ -355,7 +355,7 @@ explor_multi_pca <- function(res, settings) {
                    ## Lasso modal dialog
                    observeEvent(input$show_lasso_modal, {
                        showModal(modalDialog(
-                           title = gettext("Lasso selection", domain="R-explor"),
+                           title = gettext("Lasso selection"),
                            HTML(input$show_lasso_modal),
                            easyClose = TRUE
                        ))
