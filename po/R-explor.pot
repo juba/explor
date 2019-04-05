@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: explor 0.3.2\n"
-"POT-Creation-Date: 2017-02-23 16:29\n"
+"Project-Id-Version: explor 0.3.5\n"
+"POT-Creation-Date: 2019-04-05 10:53\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,12 @@ msgstr ""
 msgid "Supplementary individuals"
 msgstr ""
 
+msgid "X axis"
+msgstr ""
+
+msgid "Y axis"
+msgstr ""
+
 msgid "None"
 msgstr ""
 
@@ -86,6 +92,9 @@ msgid "Fixed"
 msgstr ""
 
 msgid "Points opacity :"
+msgstr ""
+
+msgid "Automatic labels position"
 msgstr ""
 
 msgid "Rows"
@@ -146,12 +155,6 @@ msgid "Eigenvalues"
 msgstr ""
 
 msgid "Plot"
-msgstr ""
-
-msgid "X axis"
-msgstr ""
-
-msgid "Y axis"
 msgstr ""
 
 msgid "Labels size"
