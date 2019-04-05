@@ -306,6 +306,24 @@ explor_multi_ind_opacity_input <- function(settings) {
   return(ind_opacity_input)
 }
 
+## Variables auto labels input
+explor_multi_var_auto_labels_input <- function(res) {
+    if (sum(res$vars$Axis == 1) < 100) {
+        checkboxInput("var_auto_labels",
+                      gettext("Automatic labels position"),
+                      value = FALSE)
+    }
+}
+
+## Individuals auto labels input
+explor_multi_ind_auto_labels_input <- function(res) {
+    if (sum(res$ind$Axis == 1) < 100) {
+        checkboxInput("ind_auto_labels",
+                      gettext("Automatic labels position"),
+                      value = FALSE)
+    }
+}
+
 
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 
