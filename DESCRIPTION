@@ -19,7 +19,8 @@ Imports:
     tidyr,
     ggplot2,
     highr,
-    scatterD3 (>= 0.9)
+    scatterD3 (>= 0.9),
+    RColorBrewer
 Suggests: 
     FactoMineR,
     ade4 (>= 1.7-13),
@@ -29,4 +30,4 @@ Suggests:
     knitr,
     rmarkdown
 Remotes: juba/scatterD3
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
