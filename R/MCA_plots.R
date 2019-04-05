@@ -211,3 +211,133 @@ MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_cont
 
 }
 
+## Biplot reactive data
+## Not exported
+MCA_bi_data <- function(res, settings) {
+
+    ind_data <- MCA_ind_data(res, settings$xax, settings$yax, ind_sup = settings$ind_sup, 
+        ind_lab_min_contrib = settings$bi_lab_min_contrib) 
+    ind_data$source <- "ind"
+    var_data <- MCA_var_data(res, settings$xax, settings$yax, var_sup = settings$var_sup, 
+        var_lab_min_contrib = settings$bi_lab_min_contrib)
+    var_data$source <- "var"
+    
+    bi_data <- bind_rows(ind_data, var_data)
+    
+    ind <- bi_data$source == "ind"
+    
+    bi_data$type <- ifelse(bi_data$Class == "Quantitative", "arrow", "point")
+    bi_data$type[ind] <- "point"
+    
+    if (!settings$ind_labels) bi_data$Lab[ind] <- ""
+    
+    if (settings$color_type == "Variable") {
+        bi_data$color <- bi_data$Variable
+    } else {
+        bi_data$color <- gettext("Variable level")
+    }
+    bi_data$color[ind] <- gettext("Individual")
+    bi_data$color <- factor(bi_data$color)
+    bi_data$color <- stats::relevel(bi_data$color, gettext("Individual"))
+    
+    bi_data$size <- settings$point_size * 2
+    bi_data$size[ind] <- settings$point_size
+    bi_data$opacity <- 1
+    bi_data$opacity[ind] <- settings$ind_opacity
+    
+
+    bi_data
+}
+
+
+##' Interactive MCA biplot
+##'
+##' This function generates an HTML widget displaying the variables plot of an MCA result.
+##'
+##' @param res Result of prepare_results() call
+##' @param xax Horizontal axis number
+##' @param yax Vertical axis number
+##' @param ind_sup TRUE to display supplementary individuals
+##' @param var_sup TRUE to display supplementary variables
+##' @param bi_lab_min_contrib Contribution threshold to display points labels
+##' @param point_size base point size
+##' @param ind_opacity individuals point opacity
+##' @param ind_labels TRUE to display individuals labels
+##' @param col_var name of the variable for points color
+##' @param symbol_var name of the variable for points symbol
+##' @param size_var name of the variable for points size
+##' @param size_range points size range with format c(minimum, maximum)
+##' @param zoom_callback scatterD3 zoom callback JavaScript body
+##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
+##' @param ... Other arguments passed to scatterD3
+##'
+##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
+##' @export
+##' @importFrom RColorBrewer brewer.pal
+
+MCA_biplot <- function(res, xax = 1, yax = 2, 
+    color_type, ind_sup = TRUE, var_sup = TRUE, bi_lab_min_contrib = 0,
+    point_size = 32,
+    ind_opacity = 0.8,
+    ind_labels = FALSE,
+    zoom_callback = NULL,
+    in_explor = FALSE, ...) {
+    
+    ## Settings changed if not run in explor
+    html_id <- if(in_explor) "explor_bi" else  NULL
+    dom_id_svg_export <- if(in_explor) "explor-bi-svg-export" else NULL
+    dom_id_lasso_toggle <- if(in_explor) "explor-bi-lasso-toggle" else NULL
+    lasso <- if(in_explor) TRUE else FALSE 
+    lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
+    zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "bi") else NULL
+    
+    settings <- list(xax = xax, yax = yax, ind_sup = ind_sup, var_sup = var_sup,
+        color_type = color_type, bi_lab_min_contrib = bi_lab_min_contrib,
+        ind_opacity = ind_opacity, point_size = point_size,
+        ind_labels = ind_labels)
+        
+    bi_data <- MCA_bi_data(res, settings)
+    
+    colors <- NULL
+    if (color_type == "Variable") {
+        n_colors <- nlevels(bi_data$color)
+        if (n_colors <= 11) {
+            colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
+        } else {
+            colors <- RColorBrewer::brewer.pal(n_colors - 1, "Paired")
+        }
+        colors <- c("#000000", colors)
+    }
+
+    scatterD3::scatterD3(
+        x = bi_data[, "Coord.x"],
+        y = bi_data[, "Coord.y"],
+        xlab = names(res$axes)[res$axes == xax],
+        ylab = names(res$axes)[res$axes == yax],
+        lab = bi_data$Lab,
+        # point_size = point_size,
+        # point_opacity = 1,
+        col_var = bi_data$color,
+        col_lab = color_type,
+        colors = colors,
+        # symbol_var = if (is.null(symbol_var)) NULL else bi_data[,symbol_var],
+        # symbol_lab = symbol_var,
+        size_var = bi_data$size,
+        opacity_var = bi_data$opacity,
+        # size_lab = size_var,
+        tooltip_text = bi_data[, "tooltip"],
+        type_var = bi_data$type,
+        unit_circle = var_sup && "Quantitative" %in% bi_data[,"Class"],
+        key_var = rownames(bi_data),
+        fixed = TRUE,
+        html_id = html_id,
+        dom_id_svg_export = dom_id_svg_export,
+        dom_id_lasso_toggle = dom_id_lasso_toggle,
+        lasso = lasso,
+        lasso_callback = lasso_callback,
+        zoom_callback = zoom_callback,
+        ...
+    )  
+}
+
+

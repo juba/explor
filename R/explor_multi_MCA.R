@@ -200,7 +200,7 @@ explor_multi_mca <- function(res, settings) {
                             sliderInput("var_lab_size",
                                 gettext("Labels size"),
                                 4, 20, 10),
-                            explor_multi_var_auto_labels_input(res),
+                            explor_multi_auto_labels_input(res$vars, "var"),
                             sliderInput("var_point_size",
                                 gettext("Points size"),
                                 4, 128, 56),
@@ -259,7 +259,7 @@ explor_multi_mca <- function(res, settings) {
                                 sliderInput("ind_labels_size",
                                     gettext("Labels size"),
                                     5, 20, 9),
-                                explor_multi_ind_auto_labels_input(res),
+                                explor_multi_auto_labels_input(res$ind, "ind"),
                                 if (settings$has_contrib) {
                                     numericInput(
                                         "ind_lab_min_contrib",
@@ -289,7 +289,51 @@ explor_multi_mca <- function(res, settings) {
             tabPanel(
                 gettext("Individuals data"),
                 explor_multi_ind_dataUI("ind_data", settings, res$axes)
-            )
+            ),
+            
+            ## BIPLOT UI
+            tabPanel(gettext("Biplot"),
+                fluidRow(
+                    column(
+                        2,
+                        wellPanel(
+                            explor_multi_axes_input(res, "bi"),
+                            selectInput("bi_color_type", 
+                                gettext("Points color :"),
+                                choices = c("Variable", "Type"), selected = "Variable"),
+                            sliderInput("bi_lab_size",
+                                gettext("Labels size"),
+                                4, 20, 10),
+                            checkboxInput("bi_ind_labels_show",
+                                HTML(gettext("Show individuals labels")),
+                                value = FALSE),
+                            explor_multi_auto_labels_input(res$vars, "bi"),
+
+                            sliderInput("bi_point_size",
+                                gettext("Point size"),
+                                4, 128, 32),
+                            sliderInput("bi_ind_point_opacity",
+                                gettext("Individuals point opacity"),
+                                0, 1, 0.8),
+                                
+                            if (settings$has_sup_ind)
+                                checkboxInput("bi_ind_sup",
+                                    HTML(gettext(
+                                        "Supplementary individuals"
+                                    )),
+                                    value = TRUE),
+                            if (settings$has_sup_vars)
+                                checkboxInput("bi_var_sup",
+                                    HTML(gettext(
+                                        "Supplementary variables"
+                                    )),
+                                    value = TRUE),
+                            explor_multi_sidebar_footer(type = "bi")
+                        )
+                    ),
+                    column(10,
+                        scatterD3Output("biplot"))
+                ))
         ),
         
         server = function(input, output) {
@@ -300,70 +344,27 @@ explor_multi_mca <- function(res, settings) {
             
             ## Variables plot code
             varplot_code <- reactive({
-                col_var <- if (input$var_col == "None")
-                    NULL
-                else
-                    input$var_col
-                symbol_var <-
-                    if (input$var_symbol == "None")
-                        NULL
-                else
-                    input$var_symbol
-                size_var <-
-                    if (!is.null(input$var_size) &&
-                            input$var_size != "None")
-                        input$var_size
-                else
-                    NULL
-                size_range <-
-                    if (!is.null(input$var_size) &&
-                            input$var_size != "None")
-                        c(30, 400) * input$var_point_size / 32
-                else
-                    c(10, 300)
-                var_lab_min_contrib <-
-                    if (settings$has_contrib)
-                        input$var_lab_min_contrib
-                else
-                    0
-                var_auto_labels <-
-                    if (!is.null(input$var_auto_labels) &&
-                            input$var_auto_labels)
-                        "\"auto\""
-                else
-                    "NULL"
+                col_var <- if (input$var_col == "None") NULL else input$var_col
+                symbol_var <- if (input$var_symbol == "None") NULL else input$var_symbol
+                size_var <- if (!is.null(input$var_size) && input$var_size != "None") input$var_size else NULL
+                size_range <- if (!is.null(input$var_size) && input$var_size != "None") c(30, 400) * input$var_point_size / 32 else c(10, 300)
+                var_lab_min_contrib <- if (settings$has_contrib) input$var_lab_min_contrib else 0
+                var_auto_labels <- if (!is.null(input$var_auto_labels) && input$var_auto_labels) "\"auto\"" else "NULL"
                 
                 paste0(
                     "explor::MCA_var_plot(res",
-                    ", xax = ",
-                    input$var_x,
-                    ", yax = ",
-                    input$var_y,
-                    ",\n",
-                    "    var_sup = ",
-                    settings$has_sup_vars && input$var_sup,
-                    ", var_lab_min_contrib = ",
-                    var_lab_min_contrib,
-                    ",\n",
-                    "    col_var = ",
-                    deparse(substitute(col_var)),
-                    ", symbol_var = ",
-                    deparse(substitute(symbol_var)),
-                    ",\n",
-                    "    size_var = ",
-                    deparse(substitute(size_var)),
-                    ", size_range = ",
-                    deparse(size_range),
-                    ",\n",
-                    "    labels_size = ",
-                    input$var_lab_size,
-                    ", point_size = ",
-                    input$var_point_size,
-                    ",\n",
-                    "    transitions = ",
-                    input$var_transitions,
-                    ", labels_positions = ",
-                    var_auto_labels
+                    ", xax = ", input$var_x,
+                    ", yax = ", input$var_y, ",\n",
+                    "    var_sup = ", settings$has_sup_vars && input$var_sup,
+                    ", var_lab_min_contrib = ", var_lab_min_contrib, ",\n",
+                    "    col_var = ", deparse(substitute(col_var)),
+                    ", symbol_var = ", deparse(substitute(symbol_var)), ",\n",
+                    "    size_var = ", deparse(substitute(size_var)),
+                    ", size_range = ", deparse(size_range), ",\n",
+                    "    labels_size = ", input$var_lab_size,
+                    ", point_size = ", input$var_point_size, ",\n",
+                    "    transitions = ", input$var_transitions,
+                    ", labels_positions = ", var_auto_labels
                 )
             })
             
@@ -375,27 +376,23 @@ explor_multi_mca <- function(res, settings) {
             
             ## Variables plot code export modal dialog
             observeEvent(input$explor_var_plot_code, {
-                code <-
-                    paste0("res <- explor::prepare_results(",
+                code <- paste0("res <- explor::prepare_results(",
                         settings$obj_name,
                         ")\n")
                 code <- paste0(code, varplot_code())
-                code <-
-                    paste0(code,
+                code <- paste0(code,
                         explor_multi_zoom_code(input$var_zoom_range),
                         ")")
                 
                 showModal(modalDialog(
                     title = gettext("Export R code"),
-                    HTML(
-                        paste0(
+                    HTML(paste0(
                             explor_multi_export_code_message(),
                             "<pre><code>",
                             paste(highr::hi_html(code), collapse =
                                     "\n"),
                             "</code></pre>"
-                        )
-                    ),
+                    )),
                     easyClose = TRUE
                 ))
             })
@@ -403,33 +400,11 @@ explor_multi_mca <- function(res, settings) {
             
             ## Indidivuals plot code
             indplot_code <- reactive({
-                col_var <- if (input$ind_col == "None")
-                    NULL
-                else
-                    input$ind_col
-                lab_var <-
-                    if (input$ind_labels_show)
-                        "Lab"
-                else
-                    NULL
-                opacity_var <-
-                    if (!is.null(input$ind_opacity_var) &&
-                            input$ind_opacity_var == "Fixed")
-                        NULL
-                else
-                    input$ind_opacity_var
-                ind_lab_min_contrib <-
-                    if (settings$has_contrib)
-                        input$ind_lab_min_contrib
-                else
-                    0
-                ind_auto_labels <-
-                    if (!is.null(input$ind_auto_labels) &&
-                            input$ind_auto_labels)
-                        "\"auto\""
-                else
-                    "NULL"
-                
+                col_var <- if (input$ind_col == "None") NULL else input$ind_col
+                lab_var <- if (input$ind_labels_show) "Lab" else NULL
+                opacity_var <- if (!is.null(input$ind_opacity_var) && input$ind_opacity_var == "Fixed") NULL else input$ind_opacity_var
+                ind_lab_min_contrib <- if (settings$has_contrib) input$ind_lab_min_contrib else 0
+                ind_auto_labels <- if (!is.null(input$ind_auto_labels) && input$ind_auto_labels) "\"auto\"" else "NULL"
                 
                 paste0(
                     "explor::MCA_ind_plot(res, ",
@@ -457,37 +432,90 @@ explor_multi_mca <- function(res, settings) {
             
             ## Indidivuals plot code export modal dialog
             observeEvent(input$explor_ind_plot_code, {
-                code <-
-                    paste0("res <- explor::prepare_results(",
+                code <- paste0("res <- explor::prepare_results(",
                         settings$obj_name,
                         ")\n")
                 code <- paste0(code, indplot_code())
-                code <-
-                    paste0(code,
+                code <- paste0(code,
                         explor_multi_zoom_code(input$ind_zoom_range),
                         ")")
                 
                 showModal(modalDialog(
                     title = gettext("Export R code"),
-                    HTML(
-                        paste0(
+                    HTML(paste0(
                             explor_multi_export_code_message(),
                             "<pre><code>",
                             paste(highr::hi_html(code), collapse =
                                     "\n"),
                             "</code></pre>"
-                        )
-                    ),
+                    )),
                     easyClose = TRUE
                 ))
             })
             
             
+            ## biplot code
+            biplot_code <- reactive({
+                bi_auto_labels <- if (!is.null(input$bi_auto_labels) && input$bi_auto_labels) "\"auto\"" else "NULL"
+                
+                paste0(
+                    "explor::MCA_biplot(res",
+                    ", xax = ", input$bi_x,
+                    ", yax = ", input$bi_y, ",\n",
+                    ", color_type = \"", input$bi_color_type, "\"",
+                    ", point_size = ", input$bi_point_size, 
+                    ", ind_opacity = ", input$bi_ind_point_opacity, 
+                    ", ind_labels = ", input$bi_ind_labels_show, 
+                    ",    var_sup = ", settings$has_sup_vars && input$bi_var_sup,
+                    ",    ind_sup = ", settings$has_sup_ind && input$bi_ind_sup,
+                    # ", var_lab_min_contrib = ", var_lab_min_contrib, ",\n",
+                    # "    col_var = ", deparse(substitute(col_var)),
+                    # ", symbol_var = ", deparse(substitute(symbol_var)), ",\n",
+                    # "    size_var = ", deparse(substitute(size_var)),
+                    # ", size_range = ", deparse(size_range), ",\n",
+                    # "    labels_size = ", input$var_lab_size,
+                    # ", point_size = ", input$var_point_size, ",\n",
+                    ",    transitions = ", input$bi_transitions,
+                    ", labels_positions = ", bi_auto_labels
+                )
+            })
+            
+            ## Biplot
+            output$biplot <- scatterD3::renderScatterD3({
+                code <- paste0(biplot_code(), ", in_explor = TRUE)")
+                eval(parse(text = code))
+            })
+            
+            ## Biplot code export modal dialog
+            observeEvent(input$explor_bi_plot_code, {
+                code <- paste0("res <- explor::prepare_results(",
+                        settings$obj_name,
+                        ")\n")
+                code <- paste0(code, biplot_code())
+                code <- paste0(code,
+                        explor_multi_zoom_code(input$bi_zoom_range),
+                        ")")
+                
+                showModal(modalDialog(
+                    title = gettext("Export R code"),
+                    HTML(paste0(
+                            explor_multi_export_code_message(),
+                            "<pre><code>",
+                            paste(highr::hi_html(code), collapse =
+                                    "\n"),
+                            "</code></pre>"
+                    )),
+                    easyClose = TRUE
+                ))
+            })
+            
+            ## Variable data module
             callModule(explor_multi_var_data,
                 "var_data",
                 reactive(res),
                 reactive(settings))
             
+            ## Individual data module            
             callModule(explor_multi_ind_data,
                 "ind_data",
                 reactive(res),
