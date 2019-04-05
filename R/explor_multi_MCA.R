@@ -189,24 +189,14 @@ explor_multi_mca <- function(res, settings) {
                 gettext("Eigenvalues"),
                 explor_multi_eigenUI("eigen", res$eig)
             ),
-            
+
+            ## VARIABLES PLOT UI            
             tabPanel(gettext("Variables plot"),
                 fluidRow(
                     column(
                         2,
                         wellPanel(
-                            selectInput(
-                                "var_x",
-                                gettext("X axis"),
-                                choices = res$axes,
-                                selected = "1"
-                            ),
-                            selectInput(
-                                "var_y",
-                                gettext("Y axis"),
-                                choices = res$axes,
-                                selected = "2"
-                            ),
+                            explor_multi_axes_input(res, "var"),
                             sliderInput("var_lab_size",
                                 gettext("Labels size"),
                                 4, 20, 10),
@@ -244,23 +234,13 @@ explor_multi_mca <- function(res, settings) {
                 explor_multi_var_dataUI("var_data", settings, res$axes)
             ),
             
+            ## INDIVIDUALS PLOT UI
             tabPanel(gettext("Individuals plot"),
                 fluidRow(
                     column(
                         2,
                         wellPanel(
-                            selectInput(
-                                "ind_x",
-                                gettext("X axis"),
-                                choices = res$axes,
-                                selected = "1"
-                            ),
-                            selectInput(
-                                "ind_y",
-                                gettext("Y axis"),
-                                choices = res$axes,
-                                selected = "2"
-                            ),
+                            explor_multi_axes_input(res, "ind"),
                             sliderInput("ind_point_size",
                                 gettext("Points size"),
                                 8, 128, 64),

@@ -181,6 +181,17 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
 
 ## INPUTS -----------------------------------------------------------------------------
 
+## Axes inputs
+explor_multi_axes_input <- function(res, type) {
+    x_input <- selectInput(paste0(type, "_x"), 
+                            gettext("X axis"), 
+                            choices = res$axes, selected = "1")
+    y_input <- selectInput(paste0(type, "_y"), 
+                            gettext("Y axis"), 
+                            choices = res$axes, selected = "2")
+    return(list(x_input, y_input))
+}
+
 ## Variable size input for MCA and CA
 explor_multi_var_size_input <- function(settings) {
     var_size_choices <- "None"
