@@ -37,7 +37,7 @@ explor_multi_css <- function() {
   .dataTables_filter, .dataTables_paginate {
       font-size: 11px !important;
   }
-  #varplot, #indplot { height: 90vh !important}
+  #varplot, #indplot, #biplot { height: 90vh !important}
   #eigplot { max-width: 850px; }
   .legend .label { font-weight: normal !important; font-size: 10px !important;}
   .navbar-nav>li>a { font-size: 13px; padding: 15px 10px;}
@@ -317,19 +317,10 @@ explor_multi_ind_opacity_input <- function(settings) {
   return(ind_opacity_input)
 }
 
-## Variables auto labels input
-explor_multi_var_auto_labels_input <- function(res) {
-    if (sum(res$vars$Axis == 1) < 100) {
-        checkboxInput("var_auto_labels",
-                      gettext("Automatic labels position"),
-                      value = FALSE)
-    }
-}
-
-## Individuals auto labels input
-explor_multi_ind_auto_labels_input <- function(res) {
-    if (sum(res$ind$Axis == 1) < 100) {
-        checkboxInput("ind_auto_labels",
+## Auto labels input
+explor_multi_auto_labels_input <- function(data, type) {
+    if (sum(data$Axis == 1) < 100) {
+        checkboxInput(paste0(type, "_auto_labels"),
                       gettext("Automatic labels position"),
                       value = FALSE)
     }

@@ -223,7 +223,7 @@ explor_multi_pca <- function(res, settings) {
                                 sliderInput("ind_labels_size", 
                                     gettext("Labels size"),
                                     5, 20, 9),
-                                explor_multi_ind_auto_labels_input(res),
+                                explor_multi_auto_labels_input(res$ind, "ind"),
                                 if (settings$has_contrib) {
                                     numericInput("ind_lab_min_contrib",
                                         gettext("Minimum contribution to show label"),

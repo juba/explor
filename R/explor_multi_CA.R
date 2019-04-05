@@ -107,7 +107,7 @@ explor_multi_ca <- function(res, settings) {
                             sliderInput("var_lab_size", 
                                 gettext("Labels size"),
                                 0, 20, 10),
-                            explor_multi_var_auto_labels_input(res),
+                            explor_multi_auto_labels_input(res$vars, "var"),
                             sliderInput("var_point_size", 
                                 gettext("Points size"),
                                 4, 128, 56),                                       
