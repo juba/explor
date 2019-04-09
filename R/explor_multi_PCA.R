@@ -257,13 +257,14 @@ explor_multi_pca <- function(res, settings) {
                 col_var <- if (!is.null(input$var_col) && input$var_col == "None") NULL else input$var_col
                 
                 paste0("explor::PCA_var_plot(res, ",
-                    "xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
-                    "    var_sup = ", settings$has_sup_vars && input$var_sup, ", ",
-                    "var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
-                    "    col_var = ", deparse(substitute(col_var)), ", ",
-                    "labels_size = ", input$var_lab_size, ", ",
-                    "scale_unit = ", settings$scale_unit, ",\n",
-                    "    transitions = ", input$var_transitions,
+                    "xax = ", input$var_x, 
+                    ", yax = ", input$var_y,
+                    ", var_sup = ", settings$has_sup_vars && input$var_sup,
+                    ", var_lab_min_contrib = ", input$var_lab_min_contrib,
+                    ", col_var = ", deparse(substitute(col_var)),
+                    ", labels_size = ", input$var_lab_size,
+                    ", scale_unit = ", settings$scale_unit,
+                    ", transitions = ", input$var_transitions,
                     ", labels_positions = NULL")
             })
             
@@ -275,17 +276,10 @@ explor_multi_pca <- function(res, settings) {
             
             ## Variables plot code export modal dialog
             observeEvent(input$explor_var_plot_code, {
-                code <- paste0("res <- explor::prepare_results(", settings$obj_name, ")\n")
-                code <- paste0(code, varplot_code())
-                code <- paste0(code, explor_multi_zoom_code(input$var_zoom_range), ")")
-                
-                showModal(modalDialog(
-                    title = gettext("Export R code"),
-                    HTML(explor_multi_export_code_message(),
-                        paste0("<pre><code>",
-                            paste(highr::hi_html(code), collapse="\n"),
-                            "</code></pre>")),
-                    easyClose = TRUE))
+                showModal(code_modal(settings$obj_name, 
+                    varplot_code(),
+                    explor_multi_zoom_code(input$var_zoom_range)
+                ))
             })
             
             
@@ -300,17 +294,18 @@ explor_multi_pca <- function(res, settings) {
                 
                 
                 paste0("explor::PCA_ind_plot(res, ",
-                    "xax = ", input$ind_x, ", yax = ", input$ind_y, ", ",
-                    "ind_sup = ", settings$has_sup_ind && input$ind_sup, ",\n",
-                    "    lab_var = ", deparse(substitute(lab_var)), ", ",
-                    ", ind_lab_min_contrib = ", ind_lab_min_contrib, ",\n",
-                    "    col_var = ", deparse(substitute(col_var)), ", ",
-                    "labels_size = ", input$ind_labels_size, ",\n",
-                    "    point_opacity = ", input$ind_opacity, ", ",
-                    "opacity_var = ", deparse(substitute(opacity_var)), ", ",
-                    "point_size = ", input$ind_point_size, ",\n",
-                    "    ellipses = ", ellipses, ", ",
-                    "transitions = ", input$ind_transitions,
+                    "xax = ", input$ind_x, 
+                    ", yax = ", input$ind_y,
+                    ", ind_sup = ", settings$has_sup_ind && input$ind_sup,
+                    ", lab_var = ", deparse(substitute(lab_var)),
+                    ", ind_lab_min_contrib = ", ind_lab_min_contrib,
+                    ", col_var = ", deparse(substitute(col_var)),
+                    ", labels_size = ", input$ind_labels_size,
+                    ", point_opacity = ", input$ind_opacity,
+                    ", opacity_var = ", deparse(substitute(opacity_var)),
+                    ", point_size = ", input$ind_point_size,
+                    ", ellipses = ", ellipses,
+                    ", transitions = ", input$ind_transitions,
                     ", labels_positions = ", ind_auto_labels)
             })
             
@@ -322,17 +317,10 @@ explor_multi_pca <- function(res, settings) {
             
             ## Indidivuals plot code export modal dialog
             observeEvent(input$explor_ind_plot_code, {
-                code <- paste0("res <- explor::prepare_results(", settings$obj_name, ")\n")
-                code <- paste0(code, indplot_code())
-                code <- paste0(code, explor_multi_zoom_code(input$ind_zoom_range), ")")
-                
-                showModal(modalDialog(
-                    title = gettext("Export R code"),
-                    HTML(paste0(explor_multi_export_code_message(),
-                        "<pre><code>",
-                        paste(highr::hi_html(code), collapse="\n"),
-                        "</code></pre>")),
-                    easyClose = TRUE))
+                showModal(code_modal(settings$obj_name, 
+                    indplot_code(),
+                    explor_multi_zoom_code(input$ind_zoom_range)
+                ))
             })
             
             

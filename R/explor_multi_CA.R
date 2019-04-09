@@ -152,17 +152,18 @@ explor_multi_ca <- function(res, settings) {
                 
                 
                 paste0("explor::CA_var_plot(res, ",
-                    "xax = ", input$var_x, ", yax = ", input$var_y, ",\n",
-                    "    var_sup = ", settings$has_sup_vars && input$var_sup, ", ",
-                    "var_hide = '", input$var_hide, "', ",
-                    "var_lab_min_contrib = ", input$var_lab_min_contrib, ",\n",
-                    "    col_var = ", deparse(substitute(col_var)), ", ", 
-                    "symbol_var = ", deparse(substitute(symbol_var)), ", ",
-                    "size_var = ", deparse(substitute(size_var)), ",\n",
-                    "    size_range = ", deparse(size_range), ", ",
-                    "labels_size = ", input$var_lab_size, ", ",
-                    "point_size = ", input$var_point_size, ",\n",
-                    "    transitions = ", input$var_transitions,
+                    "xax = ", input$var_x, 
+                    ", yax = ", input$var_y,
+                    ", var_sup = ", settings$has_sup_vars && input$var_sup,
+                    ", var_hide = '", input$var_hide, "'",
+                    ", var_lab_min_contrib = ", input$var_lab_min_contrib,
+                    ", col_var = ", deparse(substitute(col_var)),
+                    ", symbol_var = ", deparse(substitute(symbol_var)),
+                    ", size_var = ", deparse(substitute(size_var)),
+                    ", size_range = ", deparse(size_range),
+                    ", labels_size = ", input$var_lab_size,
+                    ", point_size = ", input$var_point_size,
+                    ", transitions = ", input$var_transitions,
                     ", labels_positions = ", var_auto_labels)
             })
             
@@ -174,17 +175,10 @@ explor_multi_ca <- function(res, settings) {
             
             ## Variables plot code export modal dialog
             observeEvent(input$explor_var_plot_code, {
-                code <- paste0("res <- explor::prepare_results(", settings$obj_name, ")\n")
-                code <- paste0(code, varplot_code())
-                code <- paste0(code, explor_multi_zoom_code(input$var_zoom_range), ")")
-                
-                showModal(modalDialog(
-                    title = gettext("Export R code"),
-                    HTML(paste0(explor_multi_export_code_message(),
-                        "<pre><code>",
-                        paste(highr::hi_html(code), collapse="\n"),
-                        "</code></pre>")),
-                    easyClose = TRUE))
+                showModal(code_modal(settings$obj_name, 
+                    varplot_code(),
+                    explor_multi_zoom_code(input$var_zoom_range)
+                ))
             })
             
             

@@ -5,6 +5,29 @@ if (getRversion() >= "2.15.1")
                            "starts_with", "Contrib", "Cos2", "varname", "modname", 
                            "V.test", "eta2", "con.tra", "name", "pos", "Axis", "Count"))
 
+
+##' @importFrom formatR tidy_source
+
+code_modal <- function(obj, plot_code, zoom_code) {
+  code <- paste0("res <- explor::prepare_results(", obj, ")\n")
+  code <- paste0(code, plot_code)
+  code <- paste0(code, zoom_code, ")")
+  
+  code <- formatR::tidy_source(text = code, 
+    width.cutoff = 75, 
+    output = FALSE)$text.tidy
+  
+  modalDialog(
+    title = gettext("Export R code"),
+    size = "l",
+    HTML(paste0(explor_multi_export_code_message(),
+      "<pre><code>",
+      paste(highr::hi_html(code), collapse="\n"),
+      "</code></pre>")),
+    easyClose = TRUE)
+}
+
+
 ##' @import shiny
 
 explor_multi_css <- function() {
