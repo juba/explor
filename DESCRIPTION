@@ -19,6 +19,7 @@ Imports:
     tidyr,
     ggplot2,
     highr,
+    formatR,
     scatterD3 (>= 0.9),
     RColorBrewer
 Suggests: 
