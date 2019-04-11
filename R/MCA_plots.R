@@ -263,13 +263,13 @@ MCA_bi_data <- function(res, settings) {
 ##' @param ind_sup TRUE to display supplementary individuals
 ##' @param var_sup TRUE to display supplementary variables
 ##' @param bi_lab_min_contrib Contribution threshold to display points labels
-##' @param point_size base point size
-##' @param ind_opacity individuals point opacity
+##' @param ind_point_size base point size for individuals
+##' @param var_point_size base point size for variable levels
+##' @param ind_opacity individuals point opacity (constant)
+##' @param ind_opacity_var individuals point opacity (variable)
 ##' @param ind_labels TRUE to display individuals labels
 ##' @param col_var name of the variable for points color
 ##' @param symbol_var name of the variable for points symbol
-##' @param size_var name of the variable for points size
-##' @param size_range points size range with format c(minimum, maximum)
 ##' @param zoom_callback scatterD3 zoom callback JavaScript body
 ##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
 ##' @param ... Other arguments passed to scatterD3

@@ -54,8 +54,8 @@ the \code{\link[ade4]{dudi.coa}} function, you can add the coordinates of
 \code{supr} elements added to your \code{\link[ade4]{dudi.coa}} result (See example).
 
 If you want to display supplementary individuals or variables and you're using
-the \code{\link[ade4]{dudi.acm}} function, you can add the coordinates of 
-\code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or 
+the \code{\link[ade4]{dudi.acm}} function, you can add the coordinates of
+\code{\link[ade4]{suprow}} and/or \code{\link[ade4]{supcol}} to as \code{supi} and/or
 \code{supv} elements added to your \code{\link[ade4]{dudi.acm}} result (See example).
 
 If you want to display supplementary individuals or variables and you're using
