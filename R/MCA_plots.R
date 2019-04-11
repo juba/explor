@@ -218,12 +218,14 @@ MCA_bi_data <- function(res, settings) {
     ind_data <- MCA_ind_data(res, settings$xax, settings$yax, ind_sup = settings$ind_sup, 
         ind_lab_min_contrib = settings$bi_lab_min_contrib) 
     ind_data$source <- "ind"
+    ind_data$key <- ind_data$Name
     var_data <- MCA_var_data(res, settings$xax, settings$yax, var_sup = settings$var_sup, 
         var_lab_min_contrib = settings$bi_lab_min_contrib)
     var_data$source <- "var"
+    var_data$key <- paste(var_data$Variable, var_data$Level, sep = "-")
     
     bi_data <- bind_rows(ind_data, var_data)
-    bi_data$key <- paste0(bi_data$source, bi_data$Lab)
+    bi_data$key <- paste0(bi_data$source, bi_data$key)
     ind <- bi_data$source == "ind"
     
     bi_data$type <- ifelse(bi_data$Class == "Quantitative", "arrow", "point")
