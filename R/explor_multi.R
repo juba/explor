@@ -368,11 +368,11 @@ explor_multi_min_contrib_input <- function(data, settings, type) {
 explor_multi_bi_symbol_input <- function(settings) {
     if (settings$has_sup_vars || settings$has_sup_ind) {
         choices <- c("None", "Variable", "Type", "Nature")
-        selected <- "Type"
+        selected <- "Nature"
     }
     if (!(settings$has_sup_vars || settings$has_sup_ind)) {
         choices <- c("None", "Variable", "Nature")
-        selected <- "Variable"
+        selected <- "Nature"
     }
     names(choices)[choices == "None"] <- gettext("None")
     names(choices)[choices == "Variable"] <- gettext("Variable name")

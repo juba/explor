@@ -284,7 +284,7 @@ explor_multi_mca <- function(res, settings) {
                             explor_multi_bi_symbol_input(settings),
                             sliderInput("bi_lab_size",
                                 gettext("Labels size"),
-                                4, 20, 10),
+                                4, 20, 12),
                             checkboxInput("bi_ind_labels_show",
                                 HTML(gettext("Show individuals labels")),
                                 value = FALSE),
