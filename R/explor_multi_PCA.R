@@ -181,11 +181,7 @@ explor_multi_pca <- function(res, settings) {
                             sliderInput("var_lab_size", 
                                 gettext("Labels size"),
                                 4, 20, 10),
-                            if (settings$has_contrib) {
-                                numericInput("var_lab_min_contrib",
-                                    gettext("Minimum contribution to show label"),
-                                    min = 0, max = ceiling(2*max(res$vars$Contrib, na.rm = TRUE)), value = 0)
-                            },
+                            explor_multi_min_contrib_input(res$vars, settings, "var"),
                             if (settings$has_sup_vars) explor_multi_var_col_input(settings),
                             if (settings$has_sup_vars)
                                 checkboxInput("var_sup", 
@@ -224,10 +220,7 @@ explor_multi_pca <- function(res, settings) {
                                     gettext("Labels size"),
                                     5, 20, 9),
                                 explor_multi_auto_labels_input(res$ind, "ind"),
-                                if (settings$has_contrib) {
-                                    numericInput("ind_lab_min_contrib",
-                                        gettext("Minimum contribution to show label"),
-                                        min = 0, max = ceiling(2*max(res$ind$Contrib, na.rm = TRUE)), value = 0) }),
+                                explor_multi_min_contrib_input(res$ind, settings, "ind")),
                             if (settings$has_sup_ind || settings$has_quali_sup_vars) 
                                 explor_multi_ind_col_input(settings, res),
                             if (settings$has_sup_ind || settings$has_quali_sup_vars) 

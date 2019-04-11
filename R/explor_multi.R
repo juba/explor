@@ -350,6 +350,18 @@ explor_multi_auto_labels_input <- function(data, type) {
 }
 
 
+## Min contrib to show labels input
+explor_multi_min_contrib_input <- function(data, settings, type) {
+    if (!settings$has_contrib) return(NULL)
+    numericInput(
+        paste0(type, "_lab_min_contrib"),
+        gettext("Minimum contribution to show label"),
+        min = 0,
+        max = ceiling(2 * max(data$Contrib, na.rm = TRUE)),
+        value = 0)
+}
+
+
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 
 ## Hide input choices for CA results

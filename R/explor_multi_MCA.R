@@ -204,15 +204,7 @@ explor_multi_mca <- function(res, settings) {
                             sliderInput("var_point_size",
                                 gettext("Points size"),
                                 4, 128, 56),
-                            if (settings$has_contrib) {
-                                numericInput(
-                                    "var_lab_min_contrib",
-                                    gettext("Minimum contribution to show label"),
-                                    min = 0,
-                                    max = ceiling(2 * max(res$vars$Contrib, na.rm = TRUE)),
-                                    value = 0
-                                )
-                            },
+                            explor_multi_min_contrib_input(res$vars, settings, "var"),
                             explor_multi_var_col_input(settings),
                             explor_multi_var_symbol_input(settings),
                             explor_multi_var_size_input(settings),
@@ -237,8 +229,7 @@ explor_multi_mca <- function(res, settings) {
             ## INDIVIDUALS PLOT UI
             tabPanel(gettext("Individuals plot"),
                 fluidRow(
-                    column(
-                        2,
+                    column(2,
                         wellPanel(
                             explor_multi_axes_input(res, "ind"),
                             sliderInput("ind_point_size",
@@ -260,15 +251,7 @@ explor_multi_mca <- function(res, settings) {
                                     gettext("Labels size"),
                                     5, 20, 9),
                                 explor_multi_auto_labels_input(res$ind, "ind"),
-                                if (settings$has_contrib) {
-                                    numericInput(
-                                        "ind_lab_min_contrib",
-                                        gettext("Minimum contribution to show label"),
-                                        min = 0,
-                                        max = ceiling(2 * max(res$ind$Contrib, na.rm = TRUE)),
-                                        value = 0
-                                    )
-                                }
+                                explor_multi_min_contrib_input(res$ind, settings, "ind")
                             ),
                             explor_multi_ind_col_input(settings, res),
                             checkboxInput("ind_ellipses",
@@ -294,8 +277,7 @@ explor_multi_mca <- function(res, settings) {
             ## BIPLOT UI
             tabPanel(gettext("Biplot"),
                 fluidRow(
-                    column(
-                        2,
+                    column(2,
                         wellPanel(
                             explor_multi_axes_input(res, "bi"),
                             selectInput("bi_color_type", 
@@ -307,14 +289,13 @@ explor_multi_mca <- function(res, settings) {
                             checkboxInput("bi_ind_labels_show",
                                 HTML(gettext("Show individuals labels")),
                                 value = FALSE),
-                            explor_multi_auto_labels_input(res$vars, "bi"),
+                            uiOutput("bi_auto_labels"),
                             sliderInput("bi_ind_point_size",
                                 gettext("Individuals point size"),
                                 4, 128, 16),
                             sliderInput("bi_ind_point_opacity",
                                 gettext("Individuals point opacity"),
-                                0, 1, 0.5),
-                                
+                                0, 1, 0.5), 
                             if (settings$has_sup_ind)
                                 checkboxInput("bi_ind_sup",
                                     HTML(gettext(
@@ -441,12 +422,12 @@ explor_multi_mca <- function(res, settings) {
                     ", var_point_size = ", input$bi_var_point_size, 
                     ", var_sup = ", settings$has_sup_vars && input$bi_var_sup,
                     ", ind_sup = ", settings$has_sup_ind && input$bi_ind_sup,
-                    # ", var_lab_min_contrib = ", var_lab_min_contrib, ",\n",
+                    ", labels_size = ", input$bi_lab_size,
+                    ", bi_lab_min_contrib = ", bi_lab_min_contrib, ",\n",
                     # "    col_var = ", deparse(substitute(col_var)),
                     # ", symbol_var = ", deparse(substitute(symbol_var)), ",\n",
                     # "    size_var = ", deparse(substitute(size_var)),
                     # ", size_range = ", deparse(size_range), ",\n",
-                    # "    labels_size = ", input$var_lab_size,
                     # ", point_size = ", input$var_point_size, ",\n",
                     ", transitions = ", input$bi_transitions,
                     ", labels_positions = ", bi_auto_labels
@@ -467,6 +448,16 @@ explor_multi_mca <- function(res, settings) {
                 ))
             })
             
+            ## Only show automatic label placement checkbox if less than 100 labels
+            output$bi_auto_labels <- renderUI({
+                n_label <- sum(res$vars$Level[res$vars$Axis == 1] != "")
+                if (input$bi_ind_labels_show) {
+                    n_label <- n_label + sum(res$ind$Name[res$ind$Axis == 1] != "")
+                }
+                if (n_label > 100) return(NULL)
+                explor_multi_auto_labels_input(res$vars, "bi")
+            })
+
             ## Variable data module
             callModule(explor_multi_var_data,
                 "var_data",
