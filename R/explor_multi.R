@@ -105,9 +105,11 @@ explor_multi_sidebar_footer <- function(type = "var") {
         checkboxInput(paste0(type, "_transitions"), 
                       HTML(gettext("Animations")),
                       value = TRUE),
-        tags$p(actionButton(paste0("explor-", type, "-lasso-toggle"),
+        if (type != "bi") {
+            tags$p(actionButton(paste0("explor-", type, "-lasso-toggle"),
                           icon = icon("crosshairs"),
-                          label = gettext("Lasso selection"))),
+                          label = gettext("Lasso selection")))
+        },
         tags$p(actionButton(paste0("explor_", type, "_plot_code"),
                           icon = icon("code"),
                           label = gettext("Get R code"))),

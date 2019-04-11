@@ -290,9 +290,9 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
     ## Settings changed if not run in explor
     html_id <- if(in_explor) "explor_bi" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-bi-svg-export" else NULL
-    dom_id_lasso_toggle <- if(in_explor) "explor-bi-lasso-toggle" else NULL
-    lasso <- if(in_explor) TRUE else FALSE 
-    lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
+    #dom_id_lasso_toggle <- if(in_explor) "explor-bi-lasso-toggle" else NULL
+    #lasso <- if(in_explor) TRUE else FALSE 
+    #lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "bi") else NULL
     
     settings <- list(xax = xax, yax = yax, ind_sup = ind_sup, var_sup = var_sup,
@@ -340,9 +340,9 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         fixed = TRUE,
         html_id = html_id,
         dom_id_svg_export = dom_id_svg_export,
-        dom_id_lasso_toggle = dom_id_lasso_toggle,
-        lasso = lasso,
-        lasso_callback = lasso_callback,
+        dom_id_lasso_toggle = NULL,
+        lasso = FALSE,
+        lasso_callback = NULL,
         zoom_callback = zoom_callback,
         ...
     )  
