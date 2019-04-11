@@ -353,11 +353,12 @@ explor_multi_auto_labels_input <- function(data, type) {
 ## Min contrib to show labels input
 explor_multi_min_contrib_input <- function(data, settings, type) {
     if (!settings$has_contrib) return(NULL)
+    cmax <- if (type == "bi") NA else ceiling(2 * max(data$Contrib, na.rm = TRUE))
     numericInput(
         paste0(type, "_lab_min_contrib"),
         gettext("Minimum contribution to show label"),
         min = 0,
-        max = ceiling(2 * max(data$Contrib, na.rm = TRUE)),
+        max = cmax,
         value = 0)
 }
 

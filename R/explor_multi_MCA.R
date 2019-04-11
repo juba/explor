@@ -290,6 +290,7 @@ explor_multi_mca <- function(res, settings) {
                                 HTML(gettext("Show individuals labels")),
                                 value = FALSE),
                             uiOutput("bi_auto_labels"),
+                            explor_multi_min_contrib_input(res$vars, settings, "bi"),
                             sliderInput("bi_ind_point_size",
                                 gettext("Individuals point size"),
                                 4, 128, 16),
@@ -410,6 +411,7 @@ explor_multi_mca <- function(res, settings) {
             ## biplot code
             biplot_code <- reactive({
                 bi_auto_labels <- if (!is.null(input$bi_auto_labels) && input$bi_auto_labels) "\"auto\"" else "NULL"
+                bi_lab_min_contrib <- if (settings$has_contrib) input$bi_lab_min_contrib else 0
                 
                 paste0(
                     "explor::MCA_biplot(res",
