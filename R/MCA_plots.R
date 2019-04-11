@@ -215,32 +215,39 @@ MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_cont
 ## Not exported
 MCA_bi_data <- function(res, settings) {
 
+    # Compute ind data
     ind_data <- MCA_ind_data(res, settings$xax, settings$yax, ind_sup = settings$ind_sup, 
         ind_lab_min_contrib = settings$bi_lab_min_contrib) 
     ind_data$source <- "ind"
     ind_data$key <- ind_data$Name
+    # Compute var data
     var_data <- MCA_var_data(res, settings$xax, settings$yax, var_sup = settings$var_sup, 
         var_lab_min_contrib = settings$bi_lab_min_contrib)
     var_data$source <- "var"
     var_data$key <- paste(var_data$Variable, var_data$Level, sep = "-")
     
+    # Bind ind and var
     bi_data <- bind_rows(ind_data, var_data)
     bi_data$key <- paste0(bi_data$source, bi_data$key)
     ind <- bi_data$source == "ind"
     
+    # Point or arrow
     bi_data$type <- ifelse(bi_data$Class == "Quantitative", "arrow", "point")
     bi_data$type[ind] <- "point"
-    
+
+    bi_data$Variable[ind] <- ""
+    bi_data$Nature <- gettext("Variable level")
+    bi_data$Nature[ind] <- gettext("Individual")
     if (!settings$ind_labels) bi_data$Lab[ind] <- ""
     
+    # Colors
     if (settings$color_type == "Variable") {
         bi_data$color <- bi_data$Variable
+        bi_data$color[ind] <- ""
     } else {
-        bi_data$color <- gettext("Variable level")
+        bi_data$color <- bi_data$Type
     }
-    bi_data$color[ind] <- ""
-    bi_data$color <- factor(bi_data$color)
-
+    
     bi_data
 }
 
@@ -272,6 +279,7 @@ MCA_bi_data <- function(res, settings) {
 
 MCA_biplot <- function(res, xax = 1, yax = 2, 
     color_type, ind_sup = TRUE, var_sup = TRUE, bi_lab_min_contrib = 0,
+    symbol_var = NULL,
     ind_point_size = 16,
     var_point_size = 96,
     ind_opacity = 0.5,
@@ -318,14 +326,13 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         col_var = bi_data$color,
         col_lab = color_type,
         colors = colors,
-        # symbol_var = if (is.null(symbol_var)) NULL else bi_data[,symbol_var],
-        # symbol_lab = symbol_var,
+        symbol_var = if (is.null(symbol_var)) NULL else bi_data[,symbol_var],
+        symbol_lab = symbol_var,
         size_var = bi_data$source,
         sizes = sizes,
         size_lab = NA,
         opacity_var = bi_data$source,
         opacities = opacities,
-        # size_lab = size_var,
         tooltip_text = bi_data[, "tooltip"],
         type_var = bi_data$type,
         unit_circle = var_sup && "Quantitative" %in% bi_data[,"Class"],

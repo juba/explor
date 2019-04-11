@@ -280,9 +280,8 @@ explor_multi_mca <- function(res, settings) {
                     column(2,
                         wellPanel(
                             explor_multi_axes_input(res, "bi"),
-                            selectInput("bi_color_type", 
-                                gettext("Points color :"),
-                                choices = c("Variable", "Type"), selected = "Variable"),
+                            explor_multi_bi_col_input(settings),
+                            explor_multi_bi_symbol_input(settings),
                             sliderInput("bi_lab_size",
                                 gettext("Labels size"),
                                 4, 20, 10),
@@ -412,12 +411,13 @@ explor_multi_mca <- function(res, settings) {
             biplot_code <- reactive({
                 bi_auto_labels <- if (!is.null(input$bi_auto_labels) && input$bi_auto_labels) "\"auto\"" else "NULL"
                 bi_lab_min_contrib <- if (settings$has_contrib) input$bi_lab_min_contrib else 0
+                symbol_var <- if (input$bi_symbol == "None") NULL else input$bi_symbol
                 
                 paste0(
                     "explor::MCA_biplot(res",
                     ", xax = ", input$bi_x,
                     ", yax = ", input$bi_y,
-                    ", color_type = \"", input$bi_color_type, "\"",
+                    ", color_type = \"", input$bi_col, "\"",
                     ", ind_point_size = ", input$bi_ind_point_size, 
                     ", ind_opacity = ", input$bi_ind_point_opacity, 
                     ", ind_labels = ", input$bi_ind_labels_show,
@@ -426,8 +426,7 @@ explor_multi_mca <- function(res, settings) {
                     ", ind_sup = ", settings$has_sup_ind && input$bi_ind_sup,
                     ", labels_size = ", input$bi_lab_size,
                     ", bi_lab_min_contrib = ", bi_lab_min_contrib, ",\n",
-                    # "    col_var = ", deparse(substitute(col_var)),
-                    # ", symbol_var = ", deparse(substitute(symbol_var)), ",\n",
+                    ", symbol_var = ", deparse(substitute(symbol_var)),     # "    col_var = ", deparse(substitute(col_var)),
                     # "    size_var = ", deparse(substitute(size_var)),
                     # ", size_range = ", deparse(size_range), ",\n",
                     # ", point_size = ", input$var_point_size, ",\n",

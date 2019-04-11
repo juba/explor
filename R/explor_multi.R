@@ -362,6 +362,43 @@ explor_multi_min_contrib_input <- function(data, settings, type) {
         value = 0)
 }
 
+## Biplot symbol input
+explor_multi_bi_symbol_input <- function(settings) {
+    if (settings$has_sup_vars || settings$has_sup_ind) {
+        choices <- c("None", "Variable", "Type", "Nature")
+        selected <- "Type"
+    }
+    if (!(settings$has_sup_vars || settings$has_sup_ind)) {
+        choices <- c("None", "Variable", "Nature")
+        selected <- "Variable"
+    }
+    names(choices)[choices == "None"] <- gettext("None")
+    names(choices)[choices == "Variable"] <- gettext("Variable name")
+    names(choices)[choices == "Type"] <- gettext("Active / Supplementary")
+    names(choices)[choices == "Nature"] <- gettext("Variable level / Individual")
+
+    selectInput("bi_symbol", gettext("Points symbol :"),
+                choices = choices, selected = selected)   
+}
+
+## Biplot color input
+explor_multi_bi_col_input <- function(settings) {
+    if (settings$has_sup_vars || settings$has_sup_ind) {
+        choices <- c("None", "Variable", "Type", "Nature")
+        selected <- "Variable"
+    }
+    if (!(settings$has_sup_vars || settings$has_sup_ind)) {
+        choices <- c("None", "Variable", "Nature")
+        selected <- "Variable"
+    }
+    names(choices)[choices == "None"] <- gettext("None")
+    names(choices)[choices == "Variable"] <- gettext("Variable name")
+    names(choices)[choices == "Type"] <- gettext("Active / Supplementary")
+    names(choices)[choices == "Nature"] <- gettext("Variable level / Individual")
+    
+    selectInput("bi_col", gettext("Points color :"),
+                choices = choices,  selected = selected)
+}
 
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 
