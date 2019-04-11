@@ -239,15 +239,16 @@ MCA_bi_data <- function(res, settings) {
     bi_data$Nature <- gettext("Variable level")
     bi_data$Nature[ind] <- gettext("Individual")
     if (!settings$ind_labels) bi_data$Lab[ind] <- ""
+    bi_data$Lab[is.na(bi_data$Lab)] <- ""
     
     # Colors
-    if (settings$color_type == "Variable") {
+    if (settings$col_var == "Variable") {
         bi_data$color <- bi_data$Variable
         bi_data$color[ind] <- ""
     } else {
-        bi_data$color <- bi_data$Type
+        bi_data$color <- bi_data[,settings$col_var]
     }
-    
+
     bi_data
 }
 
@@ -278,7 +279,7 @@ MCA_bi_data <- function(res, settings) {
 ##' @importFrom RColorBrewer brewer.pal
 
 MCA_biplot <- function(res, xax = 1, yax = 2, 
-    color_type, ind_sup = TRUE, var_sup = TRUE, bi_lab_min_contrib = 0,
+    col_var, ind_sup = TRUE, var_sup = TRUE, bi_lab_min_contrib = 0,
     symbol_var = NULL,
     ind_point_size = 16,
     var_point_size = 96,
@@ -296,14 +297,14 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "bi") else NULL
     
     settings <- list(xax = xax, yax = yax, ind_sup = ind_sup, var_sup = var_sup,
-        color_type = color_type, bi_lab_min_contrib = bi_lab_min_contrib,
+        col_var = col_var, bi_lab_min_contrib = bi_lab_min_contrib,
         ind_opacity = ind_opacity, ind_labels = ind_labels,
         ind_point_size = ind_point_size, var_point_size = var_point_size)
         
     bi_data <- MCA_bi_data(res, settings)
     
     colors <- NULL
-    if (color_type == "Variable") {
+    if (col_var == "Variable") {
         n_colors <- nlevels(bi_data$color)
         if (n_colors <= 11) {
             colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
@@ -316,7 +317,6 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
     opacities <- c("ind" = ind_opacity, "var" = 1)
     sizes <- c("ind" = ind_point_size, "var" = var_point_size)
     
-
     scatterD3::scatterD3(
         x = bi_data[, "Coord.x"],
         y = bi_data[, "Coord.y"],
@@ -324,7 +324,7 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         ylab = names(res$axes)[res$axes == yax],
         lab = bi_data$Lab,
         col_var = bi_data$color,
-        col_lab = color_type,
+        col_lab = col_var,
         colors = colors,
         symbol_var = if (is.null(symbol_var)) NULL else bi_data[,symbol_var],
         symbol_lab = symbol_var,

@@ -411,13 +411,14 @@ explor_multi_mca <- function(res, settings) {
             biplot_code <- reactive({
                 bi_auto_labels <- if (!is.null(input$bi_auto_labels) && input$bi_auto_labels) "\"auto\"" else "NULL"
                 bi_lab_min_contrib <- if (settings$has_contrib) input$bi_lab_min_contrib else 0
+                col_var <- if (input$bi_col == "None") NULL else input$bi_col
                 symbol_var <- if (input$bi_symbol == "None") NULL else input$bi_symbol
                 
                 paste0(
                     "explor::MCA_biplot(res",
                     ", xax = ", input$bi_x,
                     ", yax = ", input$bi_y,
-                    ", color_type = \"", input$bi_col, "\"",
+                    ", col_var = ", deparse(substitute(col_var)),
                     ", ind_point_size = ", input$bi_ind_point_size, 
                     ", ind_opacity = ", input$bi_ind_point_opacity, 
                     ", ind_labels = ", input$bi_ind_labels_show,
@@ -425,11 +426,8 @@ explor_multi_mca <- function(res, settings) {
                     ", var_sup = ", settings$has_sup_vars && input$bi_var_sup,
                     ", ind_sup = ", settings$has_sup_ind && input$bi_ind_sup,
                     ", labels_size = ", input$bi_lab_size,
-                    ", bi_lab_min_contrib = ", bi_lab_min_contrib, ",\n",
-                    ", symbol_var = ", deparse(substitute(symbol_var)),     # "    col_var = ", deparse(substitute(col_var)),
-                    # "    size_var = ", deparse(substitute(size_var)),
-                    # ", size_range = ", deparse(size_range), ",\n",
-                    # ", point_size = ", input$var_point_size, ",\n",
+                    ", bi_lab_min_contrib = ", bi_lab_min_contrib,
+                    ", symbol_var = ", deparse(substitute(symbol_var)),     
                     ", transitions = ", input$bi_transitions,
                     ", labels_positions = ", bi_auto_labels
                 )
