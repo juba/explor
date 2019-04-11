@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.3.5\n"
-"POT-Creation-Date: 2019-04-05 10:53\n"
+"POT-Creation-Date: 2019-04-11 16:36\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,16 @@ msgstr ""
 msgid "Variable"
 msgstr ""
 
+msgid "Variable level"
+msgstr ""
+
+msgid "Individual"
+msgstr ""
+
 msgid "Level"
+msgstr ""
+
+msgid "Export R code"
 msgstr ""
 
 msgid "Animations"
@@ -97,6 +106,15 @@ msgstr ""
 msgid "Automatic labels position"
 msgstr ""
 
+msgid "Minimum contribution to show label"
+msgstr ""
+
+msgid "Active / Supplementary"
+msgstr ""
+
+msgid "Variable level / Individual"
+msgstr ""
+
 msgid "Rows"
 msgstr ""
 
@@ -163,13 +181,7 @@ msgstr ""
 msgid "Points size"
 msgstr ""
 
-msgid "Minimum contribution to show label"
-msgstr ""
-
 msgid "Data"
-msgstr ""
-
-msgid "Export R code"
 msgstr ""
 
 msgid "obj must be of class MCA"
@@ -206,6 +218,18 @@ msgid "Ellipses"
 msgstr ""
 
 msgid "Individuals data"
+msgstr ""
+
+msgid "Biplot"
+msgstr ""
+
+msgid "Show individuals labels"
+msgstr ""
+
+msgid "Individuals point size"
+msgstr ""
+
+msgid "Variables point size"
 msgstr ""
 
 msgid "obj must be of class PCA"
