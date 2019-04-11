@@ -284,6 +284,7 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
     ind_point_size = 16,
     var_point_size = 96,
     ind_opacity = 0.5,
+    ind_opacity_var = NULL,
     ind_labels = FALSE,
     zoom_callback = NULL,
     in_explor = FALSE, ...) {
@@ -298,7 +299,7 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
     
     settings <- list(xax = xax, yax = yax, ind_sup = ind_sup, var_sup = var_sup,
         col_var = col_var, bi_lab_min_contrib = bi_lab_min_contrib,
-        ind_opacity = ind_opacity, ind_labels = ind_labels,
+        ind_opacity = ind_opacity, ind_opacity_var = ind_opacity_var, ind_labels = ind_labels,
         ind_point_size = ind_point_size, var_point_size = var_point_size)
         
     bi_data <- MCA_bi_data(res, settings)
@@ -314,7 +315,14 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         colors <- c("#666666", colors)
     }
     
-    opacities <- c("ind" = ind_opacity, "var" = 1)
+    if (is.null(ind_opacity_var)) {
+        opacity_var <- bi_data$source
+        opacities <- c("ind" = ind_opacity, "var" = 1)
+    } else {
+        opacity_var <- bi_data[,ind_opacity_var]
+        opacity_var[bi_data$source == "var"] <- max(opacity_var, na.rm = TRUE)
+        opacities <- NULL
+    }
     sizes <- c("ind" = ind_point_size, "var" = var_point_size)
     
     scatterD3::scatterD3(
@@ -331,7 +339,7 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         size_var = bi_data$source,
         sizes = sizes,
         size_lab = NA,
-        opacity_var = bi_data$source,
+        opacity_var = opacity_var,
         opacities = opacities,
         tooltip_text = bi_data[, "tooltip"],
         type_var = bi_data$type,

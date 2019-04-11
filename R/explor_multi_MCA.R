@@ -293,9 +293,13 @@ explor_multi_mca <- function(res, settings) {
                             sliderInput("bi_ind_point_size",
                                 gettext("Individuals point size"),
                                 4, 128, 16),
-                            sliderInput("bi_ind_point_opacity",
-                                gettext("Individuals point opacity"),
-                                0, 1, 0.5), 
+                            explor_multi_bi_ind_opacity_input(settings),
+                            conditionalPanel(condition = 'input.bi_opacity_var == "Fixed"',
+                                sliderInput(
+                                    "bi_ind_point_opacity",
+                                    gettext("Fixed points opacity"),
+                                    0, 1, 0.5
+                                )),
                             if (settings$has_sup_ind)
                                 checkboxInput("bi_ind_sup",
                                     HTML(gettext(
@@ -413,6 +417,7 @@ explor_multi_mca <- function(res, settings) {
                 bi_lab_min_contrib <- if (settings$has_contrib) input$bi_lab_min_contrib else 0
                 col_var <- if (input$bi_col == "None") NULL else input$bi_col
                 symbol_var <- if (input$bi_symbol == "None") NULL else input$bi_symbol
+                opacity_var <- if (!is.null(input$bi_opacity_var) && input$bi_opacity_var == "Fixed") NULL else input$bi_opacity_var
                 
                 paste0(
                     "explor::MCA_biplot(res",
@@ -421,6 +426,7 @@ explor_multi_mca <- function(res, settings) {
                     ", col_var = ", deparse(substitute(col_var)),
                     ", ind_point_size = ", input$bi_ind_point_size, 
                     ", ind_opacity = ", input$bi_ind_point_opacity, 
+                    ", ind_opacity_var = ", deparse(substitute(opacity_var)), 
                     ", ind_labels = ", input$bi_ind_labels_show,
                     ", var_point_size = ", input$bi_var_point_size, 
                     ", var_sup = ", settings$has_sup_vars && input$bi_var_sup,

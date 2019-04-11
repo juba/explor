@@ -402,6 +402,28 @@ explor_multi_bi_col_input <- function(settings) {
                 choices = choices,  selected = selected)
 }
 
+## Biplot individuals opacity input
+explor_multi_bi_ind_opacity_input <- function(settings) {
+  bi_opacity_choices <- "Fixed"
+  names <- gettext("Fixed")
+  if (settings$has_contrib) {
+    bi_opacity_choices <- append(bi_opacity_choices, "Contrib")
+    names <- append(names, gettext("Contribution"))
+  }
+  if (settings$has_cos2) {
+    bi_opacity_choices <- append(bi_opacity_choices, "Cos2")
+    names <- append(names, gettext("Squared cosinus"))
+  }
+  names(bi_opacity_choices) <- names
+  bi_opacity_input <- if (length(bi_opacity_choices) > 1) {
+    selectInput("bi_opacity_var", 
+                gettext("Points opacity :"),
+                choices = bi_opacity_choices,
+                selected = "Fixed")
+  } else NULL
+  return(bi_opacity_input)
+}
+
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 
 ## Hide input choices for CA results
