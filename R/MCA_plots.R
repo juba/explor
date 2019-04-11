@@ -223,7 +223,7 @@ MCA_bi_data <- function(res, settings) {
     var_data$source <- "var"
     
     bi_data <- bind_rows(ind_data, var_data)
-    
+    bi_data$key <- paste0(bi_data$source, bi_data$Lab)
     ind <- bi_data$source == "ind"
     
     bi_data$type <- ifelse(bi_data$Class == "Quantitative", "arrow", "point")
@@ -236,15 +236,8 @@ MCA_bi_data <- function(res, settings) {
     } else {
         bi_data$color <- gettext("Variable level")
     }
-    bi_data$color[ind] <- gettext("Individual")
+    bi_data$color[ind] <- ""
     bi_data$color <- factor(bi_data$color)
-    bi_data$color <- stats::relevel(bi_data$color, gettext("Individual"))
-    
-    bi_data$size <- settings$point_size * 2
-    bi_data$size[ind] <- settings$point_size
-    bi_data$opacity <- 1
-    bi_data$opacity[ind] <- settings$ind_opacity
-    
 
     bi_data
 }
@@ -277,8 +270,9 @@ MCA_bi_data <- function(res, settings) {
 
 MCA_biplot <- function(res, xax = 1, yax = 2, 
     color_type, ind_sup = TRUE, var_sup = TRUE, bi_lab_min_contrib = 0,
-    point_size = 32,
-    ind_opacity = 0.8,
+    ind_point_size = 16,
+    var_point_size = 96,
+    ind_opacity = 0.5,
     ind_labels = FALSE,
     zoom_callback = NULL,
     in_explor = FALSE, ...) {
@@ -293,8 +287,8 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
     
     settings <- list(xax = xax, yax = yax, ind_sup = ind_sup, var_sup = var_sup,
         color_type = color_type, bi_lab_min_contrib = bi_lab_min_contrib,
-        ind_opacity = ind_opacity, point_size = point_size,
-        ind_labels = ind_labels)
+        ind_opacity = ind_opacity, ind_labels = ind_labels,
+        ind_point_size = ind_point_size, var_point_size = var_point_size)
         
     bi_data <- MCA_bi_data(res, settings)
     
@@ -306,8 +300,12 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         } else {
             colors <- RColorBrewer::brewer.pal(n_colors - 1, "Paired")
         }
-        colors <- c("#000000", colors)
+        colors <- c("#666666", colors)
     }
+    
+    opacities <- c("ind" = ind_opacity, "var" = 1)
+    sizes <- c("ind" = ind_point_size, "var" = var_point_size)
+    
 
     scatterD3::scatterD3(
         x = bi_data[, "Coord.x"],
@@ -315,20 +313,20 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         xlab = names(res$axes)[res$axes == xax],
         ylab = names(res$axes)[res$axes == yax],
         lab = bi_data$Lab,
-        # point_size = point_size,
-        # point_opacity = 1,
         col_var = bi_data$color,
         col_lab = color_type,
         colors = colors,
         # symbol_var = if (is.null(symbol_var)) NULL else bi_data[,symbol_var],
         # symbol_lab = symbol_var,
-        size_var = bi_data$size,
-        opacity_var = bi_data$opacity,
+        size_var = bi_data$source,
+        sizes = sizes,
+        opacity_var = bi_data$source,
+        opacities = opacities,
         # size_lab = size_var,
         tooltip_text = bi_data[, "tooltip"],
         type_var = bi_data$type,
         unit_circle = var_sup && "Quantitative" %in% bi_data[,"Class"],
-        key_var = rownames(bi_data),
+        key_var = bi_data$key,
         fixed = TRUE,
         html_id = html_id,
         dom_id_svg_export = dom_id_svg_export,
