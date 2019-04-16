@@ -285,36 +285,74 @@ explor_multi_mca <- function(res, settings) {
                             sliderInput("bi_lab_size",
                                 gettext("Labels size"),
                                 4, 20, 12),
-                            checkboxInput("bi_ind_labels_show",
-                                HTML(gettext("Show individuals labels")),
-                                value = FALSE),
                             uiOutput("bi_auto_labels"),
                             explor_multi_min_contrib_input(res$vars, settings, "bi"),
-                            sliderInput("bi_ind_point_size",
-                                gettext("Individuals point size"),
-                                4, 128, 16),
-                            explor_multi_bi_ind_opacity_input(settings),
-                            conditionalPanel(condition = 'input.bi_opacity_var == "Fixed"',
-                                sliderInput(
-                                    "bi_ind_point_opacity",
-                                    gettext("Fixed points opacity"),
-                                    0, 1, 0.5
-                                )),
-                            if (settings$has_sup_ind)
-                                checkboxInput("bi_ind_sup",
-                                    HTML(gettext(
-                                        "Supplementary individuals"
-                                    )),
-                                    value = TRUE),
-                            sliderInput("bi_var_point_size",
-                                gettext("Variables point size"),
-                                4, 128, 96),
-                            if (settings$has_sup_vars)
-                                checkboxInput("bi_var_sup",
-                                    HTML(gettext(
-                                        "Supplementary variables"
-                                    )),
-                                    value = TRUE),
+                            
+                            div(id = "bi_accordion", class = "panel-group",
+                                role="tablist", `aria-multiselectable`="true",
+                                ## Individuals accordion
+                                div(class="panel panel-default",
+                                    div(class="panel-heading", role="tab", id="headingInd",
+                                        h4(class = "panel-title",
+                                            a(role="button", `data-toggle`="collapse", class="collapsed",
+                                                `data-parent`="#bi_accordion", href="#collapseInd",
+                                                `aria-expanded`="false", `aria-controls`="collapseInd",
+                                                gettext("Individuals settings")
+                                            )
+                                        )
+                                    ),
+                                    div(id="collapseInd", class="panel-collapse collapse",
+                                        role="tabpanel", `aria-labelledby`="headingInd",
+                                        div(class="panel-body",
+                                            checkboxInput("bi_ind_labels_show",
+                                                HTML(gettext("Show individuals labels")),
+                                                value = FALSE),
+                                            sliderInput("bi_ind_point_size",
+                                                gettext("Individuals point size"),
+                                                4, 128, 16),
+                                            explor_multi_bi_ind_opacity_input(settings),
+                                            conditionalPanel(condition = 'input.bi_opacity_var == "Fixed"',
+                                                sliderInput(
+                                                    "bi_ind_point_opacity",
+                                                    gettext("Fixed points opacity"),
+                                                    0, 1, 0.5
+                                                )),
+                                            if (settings$has_sup_ind)
+                                                checkboxInput("bi_ind_sup",
+                                                    HTML(gettext(
+                                                        "Supplementary individuals"
+                                                    )),
+                                                    value = TRUE)
+                                        )
+                                    )
+                                ),
+                                ## Variables accordion
+                                div(class="panel panel-default",
+                                    div(class="panel-heading", role="tab", id="headingVar",
+                                        h4(class = "panel-title",
+                                            a(role="button", `data-toggle`="collapse", class="collapsed",
+                                                `data-parent`="#bi_accordion", href="#collapseVar",
+                                                `aria-expanded`="false", `aria-controls`="collapseVar",
+                                                gettext("Variables settings")
+                                            )
+                                        )
+                                    ),
+                                    div(id="collapseVar", class="panel-collapse collapse",
+                                        role="tabpanel", `aria-labelledby`="headingVar",
+                                        div(class="panel-body",
+                                            sliderInput("bi_var_point_size",
+                                                gettext("Variables point size"),
+                                                4, 128, 96),
+                                            if (settings$has_sup_vars)
+                                                checkboxInput("bi_var_sup",
+                                                    HTML(gettext(
+                                                        "Supplementary variables"
+                                                    )),
+                                                    value = TRUE)
+                                        )
+                                    )
+                                )
+                            ),
                             explor_multi_sidebar_footer(type = "bi")
                         )
                     ),
