@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.3.5\n"
-"POT-Creation-Date: 2019-04-11 16:36\n"
+"POT-Creation-Date: 2019-04-16 11:57\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -223,10 +223,16 @@ msgstr ""
 msgid "Biplot"
 msgstr ""
 
+msgid "Individuals settings"
+msgstr ""
+
 msgid "Show individuals labels"
 msgstr ""
 
 msgid "Individuals point size"
+msgstr ""
+
+msgid "Variables settings"
 msgstr ""
 
 msgid "Variables point size"
