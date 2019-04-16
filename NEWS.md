@@ -1,26 +1,22 @@
-explor 0.3.5
-------------
+# explor 0.3.5
 
 * Upgrade to scatterD3 0.9
 * Add automatic labels positioning
 * Add biplot to MCA interface
 
 
-explor 0.3.4
-------------
+# explor 0.3.4
 
 * Fix improper computation in levels number in FactoMineR::PCA (thanks @Bhavanight)
 * Fox compatibility with ade4 1.7-13
 
 
-explor 0.3.3
-------------
+# explor 0.3.3
 
 * Fix CRAN tests
 
 
-explor 0.3.2
-------------
+# explor 0.3.2
 
 * Compatibility with dplyr 0.7
 * Add eigenvalues table beside barplot
@@ -28,14 +24,12 @@ explor 0.3.2
 * Add ability to hide individuals points labels based on contribution value (suggestion by @ginolhac)
 
 
-explor 0.3.1
-------------
+# explor 0.3.1
 
 * Compatibility with ade4 1.7-5
 
 
-explor 0.3.0
-------------
+# explor 0.3.0
 
 * Add a "Get R code" button which allows to get the R code to reproduce the displayed plot (minus custom labels positions)
 * Add support for `princomp` and `prcomp`
@@ -46,16 +40,14 @@ explor 0.3.0
 * Code refactoring
 
 
-explor 0.2.1
-------------
+# explor 0.2.1
 
 * Bugfix : core dump in explor.MCA when only one supplementary qualitative variable
 * Bugfix : No variable plot when missing `scale` argument in `dudi.pca`
 * Fix test failing with next `testthat` version
 
 
-explor 0.2
-------------
+# explor 0.2
 
 * Add ability to select points with lasso
 * Add ellipses to color mapping variables
@@ -63,7 +55,7 @@ explor 0.2
 * Add control to hide Rows or Columns in CA plot and tables
 * Add the ability to change point size and sizes range in variables plots for CA and MCA.
 
-explor 0.1
-----------
+
+# explor 0.1
 
 * First version

@@ -9,7 +9,7 @@ Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
 Description: Shiny interfaces and graphical functions for multivariate analysis results exploration.
 License: GPL (>= 3)
 VignetteBuilder: knitr
-URL: https://github.com/juba/explor
+URL: https://juba.github.io/explor/
 BugReports: https://github.com/juba/explor/issues
 Encoding: UTF-8
 Imports: 

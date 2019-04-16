@@ -1,0 +1,4 @@
+url: https://juba.github.io/explor/
+template:
+  params:
+    bootswatch: cosmo
