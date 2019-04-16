@@ -43,9 +43,9 @@ install.packages("explor")
 To install the latest dev version from GitHub :
 
 ```r
-install.packages("devtools")  # If necessary
-devtools::install_github("juba/scatterD3")
-devtools::install_github("juba/explor")
+install.packages("remotes")  # If necessary
+remotes::install_github("juba/scatterD3")
+remotes::install_github("juba/explor")
 ```
     
 ## Usage
