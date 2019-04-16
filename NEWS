@@ -3,6 +3,7 @@ explor 0.3.5
 
 * Upgrade to scatterD3 0.9
 * Add automatic labels positioning
+* Add biplot to MCA interface
 
 
 explor 0.3.4
