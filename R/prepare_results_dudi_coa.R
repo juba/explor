@@ -85,13 +85,13 @@ prepare_results.coa <- function(obj) {
     vars <- vars %>% left_join(tmp, by = c("name", "pos", "Type", "Class", "Axis"))
     
     ## Cos2
-    tmp_row <- inertia$row.rel / 100
+    tmp_row <- abs(inertia$row.rel) / 100
     tmp_row <- tmp_row %>% mutate(name = rownames(tmp_row),
                                   pos = "Row",
                                   Type = "Active",
                                   Class = "Qualitative")
     names(tmp_row) <- gsub("Axis", "Comp", names(tmp_row), fixed = TRUE)      
-    tmp_col <- inertia$col.rel / 100
+    tmp_col <- abs(inertia$col.rel) / 100
     tmp_col <- tmp_col %>% mutate(name = rownames(tmp_col),
                                   pos = "Column",
                                   Type = "Active",
