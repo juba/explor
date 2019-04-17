@@ -240,6 +240,7 @@ MCA_bi_data <- function(res, settings) {
     bi_data$Nature[ind] <- gettext("Individual")
     if (!settings$ind_labels) bi_data$Lab[ind] <- ""
     bi_data$Lab[is.na(bi_data$Lab)] <- ""
+    bi_data$Contrib[!ind] <- NA
     
     # Colors
     if (settings$col_var == "Variable") {
