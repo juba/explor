@@ -70,7 +70,7 @@ prepare_results.acm <- function(obj) {
     vars <- vars %>% left_join(tmp, by = c("varname", "modname", "Type", "Class", "Axis"))
     
     ## Cos2
-    tmp <- inertia$col.rel / 100
+    tmp <- abs(inertia$col.rel) / 100
     tmp <- tmp %>% mutate(varname = extract_var(tmp),
                           modname = extract_mod(tmp), 
                           Type = "Active", Class = "Qualitative")
@@ -118,7 +118,7 @@ prepare_results.acm <- function(obj) {
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
     
     ## Individuals Cos2
-    tmp <- inertia$row.rel / 100
+    tmp <- abs(inertia$row.rel) / 100
     tmp$Name <- rownames(tmp)
     tmp$Type <- "Active"
     tmp <- tmp %>% 

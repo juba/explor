@@ -20,9 +20,9 @@ test_that("Levels results are equal", {
                res$vars[res$vars$Type == "Active" & res$vars$Position == "Column" & res$vars$Axis == "1", "Coord"])
   expect_equal(as.vector(round(coa$li[,2],3)),
                res$vars[res$vars$Type == "Active" & res$vars$Position == "Row" & res$vars$Axis == "2", "Coord"])
-  expect_equal(as.vector(round(iner$col.rel[,2]/100,3)),
+  expect_equal(as.vector(round(abs(iner$col.rel[,2])/100,3)),
                res$vars[res$vars$Type == "Active" & res$vars$Position == "Column" & res$vars$Axis == "2", "Cos2"])
-  expect_equal(as.vector(round(iner$row.rel[,1]/100,3)),
+  expect_equal(as.vector(round(abs(iner$row.rel[,1])/100,3)),
                res$vars[res$vars$Type == "Active" & res$vars$Position == "Row" & res$vars$Axis == "1", "Cos2"])
   expect_equal(as.vector(round(iner$col.abs[,2],3)),
                res$vars[res$vars$Type == "Active" & res$vars$Position == "Column" & res$vars$Axis == "2", "Contrib"])
