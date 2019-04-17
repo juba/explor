@@ -309,7 +309,7 @@ explor_multi_mca <- function(res, settings) {
                                                 value = FALSE),
                                             sliderInput("bi_ind_point_size",
                                                 gettext("Individuals point size"),
-                                                4, 128, 16),
+                                                4, 128, 32),
                                             explor_multi_bi_ind_opacity_input(settings),
                                             conditionalPanel(condition = 'input.bi_opacity_var == "Fixed"',
                                                 sliderInput(
