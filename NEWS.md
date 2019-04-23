@@ -1,5 +1,8 @@
 # explor 0.3.6
 
+* Fix error when color on "None" in MCA biplot
+
+
 # explor 0.3.5
 
 * Upgrade to scatterD3 0.9

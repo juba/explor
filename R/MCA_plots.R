@@ -243,11 +243,15 @@ MCA_bi_data <- function(res, settings) {
     bi_data$Contrib[!ind] <- NA
     
     # Colors
-    if (settings$col_var == "Variable") {
+    if (!is.null(settings$col_var) && settings$col_var == "Variable") {
         bi_data$color <- bi_data$Variable
         bi_data$color[ind] <- ""
     } else {
-        bi_data$color <- bi_data[,settings$col_var]
+        if(is.null(settings$col_var)) {
+            bi_data$color <- NULL   
+        } else {
+            bi_data$color <- bi_data[,settings$col_var]
+        }
     }
 
     bi_data
@@ -306,7 +310,7 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
     bi_data <- MCA_bi_data(res, settings)
     
     colors <- NULL
-    if (col_var == "Variable") {
+    if (!is.null(col_var) && col_var == "Variable") {
         n_colors <- nlevels(bi_data$color)
         if (n_colors <= 11) {
             colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf")
