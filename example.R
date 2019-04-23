@@ -27,6 +27,7 @@ library(explor)
 
 data(hobbies)
 mca <- MCA(hobbies[1:1000,c(1:8,21:23)],quali.sup = 9:10, quanti.sup = 11, ind.sup = 1:100, graph = FALSE)
+#mca <- MCA(hobbies[1:1000,c(1:8,21:22)],quali.sup = 9:10, ind.sup = 1:100, graph = FALSE)
 detach(package:explor, unload=TRUE); library(explor)
 explor(mca)
 
