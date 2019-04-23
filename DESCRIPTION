@@ -1,8 +1,8 @@
 Package: explor
 Type: Package
 Title: Interactive Interfaces for Results Exploration
-Version: 0.3.5
-Date: 2019-04-17
+Version: 0.3.6
+Date: 2019-04-24
 Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
     role=c("aut","cre")))
 Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>

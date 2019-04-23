@@ -1,3 +1,5 @@
+# explor 0.3.6
+
 # explor 0.3.5
 
 * Upgrade to scatterD3 0.9
