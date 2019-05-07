@@ -27,13 +27,13 @@ test_that("Levels results are equal", {
 
 test_that("Supplementary levels results are equal", {
   expect_equal(as.vector(round(ca$col.sup$coord[,1],3)),
-               res$vars[res$vars$Type == "Supplementary" & res$vars$Position == "Column" & res$vars$Axis == "1", "Coord"])
+               res$vars[res$vars$Type == "Supplementary level" & res$vars$Position == "Column" & res$vars$Axis == "1", "Coord"])
   expect_equal(as.vector(round(ca$row.sup$coord[,2],3)),
-               res$vars[res$vars$Type == "Supplementary" & res$vars$Position == "Row" & res$vars$Axis == "2", "Coord"])
+               res$vars[res$vars$Type == "Supplementary level" & res$vars$Position == "Row" & res$vars$Axis == "2", "Coord"])
   expect_equal(as.vector(round(ca$col.sup$cos2[,3],3)),
-               res$vars[res$vars$Type == "Supplementary" & res$vars$Position == "Column" & res$vars$Axis == "3", "Cos2"])
+               res$vars[res$vars$Type == "Supplementary level" & res$vars$Position == "Column" & res$vars$Axis == "3", "Cos2"])
   expect_equal(as.vector(round(ca$row.sup$cos2[,1],3)),
-               res$vars[res$vars$Type == "Supplementary" & res$vars$Position == "Row" & res$vars$Axis == "1", "Cos2"])
+               res$vars[res$vars$Type == "Supplementary level" & res$vars$Position == "Row" & res$vars$Axis == "1", "Cos2"])
 })
 
 

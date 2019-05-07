@@ -88,7 +88,8 @@ explor.coa <- function(obj) {
 explor_multi_ca <- function(res, settings) { 
     
     ## Precompute inputs 
-    settings$has_sup_vars <- "Supplementary" %in% res$vars$Type
+    settings$has_sup_levels <- "Supplementary level" %in% res$vars$Type
+    settings$has_sup_vars <- "Supplementary variable" %in% res$vars$Type
     settings$type <- "CA"
     
     shiny::shinyApp(
@@ -119,9 +120,13 @@ explor_multi_ca <- function(res, settings) {
                                 gettext("Hide :"),
                                 choices = explor_multi_hide_choices(),
                                 selected = "None"),
+                            if(settings$has_sup_levels)
+                                checkboxInput("lev_sup", 
+                                    HTML(gettext("Supplementary levels")),
+                                    value = TRUE),
                             if(settings$has_sup_vars)
                                 checkboxInput("var_sup", 
-                                    HTML(gettext("Supplementary levels")),
+                                    HTML(gettext("Supplementary variables")),
                                     value = TRUE),
                             explor_multi_sidebar_footer(type = "var"))),
                     column(10,
@@ -152,6 +157,7 @@ explor_multi_ca <- function(res, settings) {
                 paste0("explor::CA_var_plot(res, ",
                     "xax = ", input$var_x, 
                     ", yax = ", input$var_y,
+                    ", lev_sup = ", settings$has_sup_levels && input$lev_sup,
                     ", var_sup = ", settings$has_sup_vars && input$var_sup,
                     ", var_hide = '", input$var_hide, "'",
                     ", var_lab_min_contrib = ", input$var_lab_min_contrib,
