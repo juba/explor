@@ -63,9 +63,23 @@ library(explor)
 library(questionr)
 
 data(children)
+res.ca <- CA(children[1:14, 1:5], graph = FALSE)
+detach(package:explor, unload=TRUE); library(explor)
+explor(res.ca)
+
+  
+data(children)
 res.ca <- CA(children, row.sup = 15:18, col.sup = 6:8, graph = FALSE)
 detach(package:explor, unload=TRUE); library(explor)
 explor(res.ca)
+
+data(children)
+tmp <- children
+tmp[,9] <- factor(sample(c("red","blue","green"), 18, replace=TRUE))  
+res.ca <- CA(tmp, row.sup = 15:18, col.sup = 6:8, quali.sup = 9, graph = FALSE)
+detach(package:explor, unload=TRUE); library(explor)
+explor(res.ca)
+
 
 
 

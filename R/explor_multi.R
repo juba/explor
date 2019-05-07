@@ -262,11 +262,11 @@ explor_multi_var_col_input <- function(settings) {
         choices <- c("None", "Variable")
         selected <- "Variable"
     }
-    if (settings$type == "CA" && settings$has_sup_vars) {
+    if (settings$type == "CA" && (settings$has_sup_vars || settings$has_sup_levels)) {
         choices <- c("None", "Position", "Type")
         selected <- "Position"
     }
-    if (settings$type == "CA" && !settings$has_sup_vars) {
+    if (settings$type == "CA" && !(settings$has_sup_vars || settings$has_sup_levels)) {
         choices <- c("None", "Position")
         selected <- "Position"
     }
@@ -289,11 +289,11 @@ explor_multi_var_symbol_input <- function(settings) {
         choices <- c("None", "Variable")
         selected <- "None"
     }
-    if (settings$type == "CA" && settings$has_sup_vars) {
+    if (settings$type == "CA" && (settings$has_sup_vars || settings$has_sup_levels)) {
         choices <- c("None", "Position", "Type")
         selected <- "Type"
     }
-    if (settings$type == "CA" && !settings$has_sup_vars) {
+    if (settings$type == "CA" && !(settings$has_sup_vars || settings$has_sup_levels)) {
         choices <- c("None", "Position")
         selected <- "None"
     }
@@ -456,10 +456,14 @@ explor_multi_var_dataUI <- function(id, settings, axes) {
                h4(if(settings$type == "CA") gettext("Active levels")                   
                   else gettext("Active variables")),
                DT::dataTableOutput(ns("vartable")),
-               if (settings$has_sup_var) {
-                   list(h4(if(settings$type == "CA") gettext("Supplementary levels")                   
-                           else gettext("Supplementary variables")),
-                        DT::dataTableOutput(ns("vartablesup")))
+               if (settings$has_sup_vars || (settings$type == "CA" && settings$has_sup_levels)) {
+                   list(h4(
+                     if(settings$type == "CA") {
+                       gettext("Supplementary elements")
+                     } else {
+                       gettext("Supplementary variables")
+                     }),
+                     DT::dataTableOutput(ns("vartablesup")))
                },
                if (settings$has_var_eta2) {
                    list(h4(withMathJax(gettext("Variables \\(\\eta^2\\)"))),
@@ -504,7 +508,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
     ## Supplementary variables
     varTableSup <- reactive({
         tmp <- res()$vars %>% 
-                   filter(Type == "Supplementary", Axis == input$vardim) %>%
+                   filter(grepl("Supplementary", Type), Axis == input$vardim) %>%
                    mutate(Level = ifelse(Class == "Quantitative", "-", Level))
         ## CA data hide option
         if (settings()$type == "CA" && input$var_tab_hide != "None") {

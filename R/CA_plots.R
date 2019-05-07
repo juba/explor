@@ -2,7 +2,8 @@
 
 ## Variables plot reactive data
 ## Not exported
-CA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None",
+CA_var_data <- function(res, xax = 1, yax = 2, 
+                        lev_sup = TRUE, var_sup = TRUE, var_hide = "None",
                         var_lab_min_contrib = 0) {
     tmp_x <- res$vars %>% 
         filter(Axis == xax) %>%
@@ -11,8 +12,12 @@ CA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
         filter(Axis == yax) %>%
         select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
     if (!var_sup) {
-        tmp_x <- tmp_x %>% filter(Type == 'Active')
-        tmp_y <- tmp_y %>% filter(Type == 'Active')
+        tmp_x <- tmp_x %>% filter(Type != 'Supplementary variable')
+        tmp_y <- tmp_y %>% filter(Type != 'Supplementary variable')
+    }
+    if (!lev_sup) {
+        tmp_x <- tmp_x %>% filter(Type != 'Supplementary level')
+        tmp_y <- tmp_y %>% filter(Type != 'Supplementary level')
     }
     if (var_hide != "None") {
         tmp_x <- tmp_x %>% filter(Position != var_hide)
@@ -53,6 +58,7 @@ CA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
 ##' @param res Result of prepare_results() call
 ##' @param xax Horizontal axis number
 ##' @param yax Vertical axis number
+##' @param lev_sup TRUE to display supplementary levels
 ##' @param var_sup TRUE to display supplementary variables
 ##' @param var_hide elements to hide (rows or columns)
 ##' @param var_lab_min_contrib Contribution threshold to display points labels
@@ -67,7 +73,10 @@ CA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
 ##'
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
-CA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None",
+CA_var_plot <- function(res, xax = 1, yax = 2, 
+                        lev_sup = TRUE,
+                        var_sup = TRUE, 
+                        var_hide = "None",
                         var_lab_min_contrib = 0,
                         point_size = 64,
                         col_var = NULL,
@@ -85,7 +94,7 @@ CA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_hide = "None"
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
 
-    var_data <- CA_var_data(res, xax, yax, var_sup, var_hide, var_lab_min_contrib)
+    var_data <- CA_var_data(res, xax, yax, lev_sup, var_sup, var_hide, var_lab_min_contrib)
 
     scatterD3::scatterD3(
                    x = var_data[, "Coord.x"],

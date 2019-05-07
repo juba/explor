@@ -1,5 +1,6 @@
 # explor 0.3.6
 
+* Add support for qualitative supplementary variables in FactoMineR::CA
 * Fix error when color on "None" in MCA biplot
 
 

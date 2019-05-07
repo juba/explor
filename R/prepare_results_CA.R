@@ -34,7 +34,12 @@ prepare_results.CA <- function(obj) {
     tmp$pos <- "Row"
     # Counts
     row.mods <- rownames(obj$row$coord)
-    counts.rows <- sapply(data.frame(t(obj$call$Xtot))[, make.names(row.mods), drop = FALSE], sum, na.rm = TRUE)
+    if (!is.null(obj$call$quali.sup) || !is.null(obj$call$quanti.sup)) {
+        tmp_call <- obj$call$Xtot[, -c(obj$call$quali.sup, obj$call$quanti.sup)]
+    } else {
+        tmp_call <- obj$call$Xtot
+    }
+    counts.rows <- sapply(data.frame(t(tmp_call))[, make.names(row.mods), drop = FALSE], sum, na.rm = TRUE)
     tmp$Count <- counts.rows
 
     vars <- rbind(vars, tmp)
@@ -48,10 +53,10 @@ prepare_results.CA <- function(obj) {
         tmp$name <- rownames(tmp)
         ## Counts
         row.mods <- rownames(obj$row.sup$coord)
-        counts.rows <- sapply(data.frame(t(obj$call$Xtot))[, row.mods, drop = FALSE], sum, na.rm = TRUE)
+        counts.rows <- sapply(data.frame(t(tmp_call), check.names = FALSE)[, row.mods, drop = FALSE], sum, na.rm = TRUE)
         tmp$Count <- counts.rows
         tmp$pos <- "Row"
-        tmp$Type <- "Supplementary"
+        tmp$Type <- "Supplementary level"
         tmp$Class <- "Qualitative"  
         vars <- rbind(vars, tmp)
     }
@@ -65,11 +70,25 @@ prepare_results.CA <- function(obj) {
         counts.cols <- sapply(obj$call$Xtot[, col.mods, drop = FALSE], sum, na.rm = TRUE)
         tmp$Count <- counts.cols
         tmp$pos <- "Column"
-        tmp$Type <- "Supplementary"
+        tmp$Type <- "Supplementary level"
         tmp$Class <- "Qualitative"    
         vars <- rbind(vars, tmp)
     }
     
+    ## Supplementary variables coordinates
+    if (!is.null(obj$quali.sup)) {
+        vars.quali.sup <- data.frame(obj$quali.sup$coord)
+        vars.quali.sup$name <- rownames(vars.quali.sup)
+        vars.quali.sup$Type <- "Supplementary variable"
+        vars.quali.sup$Class <- "Qualitative"
+        # quali.sup.mods <- rownames(obj$quali.sup$coord)
+        # counts <- sapply(counts.tab[,quali.sup.mods, drop = FALSE], sum)
+        # vars.quali.sup$Count <- counts
+        vars.quali.sup$Count <- NA
+        vars.quali.sup$pos <- "Supplementary variable"
+        vars <- rbind(vars, vars.quali.sup)
+    }
+
     vars <- vars %>% gather(Axis, Coord, starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
@@ -108,7 +127,7 @@ prepare_results.CA <- function(obj) {
         tmp_row_sup <- data.frame(obj$row.sup$cos2) %>%
             mutate(name = rownames(obj$row.sup$cos2),
                    pos = "Row",
-                   Type = "Supplementary",
+                   Type = "Supplementary level",
                    Class = "Qualitative")
         tmp <- tmp %>% bind_rows(tmp_row_sup)
     }
@@ -118,11 +137,21 @@ prepare_results.CA <- function(obj) {
         tmp_col_sup <- data.frame(obj$col.sup$cos2) %>%
             mutate(name = rownames(obj$col.sup$cos2),
                    pos = "Column",
-                   Type = "Supplementary",
+                   Type = "Supplementary level",
                    Class = "Qualitative")
         tmp <- tmp %>% bind_rows(tmp_col_sup)
     }
     
+    ## Supplementary variables cos2
+    if (!is.null(obj$quali.sup)) {
+        tmp_sup <- data.frame(obj$quali.sup$cos2)
+        tmp_sup$name <- rownames(tmp_sup)
+        tmp_sup$pos <- "Supplementary variable"
+        tmp_sup$Type <- "Supplementary variable"
+        tmp_sup$Class <- "Qualitative"
+        tmp <- tmp %>% bind_rows(tmp_sup)
+    }
+
     tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
