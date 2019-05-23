@@ -201,6 +201,8 @@ explor_multi_mca <- function(res, settings) {
                                 gettext("Labels size"),
                                 4, 20, 10),
                             explor_multi_auto_labels_input(res$vars, "var"),
+                            checkboxInput("var_prepend_varname", 
+                                gettext("Prepend variable name")),
                             sliderInput("var_point_size",
                                 gettext("Points size"),
                                 4, 128, 56),
@@ -389,7 +391,8 @@ explor_multi_mca <- function(res, settings) {
                     ", labels_size = ", input$var_lab_size,
                     ", point_size = ", input$var_point_size,
                     ", transitions = ", input$var_transitions,
-                    ", labels_positions = ", var_auto_labels
+                    ", labels_positions = ", var_auto_labels,
+                    ", labels_prepend_var = ", input$var_prepend_varname
                 )
             })
             

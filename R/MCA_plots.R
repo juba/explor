@@ -2,7 +2,9 @@
 
 ## Variables plot reactive data
 ## Not exported
-MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_contrib = 0) {
+MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, 
+    var_lab_min_contrib = 0, labels_prepend_var = FALSE) {
+    
     tmp_x <- res$vars %>%
         arrange(Axis, Type, Variable) %>%
         filter(Axis == xax) %>%
@@ -13,6 +15,10 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
     if (!(var_sup)) {
         tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- tmp_y %>% filter(Type == 'Active')
+    }
+    if (labels_prepend_var) {
+        tmp_x$Level <- paste(tmp_x$Variable, "-", tmp_x$Level)
+        tmp_y$Level <- paste(tmp_y$Variable, "-", tmp_y$Level)
     }
     tmp <- tmp_x %>%
         left_join(tmp_y, by = c("Variable", "Level", "Type", "Class", "Count")) %>%
@@ -51,6 +57,7 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 ##' @param yax Vertical axis number
 ##' @param var_sup TRUE to display supplementary variables
 ##' @param var_lab_min_contrib Contribution threshold to display points labels
+##' @param labels_prepend_var if TRUE, prepend variable names to labels
 ##' @param point_size base point size
 ##' @param col_var name of the variable for points color
 ##' @param symbol_var name of the variable for points symbol
@@ -64,6 +71,7 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 ##' @export
 MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_contrib = 0,
                          point_size = 64,
+                         labels_prepend_var = FALSE,
                          col_var = NULL,
                          symbol_var = NULL,
                          size_var = NULL,
@@ -79,7 +87,7 @@ MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
     
-    var_data <- MCA_var_data(res, xax, yax, var_sup, var_lab_min_contrib)
+    var_data <- MCA_var_data(res, xax, yax, var_sup, var_lab_min_contrib, labels_prepend_var)
     
     scatterD3::scatterD3(
                    x = var_data[, "Coord.x"],

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2019-04-16 11:57\n"
-"PO-Revision-Date: 2019-04-16 11:57+0200\n"
+"POT-Creation-Date: 2019-05-23 09:33\n"
+"PO-Revision-Date: 2019-05-23 09:46+0200\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -142,8 +142,8 @@ msgstr "Modalités actives"
 msgid "Active variables"
 msgstr "Variables actives"
 
-msgid "Supplementary levels"
-msgstr "Modalités supplémentaires"
+msgid "Supplementary elements"
+msgstr "Éléments supplémentaires"
 
 msgid "Supplementary variables"
 msgstr "Variables supplémentaires"
@@ -193,6 +193,9 @@ msgstr "Taille des étiquettes"
 msgid "Points size"
 msgstr "Taille des points"
 
+msgid "Supplementary levels"
+msgstr "Modalités supplémentaires"
+
 msgid "Data"
 msgstr "Données"
 
@@ -213,6 +216,9 @@ msgstr "ACM"
 
 msgid "Variables plot"
 msgstr "Variables - graphique"
+
+msgid "Prepend variable name"
+msgstr "Préfixer par le nom de variable"
 
 msgid "Variables data"
 msgstr "Variables - données"
