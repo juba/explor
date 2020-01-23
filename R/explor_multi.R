@@ -344,7 +344,7 @@ explor_multi_ind_opacity_input <- function(settings) {
 
 ## Auto labels input
 explor_multi_auto_labels_input <- function(data, type) {
-    if (sum(data$Axis == 1) < 100) {
+    if (sum(data$Axis == 1) < 200) {
         checkboxInput(paste0(type, "_auto_labels"),
                       gettext("Automatic labels position"),
                       value = FALSE)
