@@ -4,11 +4,22 @@
 \alias{MCA_var_plot}
 \title{Interactive MCA variables plot}
 \usage{
-MCA_var_plot(res, xax = 1, yax = 2, var_sup = TRUE,
-  var_lab_min_contrib = 0, point_size = 64,
-  labels_prepend_var = FALSE, col_var = NULL, symbol_var = NULL,
-  size_var = NULL, size_range = c(10, 300), zoom_callback = NULL,
-  in_explor = FALSE, ...)
+MCA_var_plot(
+  res,
+  xax = 1,
+  yax = 2,
+  var_sup = TRUE,
+  var_lab_min_contrib = 0,
+  point_size = 64,
+  labels_prepend_var = FALSE,
+  col_var = NULL,
+  symbol_var = NULL,
+  size_var = NULL,
+  size_range = c(10, 300),
+  zoom_callback = NULL,
+  in_explor = FALSE,
+  ...
+)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}

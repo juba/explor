@@ -4,11 +4,24 @@
 \alias{MCA_biplot}
 \title{Interactive MCA biplot}
 \usage{
-MCA_biplot(res, xax = 1, yax = 2, col_var, ind_sup = TRUE,
-  var_sup = TRUE, bi_lab_min_contrib = 0, symbol_var = NULL,
-  ind_point_size = 16, var_point_size = 96, ind_opacity = 0.5,
-  ind_opacity_var = NULL, ind_labels = FALSE, zoom_callback = NULL,
-  in_explor = FALSE, ...)
+MCA_biplot(
+  res,
+  xax = 1,
+  yax = 2,
+  col_var,
+  ind_sup = TRUE,
+  var_sup = TRUE,
+  bi_lab_min_contrib = 0,
+  symbol_var = NULL,
+  ind_point_size = 16,
+  var_point_size = 96,
+  ind_opacity = 0.5,
+  ind_opacity_var = NULL,
+  ind_labels = FALSE,
+  zoom_callback = NULL,
+  in_explor = FALSE,
+  ...
+)
 }
 \arguments{
 \item{res}{Result of prepare_results() call}

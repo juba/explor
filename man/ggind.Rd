@@ -7,8 +7,16 @@
 \usage{
 ggind(obj, ...)
 
-\method{ggind}{MCA}(obj, xax = 1, yax = 2, fac = NA, label = NULL,
-  alpha = 0.5, palette = "Set1", ...)
+\method{ggind}{MCA}(
+  obj,
+  xax = 1,
+  yax = 2,
+  fac = NA,
+  label = NULL,
+  alpha = 0.5,
+  palette = "Set1",
+  ...
+)
 }
 \arguments{
 \item{obj}{a multivariate analysis results object. Currently only MCA is supported}
