@@ -7,3 +7,4 @@ ggcrosstab.R
 resources
 ^\.travis\.yml$
 .vscode
+\.github/
