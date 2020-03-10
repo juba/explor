@@ -46,6 +46,17 @@ explor_multi_css <- function() {
   .well .checkbox { margin-left: 5px !important; }
   .well {padding: 5px !important;}
   .well .btn { padding: 6px 10px; }
+  .well #var_sup_choice .shiny-options-group {
+    max-height: 200px;
+    margin-top: 5px;
+    margin-left: 15px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .well #var_sup_choice .checkbox {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  } 
   .dataTable th, 
   .dataTable td {
       font-size: 11px !important;
@@ -352,6 +363,30 @@ explor_multi_auto_labels_input <- function(data, type) {
 }
 
 
+## Supplementary variables choice input
+explor_multi_var_sup_choice_input <-function(data, settings) {
+  if (settings$type == "CA") {
+    vnames <- data %>% 
+      filter(Type == "Supplementary variable") %>% 
+      select(.data$Level) %>% 
+      distinct() %>% 
+      pull(.data$Level)
+  } else {
+    vnames <- data %>% 
+      filter(Type == "Supplementary") %>% 
+      select(.data$Variable) %>% 
+      distinct() %>% 
+      pull(.data$Variable)
+  }
+  checkboxGroupInput(
+    "var_sup_choice",
+    gettext("Supplementary variables to display"),
+    choices = vnames,
+    selected = vnames
+  )
+}
+
+
 ## Min contrib to show labels input
 explor_multi_min_contrib_input <- function(data, settings, type) {
     if (!settings$has_contrib) return(NULL)
@@ -423,6 +458,7 @@ explor_multi_bi_ind_opacity_input <- function(settings) {
   } else NULL
   return(bi_opacity_input)
 }
+
 
 ## VARIABLE DATA SHINY MODULE ---------------------------------------------------------
 

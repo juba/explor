@@ -2,16 +2,21 @@
 
 ## Variables plot reactive data
 ## Not exported
-PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_contrib = 0) {
+PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, 
+    var_sup_choice = NULL, var_lab_min_contrib = 0) {
     tmp_x <- res$vars %>% 
         filter(Axis == xax) %>%
         select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
     tmp_y <- res$vars %>% 
         filter(Axis == yax) %>%
         select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
-    if (!(var_sup)) {
+    if (!(var_sup) || is.null(var_sup_choice)) {
         tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- tmp_y %>% filter(Type == 'Active')
+    }
+    if (var_sup && !is.null(var_sup_choice)) {
+        tmp_x <- tmp_x %>% filter(Type == 'Active' | Variable %in% var_sup_choice)
+        tmp_y <- tmp_y %>% filter(Type == 'Active' | Variable %in% var_sup_choice)
     }
 
     tmp <- tmp_x %>%
@@ -51,6 +56,7 @@ PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 ##' @param xax Horizontal axis number
 ##' @param yax Vertical axis number
 ##' @param var_sup TRUE to display supplementary variables
+##' @param var_sup_choice list of supplementary variables to display
 ##' @param var_lab_min_contrib Contribution threshold to display points labels
 ##' @param col_var name of the variable for points color
 ##' @param size_var name of the variable for points size
@@ -63,7 +69,9 @@ PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
 ##'
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
-PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_contrib = 0,
+PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, 
+                         var_sup_choice = NULL,
+                         var_lab_min_contrib = 0,
                          scale_unit = FALSE,
                          col_var = NULL,
                          size_var = NULL,
@@ -84,7 +92,7 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
     if (is.null(xlim) && scale_unit && !has_quali_sup_vars) xlim <- c(-1.1, 1.1)
     if (is.null(ylim) && scale_unit && !has_quali_sup_vars) ylim <- c(-1.1, 1.1)
     
-    var_data <- PCA_var_data(res, xax, yax, var_sup, var_lab_min_contrib)
+    var_data <- PCA_var_data(res, xax, yax, var_sup, var_sup_choice, var_lab_min_contrib)
     
     scatterD3::scatterD3(
                    x = var_data[, "Coord.x"],

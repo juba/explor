@@ -187,6 +187,9 @@ explor_multi_pca <- function(res, settings) {
                                 checkboxInput("var_sup", 
                                     HTML(gettext("Supplementary variables")), 
                                     value = TRUE),
+                            conditionalPanel("input.var_sup",
+                                explor_multi_var_sup_choice_input(res$vars, settings)
+                            ),
                             explor_multi_sidebar_footer(type = "var"))),
                     column(10,
                         scatterD3Output("varplot", height = "auto"))
@@ -248,11 +251,14 @@ explor_multi_pca <- function(res, settings) {
             ## Variables plot code
             varplot_code <- reactive({
                 col_var <- if (!is.null(input$var_col) && input$var_col == "None") NULL else input$var_col
+                var_sup <- settings$has_sup_vars && input$var_sup
+                var_sup_choice <- if(var_sup) paste0(utils::capture.output(dput(input$var_sup_choice)), collapse="") else NULL
                 
                 paste0("explor::PCA_var_plot(res, ",
                     "xax = ", input$var_x, 
                     ", yax = ", input$var_y,
-                    ", var_sup = ", settings$has_sup_vars && input$var_sup,
+                    ", var_sup = ", var_sup,
+                    ", var_sup_choice = ", var_sup_choice,
                     ", var_lab_min_contrib = ", input$var_lab_min_contrib,
                     ", col_var = ", deparse(substitute(col_var)),
                     ", labels_size = ", input$var_lab_size,

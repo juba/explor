@@ -2,19 +2,23 @@
 
 ## Variables plot reactive data
 ## Not exported
-MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, 
+MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_sup_choice = NULL,
     var_lab_min_contrib = 0, labels_prepend_var = FALSE) {
     
     tmp_x <- res$vars %>%
         arrange(Axis, Type, Variable) %>%
         filter(Axis == xax) %>%
-        select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
+        select("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
     tmp_y <- res$vars %>% 
         filter(Axis == yax) %>%
-        select_("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
-    if (!(var_sup)) {
+        select("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
+    if (!(var_sup) || is.null(var_sup_choice)) {
         tmp_x <- tmp_x %>% filter(Type == 'Active')
         tmp_y <- tmp_y %>% filter(Type == 'Active')
+    }
+    if (var_sup && !is.null(var_sup_choice)) {
+        tmp_x <- tmp_x %>% filter(Type == 'Active' | Variable %in% var_sup_choice)
+        tmp_y <- tmp_y %>% filter(Type == 'Active' | Variable %in% var_sup_choice)
     }
     if (labels_prepend_var) {
         tmp_x$Level <- paste(tmp_x$Variable, "-", tmp_x$Level)
@@ -56,6 +60,7 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE,
 ##' @param xax Horizontal axis number
 ##' @param yax Vertical axis number
 ##' @param var_sup TRUE to display supplementary variables
+##' @param var_sup_choice list of supplementary variables to display
 ##' @param var_lab_min_contrib Contribution threshold to display points labels
 ##' @param labels_prepend_var if TRUE, prepend variable names to labels
 ##' @param point_size base point size
@@ -69,7 +74,10 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE,
 ##'
 ##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
-MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_contrib = 0,
+MCA_var_plot <- function(res, xax = 1, yax = 2, 
+                         var_sup = TRUE, 
+                         var_sup_choice = NULL,
+                         var_lab_min_contrib = 0,
                          point_size = 64,
                          labels_prepend_var = FALSE,
                          col_var = NULL,
@@ -87,7 +95,7 @@ MCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_lab_min_cont
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
     
-    var_data <- MCA_var_data(res, xax, yax, var_sup, var_lab_min_contrib, labels_prepend_var)
+    var_data <- MCA_var_data(res, xax, yax, var_sup, var_sup_choice, var_lab_min_contrib, labels_prepend_var)
     
     scatterD3::scatterD3(
                    x = var_data[, "Coord.x"],

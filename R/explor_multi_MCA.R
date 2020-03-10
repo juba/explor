@@ -216,6 +216,9 @@ explor_multi_mca <- function(res, settings) {
                                         "Supplementary variables"
                                     )),
                                     value = TRUE),
+                            conditionalPanel("input.var_sup",
+                                explor_multi_var_sup_choice_input(res$vars, settings)
+                            ),
                             explor_multi_sidebar_footer(type = "var")
                         )
                     ),
@@ -377,12 +380,15 @@ explor_multi_mca <- function(res, settings) {
                 size_range <- if (!is.null(input$var_size) && input$var_size != "None") c(30, 400) * input$var_point_size / 32 else c(10, 300)
                 var_lab_min_contrib <- if (settings$has_contrib) input$var_lab_min_contrib else 0
                 var_auto_labels <- if (!is.null(input$var_auto_labels) && input$var_auto_labels) "\"auto\"" else "NULL"
+                var_sup <- settings$has_sup_vars && input$var_sup
+                var_sup_choice <- if(var_sup) paste0(utils::capture.output(dput(input$var_sup_choice)), collapse="") else NULL
                 
                 paste0(
                     "explor::MCA_var_plot(res",
                     ", xax = ", input$var_x,
                     ", yax = ", input$var_y,
-                    ", var_sup = ", settings$has_sup_vars && input$var_sup,
+                    ", var_sup = ", var_sup,
+                    ", var_sup_choice = ", var_sup_choice,
                     ", var_lab_min_contrib = ", var_lab_min_contrib,
                     ", col_var = ", deparse(substitute(col_var)),
                     ", symbol_var = ", deparse(substitute(symbol_var)),
