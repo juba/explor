@@ -8,10 +8,10 @@ CA_var_data <- function(res, xax = 1, yax = 2,
                         var_lab_min_contrib = 0) {
     tmp_x <- res$vars %>% 
         filter(Axis == xax) %>%
-        select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
+        select("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
     tmp_y <- res$vars %>% 
         filter(Axis == yax) %>%
-        select_("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
+        select("Level", "Position", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
     if (!(var_sup) || is.null(var_sup_choice)) {
         tmp_x <- tmp_x %>% filter(Type != 'Supplementary variable')
         tmp_y <- tmp_y %>% filter(Type != 'Supplementary variable')

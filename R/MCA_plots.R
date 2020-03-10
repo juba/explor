@@ -157,7 +157,7 @@ MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity
                Lab = ifelse(Contrib >= as.numeric(ind_lab_min_contrib) | 
                               (is.na(Contrib) & as.numeric(ind_lab_min_contrib) == 0), Name, ""))
     if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
-        tmp_data <- res$quali_data %>% select_("Name", col_var)
+        tmp_data <- res$quali_data %>% select("Name", col_var)
         tmp <- tmp %>%
             left_join(tmp_data, by = "Name")
     }
