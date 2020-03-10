@@ -2,10 +2,10 @@ Package: explor
 Type: Package
 Title: Interactive Interfaces for Results Exploration
 Version: 0.3.6
-Date: 2019-05-24
-Authors@R: c(person("Julien", "Barnier", email="julien.barnier@ens-lyon.fr",
+Date: 2020-02-10
+Authors@R: c(person("Julien", "Barnier", email="julien.barnier@cnrs.fr",
     role=c("aut","cre")))
-Maintainer: Julien Barnier <julien.barnier@ens-lyon.fr>
+Maintainer: Julien Barnier <julien.barnier@cnrs.fr>
 Description: Shiny interfaces and graphical functions for multivariate analysis results exploration.
 License: GPL (>= 3)
 VignetteBuilder: knitr
