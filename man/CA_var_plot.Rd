@@ -10,6 +10,7 @@ CA_var_plot(
   yax = 2,
   lev_sup = TRUE,
   var_sup = TRUE,
+  var_sup_choice = NULL,
   var_hide = "None",
   var_lab_min_contrib = 0,
   point_size = 64,
@@ -32,6 +33,8 @@ CA_var_plot(
 \item{lev_sup}{TRUE to display supplementary levels}
 
 \item{var_sup}{TRUE to display supplementary variables}
+
+\item{var_sup_choice}{list of supplementary variables to display}
 
 \item{var_hide}{elements to hide (rows or columns)}
 

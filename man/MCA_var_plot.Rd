@@ -9,6 +9,7 @@ MCA_var_plot(
   xax = 1,
   yax = 2,
   var_sup = TRUE,
+  var_sup_choice = NULL,
   var_lab_min_contrib = 0,
   point_size = 64,
   labels_prepend_var = FALSE,
@@ -29,6 +30,8 @@ MCA_var_plot(
 \item{yax}{Vertical axis number}
 
 \item{var_sup}{TRUE to display supplementary variables}
+
+\item{var_sup_choice}{list of supplementary variables to display}
 
 \item{var_lab_min_contrib}{Contribution threshold to display points labels}
 
