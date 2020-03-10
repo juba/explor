@@ -1,5 +1,6 @@
 # explor 0.3.6
 
+* Add ability to select which supplementary variable to display
 * Add support for qualitative supplementary variables in FactoMineR::CA
 * Fix error when color on "None" in MCA biplot
 * Add ability to prepend variable name to labels in MCA variable plot (thanks @larmarange)
