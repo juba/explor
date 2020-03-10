@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.3.6\n"
-"POT-Creation-Date: 2019-05-23 09:33\n"
+"POT-Creation-Date: 2020-03-10 11:36\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,6 +104,9 @@ msgid "Points opacity :"
 msgstr ""
 
 msgid "Automatic labels position"
+msgstr ""
+
+msgid "Supplementary variables to display"
 msgstr ""
 
 msgid "Minimum contribution to show label"

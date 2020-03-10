@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: explor 0.1\n"
-"POT-Creation-Date: 2019-05-23 09:33\n"
-"PO-Revision-Date: 2019-05-23 09:46+0200\n"
+"POT-Creation-Date: 2020-03-10 11:36\n"
+"PO-Revision-Date: 2020-03-10 11:37+0100\n"
 "Last-Translator: Julien Barnier <julien@nozav.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -117,6 +117,9 @@ msgstr "Opacité des points :"
 
 msgid "Automatic labels position"
 msgstr "Position automatique des étiquettes"
+
+msgid "Supplementary variables to display"
+msgstr "Variables supplémentaires à afficher"
 
 msgid "Minimum contribution to show label"
 msgstr "Contribution min pour afficher l'étiquette"
