@@ -128,11 +128,11 @@ explor.mca <- function(obj) {
 ##' ind_sup <- banque[1:100, -(19:21)]
 ##' var_sup <- banque[-(1:100),19:21]
 ##' acm <- dudi.acm(d, scannf = FALSE, nf = 5)
-##' acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
+##' acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)
 ##' colw <- acm$cw*ncol(d)
 ##' X <- acm.disjonctif(ind_sup)
 ##' X <- data.frame(t(t(X)/colw) - 1)
-##' acm$supi <- suprow(acm, X)$lisup
+##' acm$supi <- suprow(acm, X)
 ##' explor(acm)
 ##' }
 

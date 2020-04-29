@@ -6,8 +6,8 @@ tab <- bordeaux
 row_sup <- tab[5,-4]
 col_sup <- tab[-5,4]
 coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
-coa$supr <- suprow(coa, row_sup)$lisup
-coa$supc <- supcol(coa, col_sup)$cosup
+coa$supr <- suprow(coa, row_sup)
+coa$supc <- supcol(coa, col_sup)
 iner <- inertia.dudi(coa, row.inertia = TRUE, col.inertia = TRUE)
 res <- prepare_results(coa)
 
@@ -31,9 +31,9 @@ test_that("Levels results are equal", {
 })
 
 test_that("Supplementary levels results are equal", {
-  expect_equal(as.vector(round(coa$supc[,1],3)),
+  expect_equal(as.vector(round(coa$supc$cosup[,1],3)),
                res$vars[res$vars$Type == "Supplementary" & res$vars$Position == "Column" & res$vars$Axis == "1", "Coord"])
-  expect_equal(as.vector(round(coa$supr[,2],3)),
+  expect_equal(as.vector(round(coa$supr$lisup[,2],3)),
                res$vars[res$vars$Type == "Supplementary" & res$vars$Position == "Row" & res$vars$Axis == "2", "Coord"])
 })
 

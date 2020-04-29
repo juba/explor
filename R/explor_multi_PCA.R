@@ -114,9 +114,9 @@ explor.prcomp <- function(obj) {
 ##' sup_ind <- d[1:10, -(8:9)]
 ##' pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
 ##' supi <- suprow(pca, sup_ind)
-##' pca$supi <- supi$lisup
+##' pca$supi <- supi
 ##' supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
-##' pca$supv <- supv$cosup
+##' pca$supv <- supv
 ##' explor(pca)
 ##' }
 

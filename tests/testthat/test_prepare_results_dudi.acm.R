@@ -8,10 +8,10 @@ ind_sup <- banque[1:10, -(9:10)]
 var_sup <- banque[-(1:10),9:10]
 mca <- dudi.acm(d, scannf = FALSE, nf = 5)
 ## Supplementary variables
-mca$supv <- supcol(mca, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
+mca$supv <- supcol(mca, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)
 ## Supplementary individuals
 colw <- mca$cw*ncol(d)
-mca$supi <- suprow(mca, ind_sup)$lisup
+mca$supi <- suprow(mca, ind_sup)
 iner <- inertia.dudi(mca, row.inertia = TRUE, col.inertia = TRUE)
 
 res <- prepare_results(mca)
@@ -33,7 +33,7 @@ test_that("Variables results are equal", {
 })
 
 test_that("Qualitative supplementary variables results are equal", {
-  expect_equal(as.vector(round(mca$supv[,1],3)),
+  expect_equal(as.vector(round(mca$supv$cosup[,1],3)),
                res$vars[res$vars$Type == "Supplementary" & 
                           res$vars$Class == "Qualitative" & res$vars$Axis == "1", "Coord"])
 })
@@ -49,7 +49,7 @@ test_that("Individuals results are equal", {
 })  
   
 test_that("Supplementary individuals results are equal", {
-  expect_equal(as.vector(round(mca$supi[,4],3)),
+  expect_equal(as.vector(round(mca$supi$lisup[,4],3)),
                data.frame(res$ind)[res$ind$Type == "Supplementary" & res$ind$Axis == "4", "Coord"])
 })  
 

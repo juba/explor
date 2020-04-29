@@ -93,10 +93,8 @@ d <- deug$tab
 sup_var <- d[-(1:10), 8:9]
 sup_ind <- d[1:10, -(8:9)]
 pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
-supi <- suprow(pca, sup_ind)
-pca$supi <- supi$lisup
-supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
-pca$supv <- supv$cosup
+pca$supi <- suprow(pca, sup_ind)
+pca$supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
 detach(package:explor, unload=TRUE); library(explor)
 explor(pca)
 
@@ -116,9 +114,9 @@ ind_sup <- banque[1:100, -(19:21)]
 var_sup <- banque[-(1:100),19:21]
 acm <- dudi.acm(d, scannf = FALSE, nf = 5)
 ## Supplementary variables
-acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
+acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)
 ## Supplementary individuals
-acm$supi <- suprow(acm, ind_sup)$lisup
+acm$supi <- suprow(acm, ind_sup)
 detach(package:explor, unload=TRUE); library(explor)
 explor(acm)
 
@@ -132,8 +130,8 @@ tab <- bordeaux
 row_sup <- tab[5,-4]
 col_sup <- tab[-5,4]
 coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
-coa$supr <- suprow(coa, row_sup)$lisup
-coa$supc <- supcol(coa, col_sup)$cosup
+coa$supr <- suprow(coa, row_sup)
+coa$supc <- supcol(coa, col_sup)
 detach(package:explor, unload=TRUE); library(explor)
 explor(coa)
 

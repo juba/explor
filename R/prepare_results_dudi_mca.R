@@ -45,7 +45,7 @@ prepare_results.acm <- function(obj) {
     
     ## Supplementary variables coordinates
     if (!is.null(obj$supv)) {
-        vars.quali.sup <- data.frame(obj$supv)
+        vars.quali.sup <- data.frame(obj$supv$cosup)
         vars.quali.sup$varname <- extract_var(vars.quali.sup)
         vars.quali.sup$modname <- extract_mod(vars.quali.sup)
         vars.quali.sup$Type <- "Supplementary"
@@ -99,7 +99,7 @@ prepare_results.acm <- function(obj) {
     ind$Name <- rownames(ind)
     ind$Type <- "Active"
     if (!is.null(obj$supi)) {
-        tmp_sup <- data.frame(obj$supi)
+        tmp_sup <- data.frame(obj$supi$lisup)
         tmp_sup$Name <- rownames(tmp_sup)
         tmp_sup$Type <- "Supplementary"
         ind <- ind %>% bind_rows(tmp_sup)
@@ -131,6 +131,9 @@ prepare_results.acm <- function(obj) {
     ## Qualitative data for individuals plot color mapping
     tmp <- obj$tab
     row_names <- rownames(tmp)
+    if (!is.null(obj$supv)) {
+      tmp <- tmp %>% bind_cols(obj$supv$tab)
+    }
     # Rebuild original data from `tab` slot
     tmp <- as.data.frame(vapply(names(tmp), function(name) {
         value <- sub("^.*?\\.", "", name)

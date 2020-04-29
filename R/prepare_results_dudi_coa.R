@@ -39,10 +39,10 @@ prepare_results.coa <- function(obj) {
     
     ## Supplementary rows coordinates
     if (!is.null(obj$supr)) {
-        tmp <- obj$supr
+        tmp <- obj$supr$lisup
         tmp$name <- rownames(tmp)
         tmp$pos <- "Row"
-        tmp$Type <- "Supplementary"
+        tmp$Type <- "Supplementary level"
         tmp$Class <- "Qualitative"
         tmp$Count <- NA
         names(tmp) <- gsub("Axis", "Comp", names(tmp), fixed = TRUE)    
@@ -51,10 +51,10 @@ prepare_results.coa <- function(obj) {
 
     ## Supplementary columns coordinates
     if (!is.null(obj$supc)) {
-        tmp <- obj$supc
+        tmp <- obj$supc$cosup
         tmp$name <- rownames(tmp)
         tmp$pos <- "Column"
-        tmp$Type <- "Supplementary"
+        tmp$Type <- "Supplementary level"
         tmp$Class <- "Qualitative"
         tmp$Count <- NA
         vars <- rbind(vars, tmp)

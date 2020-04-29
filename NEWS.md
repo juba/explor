@@ -1,5 +1,8 @@
 # explor 0.3.6
 
+* Fix supplementary elements in dudi.coa
+* Change supplementary variables / individuals handling in dudi.* functions. You now have to supply the entire suprow() ou supcol() result instead if sub-elements `$cosup` and `$lisup`.
+* Fix individual plot point coloration by supplementary variable in dudi.mca
 * Add ability to select which supplementary variable to display
 * Add support for qualitative supplementary variables in FactoMineR::CA
 * Fix error when color on "None" in MCA biplot

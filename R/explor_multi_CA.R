@@ -46,8 +46,8 @@ explor.CA <- function(obj) {
 ##' row_sup <- tab[5,-4]
 ##' col_sup <- tab[-5,4]
 ##' coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
-##' coa$supr <- suprow(coa, row_sup)$lisup
-##' coa$supc <- supcol(coa, col_sup)$cosup
+##' coa$supr <- suprow(coa, row_sup)
+##' coa$supc <- supcol(coa, col_sup)
 ##' explor(coa)
 ##' }
 

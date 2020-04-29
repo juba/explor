@@ -32,7 +32,7 @@ prepare_results.pca <- function(obj) {
   
   ## Supplementary variables coordinates
   if (!is.null(obj$supv)) {
-    vars.quanti.sup <- obj$supv
+    vars.quanti.sup <- obj$supv$cosup
     vars.quanti.sup$varname <- rownames(vars.quanti.sup)
     vars.quanti.sup$Type <- "Supplementary"
     vars.quanti.sup$Class <- "Quantitative"
@@ -73,7 +73,7 @@ prepare_results.pca <- function(obj) {
   ind$Name <- rownames(ind)
   ind$Type <- "Active"
   if (!is.null(obj$supi)) {
-    tmp_sup <- obj$supi
+    tmp_sup <- obj$supi$lisup
     tmp_sup$Name <- rownames(tmp_sup)
     tmp_sup$Type <- "Supplementary"
     ind <- ind %>% bind_rows(tmp_sup)
