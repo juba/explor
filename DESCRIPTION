@@ -20,7 +20,7 @@ Imports:
     ggplot2,
     highr,
     formatR,
-    scatterD3 (>= 0.9),
+    scatterD3 (>= 0.9.1),
     RColorBrewer
 Suggests: 
     FactoMineR,
@@ -30,4 +30,4 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0

@@ -89,8 +89,8 @@ tab <- bordeaux
 row_sup <- tab[5,-4]
 col_sup <- tab[-5,4]
 coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
-coa$supr <- suprow(coa, row_sup)$lisup
-coa$supc <- supcol(coa, col_sup)$cosup
+coa$supr <- suprow(coa, row_sup)
+coa$supc <- supcol(coa, col_sup)
 explor(coa)
 }
 \dontrun{
@@ -101,11 +101,11 @@ d <- banque[-(1:100),-(19:21)]
 ind_sup <- banque[1:100, -(19:21)]
 var_sup <- banque[-(1:100),19:21]
 acm <- dudi.acm(d, scannf = FALSE, nf = 5)
-acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)$cosup
+acm$supv <- supcol(acm, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)
 colw <- acm$cw*ncol(d)
 X <- acm.disjonctif(ind_sup)
 X <- data.frame(t(t(X)/colw) - 1)
-acm$supi <- suprow(acm, X)$lisup
+acm$supi <- suprow(acm, X)
 explor(acm)
 }
 \dontrun{
@@ -117,9 +117,9 @@ sup_var <- d[-(1:10), 8:9]
 sup_ind <- d[1:10, -(8:9)]
 pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
 supi <- suprow(pca, sup_ind)
-pca$supi <- supi$lisup
+pca$supi <- supi
 supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
-pca$supv <- supv$cosup
+pca$supv <- supv
 explor(pca)
 }
 }
