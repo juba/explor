@@ -8,3 +8,4 @@ resources
 ^\.travis\.yml$
 .vscode
 \.github/
+pkgdown/
