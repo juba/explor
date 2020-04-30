@@ -27,6 +27,8 @@ Suggests:
     ade4 (>= 1.7-13),
     GDAtools,
     MASS,
+    quanteda,
+    quanteda.textmodels,
     testthat,
     knitr,
     rmarkdown

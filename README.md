@@ -22,6 +22,7 @@ Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-p
 Multiple Correspondance Analysis | mca | [MASS](https://cran.r-project.org/package=MASS) | Quantitative supplementary variables are not supported
 Principal Component Analysis  | princomp  | stats | Supplementary variables are ignored
 Principal Component Analysis  | prcomp  | stats | Supplementary variables are ignored
+Correspondance Analysis  | textmodel_ca  | [quanteda.textmodels](https://cran.r-project.org/package=quanteda.textmodels)  | Only coordinates are available
 
 ## Features
 

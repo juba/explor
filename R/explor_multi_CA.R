@@ -29,6 +29,36 @@ explor.CA <- function(obj) {
 
 
 ##' @rdname explor
+##' @aliases explor.textmodel_ca
+##' @export
+
+explor.textmodel_ca <- function(obj) {
+    
+    if (!inherits(obj, "textmodel_ca")) stop("obj must be of class textmodel_ca")
+    
+    ## results preparation
+    res <- prepare_results(obj)
+    
+    ## Settings
+    settings <- list()
+    settings$var_columns <- c("Level", "Position", "Coord")
+    settings$varsup_columns <- c("Level", "Position", "Coord")
+    settings$obj_name <- deparse(substitute(obj))    
+    
+    settings$has_count <- FALSE
+    settings$has_contrib <- FALSE
+    settings$has_cos2 <- FALSE
+    settings$has_var_eta2 <- FALSE
+    settings$has_varsup_eta2 <- FALSE
+    
+    
+    ## Launch interface
+    explor_multi_ca(res, settings)
+    
+}
+
+
+##' @rdname explor
 ##' @aliases explor.coa
 ##' @details 
 ##' If you want to display supplementary individuals or variables and you're using
@@ -76,6 +106,7 @@ explor.coa <- function(obj) {
     explor_multi_ca(res, settings)
     
 }
+
 
 
 
@@ -128,9 +159,9 @@ explor_multi_ca <- function(res, settings) {
                                 checkboxInput("var_sup", 
                                     HTML(gettext("Supplementary variables")),
                                     value = TRUE),
-                            conditionalPanel("input.var_sup",
-                                explor_multi_var_sup_choice_input(res$vars, settings)
-                            ),
+                            if(settings$has_sup_vars)
+                                conditionalPanel("input.var_sup",
+                                    explor_multi_var_sup_choice_input(res$vars, settings)),
                             explor_multi_sidebar_footer(type = "var"))),
                     column(10,
                         scatterD3Output("varplot", height = "auto"))
@@ -152,9 +183,9 @@ explor_multi_ca <- function(res, settings) {
             varplot_code <- reactive({
                 col_var <- if (input$var_col == "None") NULL else input$var_col
                 symbol_var <- if (input$var_symbol == "None") NULL else input$var_symbol
-                size_var <- if (input$var_size == "None") NULL else input$var_size
-                size_range <- if (input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
-                var_auto_labels <- if (!is.null(input$var_auto_labels) &&    input$var_auto_labels) "\"auto\"" else "NULL"
+                size_var <- if (is.null(input$var_size) || input$var_size == "None") NULL else input$var_size
+                size_range <- if (is.null(input$var_size) || input$var_size == "None") c(10,300) else c(30,400) * input$var_point_size / 32
+                var_auto_labels <- if (!is.null(input$var_auto_labels) && input$var_auto_labels) "\"auto\"" else "NULL"
                 var_sup <- settings$has_sup_vars && input$var_sup
                 var_sup_choice <- if(var_sup) paste0(utils::capture.output(dput(input$var_sup_choice)), collapse="") else NULL
                 

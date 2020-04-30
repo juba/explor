@@ -207,3 +207,9 @@ detach(package:explor, unload=TRUE); library(explor)
 explor(pca)
 
 
+## textmodel_ca --------------------------------------------
+
+library(quanteda.textmodels)
+dfmat <- quanteda::dfm(data_corpus_irishbudget2010)
+tmod <- textmodel_ca(dfmat, nd = 7)
+explor(tmod)
