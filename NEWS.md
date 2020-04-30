@@ -1,5 +1,6 @@
 # explor 0.3.6
 
+* Add support for textmodel_ca
 * Fix supplementary elements in dudi.coa
 * Change supplementary variables / individuals handling in dudi.* functions. You now have to supply the entire suprow() ou supcol() result instead if sub-elements `$cosup` and `$lisup`.
 * Fix individual plot point coloration by supplementary variable in dudi.mca
