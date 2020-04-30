@@ -4,7 +4,7 @@
 %   R/prepare_results_PCA.R, R/prepare_results_dudi_coa.R,
 %   R/prepare_results_dudi_mca.R, R/prepare_results_dudi_pca.R,
 %   R/prepare_results_prcomp.R, R/prepare_results_princomp.R,
-%   R/prepare_results_speMCA.R
+%   R/prepare_results_speMCA.R, R/prepare_results_textmodel_ca.R
 \name{prepare_results}
 \alias{prepare_results}
 \alias{prepare_results.CA}
@@ -17,6 +17,7 @@
 \alias{prepare_results.prcomp}
 \alias{prepare_results.princomp}
 \alias{prepare_results.speMCA}
+\alias{prepare_results.textmodel_ca}
 \title{Analysis results preparation}
 \usage{
 prepare_results(obj)
@@ -40,6 +41,8 @@ prepare_results(obj)
 \method{prepare_results}{princomp}(obj)
 
 \method{prepare_results}{speMCA}(obj)
+
+\method{prepare_results}{textmodel_ca}(obj)
 }
 \arguments{
 \item{obj}{object containing analysis results}
@@ -67,6 +70,8 @@ This function prepares results to be used by \code{explor}. Not to be used direc
 \code{\link{princomp}}
 
 \code{\link[GDAtools]{speMCA}}
+
+\code{\link[quanteda.textmodels]{textmodel_ca}}
 }
 \author{
 Julien Barnier <julien.barnier@ens-lyon.fr>

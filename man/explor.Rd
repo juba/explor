@@ -4,6 +4,7 @@
 \name{explor}
 \alias{explor}
 \alias{explor.CA}
+\alias{explor.textmodel_ca}
 \alias{explor.coa}
 \alias{explor.MCA}
 \alias{explor.speMCA}
@@ -18,6 +19,8 @@
 explor(obj)
 
 \method{explor}{CA}(obj)
+
+\method{explor}{textmodel_ca}(obj)
 
 \method{explor}{coa}(obj)
 
