@@ -1,6 +1,5 @@
 ##' @rdname prepare_results
 ##' @aliases prepare_results.prcomp
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link{prcomp}}
 ##' @import dplyr
 ##' @importFrom tidyr gather

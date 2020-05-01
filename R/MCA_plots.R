@@ -72,7 +72,6 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_sup_choice =
 ##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
 ##' @param ... Other arguments passed to scatterD3
 ##'
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
 MCA_var_plot <- function(res, xax = 1, yax = 2, 
                          var_sup = TRUE, 
@@ -183,7 +182,6 @@ MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity
 ##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
 ##' @param ... Other arguments passed to scatterD3
 ##'
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
 MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_contrib = 0,
                          lab_var = NULL,
@@ -295,7 +293,6 @@ MCA_bi_data <- function(res, settings) {
 ##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
 ##' @param ... Other arguments passed to scatterD3
 ##'
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
 ##' @importFrom RColorBrewer brewer.pal
 

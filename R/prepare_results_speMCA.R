@@ -1,6 +1,5 @@
 ##' @rdname prepare_results
 ##' @aliases prepare_results.speMCA
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[GDAtools]{speMCA}}
 ##' @import dplyr
 ##' @importFrom tidyr gather

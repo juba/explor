@@ -1,6 +1,5 @@
 ##' @rdname prepare_results
 ##' @aliases prepare_results.MCA
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import dplyr
 ##' @importFrom tidyr gather

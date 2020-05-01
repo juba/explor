@@ -67,7 +67,6 @@ PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE,
 ##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
 ##' @param ... Other arguments passed to scatterD3
 ##'
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
 PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, 
                          var_sup_choice = NULL,
@@ -175,7 +174,6 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, 
 ##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
 ##' @param ... Other arguments passed to scatterD3
 ##'
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
 PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_contrib = 0,
                          col_var = NULL,

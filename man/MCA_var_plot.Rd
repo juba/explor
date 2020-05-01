@@ -56,6 +56,3 @@ MCA_var_plot(
 \description{
 This function generates an HTML widget displaying the variables plot of an MCA result.
 }
-\author{
-Julien Barnier <julien.barnier@ens-lyon.fr>
-}

@@ -1,6 +1,6 @@
 ##' @rdname prepare_results
 ##' @aliases prepare_results.acm
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
+##' 
 ##' @seealso \code{\link[ade4]{dudi.acm}}
 ##' @import dplyr
 ##' @importFrom tidyr gather

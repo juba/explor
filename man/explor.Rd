@@ -126,6 +126,3 @@ pca$supv <- supv
 explor(pca)
 }
 }
-\author{
-Julien Barnier <julien.barnier@ens-lyon.fr>
-}

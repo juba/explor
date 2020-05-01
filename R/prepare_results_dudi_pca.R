@@ -1,6 +1,5 @@
 ##' @rdname prepare_results
 ##' @aliases prepare_results.pca
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @seealso \code{\link[ade4]{dudi.pca}}
 ##' @import dplyr
 ##' @importFrom tidyr gather

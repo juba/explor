@@ -53,6 +53,3 @@ MCA_ind_plot(
 \description{
 This function generates an HTML widget displaying the individuals plot of an MCA result.
 }
-\author{
-Julien Barnier <julien.barnier@ens-lyon.fr>
-}

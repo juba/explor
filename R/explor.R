@@ -6,7 +6,6 @@
 ##' @param obj object containing analysis results
 ##' @return
 ##' The function launches a shiny app in the system web browser.
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
 ##' @examples
 ##' \dontrun{

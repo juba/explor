@@ -1,6 +1,6 @@
 ##' @rdname prepare_results
 ##' @aliases prepare_results.PCA
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
+##'
 ##' @seealso \code{\link[FactoMineR]{PCA}}
 ##' @import dplyr
 ##' @importFrom tidyr gather

@@ -53,6 +53,3 @@ PCA_var_plot(
 \description{
 This function generates an HTML widget displaying the variables plot of a PCA result.
 }
-\author{
-Julien Barnier <julien.barnier@ens-lyon.fr>
-}

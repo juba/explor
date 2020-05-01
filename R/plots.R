@@ -57,7 +57,7 @@ ggind.MCA <- function(obj, xax = 1, yax = 2, fac = NA, label = NULL, alpha = 0.5
 ##'
 ##' @param obj a multivariate analysis results object. Currently only MCA is supported
 ##' @param ... arguments passed to other methods
-##' @author Julien Barnier <julien.barnier@@ens.lyon.fr>
+##' 
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import ggplot2
 ##' @export

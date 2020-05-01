@@ -77,7 +77,6 @@ CA_var_data <- function(res, xax = 1, yax = 2,
 ##' @param in_explor wether the plot is to be displayed in the \code{explor} interface
 ##' @param ... Other arguments passed to scatterD3
 ##'
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
 ##' @export
 CA_var_plot <- function(res, xax = 1, yax = 2, 
                         lev_sup = TRUE,

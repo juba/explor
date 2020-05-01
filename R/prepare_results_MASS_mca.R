@@ -1,6 +1,6 @@
 ##' @rdname prepare_results
 ##' @aliases prepare_results.mca
-##' @author Julien Barnier <julien.barnier@@ens-lyon.fr>
+##' 
 ##' @seealso \code{\link[MASS]{mca}}
 ##' @import dplyr
 ##' @importFrom tidyr gather

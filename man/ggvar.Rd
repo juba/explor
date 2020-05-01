@@ -34,6 +34,3 @@ function of the \code{FactoMineR} package.
 \seealso{
 \code{\link[FactoMineR]{MCA}}
 }
-\author{
-Julien Barnier <julien.barnier@ens.lyon.fr>
-}
