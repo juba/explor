@@ -1,8 +1,8 @@
 Package: explor
 Type: Package
 Title: Interactive Interfaces for Results Exploration
-Version: 0.3.6
-Date: 2020-05-02
+Version: 0.3.7
+Date: 2020-05-03
 Authors@R: c(person("Julien", "Barnier", email="julien.barnier@cnrs.fr",
     role=c("aut","cre")))
 Maintainer: Julien Barnier <julien.barnier@cnrs.fr>
