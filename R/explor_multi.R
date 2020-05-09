@@ -199,7 +199,7 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
     indTable <- reactive({
         res()$ind %>%
             filter(Type == "Active", Axis == input$inddim) %>%
-            select_(.dots = settings()$ind_columns)
+            select(all_of(settings()$ind_columns))
     })
     output$indtable <- DT::renderDataTable(
                                explor_multi_table(indTable(), table_options, "Coord"))
@@ -208,7 +208,7 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
     indTableSup <- reactive({
         res()$ind %>%
             filter(Type == "Supplementary", Axis == input$inddim) %>%
-            select_(.dots = settings()$indsup_columns)
+            select(all_of(settings()$indsup_columns))
     })
     output$indtablesup <- DT::renderDataTable(
                                   explor_multi_table(indTableSup(), table_options, "Coord"))
@@ -528,7 +528,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
     varTable <- reactive({
         tmp <- res()$vars %>% 
                    filter(Type == "Active", Axis == input$vardim) %>%
-                   select_(.dots = settings()$var_columns)
+                   select(all_of(settings()$var_columns))
         ## CA data hide option
         if (settings()$type == "CA" && input$var_tab_hide != "None") {
             tmp <- tmp %>% filter(Position != input$var_tab_hide)
@@ -554,7 +554,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
         if (settings()$type == "PCA" && settings()$has_quali_sup_vars) {
             tmp <- tmp %>% filter(Class == "Quantitative")
         }
-        tmp <- tmp %>% select_(.dots = settings()$varsup_columns)
+        tmp <- tmp %>% select(all_of(settings()$varsup_columns))
         data.frame(tmp)
     })
     output$vartablesup <- DT::renderDataTable(
@@ -566,7 +566,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
             tmp <- res()$vars %>% 
                        filter(Type == "Supplementary", Class == "Qualitative",
                               Axis == input$vardim) %>%
-                       select_(.dots = settings()$varsup_quali_columns)
+                       select(all_of(settings()$varsup_quali_columns))
             data.frame(tmp)
         }
     })
@@ -577,7 +577,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
     varTableEta2 <- reactive({
         if (settings()$has_var_eta2) {
             res()$vareta2 %>% filter(Type == "Active", Axis == input$vardim) %>%
-                    select_(.dots = settings()$vareta2_columns) %>%
+                    select(all_of(settings()$vareta2_columns)) %>%
                     arrange(eta2)
         }
     })
@@ -590,7 +590,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
             res()$vareta2 %>% filter(Type == "Supplementary",
                                      Class == "Qualitative",
                                      Axis == input$vardim) %>%
-                    select_(.dots = settings()$varsupeta2_columns) %>%
+                    select(all_of(settings()$varsupeta2_columns)) %>%
                     arrange(eta2)
         }
     })
