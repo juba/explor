@@ -1,5 +1,7 @@
 # explor 0.3.7
 
+* Fix percentage of variance computation for prcomp() (thanks @zenn1989)
+
 
 # explor 0.3.6
 
