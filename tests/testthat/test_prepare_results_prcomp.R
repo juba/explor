@@ -7,7 +7,7 @@ pca$supi <- predict(pca, USArrests[1:5,])
 res <- prepare_results(pca)
 
 test_that("Eigenvalues are equals", {
-  expect_equal(unname(round(pca$sdev / sum(pca$sdev) * 100,2)), res$eig$percent)
+  expect_equal(unname(round(pca$sdev^2 / sum(pca$sdev^2) * 100,2)), res$eig$percent)
 })
 
 test_that("Variables results are equal", {

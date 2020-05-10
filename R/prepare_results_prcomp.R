@@ -14,7 +14,7 @@ prepare_results.prcomp <- function(obj) {
     vars <- data.frame(vars)
     ## Axes names and inertia
     axes <- seq_len(length(obj$sdev))
-    percent <- round(obj$sdev / sum(obj$sdev) *100, 2)
+    percent <- round(obj$sdev^2 / sum(obj$sdev^2) *100, 2)
     names(axes) <- paste("Axis", axes, paste0("(", percent,"%)"))
     ## Eigenvalues
     eig <- data.frame(dim = 1:length(obj$sdev), percent = percent)
