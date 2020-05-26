@@ -9,3 +9,4 @@ resources
 .vscode
 \.github/
 pkgdown/
+^\.github$
