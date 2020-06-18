@@ -145,40 +145,40 @@ interactive visualisation and exploration of an analysis results." />
 interactive visualisation and exploration of an analysis results.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>explor</span>(<span class='no'>obj</span>)
+    <pre class="usage"><span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for CA</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for textmodel_ca</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for coa</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for MCA</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for speMCA</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for mca</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for acm</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for PCA</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for princomp</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for prcomp</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)
 
 <span class='co'># S3 method for pca</span>
-<span class='fu'>explor</span>(<span class='no'>obj</span>)</pre>
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>obj</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,63 +208,63 @@ the <code><a href='https://rdrr.io/pkg/ade4/man/dudi.pca.html'>dudi.pca</a></cod
 <code>supv</code> elements added to your <code><a href='https://rdrr.io/pkg/ade4/man/dudi.pca.html'>dudi.pca</a></code> result (See example).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>FactoMineR</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='kw'><a href='http://factominer.free.fr'>FactoMineR</a></span>)
 
 <span class='co'>## FactoMineR::MCA exploration</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>hobbies</span>)
-<span class='no'>mca</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/FactoMineR/man/MCA.html'>MCA</a></span>(<span class='no'>hobbies</span>[<span class='fl'>1</span>:<span class='fl'>1000</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>8</span>,<span class='fl'>21</span>:<span class='fl'>23</span>)], <span class='kw'>quali.sup</span> <span class='kw'>=</span> <span class='fl'>9</span>:<span class='fl'>10</span>,
-           <span class='kw'>quanti.sup</span> <span class='kw'>=</span> <span class='fl'>11</span>, <span class='kw'>ind.sup</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>100</span>, <span class='kw'>graph</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'>explor</span>(<span class='no'>mca</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>hobbies</span>)
+<span class='kw'>mca</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/FactoMineR/man/MCA.html'>MCA</a></span>(<span class='kw'>hobbies</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>1000</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>8</span>,<span class='fl'>21</span><span class='op'>:</span><span class='fl'>23</span>)], quali.sup = <span class='fl'>9</span><span class='op'>:</span><span class='fl'>10</span>, 
+           quanti.sup = <span class='fl'>11</span>, ind.sup = <span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>, graph = <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>mca</span>)
 
 <span class='co'>## FactoMineR::PCA exploration</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>decathlon</span>)
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='no'>decathlon</span>[,<span class='fl'>1</span>:<span class='fl'>12</span>]
-<span class='no'>pca</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/FactoMineR/man/PCA.html'>PCA</a></span>(<span class='no'>d</span>, <span class='kw'>quanti.sup</span> <span class='kw'>=</span> <span class='fl'>11</span>:<span class='fl'>12</span>, <span class='kw'>graph</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'>explor</span>(<span class='no'>pca</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>decathlon</span>)
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='kw'>decathlon</span>[,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>]
+<span class='kw'>pca</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/FactoMineR/man/PCA.html'>PCA</a></span>(<span class='kw'>d</span>, quanti.sup = <span class='fl'>11</span><span class='op'>:</span><span class='fl'>12</span>, graph = <span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>pca</span>)
 }
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ade4</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://pbil.univ-lyon1.fr/ADE-4'>ade4</a></span>)
 
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>bordeaux</span>)
-<span class='no'>tab</span> <span class='kw'>&lt;-</span> <span class='no'>bordeaux</span>
-<span class='no'>row_sup</span> <span class='kw'>&lt;-</span> <span class='no'>tab</span>[<span class='fl'>5</span>,-<span class='fl'>4</span>]
-<span class='no'>col_sup</span> <span class='kw'>&lt;-</span> <span class='no'>tab</span>[-<span class='fl'>5</span>,<span class='fl'>4</span>]
-<span class='no'>coa</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.coa.html'>dudi.coa</a></span>(<span class='no'>tab</span>[-<span class='fl'>5</span>,-<span class='fl'>4</span>], <span class='kw'>nf</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>scannf</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>coa</span>$<span class='no'>supr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/suprow.html'>suprow</a></span>(<span class='no'>coa</span>, <span class='no'>row_sup</span>)
-<span class='no'>coa</span>$<span class='no'>supc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/supcol.html'>supcol</a></span>(<span class='no'>coa</span>, <span class='no'>col_sup</span>)
-<span class='fu'>explor</span>(<span class='no'>coa</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>bordeaux</span>)
+<span class='kw'>tab</span> <span class='op'>&lt;-</span> <span class='kw'>bordeaux</span>
+<span class='kw'>row_sup</span> <span class='op'>&lt;-</span> <span class='kw'>tab</span>[<span class='fl'>5</span>,<span class='op'>-</span><span class='fl'>4</span>]
+<span class='kw'>col_sup</span> <span class='op'>&lt;-</span> <span class='kw'>tab</span>[<span class='op'>-</span><span class='fl'>5</span>,<span class='fl'>4</span>]
+<span class='kw'>coa</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.coa.html'>dudi.coa</a></span>(<span class='kw'>tab</span>[<span class='op'>-</span><span class='fl'>5</span>,<span class='op'>-</span><span class='fl'>4</span>], nf = <span class='fl'>5</span>, scannf = <span class='fl'>FALSE</span>)
+<span class='kw'>coa</span><span class='op'>$</span><span class='kw'>supr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/suprow.html'>suprow</a></span>(<span class='kw'>coa</span>, <span class='kw'>row_sup</span>)
+<span class='kw'>coa</span><span class='op'>$</span><span class='kw'>supc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/supcol.html'>supcol</a></span>(<span class='kw'>coa</span>, <span class='kw'>col_sup</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>coa</span>)
 }
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ade4</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>banque</span>)
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='no'>banque</span>[-(<span class='fl'>1</span>:<span class='fl'>100</span>),-(<span class='fl'>19</span>:<span class='fl'>21</span>)]
-<span class='no'>ind_sup</span> <span class='kw'>&lt;-</span> <span class='no'>banque</span>[<span class='fl'>1</span>:<span class='fl'>100</span>, -(<span class='fl'>19</span>:<span class='fl'>21</span>)]
-<span class='no'>var_sup</span> <span class='kw'>&lt;-</span> <span class='no'>banque</span>[-(<span class='fl'>1</span>:<span class='fl'>100</span>),<span class='fl'>19</span>:<span class='fl'>21</span>]
-<span class='no'>acm</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.acm.html'>dudi.acm</a></span>(<span class='no'>d</span>, <span class='kw'>scannf</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>nf</span> <span class='kw'>=</span> <span class='fl'>5</span>)
-<span class='no'>acm</span>$<span class='no'>supv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/supcol.html'>supcol</a></span>(<span class='no'>acm</span>, <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.acm.html'>dudi.acm</a></span>(<span class='no'>var_sup</span>, <span class='kw'>scannf</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>nf</span> <span class='kw'>=</span> <span class='fl'>5</span>)$<span class='no'>tab</span>)
-<span class='no'>colw</span> <span class='kw'>&lt;-</span> <span class='no'>acm</span>$<span class='no'>cw</span>*<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>d</span>)
-<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.acm.html'>acm.disjonctif</a></span>(<span class='no'>ind_sup</span>)
-<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>X</span>)/<span class='no'>colw</span>) - <span class='fl'>1</span>)
-<span class='no'>acm</span>$<span class='no'>supi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/suprow.html'>suprow</a></span>(<span class='no'>acm</span>, <span class='no'>X</span>)
-<span class='fu'>explor</span>(<span class='no'>acm</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://pbil.univ-lyon1.fr/ADE-4'>ade4</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>banque</span>)
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='kw'>banque</span>[<span class='op'>-</span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>),<span class='op'>-</span>(<span class='fl'>19</span><span class='op'>:</span><span class='fl'>21</span>)]
+<span class='kw'>ind_sup</span> <span class='op'>&lt;-</span> <span class='kw'>banque</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>, <span class='op'>-</span>(<span class='fl'>19</span><span class='op'>:</span><span class='fl'>21</span>)]
+<span class='kw'>var_sup</span> <span class='op'>&lt;-</span> <span class='kw'>banque</span>[<span class='op'>-</span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>),<span class='fl'>19</span><span class='op'>:</span><span class='fl'>21</span>]
+<span class='kw'>acm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.acm.html'>dudi.acm</a></span>(<span class='kw'>d</span>, scannf = <span class='fl'>FALSE</span>, nf = <span class='fl'>5</span>)
+<span class='kw'>acm</span><span class='op'>$</span><span class='kw'>supv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/supcol.html'>supcol</a></span>(<span class='kw'>acm</span>, <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.acm.html'>dudi.acm</a></span>(<span class='kw'>var_sup</span>, scannf = <span class='fl'>FALSE</span>, nf = <span class='fl'>5</span>)<span class='op'>$</span><span class='kw'>tab</span>)
+<span class='kw'>colw</span> <span class='op'>&lt;-</span> <span class='kw'>acm</span><span class='op'>$</span><span class='kw'>cw</span><span class='op'>*</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='kw'>d</span>)
+<span class='kw'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.acm.html'>acm.disjonctif</a></span>(<span class='kw'>ind_sup</span>)
+<span class='kw'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='kw'>X</span>)<span class='op'>/</span><span class='kw'>colw</span>) <span class='op'>-</span> <span class='fl'>1</span>)
+<span class='kw'>acm</span><span class='op'>$</span><span class='kw'>supi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/suprow.html'>suprow</a></span>(<span class='kw'>acm</span>, <span class='kw'>X</span>)
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>acm</span>)
 }
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ade4</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>deug</span>)
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='no'>deug</span>$<span class='no'>tab</span>
-<span class='no'>sup_var</span> <span class='kw'>&lt;-</span> <span class='no'>d</span>[-(<span class='fl'>1</span>:<span class='fl'>10</span>), <span class='fl'>8</span>:<span class='fl'>9</span>]
-<span class='no'>sup_ind</span> <span class='kw'>&lt;-</span> <span class='no'>d</span>[<span class='fl'>1</span>:<span class='fl'>10</span>, -(<span class='fl'>8</span>:<span class='fl'>9</span>)]
-<span class='no'>pca</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.pca.html'>dudi.pca</a></span>(<span class='no'>d</span>[-(<span class='fl'>1</span>:<span class='fl'>10</span>), -(<span class='fl'>8</span>:<span class='fl'>9</span>)], <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>scannf</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>nf</span> <span class='kw'>=</span> <span class='fl'>5</span>)
-<span class='no'>supi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/suprow.html'>suprow</a></span>(<span class='no'>pca</span>, <span class='no'>sup_ind</span>)
-<span class='no'>pca</span>$<span class='no'>supi</span> <span class='kw'>&lt;-</span> <span class='no'>supi</span>
-<span class='no'>supv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/supcol.html'>supcol</a></span>(<span class='no'>pca</span>, <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.pca.html'>dudi.pca</a></span>(<span class='no'>sup_var</span>, <span class='kw'>scale</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>scannf</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)$<span class='no'>tab</span>)
-<span class='no'>pca</span>$<span class='no'>supv</span> <span class='kw'>&lt;-</span> <span class='no'>supv</span>
-<span class='fu'>explor</span>(<span class='no'>pca</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='http://pbil.univ-lyon1.fr/ADE-4'>ade4</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>deug</span>)
+<span class='kw'>d</span> <span class='op'>&lt;-</span> <span class='kw'>deug</span><span class='op'>$</span><span class='kw'>tab</span>
+<span class='kw'>sup_var</span> <span class='op'>&lt;-</span> <span class='kw'>d</span>[<span class='op'>-</span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>), <span class='fl'>8</span><span class='op'>:</span><span class='fl'>9</span>]
+<span class='kw'>sup_ind</span> <span class='op'>&lt;-</span> <span class='kw'>d</span>[<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='op'>-</span>(<span class='fl'>8</span><span class='op'>:</span><span class='fl'>9</span>)]
+<span class='kw'>pca</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.pca.html'>dudi.pca</a></span>(<span class='kw'>d</span>[<span class='op'>-</span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>), <span class='op'>-</span>(<span class='fl'>8</span><span class='op'>:</span><span class='fl'>9</span>)], scale = <span class='fl'>TRUE</span>, scannf = <span class='fl'>FALSE</span>, nf = <span class='fl'>5</span>)
+<span class='kw'>supi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/suprow.html'>suprow</a></span>(<span class='kw'>pca</span>, <span class='kw'>sup_ind</span>)
+<span class='kw'>pca</span><span class='op'>$</span><span class='kw'>supi</span> <span class='op'>&lt;-</span> <span class='kw'>supi</span>
+<span class='kw'>supv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/supcol.html'>supcol</a></span>(<span class='kw'>pca</span>, <span class='fu'><a href='https://rdrr.io/pkg/ade4/man/dudi.pca.html'>dudi.pca</a></span>(<span class='kw'>sup_var</span>, scale = <span class='fl'>TRUE</span>, scannf = <span class='fl'>FALSE</span>)<span class='op'>$</span><span class='kw'>tab</span>)
+<span class='kw'>pca</span><span class='op'>$</span><span class='kw'>supv</span> <span class='op'>&lt;-</span> <span class='kw'>supv</span>
+<span class='fu'><a href='https://juba.github.io/explor//reference/explor.html'>explor</a></span>(<span class='kw'>pca</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -281,7 +281,7 @@ the <code><a href='https://rdrr.io/pkg/ade4/man/dudi.pca.html'>dudi.pca</a></cod
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
