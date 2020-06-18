@@ -1,0 +1,11 @@
+pandoc: 2.7.3
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  introduction_en: introduction_en.html
+  introduction_fr: introduction_fr.html
+last_built: 2020-06-18T08:09Z
+urls:
+  reference: https://juba.github.io/explor//reference
+  article: https://juba.github.io/explor//articles
+
