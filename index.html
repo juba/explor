@@ -191,35 +191,27 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>To get the stable version from CRAN :</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"explor"</span>)
-</pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"explor"</span>)</pre></div>
 <p>To install the latest dev version from GitHub :</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)  <span class="co"># If necessary</span>
-<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"juba/scatterD3"</span>)
-<span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"juba/explor"</span>)
-</pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)  <span class="co"># If necessary</span>
+<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"juba/scatterD3"</span>)
+<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"juba/explor"</span>)</pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>Usage is very simple : you just apply the <code>explor</code> function to the result of one of the supported analysis functions.</p>
 <p>Example with a principal correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html">FactoMineR::PCA</a></code> :</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://factominer.free.fr">FactoMineR</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://juba.github.io/explor">explor</a></span>)
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">FactoMineR</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">explor</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">decathlon</span>)
-<span class="kw">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html">PCA</a></span>(<span class="kw">decathlon</span>[,<span class="fl">1</span><span class="op">:</span><span class="fl">12</span>], quanti.sup = <span class="fl">11</span><span class="op">:</span><span class="fl">12</span>, graph = <span class="fl">FALSE</span>)
-<span class="fu"><a href="reference/explor.html">explor</a></span>(<span class="kw">pca</span>)
-</pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">decathlon</span>)
+<span class="no">pca</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html">PCA</a></span>(<span class="no">decathlon</span>[,<span class="fl">1</span>:<span class="fl">12</span>], <span class="kw">quanti.sup</span> <span class="kw">=</span> <span class="fl">11</span>:<span class="fl">12</span>, <span class="kw">graph</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="reference/explor.html">explor</a></span>(<span class="no">pca</span>)</pre></div>
 <p>Example with a multiple correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html">FactoMineR::MCA</a></code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="kw">hobbies</span>)
-<span class="kw">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html">MCA</a></span>(<span class="kw">hobbies</span>[<span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span><span class="op">:</span><span class="fl">8</span>,<span class="fl">21</span><span class="op">:</span><span class="fl">23</span>)],quali.sup = <span class="fl">9</span><span class="op">:</span><span class="fl">10</span>, quanti.sup = <span class="fl">11</span>, ind.sup = <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>)
-<span class="fu"><a href="reference/explor.html">explor</a></span>(<span class="kw">mca</span>)
-</pre></div>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">hobbies</span>)
+<span class="no">mca</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html">MCA</a></span>(<span class="no">hobbies</span>[<span class="fl">1</span>:<span class="fl">1000</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>:<span class="fl">8</span>,<span class="fl">21</span>:<span class="fl">23</span>)],<span class="kw">quali.sup</span> <span class="kw">=</span> <span class="fl">9</span>:<span class="fl">10</span>, <span class="kw">quanti.sup</span> <span class="kw">=</span> <span class="fl">11</span>, <span class="kw">ind.sup</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">100</span>)
+<span class="fu"><a href="reference/explor.html">explor</a></span>(<span class="no">mca</span>)</pre></div>
 </div>
 <div id="documentation-and-localization" class="section level2">
 <h2 class="hasAnchor">
@@ -275,7 +267,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
