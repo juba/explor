@@ -3,7 +3,7 @@
 ##' 
 ##' @seealso \code{\link{princomp}}
 ##' @import dplyr
-##' @importFrom tidyr gather
+##' @importFrom tidyr pivot_longer
 ##' @importFrom utils head
 ##' @export
 
@@ -27,7 +27,7 @@ prepare_results.princomp <- function(obj) {
     vars$Type <- "Active"
     vars$Class <- "Quantitative"
     
-    vars <- vars %>% gather(Axis, Coord, starts_with("Comp.")) %>%
+    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Comp.")) %>%
         mutate(Axis = gsub("Comp.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
@@ -45,7 +45,7 @@ prepare_results.princomp <- function(obj) {
         tmp_sup$Type <- "Supplementary"
         ind <- ind %>% bind_rows(tmp_sup)
     }
-    ind <- ind %>% gather(Axis, Coord, starts_with("Comp.")) %>%
+    ind <- ind %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Comp.")) %>%
         mutate(Axis = gsub("Comp.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
     ind$Contrib <- NA

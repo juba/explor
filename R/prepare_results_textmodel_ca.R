@@ -2,7 +2,7 @@
 ##' @aliases prepare_results.textmodel_ca
 ##' @seealso \code{\link[quanteda.textmodels]{textmodel_ca}}
 ##' @import dplyr
-##' @importFrom tidyr gather
+##' @importFrom tidyr pivot_longer
 ##' @importFrom utils head
 ##' @export
 
@@ -37,7 +37,7 @@ prepare_results.textmodel_ca <- function(obj) {
     vars$Cos2 <- NA
     vars$Count <- NA
 
-    vars <- vars %>% gather(Axis, Coord, starts_with("Dim")) %>%
+    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Dim")) %>%
         mutate(Axis = gsub("Dim", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3)) %>%
         rename(Level = name, Position = pos)

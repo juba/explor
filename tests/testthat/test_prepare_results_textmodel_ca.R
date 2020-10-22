@@ -13,9 +13,9 @@ test_that("Eigenvalues are equals", {
 
 test_that("Levels results are equal", {
   expect_equal(as.vector(round(ca$colcoord[,1],3)),
-               res$vars[res$vars$Type == "Active" & res$vars$Position == "Column" & res$vars$Axis == "1", "Coord"])
+               res$vars[res$vars$Type == "Active" & res$vars$Position == "Column" & res$vars$Axis == "1", "Coord", drop = TRUE])
   expect_equal(as.vector(round(ca$rowcoord[,2],3)),
-               res$vars[res$vars$Type == "Active" & res$vars$Position == "Row" & res$vars$Axis == "2", "Coord"])
+               res$vars[res$vars$Type == "Active" & res$vars$Position == "Row" & res$vars$Axis == "2", "Coord", drop = TRUE])
 })
 
 

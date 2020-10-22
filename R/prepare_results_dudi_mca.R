@@ -3,7 +3,7 @@
 ##' 
 ##' @seealso \code{\link[ade4]{dudi.acm}}
 ##' @import dplyr
-##' @importFrom tidyr gather
+##' @importFrom tidyr pivot_longer
 ##' @importFrom tidyr unite
 ##' @importFrom utils head
 ##' @export
@@ -54,7 +54,7 @@ prepare_results.acm <- function(obj) {
         vars <- rbind(vars, vars.quali.sup)
     }
 
-    vars <- vars %>% gather(Axis, Coord, starts_with("Comp")) %>%
+    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Comp")) %>%
         mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
@@ -63,7 +63,7 @@ prepare_results.acm <- function(obj) {
     tmp <- tmp %>% mutate(varname = extract_var(tmp),
                           modname = extract_mod(tmp), 
                           Type = "Active", Class = "Qualitative") %>%
-        gather(Axis, Contrib, starts_with("Axis")) %>%
+        pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Axis")) %>%
         mutate(Axis = gsub("^Axis([0-9]+)$", "\\1", Axis),
                Contrib = round(Contrib, 3))
     
@@ -75,7 +75,7 @@ prepare_results.acm <- function(obj) {
                           modname = extract_mod(tmp), 
                           Type = "Active", Class = "Qualitative")
 
-    tmp <- tmp %>% gather(Axis, Cos2, starts_with("Axis")) %>%
+    tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Axis")) %>%
         mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     
@@ -90,7 +90,7 @@ prepare_results.acm <- function(obj) {
     vareta2$Type <- "Active"
     vareta2$Class <- "Qualitative"
 
-    vareta2 <- vareta2 %>% gather(Axis, eta2, starts_with("RS")) %>%
+    vareta2 <- vareta2 %>% pivot_longer(names_to = "Axis", values_to = "eta2", starts_with("RS")) %>%
         mutate(Axis = gsub("RS", "", Axis, fixed = TRUE))
     vareta2$eta2 <- format(vareta2$eta2, scientific = FALSE, nsmall = 3, digits = 0)
 
@@ -104,14 +104,14 @@ prepare_results.acm <- function(obj) {
         tmp_sup$Type <- "Supplementary"
         ind <- ind %>% bind_rows(tmp_sup)
     }
-    ind <- ind %>% gather(Axis, Coord, starts_with("Axis")) %>%
+    ind <- ind %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Axis")) %>%
         mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
     ## Individuals contrib
     tmp <- inertia$row.abs
     tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
-      gather(Axis, Contrib, starts_with("Axis")) %>%
+      pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Axis")) %>%
       mutate(Axis = gsub("^Axis([0-9]+)$", "\\1", Axis),
              Contrib = round(Contrib, 3))
     
@@ -122,7 +122,7 @@ prepare_results.acm <- function(obj) {
     tmp$Name <- rownames(tmp)
     tmp$Type <- "Active"
     tmp <- tmp %>% 
-        gather(Axis, Cos2, starts_with("Axis")) %>%
+        pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Axis")) %>%
         mutate(Axis = gsub("Axis", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
 

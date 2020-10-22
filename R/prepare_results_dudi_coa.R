@@ -3,7 +3,7 @@
 ##' 
 ##' @seealso \code{\link[FactoMineR]{CA}}
 ##' @import dplyr
-##' @importFrom tidyr gather
+##' @importFrom tidyr pivot_longer
 ##' @importFrom utils head
 ##' @export
 
@@ -60,7 +60,7 @@ prepare_results.coa <- function(obj) {
         vars <- rbind(vars, tmp)
     }
     
-    vars <- vars %>% gather(Axis, Coord, starts_with("Comp")) %>%
+    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Comp")) %>%
         mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
@@ -78,7 +78,7 @@ prepare_results.coa <- function(obj) {
                                   Class = "Qualitative")
     names(tmp_col) <- gsub("^Axis([0-9]+)$", "Comp\\1", names(tmp_col))
     tmp <- tmp_col %>% bind_rows(tmp_row) %>%
-        gather(Axis, Contrib, starts_with("Comp")) %>%
+        pivot_longer(names_to ="Axis", values_to = "Contrib", starts_with("Comp")) %>%
         mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
     
@@ -98,7 +98,7 @@ prepare_results.coa <- function(obj) {
                                   Class = "Qualitative")
     names(tmp_col) <- gsub("Axis", "Comp", names(tmp_col), fixed = TRUE)
     tmp <- tmp_col %>% bind_rows(tmp_row) %>%
-        gather(Axis, Cos2, starts_with("Comp")) %>%
+        pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Comp")) %>%
         mutate(Axis = gsub("Comp", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     

@@ -2,7 +2,7 @@
 ##' @aliases prepare_results.speMCA
 ##' @seealso \code{\link[GDAtools]{speMCA}}
 ##' @import dplyr
-##' @importFrom tidyr gather
+##' @importFrom tidyr pivot_longer
 ##' @importFrom utils head
 ##' @importFrom stats pnorm
 ##' @export
@@ -27,14 +27,14 @@ prepare_results.speMCA <- function(obj) {
     vars$Type <- "Active"
     vars$Class <- "Qualitative"
 
-    vars <- vars %>% gather(Axis, Coord, starts_with("dim.")) %>%
+    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("dim.")) %>%
         mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
     ## Contributions
     tmp <- data.frame(obj$var$contrib)
     tmp <- tmp %>% mutate(modname = rownames(tmp), Type = "Active", Class = "Qualitative") %>%
-        gather(Axis, Contrib, starts_with("dim.")) %>%
+        pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("dim.")) %>%
         mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
     
@@ -45,7 +45,7 @@ prepare_results.speMCA <- function(obj) {
     tmp$modname <- rownames(tmp)
     tmp$Type <- "Active"
     tmp$Class <- "Qualitative"
-    tmp <- tmp %>% gather(Axis, Cos2, starts_with("dim.")) %>%
+    tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("dim.")) %>%
         mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
@@ -63,7 +63,7 @@ prepare_results.speMCA <- function(obj) {
     vareta2$Variable <- rownames(vareta2)
     vareta2$Type <- "Active"
     vareta2$Class <- "Qualitative"
-    vareta2 <- vareta2 %>% gather(Axis, eta2, starts_with("dim.")) %>%
+    vareta2 <- vareta2 %>% pivot_longer(names_to = "Axis", values_to = "eta2", starts_with("dim.")) %>%
         mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE))
     vareta2$eta2 <- format(vareta2$eta2, scientific = FALSE, nsmall = 3, digits = 0)
 
@@ -77,14 +77,14 @@ prepare_results.speMCA <- function(obj) {
         tmp_sup$Type <- "Supplementary"
         ind <- ind %>% bind_rows(tmp_sup)
     }
-    ind <- ind %>% gather(Axis, Coord, starts_with("dim.")) %>%
+    ind <- ind %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("dim.")) %>%
         mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
     ## Individuals contrib
     tmp <- data.frame(obj$ind$contrib)
     tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
-        gather(Axis, Contrib, starts_with("dim.")) %>%
+        pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("dim.")) %>%
         mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
     
@@ -94,7 +94,7 @@ prepare_results.speMCA <- function(obj) {
     if (!is.null(obj$supi)) {
         tmp <- data.frame(obj$supi$cos2)
         tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Supplementary") %>%
-            gather(Axis, Cos2, starts_with("dim.")) %>%
+            pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("dim.")) %>%
             mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE),
                    Cos2 = round(Cos2, 3))
         ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))

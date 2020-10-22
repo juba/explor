@@ -3,7 +3,7 @@
 ##' 
 ##' @seealso \code{\link[FactoMineR]{CA}}
 ##' @import dplyr
-##' @importFrom tidyr gather
+##' @importFrom tidyr pivot_longer
 ##' @importFrom utils head
 ##' @export
 
@@ -89,7 +89,7 @@ prepare_results.CA <- function(obj) {
         vars <- rbind(vars, vars.quali.sup)
     }
 
-    vars <- vars %>% gather(Axis, Coord, starts_with("Dim.")) %>%
+    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
@@ -105,7 +105,7 @@ prepare_results.CA <- function(obj) {
                                   Type = "Active",
                                   Class = "Qualitative")
     tmp <- tmp_col %>% bind_rows(tmp_row) %>%
-        gather(Axis, Contrib, starts_with("Dim.")) %>%
+        pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
     
@@ -152,7 +152,7 @@ prepare_results.CA <- function(obj) {
         tmp <- tmp %>% bind_rows(tmp_sup)
     }
 
-    tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
+    tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     

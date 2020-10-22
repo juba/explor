@@ -3,7 +3,7 @@
 ##' 
 ##' @seealso \code{\link[MASS]{mca}}
 ##' @import dplyr
-##' @importFrom tidyr gather
+##' @importFrom tidyr pivot_longer
 ##' @importFrom utils head
 ##' @importFrom stats pnorm
 ##' @export
@@ -37,7 +37,7 @@ prepare_results.mca <- function(obj) {
         vars <- rbind(vars, vars.quali.sup)
     }
  
-    vars <- vars %>% gather(Axis, Coord, starts_with("DimX")) %>%
+    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("DimX")) %>%
         mutate(Axis = gsub("DimX", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
@@ -62,7 +62,7 @@ prepare_results.mca <- function(obj) {
         tmp_sup$Type <- "Supplementary"
         ind <- ind %>% bind_rows(tmp_sup)
     }
-    ind <- ind %>% gather(Axis, Coord, starts_with("DimX")) %>%
+    ind <- ind %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("DimX")) %>%
         mutate(Axis = gsub("DimX", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 

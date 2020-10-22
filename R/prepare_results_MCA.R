@@ -2,7 +2,7 @@
 ##' @aliases prepare_results.MCA
 ##' @seealso \code{\link[FactoMineR]{MCA}}
 ##' @import dplyr
-##' @importFrom tidyr gather
+##' @importFrom tidyr pivot_longer
 ##' @importFrom utils head
 ##' @importFrom stats pnorm
 ##' @export
@@ -65,14 +65,14 @@ prepare_results.MCA <- function(obj) {
         vars <- rbind(vars, vars.quanti.sup)
     }
 
-    vars <- vars %>% gather(Axis, Coord, starts_with("Dim.")) %>%
+    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
     ## Contributions
     tmp <- data.frame(obj$var$contrib)
     tmp <- tmp %>% mutate(modname = rownames(tmp), Type = "Active", Class = "Qualitative") %>%
-        gather(Axis, Contrib, starts_with("Dim.")) %>%
+        pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
     
@@ -90,7 +90,7 @@ prepare_results.MCA <- function(obj) {
         tmp_sup$Class <- "Qualitative"
         tmp <- tmp %>% bind_rows(tmp_sup)
     }
-    tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
+    tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     
@@ -102,7 +102,7 @@ prepare_results.MCA <- function(obj) {
         tmp$modname <- rownames(tmp)
         tmp$Type <- "Supplementary"
         tmp$Class <- "Qualitative"    
-        tmp <- tmp %>% gather(Axis, V.test, starts_with("Dim.")) %>%
+        tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "V.test", starts_with("Dim.")) %>%
             mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                    P.value = round(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
                    V.test = round(V.test, 2))
@@ -126,7 +126,7 @@ prepare_results.MCA <- function(obj) {
         vareta2_sup$Class <- "Qualitative"
         vareta2 <- vareta2 %>% bind_rows(vareta2_sup)
     }
-    vareta2 <- vareta2 %>% gather(Axis, eta2, starts_with("Dim.")) %>%
+    vareta2 <- vareta2 %>% pivot_longer(names_to = "Axis", values_to = "eta2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE))
     vareta2$eta2 <- format(vareta2$eta2, scientific = FALSE, nsmall = 3, digits = 0)
 
@@ -140,14 +140,14 @@ prepare_results.MCA <- function(obj) {
         tmp_sup$Type <- "Supplementary"
         ind <- ind %>% bind_rows(tmp_sup)
     }
-    ind <- ind %>% gather(Axis, Coord, starts_with("Dim.")) %>%
+    ind <- ind %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
     ## Individuals contrib
     tmp <- data.frame(obj$ind$contrib)
     tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
-        gather(Axis, Contrib, starts_with("Dim.")) %>%
+        pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
     
@@ -163,7 +163,7 @@ prepare_results.MCA <- function(obj) {
         tmp_sup$Type <- "Supplementary"
         tmp <- tmp %>% bind_rows(tmp_sup)
     }
-    tmp <- tmp %>% gather(Axis, Cos2, starts_with("Dim.")) %>%
+    tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
     
