@@ -15,8 +15,8 @@ Encoding: UTF-8
 Imports: 
     shiny (>= 1.0),
     DT,
-    dplyr (>= 0.7),
-    tidyr,
+    dplyr (>= 1.0),
+    tidyr (>= 1.0),
     ggplot2,
     highr,
     formatR,
