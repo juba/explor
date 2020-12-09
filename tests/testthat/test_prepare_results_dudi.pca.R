@@ -1,17 +1,17 @@
-library(ade4)
+skip_if_not(require("ade4"))
 context("prepare_results.pca")
 
 data(deug)
 d <- deug$tab
 sup_var <- d[-(1:10), 8:9]
 sup_ind <- d[1:10, -(8:9)]
-pca <- dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
+pca <- ade4::dudi.pca(d[-(1:10), -(8:9)], scale = TRUE, scannf = FALSE, nf = 5)
 ## Supplementary individuals
-pca$supi <- suprow(pca, sup_ind)
+pca$supi <- ade4::suprow(pca, sup_ind)
 ## Supplementary variables
-pca$supv <- supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
+pca$supv <- ade4::supcol(pca, dudi.pca(sup_var, scale = TRUE, scannf = FALSE)$tab)
 
-iner <- inertia.dudi(pca, row.inertia = TRUE, col.inertia = TRUE)
+iner <- ade4::inertia.dudi(pca, row.inertia = TRUE, col.inertia = TRUE)
 
 res <- prepare_results(pca)
 

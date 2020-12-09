@@ -1,8 +1,8 @@
-library(FactoMineR)
+skip_if_not(require("FactoMineR"))
 context("prepare_results.MCA")
 
 data(hobbies)
-mca <- MCA(hobbies[1:1000,c(1:8,21:23)], quali.sup = 9:10, 
+mca <- FactoMineR::MCA(hobbies[1:1000,c(1:8,21:23)], quali.sup = 9:10, 
            quanti.sup = 11, ind.sup = 1:100, excl = c(5, 8),
            graph = FALSE)
 res <- prepare_results(mca)

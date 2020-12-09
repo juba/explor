@@ -1,8 +1,8 @@
-library(FactoMineR)
+skip_if_not(require("FactoMineR"))
 context("prepare_results.PCA")
 
 data(decathlon)
-pca <- PCA(decathlon, ind.sup = 1:5, quanti.sup = 11:12, quali.sup = 13, graph = FALSE)
+pca <- FactoMineR::PCA(decathlon, ind.sup = 1:5, quanti.sup = 11:12, quali.sup = 13, graph = FALSE)
 res <- prepare_results(pca)
 
 test_that("Eigenvalues are equals", {

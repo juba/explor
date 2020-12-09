@@ -1,4 +1,4 @@
-library(ade4)
+skip_if_not(require("ade4"))
 context("prepare_results.acm")
 
 data(banque)
@@ -6,13 +6,13 @@ banque <- banque[1:100, 1:10]
 d <- banque[-(1:10),-(9:10)]
 ind_sup <- banque[1:10, -(9:10)]
 var_sup <- banque[-(1:10),9:10]
-mca <- dudi.acm(d, scannf = FALSE, nf = 5)
+mca <- ade4::dudi.acm(d, scannf = FALSE, nf = 5)
 ## Supplementary variables
-mca$supv <- supcol(mca, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)
+mca$supv <- ade4::supcol(mca, dudi.acm(var_sup, scannf = FALSE, nf = 5)$tab)
 ## Supplementary individuals
 colw <- mca$cw*ncol(d)
-mca$supi <- suprow(mca, ind_sup)
-iner <- inertia.dudi(mca, row.inertia = TRUE, col.inertia = TRUE)
+mca$supi <- ade4::suprow(mca, ind_sup)
+iner <- ade4::inertia.dudi(mca, row.inertia = TRUE, col.inertia = TRUE)
 
 res <- prepare_results(mca)
 

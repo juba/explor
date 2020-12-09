@@ -1,14 +1,14 @@
-library(ade4)
+skip_if_not(require("ade4"))
 context("prepare_results.coa")
 
 data(bordeaux)
 tab <- bordeaux
 row_sup <- tab[5,-4]
 col_sup <- tab[-5,4]
-coa <- dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
-coa$supr <- suprow(coa, row_sup)
-coa$supc <- supcol(coa, col_sup)
-iner <- inertia.dudi(coa, row.inertia = TRUE, col.inertia = TRUE)
+coa <- ade4::dudi.coa(tab[-5,-4], nf = 5, scannf = FALSE)
+coa$supr <- ade4::suprow(coa, row_sup)
+coa$supc <- ade4::supcol(coa, col_sup)
+iner <- ade4::inertia.dudi(coa, row.inertia = TRUE, col.inertia = TRUE)
 res <- prepare_results(coa)
 
 test_that("Eigenvalues are equals", {

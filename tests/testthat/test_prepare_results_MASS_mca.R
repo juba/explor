@@ -1,4 +1,4 @@
-library(MASS)
+skip_if_not(require("MASS"))
 context("prepare_results.mca")
 
 data(farms)

@@ -1,4 +1,5 @@
-library(quanteda.textmodels)
+skip_if_not(require("quanteda.textmodels"))
+skip_if_not(require("quanteda"))
 context("prepare_results.textmodel_ca")
 
 dfmat <- quanteda::dfm(data_corpus_irishbudget2010)

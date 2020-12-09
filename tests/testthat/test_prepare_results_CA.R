@@ -1,8 +1,8 @@
-library(FactoMineR)
+skip_if_not(require("FactoMineR"))
 context("prepare_results.CA")
 
 data(children)
-ca <- CA(children[,1:5], row.sup = 1:3, 
+ca <- FactoMineR::CA(children[,1:5], row.sup = 1:3, 
            col.sup = 5, graph = FALSE)
 res <- prepare_results(ca)
 

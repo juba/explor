@@ -1,8 +1,8 @@
-library(GDAtools)
+skip_if_not(require("GDAtools"))
 context("prepare_results.speMCA")
 
 data(Music)
-mca <- speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
+mca <- GDAtools::speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
 mca$supi <- indsup(mca,Music[1:2,1:5])
 
 res <- prepare_results(mca)
