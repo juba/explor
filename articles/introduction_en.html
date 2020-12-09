@@ -96,7 +96,7 @@
       <h1 data-toc-skip>Interactive MCA/PCA results exploration with explor</h1>
                         <h4 class="author">Julien Barnier</h4>
             
-            <h4 class="date">2020-10-22</h4>
+            <h4 class="date">2020-12-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/juba/explor/blob/master/vignettes/introduction_en.Rmd"><code>vignettes/introduction_en.Rmd</code></a></small>
       <div class="hidden name"><code>introduction_en.Rmd</code></div>
@@ -221,26 +221,26 @@
 </h3>
 <p>To visualize and explore these functions results, just pass the result object to <code><a href="../reference/explor.html">explor()</a></code>.</p>
 <p>Here is an example for a sample PCA with <code>princomp</code> :</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">USArrests</span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">USArrests</span><span class="op">)</span>
 <span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/princomp.html">princomp</a></span><span class="op">(</span><span class="va">USArrests</span>, cor <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></code></pre></div>
 <p><code>explor</code> supports the visualization of supplementary individuals whose scores have been computed with <code>predict</code>. You just have to add them as a <code>supi</code> element to your result object.</p>
 <p>Here is an example with <code>prcomp</code> :</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span><span class="va">USArrests</span><span class="op">[</span><span class="fl">6</span><span class="op">:</span><span class="fl">50</span>,<span class="op">]</span>, scale. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span><span class="op">(</span><span class="va">USArrests</span><span class="op">[</span><span class="fl">6</span><span class="op">:</span><span class="fl">50</span>,<span class="op">]</span>, scale. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">pca</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">pca</span>, <span class="va">USArrests</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></code></pre></div>
 <p>For <code><a href="https://rdrr.io/pkg/MASS/man/mca.html">MASS::mca</a></code>, <code><a href="../reference/explor.html">explor()</a></code> also supports qualitative supplementary variables. You must include their predicted coordinates to a <code>supv</code> element. It’s also best to manually add row names to the <code>supi</code>data, if any :</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span>
 <span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/mca.html">mca</a></span><span class="op">(</span><span class="va">farms</span><span class="op">[</span><span class="fl">4</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, nf <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>
 <span class="va">supi_df</span> <span class="op">&lt;-</span> <span class="va">farms</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>
 <span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mca</span>, <span class="va">supi_df</span>, type<span class="op">=</span><span class="st">"row"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">supi</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">supi_df</span><span class="op">)</span>
 <span class="va">mca</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="va">supi</span>
 <span class="va">mca</span><span class="op">$</span><span class="va">supv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mca</span>, <span class="va">farms</span><span class="op">[</span><span class="fl">4</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">1</span>, drop<span class="op">=</span><span class="cn">FALSE</span><span class="op">]</span>, type<span class="op">=</span><span class="st">"factor"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></code></pre></div>
 <p>Note that the results of these three functions are quite limited : they provide variables and individuals coordinates, but no contributions or squared cosinus.</p>
 </div>
 <div id="factominer-functions" class="section level3">
@@ -248,39 +248,39 @@
 <a href="#factominer-functions" class="anchor"></a><code>FactoMineR</code> functions</h3>
 <p>Supported <code>FactoMineR</code> functions should work “out of the box”. Just pass the result object to <code><a href="../reference/explor.html">explor()</a></code>.</p>
 <p>Example with a principal correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html">FactoMineR::PCA</a></code> :</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr">FactoMineR</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr">FactoMineR</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">decathlon</span><span class="op">)</span>
 <span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html">PCA</a></span><span class="op">(</span><span class="va">decathlon</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span>, quanti.sup <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></code></pre></div>
 <p>Example with a simple correspondence analysis from <code>FactoMiner::CA</code> :</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">children</span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">children</span><span class="op">)</span>
 <span class="va">res.ca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/CA.html">CA</a></span><span class="op">(</span><span class="va">children</span>, row.sup <span class="op">=</span> <span class="fl">15</span><span class="op">:</span><span class="fl">18</span>, col.sup <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">res.ca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">res.ca</span><span class="op">)</span></code></pre></div>
 <p>Example with a multiple correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html">FactoMineR::MCA</a></code> :</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr">FactoMineR</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr">FactoMineR</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">hobbies</span><span class="op">)</span>
 <span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html">MCA</a></span><span class="op">(</span><span class="va">hobbies</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>,<span class="fl">21</span><span class="op">:</span><span class="fl">23</span><span class="op">)</span><span class="op">]</span>, quali.sup <span class="op">=</span> <span class="fl">9</span><span class="op">:</span><span class="fl">10</span>, 
            quanti.sup <span class="op">=</span> <span class="fl">11</span>, ind.sup <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="ade4-functions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#ade4-functions" class="anchor"></a><code>ade4</code> functions</h3>
 <p><code>ade4</code> functions should also work by directly passing the object result to <code><a href="../reference/explor.html">explor()</a></code>.</p>
 <p>For example, to visualize a simple PCA results :</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://pbil.univ-lyon1.fr/ADE-4">ade4</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://pbil.univ-lyon1.fr/ADE-4/">ade4</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">deug</span><span class="op">)</span>
 <span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/dudi.pca.html">dudi.pca</a></span><span class="op">(</span><span class="va">deug</span><span class="op">$</span><span class="va">tab</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>, scannf <span class="op">=</span> <span class="cn">FALSE</span>, nf <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></code></pre></div>
 <p>There’s a bit more work to be done if you want to display supplementary elements, as <code>ade4</code> don’t include them directly in the results analysis.</p>
 <p>For a principal component analysis, you have to compute supplementary individuals (resp. variables) results with <code>suprow</code> (resp. <code>supcol</code>) and add them manually as a <code>supi</code> (resp. <code>supv</code>) element of your result object.</p>
 <p>Here is an example of how to do this :</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">deug</span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">deug</span><span class="op">)</span>
 <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">deug</span><span class="op">$</span><span class="va">tab</span>
 <span class="va">sup_var</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>, <span class="fl">8</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span>
 <span class="va">sup_ind</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="op">-</span><span class="op">(</span><span class="fl">8</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span><span class="op">]</span>
@@ -289,10 +289,10 @@
 <span class="va">pca</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/suprow.html">suprow</a></span><span class="op">(</span><span class="va">pca</span>, <span class="va">sup_ind</span><span class="op">)</span>
 <span class="co">## Supplementary variables</span>
 <span class="va">pca</span><span class="op">$</span><span class="va">supv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/supcol.html">supcol</a></span><span class="op">(</span><span class="va">pca</span>, <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/dudi.pca.html">dudi.pca</a></span><span class="op">(</span><span class="va">sup_var</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>, scannf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">tab</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></code></pre></div>
 <p>You have to do the same thing for supplementary elements in a multiple correspondence analysis :</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">banque</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">banque</span><span class="op">)</span>
 <span class="va">d</span> <span class="op">&lt;-</span> <span class="va">banque</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>,<span class="op">-</span><span class="op">(</span><span class="fl">19</span><span class="op">:</span><span class="fl">21</span><span class="op">)</span><span class="op">]</span>
 <span class="va">ind_sup</span> <span class="op">&lt;-</span> <span class="va">banque</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">-</span><span class="op">(</span><span class="fl">19</span><span class="op">:</span><span class="fl">21</span><span class="op">)</span><span class="op">]</span>
 <span class="va">var_sup</span> <span class="op">&lt;-</span> <span class="va">banque</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>,<span class="fl">19</span><span class="op">:</span><span class="fl">21</span><span class="op">]</span>
@@ -301,36 +301,36 @@
 <span class="va">acm</span><span class="op">$</span><span class="va">supv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/supcol.html">supcol</a></span><span class="op">(</span><span class="va">acm</span>, <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/dudi.acm.html">dudi.acm</a></span><span class="op">(</span><span class="va">var_sup</span>, scannf <span class="op">=</span> <span class="cn">FALSE</span>, nf <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">$</span><span class="va">tab</span><span class="op">)</span>
 <span class="co">## Supplementary individuals</span>
 <span class="va">acm</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/suprow.html">suprow</a></span><span class="op">(</span><span class="va">acm</span>, <span class="va">ind_sup</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">acm</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">acm</span><span class="op">)</span></code></pre></div>
 <p>For simple correspondence analysis, you can add supplementary rows or columns by adding their coordinates to <code>supr</code> and <code>supc</code> elements of your result object :</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">bordeaux</span><span class="op">)</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">bordeaux</span><span class="op">)</span>
 <span class="va">tab</span> <span class="op">&lt;-</span> <span class="va">bordeaux</span>
 <span class="va">row_sup</span> <span class="op">&lt;-</span> <span class="va">tab</span><span class="op">[</span><span class="fl">5</span>,<span class="op">-</span><span class="fl">4</span><span class="op">]</span>
 <span class="va">col_sup</span> <span class="op">&lt;-</span> <span class="va">tab</span><span class="op">[</span><span class="op">-</span><span class="fl">5</span>,<span class="fl">4</span><span class="op">]</span>
 <span class="va">coa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/dudi.coa.html">dudi.coa</a></span><span class="op">(</span><span class="va">tab</span><span class="op">[</span><span class="op">-</span><span class="fl">5</span>,<span class="op">-</span><span class="fl">4</span><span class="op">]</span>, nf <span class="op">=</span> <span class="fl">5</span>, scannf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">coa</span><span class="op">$</span><span class="va">supr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/suprow.html">suprow</a></span><span class="op">(</span><span class="va">coa</span>, <span class="va">row_sup</span><span class="op">)</span>
 <span class="va">coa</span><span class="op">$</span><span class="va">supc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/supcol.html">supcol</a></span><span class="op">(</span><span class="va">coa</span>, <span class="va">col_sup</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">coa</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">coa</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="gdatools-functions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gdatools-functions" class="anchor"></a><code>GDAtools</code> functions</h3>
 <p><code>GDAtools</code> functions should also work by directly passing the object result to <code><a href="../reference/explor.html">explor()</a></code>.</p>
 <p>For example, to visualize a <code>speMCA</code> results :</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://nicolas.robette.free.fr/outils_eng.html">GDAtools</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://nicolas.robette.free.fr/outils_eng.html">GDAtools</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Music</span><span class="op">)</span>
 <span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GDAtools/man/speMCA.html">speMCA</a></span><span class="op">(</span><span class="va">Music</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>,excl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">6</span>,<span class="fl">9</span>,<span class="fl">12</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></code></pre></div>
 <p>To display supplementary individuals, you have to compute their data with the <code>indsup</code> function, and add them manually as a <code>supi</code> element of your result object.</p>
 <p>Here is an example :</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://nicolas.robette.free.fr/outils_eng.html">GDAtools</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://nicolas.robette.free.fr/outils_eng.html">GDAtools</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Music</span><span class="op">)</span>
 <span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GDAtools/man/speMCA.html">speMCA</a></span><span class="op">(</span><span class="va">Music</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">Music</span><span class="op">)</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>,excl<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">6</span>,<span class="fl">9</span>,<span class="fl">12</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span>
 <span class="va">mca</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GDAtools/man/indsup.html">indsup</a></span><span class="op">(</span><span class="va">mca</span>,<span class="va">Music</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="exporting-plots" class="section level2">
@@ -350,15 +350,15 @@
 <p>Another way is to get the R code which allows to generate the current plot. This code can then be used in a script or a <em>Rmarkdown</em> document.</p>
 <p>To do this, click on the <em>Get R code</em> button on the bottom of the left sidebar. A modal dialog should show up with the R code that you can then copy/paste.</p>
 <p>Please note that this R code keeps track of the current plot zooming, but not of any custom label positioning. If you want to keep those, you have to first save them in a CSV file with <em>Export labels positions</em> gear menu entry. Then, in your R script, read this file in an object with <code>read.csv</code> and pass this object to the <code>export_labels_positions</code> argument in the generated code :</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"position_labels.csv"</span><span class="op">)</span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"position_labels.csv"</span><span class="op">)</span>
 <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">explor</span><span class="fu">::</span><span class="fu"><a href="../reference/prepare_results.html">prepare_results</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span>
 <span class="fu">explor</span><span class="fu">::</span><span class="fu"><a href="../reference/MCA_var_plot.html">MCA_var_plot</a></span><span class="op">(</span><span class="va">res</span>, xax <span class="op">=</span> <span class="fl">1</span>, yax <span class="op">=</span> <span class="fl">2</span>,
     var_sup <span class="op">=</span> <span class="cn">TRUE</span>, , var_lab_min_contrib <span class="op">=</span> <span class="fl">0</span>,
     col_var <span class="op">=</span> <span class="st">"Variable"</span>, symbol_var <span class="op">=</span> <span class="st">"Type"</span>,
     size_var <span class="op">=</span> <span class="cn">NULL</span>, size_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">300</span><span class="op">)</span>,
     labels_size <span class="op">=</span> <span class="fl">10</span>, point_size <span class="op">=</span> <span class="fl">56</span>,
-    transitions <span class="op">=</span> <span class="cn">TRUE</span>, labels_positions <span class="op">=</span> <span class="va">labels</span><span class="op">)</span></pre></div>
+    transitions <span class="op">=</span> <span class="cn">TRUE</span>, labels_positions <span class="op">=</span> <span class="va">labels</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="feedback" class="section level2">
