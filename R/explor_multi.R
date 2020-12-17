@@ -144,9 +144,15 @@ explor_multi_table <- function(tab, options, sort_column) {
                         rownames = FALSE)
     indices_3 <- which(names(tab) %in% c("Coord", "Cos2", "V.test", "eta2", "P.value"))
     indices_2 <- which(names(tab) %in% c("Contrib"))
-    dt %>%
-        DT::formatRound(indices_3, digits = 3) %>%
+    if (length(indices_3) > 0) {
+      dt <- dt %>%
+        DT::formatRound(indices_3, digits = 3)
+    }
+    if (length(indices_2) > 0) {
+      dt <- dt %>%
         DT::formatRound(indices_2, digits = 2)
+    }
+    dt
 }
 
 
@@ -180,10 +186,10 @@ explor_multi_ind_dataUI <- function(id, settings, axes) {
                                choices = axes, selected = "Axis 1"))),
         column(10,
                h4(gettext("Active individuals")),
-               DT::dataTableOutput(ns("indtable")),
+               DT::DTOutput(ns("indtable")),
                if (settings$has_sup_ind) {
                    list(h4(gettext("Supplementary individuals")),
-                        DT::dataTableOutput(ns("indtablesup")))
+                        DT::DTOutput(ns("indtablesup")))
                }
                ))
 }
@@ -201,7 +207,7 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
             filter(Type == "Active", Axis == input$inddim) %>%
             select(all_of(settings()$ind_columns))
     })
-    output$indtable <- DT::renderDataTable(
+    output$indtable <- DT::renderDT(
                                explor_multi_table(indTable(), table_options, "Coord"))
 
     ## Supplementary individuals
@@ -210,7 +216,7 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
             filter(Type == "Supplementary", Axis == input$inddim) %>%
             select(all_of(settings()$indsup_columns))
     })
-    output$indtablesup <- DT::renderDataTable(
+    output$indtablesup <- DT::renderDT(
                                   explor_multi_table(indTableSup(), table_options, "Coord"))
 }
 
@@ -491,7 +497,7 @@ explor_multi_var_dataUI <- function(id, settings, axes) {
         column(10,
                h4(if(settings$type == "CA") gettext("Active levels")                   
                   else gettext("Active variables")),
-               DT::dataTableOutput(ns("vartable")),
+               DT::DTOutput(ns("vartable")),
                if (settings$has_sup_vars || (settings$type == "CA" && settings$has_sup_levels)) {
                    list(h4(
                      if(settings$type == "CA") {
@@ -499,19 +505,19 @@ explor_multi_var_dataUI <- function(id, settings, axes) {
                      } else {
                        gettext("Supplementary variables")
                      }),
-                     DT::dataTableOutput(ns("vartablesup")))
+                     DT::DTOutput(ns("vartablesup")))
                },
                if (settings$has_var_eta2) {
                    list(h4(withMathJax(gettext("Variables \\(\\eta^2\\)"))),
-                        DT::dataTableOutput(ns("vartableeta2")))
+                        DT::DTOutput(ns("vartableeta2")))
                },
                if (settings$has_sup_vars && settings$has_varsup_eta2) {
                    list(h4(gettext("Supplementary variables \\(\\eta^2\\)")),
-                        DT::dataTableOutput(ns("vartablesupeta2")))
+                        DT::DTOutput(ns("vartablesupeta2")))
                },
                if (settings$type == "PCA" && settings$has_quali_sup_vars) {
                    list(h4(gettext("Qualitative supplementary variables")),
-                        DT::dataTableOutput(ns("vartablequalisup")))
+                        DT::DTOutput(ns("vartablequalisup")))
                }
                )
     )
@@ -538,7 +544,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
     vartable_sort <- reactive({
         if(settings()$has_contrib) "Contrib" else "Coord"
     })
-    output$vartable <- DT::renderDataTable(
+    output$vartable <- DT::renderDT(
                                explor_multi_table(varTable(), table_options, vartable_sort()))
 
     ## Supplementary variables
@@ -557,7 +563,8 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
         tmp <- tmp %>% select(all_of(settings()$varsup_columns))
         data.frame(tmp)
     })
-    output$vartablesup <- DT::renderDataTable(
+    
+    output$vartablesup <- DT::renderDT(
                                   explor_multi_table(varTableSup(), table_options, "Coord"))
 
     ## PCA qualitative supplementary variable
@@ -570,7 +577,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
             data.frame(tmp)
         }
     })
-    output$vartablequalisup <- DT::renderDataTable(
+    output$vartablequalisup <- DT::renderDT(
                                        explor_multi_table(varTableQualiSup(), table_options, "Coord"))
 
     ## Variables eta2
@@ -581,7 +588,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
                     arrange(eta2)
         }
     })
-    output$vartableeta2 <- DT::renderDataTable(
+    output$vartableeta2 <- DT::renderDT(
                                    explor_multi_table(varTableEta2(), table_options, "eta2"))
 
     ## Supplementary variables eta2
@@ -594,7 +601,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
                     arrange(eta2)
         }
     })
-    output$vartablesupeta2 <- DT::renderDataTable(
+    output$vartablesupeta2 <- DT::renderDT(
                                   explor_multi_table(varTableSupEta2(), table_options, "eta2"))
 
 }
@@ -616,7 +623,7 @@ explor_multi_eigenUI <- function(id, eig) {
                plotOutput(ns("eigplot"), height = "500px")),
         column(3, offset = 1,
                h4(gettext("Eigenvalues table")),
-               DT::dataTableOutput(ns("eigtab"))))
+               DT::DTOutput(ns("eigtab"))))
 }
 
 
@@ -632,7 +639,7 @@ explor_multi_eigen <- function(input, output, session, eig) {
           scale_y_continuous(gettext("Percentage of inertia"))
     })
     ## Table
-    output$eigtab <- DT::renderDataTable({
+    output$eigtab <- DT::renderDT({
         tmp <- eig()[1:nb(),]
         tmp$cumpercent <- cumsum(tmp$percent)
         names(tmp) <- c(gettext("Axis"), "%", "Cum. %")
