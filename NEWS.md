@@ -1,6 +1,6 @@
 # explor 0.3.8
 
-
+* Fix supplementary variables not showing in MCA biplot
 
 # explor 0.3.7
 
