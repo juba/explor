@@ -235,8 +235,16 @@ MCA_bi_data <- function(res, settings) {
     ind_data$source <- "ind"
     ind_data$key <- ind_data$Name
     # Compute var data
-    var_data <- MCA_var_data(res, settings$xax, settings$yax, var_sup = settings$var_sup, 
-        var_lab_min_contrib = settings$bi_lab_min_contrib)
+    var_sup_choice <- res$vars %>% 
+        filter(Type == "Supplementary") %>%
+        pull("Variable") %>%
+        unique()
+    var_data <- MCA_var_data(
+        res, settings$xax, settings$yax, 
+        var_sup = settings$var_sup, 
+        var_sup_choice = var_sup_choice,
+        var_lab_min_contrib = settings$bi_lab_min_contrib
+    )
     var_data$source <- "var"
     var_data$key <- paste(var_data$Variable, var_data$Level, sep = "-")
     
