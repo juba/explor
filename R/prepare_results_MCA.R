@@ -14,13 +14,13 @@ prepare_results.MCA <- function(obj) {
     vars <- data.frame(obj$var$coord)
     ## Axes names and inertia
     axes <- seq_len(ncol(obj$var$coord))
-    names(axes) <- paste("Axis", axes, paste0("(", head(round(obj$eig[, 2], 2), length(axes)),"%)"))
+    names(axes) <- paste("Axis", axes, paste0("(", head(round(obj$eig[, 2], 2), length(axes)), "%)"))
     ## Eigenvalues
-    eig <- data.frame(dim = 1:nrow(obj$eig), percent = obj$eig[,2])
+    eig <- data.frame(dim = 1:nrow(obj$eig), percent = obj$eig[, 2])
 
     ## Variables coordinates
-    varnames <- sapply(obj$call$X[,obj$call$quali, drop = FALSE], nlevels)
-    varnames <- rep(names(varnames),varnames)
+    varnames <- sapply(obj$call$X[, obj$call$quali, drop = FALSE], nlevels)
+    varnames <- rep(names(varnames), varnames)
     if (!is.null(obj$call$excl)) varnames <- varnames[-obj$call$excl]
     vars$varname <- varnames
     vars$modname <- rownames(vars)
@@ -31,7 +31,7 @@ prepare_results.MCA <- function(obj) {
     quali.mods <- rownames(obj$var$coord)
     # Remove supplementary individuals from counts
     if (is.null(obj$call$ind.sup)) counts.tab <- obj$call$Xtot
-    else counts.tab <- obj$call$Xtot[-(obj$call$ind.sup), ]
+    else counts.tab <- obj$call$Xtot[- (obj$call$ind.sup), ]
     # Fix when MCA called with tab.disj, see #37
     names(counts.tab) <- make.unique(names(counts.tab))
     counts <- sapply(counts.tab[, quali.mods, drop = FALSE], sum)
@@ -45,13 +45,13 @@ prepare_results.MCA <- function(obj) {
             vars.quali.sup$varname <- gsub("[._][^._]+?$", "", varnames)
         } else {
             varnames <- sapply(obj$call$X[, obj$call$quali.sup, drop = FALSE], nlevels)
-            vars.quali.sup$varname <- rep(names(varnames),varnames)
+            vars.quali.sup$varname <- rep(names(varnames), varnames)
         }
         vars.quali.sup$modname <- rownames(vars.quali.sup)
         vars.quali.sup$Type <- "Supplementary"
         vars.quali.sup$Class <- "Qualitative"
         quali.sup.mods <- rownames(obj$quali.sup$coord)
-        counts <- sapply(counts.tab[,quali.sup.mods, drop = FALSE], sum)
+        counts <- sapply(counts.tab[, quali.sup.mods, drop = FALSE], sum)
         vars.quali.sup$Count <- counts
         vars <- rbind(vars, vars.quali.sup)
     }
@@ -67,13 +67,15 @@ prepare_results.MCA <- function(obj) {
         vars <- rbind(vars, vars.quanti.sup)
     }
 
-    vars <- vars %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Dim.")) %>%
+    vars <- vars %>%
+        pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
     ## Contributions
     tmp <- data.frame(obj$var$contrib)
-    tmp <- tmp %>% mutate(modname = rownames(tmp), Type = "Active", Class = "Qualitative") %>%
+    tmp <- tmp %>%
+        mutate(modname = rownames(tmp), Type = "Active", Class = "Qualitative") %>%
         pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
@@ -92,7 +94,8 @@ prepare_results.MCA <- function(obj) {
         tmp_sup$Class <- "Qualitative"
         tmp <- tmp %>% bind_rows(tmp_sup)
     }
-    tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
+    tmp <- tmp %>%
+        pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
 
@@ -104,7 +107,8 @@ prepare_results.MCA <- function(obj) {
         tmp$modname <- rownames(tmp)
         tmp$Type <- "Supplementary"
         tmp$Class <- "Qualitative"
-        tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "V.test", starts_with("Dim.")) %>%
+        tmp <- tmp %>%
+            pivot_longer(names_to = "Axis", values_to = "V.test", starts_with("Dim.")) %>%
             mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                    P.value = round(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
                    V.test = round(V.test, 2))
@@ -128,7 +132,8 @@ prepare_results.MCA <- function(obj) {
         vareta2_sup$Class <- "Qualitative"
         vareta2 <- vareta2 %>% bind_rows(vareta2_sup)
     }
-    vareta2 <- vareta2 %>% pivot_longer(names_to = "Axis", values_to = "eta2", starts_with("Dim.")) %>%
+    vareta2 <- vareta2 %>%
+        pivot_longer(names_to = "Axis", values_to = "eta2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE))
     vareta2$eta2 <- format(vareta2$eta2, scientific = FALSE, nsmall = 3, digits = 0)
 
@@ -142,13 +147,15 @@ prepare_results.MCA <- function(obj) {
         tmp_sup$Type <- "Supplementary"
         ind <- ind %>% bind_rows(tmp_sup)
     }
-    ind <- ind %>% pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Dim.")) %>%
+    ind <- ind %>%
+        pivot_longer(names_to = "Axis", values_to = "Coord", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Coord = round(Coord, 3))
 
     ## Individuals contrib
     tmp <- data.frame(obj$ind$contrib)
-    tmp <- tmp %>% mutate(Name = rownames(tmp), Type = "Active") %>%
+    tmp <- tmp %>%
+        mutate(Name = rownames(tmp), Type = "Active") %>%
         pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
@@ -165,16 +172,17 @@ prepare_results.MCA <- function(obj) {
         tmp_sup$Type <- "Supplementary"
         tmp <- tmp %>% bind_rows(tmp_sup)
     }
-    tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
+    tmp <- tmp %>%
+        pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
 
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
 
     ## Qualitative data for individuals plot color mapping
-    quali_data <- obj$call$X[,obj$call$quali]
+    quali_data <- obj$call$X[, obj$call$quali]
     if (!is.null(obj$quali.sup)) {
-        quali_data <- obj$call$X[,obj$call$quali.sup, drop = FALSE] %>% bind_cols(quali_data)
+        quali_data <- obj$call$X[, obj$call$quali.sup, drop = FALSE] %>% bind_cols(quali_data)
     }
     quali_data$Name <- rownames(obj$call$X)
 
