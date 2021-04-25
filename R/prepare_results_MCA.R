@@ -17,7 +17,7 @@ prepare_results.MCA <- function(obj) {
     names(axes) <- paste("Axis", axes, paste0("(", head(round(obj$eig[, 2], 2), length(axes)),"%)"))
     ## Eigenvalues
     eig <- data.frame(dim = 1:nrow(obj$eig), percent = obj$eig[,2])
-    
+
     ## Variables coordinates
     varnames <- sapply(obj$call$X[,obj$call$quali, drop = FALSE], nlevels)
     varnames <- rep(names(varnames),varnames)
@@ -32,9 +32,11 @@ prepare_results.MCA <- function(obj) {
     # Remove supplementary individuals from counts
     if (is.null(obj$call$ind.sup)) counts.tab <- obj$call$Xtot
     else counts.tab <- obj$call$Xtot[-(obj$call$ind.sup), ]
+    # Fix when MCA called with tab.disj, see #37
+    names(counts.tab) <- make.unique(names(counts.tab))
     counts <- sapply(counts.tab[, quali.mods, drop = FALSE], sum)
     vars$Count <- counts
-    
+
     ## Supplementary variables coordinates
     if (!is.null(obj$quali.sup)) {
         vars.quali.sup <- data.frame(obj$quali.sup$coord)
@@ -75,9 +77,9 @@ prepare_results.MCA <- function(obj) {
         pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
-    
+
     vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
-    
+
     ## Cos2
     tmp <- data.frame(obj$var$cos2)
     tmp$modname <- rownames(tmp)
@@ -93,27 +95,27 @@ prepare_results.MCA <- function(obj) {
     tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
-    
+
     vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
 
     ## V.test for supplementary qualitative variables
-    if (!is.null(obj$quali.sup)) {  
+    if (!is.null(obj$quali.sup)) {
         tmp <- data.frame(obj$quali.sup$v.test)
         tmp$modname <- rownames(tmp)
         tmp$Type <- "Supplementary"
-        tmp$Class <- "Qualitative"    
+        tmp$Class <- "Qualitative"
         tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "V.test", starts_with("Dim.")) %>%
             mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                    P.value = round(ifelse(V.test >= 0, 2 * (1 - pnorm(V.test)), 2 * pnorm(V.test)), 3),
                    V.test = round(V.test, 2))
-        
+
         vars <- vars %>% left_join(tmp, by = c("modname", "Type", "Class", "Axis"))
     }
-    
+
     vars <- vars %>%
         rename(Variable = varname, Level = modname) %>%
         as.data.frame()
-    
+
     ## Variables eta2
     vareta2 <- data.frame(obj$var$eta2)
     vareta2$Variable <- rownames(vareta2)
@@ -150,9 +152,9 @@ prepare_results.MCA <- function(obj) {
         pivot_longer(names_to = "Axis", values_to = "Contrib", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Contrib = round(Contrib, 3))
-    
+
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
-    
+
     ## Individuals Cos2
     tmp <- data.frame(obj$ind$cos2)
     tmp$Name <- rownames(tmp)
@@ -166,17 +168,17 @@ prepare_results.MCA <- function(obj) {
     tmp <- tmp %>% pivot_longer(names_to = "Axis", values_to = "Cos2", starts_with("Dim.")) %>%
         mutate(Axis = gsub("Dim.", "", Axis, fixed = TRUE),
                Cos2 = round(Cos2, 3))
-    
+
     ind <- ind %>% left_join(tmp, by = c("Name", "Type", "Axis"))
-    
+
     ## Qualitative data for individuals plot color mapping
     quali_data <- obj$call$X[,obj$call$quali]
     if (!is.null(obj$quali.sup)) {
         quali_data <- obj$call$X[,obj$call$quali.sup, drop = FALSE] %>% bind_cols(quali_data)
     }
     quali_data$Name <- rownames(obj$call$X)
-    
-    
+
+
     return(list(vars = vars, ind = ind, eig = eig, axes = axes, vareta2 = vareta2, quali_data = quali_data))
-    
+
 }
