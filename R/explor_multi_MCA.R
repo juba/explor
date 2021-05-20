@@ -5,10 +5,10 @@
 explor.MCA <- function(obj) {
     if (!inherits(obj, "MCA"))
         stop("obj must be of class MCA")
-    
+
     ## results preparation
     res <- prepare_results(obj)
-    
+
     ## Settings
     settings <- list()
     settings$var_columns <-
@@ -27,16 +27,16 @@ explor.MCA <- function(obj) {
     settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
     settings$indsup_columns <- c("Name", "Coord")
     settings$obj_name <- deparse(substitute(obj))
-    
+
     settings$has_count <- TRUE
     settings$has_contrib <- TRUE
     settings$has_cos2 <- TRUE
     settings$has_var_eta2 <- TRUE
     settings$has_varsup_eta2 <- TRUE
-    
+
     ## Launch interface
     explor_multi_mca(res, settings)
-    
+
 }
 
 ##' @rdname explor
@@ -46,10 +46,10 @@ explor.MCA <- function(obj) {
 explor.speMCA <- function(obj) {
     if (!inherits(obj, "speMCA"))
         stop("obj must be of class speMCA")
-    
+
     ## results preparation
     res <- prepare_results(obj)
-    
+
     ## Settings
     settings <- list()
     settings$var_columns <-
@@ -59,24 +59,22 @@ explor.speMCA <- function(obj) {
             "Level",
             "Class",
             "Coord",
-            "Cos2",
-            "V.test",
-            "P.value")
+            "Cos2")
     settings$vareta2_columns <- c("Variable", "eta2")
     settings$varsupeta2_columns <- c("Variable", "eta2")
     settings$ind_columns <- c("Name", "Coord", "Contrib")
     settings$indsup_columns <- c("Name", "Coord", "Cos2")
     settings$obj_name <- deparse(substitute(obj))
-    
+
     settings$has_count <- FALSE
     settings$has_contrib <- TRUE
     settings$has_cos2 <- TRUE
     settings$has_var_eta2 <- TRUE
     settings$has_varsup_eta2 <- FALSE
-    
+
     ## Launch interface
     explor_multi_mca(res, settings)
-    
+
 }
 
 ##' @rdname explor
@@ -86,10 +84,10 @@ explor.speMCA <- function(obj) {
 explor.mca <- function(obj) {
     if (!inherits(obj, "mca"))
         stop("obj must be of class mca")
-    
+
     ## results preparation
     res <- prepare_results(obj)
-    
+
     ## Settings
     settings <- list()
     settings$var_columns <- c("Variable", "Level", "Coord")
@@ -98,16 +96,16 @@ explor.mca <- function(obj) {
     settings$ind_columns <- c("Name", "Coord")
     settings$indsup_columns <- c("Name", "Coord")
     settings$obj_name <- deparse(substitute(obj))
-    
+
     settings$has_count <- FALSE
     settings$has_contrib <- FALSE
     settings$has_cos2 <- FALSE
     settings$has_var_eta2 <- FALSE
     settings$has_varsup_eta2 <- FALSE
-    
+
     ## Launch interface
     explor_multi_mca(res, settings)
-    
+
 }
 
 
@@ -141,10 +139,10 @@ explor.acm <- function(obj) {
     if (!inherits(obj, "acm") ||
             !inherits(obj, "dudi"))
         stop("obj must be of class dudi and acm")
-    
+
     ## results preparation
     res <- prepare_results(obj)
-    
+
     ## Settings
     settings <- list()
     settings$var_columns <-
@@ -154,16 +152,16 @@ explor.acm <- function(obj) {
     settings$ind_columns <- c("Name", "Coord", "Contrib", "Cos2")
     settings$indsup_columns <- c("Name", "Coord")
     settings$obj_name <- deparse(substitute(obj))
-    
+
     settings$has_count <- FALSE
     settings$has_contrib <- TRUE
     settings$has_cos2 <- TRUE
     settings$has_var_eta2 <- TRUE
     settings$has_varsup_eta2 <- FALSE
-    
+
     ## Launch interface
     explor_multi_mca(res, settings)
-    
+
 }
 
 
@@ -179,18 +177,18 @@ explor_multi_mca <- function(res, settings) {
     settings$has_sup_vars <- "Supplementary" %in% res$vars$Type
     settings$has_sup_ind <- "Supplementary" %in% res$ind$Type
     settings$type <- "MCA"
-    
+
     shiny::shinyApp(
         ui = navbarPage(
             gettext("MCA"),
             header = tags$head(tags$style(explor_multi_css())),
-            
+
             tabPanel(
                 gettext("Eigenvalues"),
                 explor_multi_eigenUI("eigen", res$eig)
             ),
 
-            ## VARIABLES PLOT UI            
+            ## VARIABLES PLOT UI
             tabPanel(gettext("Variables plot"),
                 fluidRow(
                     column(
@@ -201,7 +199,7 @@ explor_multi_mca <- function(res, settings) {
                                 gettext("Labels size"),
                                 4, 20, 10),
                             explor_multi_auto_labels_input(res$vars, "var"),
-                            checkboxInput("var_prepend_varname", 
+                            checkboxInput("var_prepend_varname",
                                 gettext("Prepend variable name")),
                             sliderInput("var_point_size",
                                 gettext("Points size"),
@@ -225,12 +223,12 @@ explor_multi_mca <- function(res, settings) {
                     column(10,
                         scatterD3Output("varplot", height = "auto"))
                 )),
-            
+
             tabPanel(
                 gettext("Variables data"),
                 explor_multi_var_dataUI("var_data", settings, res$axes)
             ),
-            
+
             ## INDIVIDUALS PLOT UI
             tabPanel(gettext("Individuals plot"),
                 fluidRow(
@@ -278,7 +276,7 @@ explor_multi_mca <- function(res, settings) {
                 gettext("Individuals data"),
                 explor_multi_ind_dataUI("ind_data", settings, res$axes)
             ),
-            
+
             ## BIPLOT UI
             tabPanel(gettext("Biplot"),
                 fluidRow(
@@ -292,7 +290,7 @@ explor_multi_mca <- function(res, settings) {
                                 4, 20, 12),
                             uiOutput("bi_auto_labels"),
                             explor_multi_min_contrib_input(res$vars, settings, "bi"),
-                            
+
                             div(id = "bi_accordion", class = "panel-group",
                                 role="tablist", `aria-multiselectable`="true",
                                 ## Individuals accordion
@@ -365,13 +363,13 @@ explor_multi_mca <- function(res, settings) {
                         scatterD3Output("biplot"))
                 ))
         ),
-        
+
         server = function(input, output) {
             ## Eigenvalues
             callModule(explor_multi_eigen,
                 "eigen",
                 reactive(res$eig))
-            
+
             ## Variables plot code
             varplot_code <- reactive({
                 col_var <- if (input$var_col == "None") NULL else input$var_col
@@ -382,7 +380,7 @@ explor_multi_mca <- function(res, settings) {
                 var_auto_labels <- if (!is.null(input$var_auto_labels) && input$var_auto_labels) "\"auto\"" else "NULL"
                 var_sup <- settings$has_sup_vars && input$var_sup
                 var_sup_choice <- if(var_sup) paste0(utils::capture.output(dput(input$var_sup_choice)), collapse="") else NULL
-                
+
                 paste0(
                     "explor::MCA_var_plot(res",
                     ", xax = ", input$var_x,
@@ -401,22 +399,22 @@ explor_multi_mca <- function(res, settings) {
                     ", labels_prepend_var = ", input$var_prepend_varname
                 )
             })
-            
+
             ## Variables plot
             output$varplot <- scatterD3::renderScatterD3({
                 code <- paste0(varplot_code(), ", in_explor = TRUE)")
                 eval(parse(text = code))
             })
-            
+
             ## Variables plot code export modal dialog
             observeEvent(input$explor_var_plot_code, {
-                showModal(code_modal(settings$obj_name, 
+                showModal(code_modal(settings$obj_name,
                     varplot_code(),
                     explor_multi_zoom_code(input$var_zoom_range)
                 ))
             })
-            
-            
+
+
             ## Indidivuals plot code
             indplot_code <- reactive({
                 col_var <- if (input$ind_col == "None") NULL else input$ind_col
@@ -424,7 +422,7 @@ explor_multi_mca <- function(res, settings) {
                 opacity_var <- if (!is.null(input$ind_opacity_var) && input$ind_opacity_var == "Fixed") NULL else input$ind_opacity_var
                 ind_lab_min_contrib <- if (settings$has_contrib) input$ind_lab_min_contrib else 0
                 ind_auto_labels <- if (!is.null(input$ind_auto_labels) && input$ind_auto_labels) "\"auto\"" else "NULL"
-                
+
                 paste0(
                     "explor::MCA_ind_plot(res, ",
                     "xax = ", input$ind_x,
@@ -434,7 +432,7 @@ explor_multi_mca <- function(res, settings) {
                     ", ind_lab_min_contrib = ", ind_lab_min_contrib,
                     ", col_var = ", deparse(substitute(col_var)),
                     ", labels_size = ", input$ind_labels_size,
-                    ", point_opacity = ", input$ind_opacity, 
+                    ", point_opacity = ", input$ind_opacity,
                     ", opacity_var = ", deparse(substitute(opacity_var)),
                     ", point_size = ", input$ind_point_size,
                     ", ellipses = ", input$ind_ellipses,
@@ -442,22 +440,22 @@ explor_multi_mca <- function(res, settings) {
                     ", labels_positions = ", ind_auto_labels
                 )
             })
-            
+
             ## Indidivuals plot
             output$indplot <- scatterD3::renderScatterD3({
                 code <- paste0(indplot_code(), ", in_explor = TRUE)")
                 eval(parse(text = code))
             })
-            
+
             ## Indidivuals plot code export modal dialog
             observeEvent(input$explor_ind_plot_code, {
-                showModal(code_modal(settings$obj_name, 
+                showModal(code_modal(settings$obj_name,
                     indplot_code(),
                     explor_multi_zoom_code(input$ind_zoom_range)
                     ))
             })
-            
-            
+
+
             ## biplot code
             biplot_code <- reactive({
                 bi_auto_labels <- if (!is.null(input$bi_auto_labels) && input$bi_auto_labels) "\"auto\"" else "NULL"
@@ -465,41 +463,41 @@ explor_multi_mca <- function(res, settings) {
                 col_var <- if (input$bi_col == "None") NULL else input$bi_col
                 symbol_var <- if (input$bi_symbol == "None") NULL else input$bi_symbol
                 opacity_var <- if (!is.null(input$bi_opacity_var) && input$bi_opacity_var == "Fixed") NULL else input$bi_opacity_var
-                
+
                 paste0(
                     "explor::MCA_biplot(res",
                     ", xax = ", input$bi_x,
                     ", yax = ", input$bi_y,
                     ", col_var = ", deparse(substitute(col_var)),
-                    ", ind_point_size = ", input$bi_ind_point_size, 
-                    ", ind_opacity = ", input$bi_ind_point_opacity, 
-                    ", ind_opacity_var = ", deparse(substitute(opacity_var)), 
+                    ", ind_point_size = ", input$bi_ind_point_size,
+                    ", ind_opacity = ", input$bi_ind_point_opacity,
+                    ", ind_opacity_var = ", deparse(substitute(opacity_var)),
                     ", ind_labels = ", input$bi_ind_labels_show,
-                    ", var_point_size = ", input$bi_var_point_size, 
+                    ", var_point_size = ", input$bi_var_point_size,
                     ", var_sup = ", settings$has_sup_vars && input$bi_var_sup,
                     ", ind_sup = ", settings$has_sup_ind && input$bi_ind_sup,
                     ", labels_size = ", input$bi_lab_size,
                     ", bi_lab_min_contrib = ", bi_lab_min_contrib,
-                    ", symbol_var = ", deparse(substitute(symbol_var)),     
+                    ", symbol_var = ", deparse(substitute(symbol_var)),
                     ", transitions = ", input$bi_transitions,
                     ", labels_positions = ", bi_auto_labels
                 )
             })
-            
+
             ## Biplot
             output$biplot <- scatterD3::renderScatterD3({
                 code <- paste0(biplot_code(), ", in_explor = TRUE)")
                 eval(parse(text = code))
             })
-            
+
             ## Biplot code export modal dialog
             observeEvent(input$explor_bi_plot_code, {
-                showModal(code_modal(settings$obj_name, 
+                showModal(code_modal(settings$obj_name,
                     biplot_code(),
                     explor_multi_zoom_code(input$bi_zoom_range)
                 ))
             })
-            
+
             ## Only show automatic label placement checkbox if less than 100 labels
             output$bi_auto_labels <- renderUI({
                 n_label <- sum(res$vars$Level[res$vars$Axis == 1] != "")
@@ -515,13 +513,13 @@ explor_multi_mca <- function(res, settings) {
                 "var_data",
                 reactive(res),
                 reactive(settings))
-            
-            ## Individual data module            
+
+            ## Individual data module
             callModule(explor_multi_ind_data,
                 "ind_data",
                 reactive(res),
                 reactive(settings))
-            
+
             ## Lasso modal dialog
             observeEvent(input$show_lasso_modal, {
                 showModal(modalDialog(
@@ -530,7 +528,7 @@ explor_multi_mca <- function(res, settings) {
                     easyClose = TRUE
                 ))
             })
-            
+
         }
     )
 }
