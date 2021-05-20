@@ -2,8 +2,9 @@ skip_if_not(require("GDAtools"))
 context("prepare_results.speMCA")
 
 data(Music)
-mca <- GDAtools::speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
-mca$supi <- indsup(mca,Music[1:2,1:5])
+mca <- GDAtools::speMCA(Music[3:nrow(Music),1:4],excl=c(3,6,9,12))
+mca$supi <- indsup(mca,Music[1:2,1:4])
+mca$supv <- speMCA_varsup(mca,Music[3:nrow(Music),5:6])
 
 res <- prepare_results(mca)
 
@@ -35,6 +36,13 @@ test_that("Supplementary individuals results are equal", {
                data.frame(res$ind)[res$ind$Type == "Supplementary" & res$ind$Axis == "4", "Coord"])
   expect_equal(as.vector(round(mca$supi$cos2[,2],3)),
                data.frame(res$ind)[res$ind$Type == "Supplementary" & res$ind$Axis == "2", "Cos2"])
+})  
+
+test_that("Supplementary variables results are equal", {
+  expect_equal(round(GDAtools::varsup(mca, Music[3:nrow(Music), 5])$coord[,1], 3),
+               data.frame(res$vars)[res$vars$Type == "Supplementary" & res$vars$Variable == "Classical" & res$vars$Axis == "1", "Coord"])
+  expect_equal(round(GDAtools::varsup(mca, Music[3:nrow(Music), 6])$cos2[,2], 3),
+               data.frame(res$vars)[res$vars$Type == "Supplementary" & res$vars$Variable == "Gender" & res$vars$Axis == "2", "Cos2"])
 })  
 
 test_that("Qualitative data are equal", {

@@ -1,5 +1,6 @@
 # explor 0.3.8
 
+* Add `speMCA_varsup` function and support for supplementary variables in `GDAtools::speMCA` results
 * Fix supplementary variables not showing in MCA biplot
 
 # explor 0.3.7

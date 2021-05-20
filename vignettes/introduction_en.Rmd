@@ -27,7 +27,7 @@ Multiple correspondence analysis  | MCA  | [FactoMineR](http://factominer.free.f
 Principal component analysis  | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Qualitative supplementary variables are ignored
 Correspondance analysis  | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
 Multiple correspondence analysis  | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Quantitative supplementary variables are ignored
-Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Supplementary variables are not supported
+Specific Multiple Correspondance Analysis | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | -
 Multiple Correspondance Analysis | mca | [MASS](https://cran.r-project.org/package=MASS) | Quantitative supplementary variables are not supported
 Principal Component Analysis  | princomp  | stats | Supplementary variables are ignored
 Principal Component Analysis  | prcomp  | stats | Supplementary variables are ignored
@@ -204,20 +204,25 @@ For example, to visualize a `speMCA` results :
 ```r
 library(GDAtools)
 data(Music)
-mca <- speMCA(Music[,1:5],excl=c(3,6,9,12,15))
+mca <- speMCA(Music[,1:5], excl = c(3, 6, 9, 12, 15))
 explor(mca)
 ```
 
 To display supplementary individuals, you have to compute their data with the
-`indsup` function, and add them manually as a `supi` element of your result object.
-
-Here is an example :
+`indsup` function, and add them manually as a `supi` element of your result object :
 
 ```r
-library(GDAtools)
-data(Music)
-mca <- speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
-mca$supi <- indsup(mca,Music[1:2,1:5])
+mca <- speMCA(Music[3:nrow(Music), 1:5], excl = c(3, 6, 9, 12, 15))
+mca$supi <- indsup(mca, Music[1:2, 1:5])
+explor(mca)
+```
+
+To display supplementary variables, you have to compute their data with the `speMCA_varsup` function and add them manually as a `supv` element of your result object :
+
+```r
+mca <- speMCA(Music[3:nrow(Music), 1:4], excl = c(3, 6, 9, 12))
+mca$supi <- indsup(mca, Music[1:2, 1:4])
+mca$supv <- speMCA_varsup(mca, Music[3:nrow(Music), 5:6])
 explor(mca)
 ```
 

@@ -27,7 +27,7 @@ Analyse des correspondances multiples  | MCA  | [FactoMineR](http://factominer.f
 Analyse en composantes principales | dudi.pca  | [ade4](https://cran.r-project.org/package=ade4) | Les variables supplémentaires qualitatives ne sont pas prises en charge
 Analyse des correspondances   | dudi.coa  | [ade4](https://cran.r-project.org/package=ade4)  | -
 Analyse des correspondances multiples   | dudi.acm  | [ade4](https://cran.r-project.org/package=ade4) | Les variables supplémentaires quantitatives ne sont pas prises en charge
-Analyse des correspondances multiples spécifique | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | Les variables supplémentaires ne sont pas prises en charge
+Analyse des correspondances multiples spécifique | speMCA | [GDAtools](https://cran.r-project.org/package=GDAtools) | -
 Analyse des correspondances multiples | mca | [MASS](https://cran.r-project.org/package=MASS) | Les variables supplémentaires ne sont pas prises en charge
 Analyse en composantes principales  | princomp  | stats | Les variables supplémentaires ne sont pas prises en charge
 Analyse en composantes principales  | prcomp  | stats | Les variables supplémentaires ne sont pas prises en charge
@@ -202,19 +202,24 @@ Les résultats des fonctions de `GDAtools` prises en charge peuvent également �
 ```r
 library(GDAtools)
 data(Music)
-mca <- speMCA(Music[,1:5],excl=c(3,6,9,12,15))
+mca <- speMCA(Music[,1:5], excl = c(3, 6, 9, 12, 15))
 explor(mca)
 ```
 
-Pour ajouter des individus supplémentaires, il est nécessaire de calculer leurs données associées à l'aide de la fonction `indsup`, puis de les ajouter manuellement comme un éléménet nommé `supi` de l'objet résultat. 
-
-Voici un exemple :
+Pour ajouter des individus supplémentaires, il est nécessaire de calculer leurs données associées à l'aide de la fonction `indsup`, puis de les ajouter manuellement comme un élément nommé `supi` de l'objet résultat :
 
 ```r
-library(GDAtools)
-data(Music)
-mca <- speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
-mca$supi <- indsup(mca,Music[1:2,1:5])
+mca <- speMCA(Music[3:nrow(Music),1:5], excl = c(3, 6, 9, 12, 15))
+mca$supi <- indsup(mca, Music[1:2, 1:5])
+explor(mca)
+```
+
+Pour ajouter des variables supplémentaires, il faut calculer leurs données associées à l'aide de la fonction `speMCA_varsup`, et je les ajouter manuellement comme un élément `supv` de l'objet résultat :
+
+```r
+mca <- speMCA(Music[3:nrow(Music), 1:4], excl = c(3, 6, 9, 12))
+mca$supi <- indsup(mca, Music[1:2, 1:4])
+mca$supv <- speMCA_varsup(mca, Music[3:nrow(Music), 5:6])
 explor(mca)
 ```
 
