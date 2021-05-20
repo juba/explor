@@ -152,12 +152,14 @@ mca <- speMCA(Music[,1:5],excl=c(3,6,9,12,15))
 explor(mca)
 
 
-## speMCA with indsup 
+## speMCA with indsup and varsup
 library(explor)
 library(GDAtools)
 data(Music)
-mca <- speMCA(Music[3:nrow(Music),1:5],excl=c(3,6,9,12,15))
-mca$supi <- indsup(mca,Music[1:2,1:5])
+getindexcat(Music[,1:4])
+mca <- speMCA(Music[3:nrow(Music), 1:4], excl = c(3, 6, 9, 12))
+mca$supi <- indsup(mca, Music[1:2, 1:4])
+mca$supv <- speMCA_varsup(mca, Music[3:nrow(Music), 5:6])
 explor(mca)
 
 
