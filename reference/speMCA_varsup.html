@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • explor</title>
+<title>Compute supplementary variables data for a GDAtools::speMCA result — speMCA_varsup • explor</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Compute supplementary variables data for a GDAtools::speMCA result — speMCA_varsup" />
+<meta property="og:description" content="Compute supplementary variables data for a GDAtools::speMCA result" />
 <meta property="og:image" content="https://juba.github.io/explor/logo.png" />
 
 
@@ -66,7 +67,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -131,102 +132,42 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Compute supplementary variables data for a GDAtools::speMCA result</h1>
+    <small class="dont-index">Source: <a href='https://github.com/juba/explor/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <div class="hidden name"><code>speMCA_varsup.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Compute supplementary variables data for a GDAtools::speMCA result</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>speMCA_varsup</span><span class='op'>(</span><span class='va'>mca</span>, <span class='va'>df</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="CA_var_plot.html">CA_var_plot()</a></code> </p>
-        </td>
-        <td><p>Interactive CA variables plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="MCA_biplot.html">MCA_biplot()</a></code> </p>
-        </td>
-        <td><p>Interactive MCA biplot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="MCA_ind_plot.html">MCA_ind_plot()</a></code> </p>
-        </td>
-        <td><p>Interactive MCA indivuals plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="MCA_var_plot.html">MCA_var_plot()</a></code> </p>
-        </td>
-        <td><p>Interactive MCA variables plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="PCA_ind_plot.html">PCA_ind_plot()</a></code> </p>
-        </td>
-        <td><p>Interactive PCA indivuals plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="PCA_var_plot.html">PCA_var_plot()</a></code> </p>
-        </td>
-        <td><p>Interactive PCA variables plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="explor.html">explor()</a></code> </p>
-        </td>
-        <td><p>Interface for analysis results exploration</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ggind.html">ggind()</a></code> </p>
-        </td>
-        <td><p>Graphical representation of indivduals (rows) of a multivariate analysis</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ggvar.html">ggvar()</a></code> </p>
-        </td>
-        <td><p>Graphical representation of the variables (columnss) of a multivariate analysis</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="prepare_results.html">prepare_results()</a></code> </p>
-        </td>
-        <td><p>Analysis results preparation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="speMCA_varsup.html">speMCA_varsup()</a></code> </p>
-        </td>
-        <td><p>Compute supplementary variables data for a GDAtools::speMCA result</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>mca</th>
+      <td><p>result object from speMCA.</p></td>
+    </tr>
+    <tr>
+      <th>df</th>
+      <td><p>data frame with the supplementary variables data. Must have the
+same number of rows than the data used with speMCA.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list of results suitable to be added as a `supv` element to the `mca`
+object.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='https://nicolas-robette.github.io/GDAtools//reference/speMCA.html'>speMCA</a></code>, <code><a href='https://nicolas-robette.github.io/GDAtools//reference/varsup.html'>varsup</a></code></p></div>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
