@@ -13,6 +13,7 @@
 #' @export
 
 speMCA_varsup <- function(mca, df) {
+    if (!is.data.frame(df)) stop("df must be a data frame")
     res <- lapply(names(df), function(name) {
         l <- GDAtools::varsup(mca, df[, name])
         l <- lapply(l, function(x) {
