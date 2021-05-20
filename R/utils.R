@@ -10,6 +10,7 @@
 #'
 #' @seealso
 #' \code{\link[GDAtools]{speMCA}}, \code{\link[GDAtools]{varsup}}
+#' @export
 
 speMCA_varsup <- function(mca, df) {
     res <- lapply(names(df), function(name) {
