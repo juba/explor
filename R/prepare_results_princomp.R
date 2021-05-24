@@ -19,7 +19,7 @@ prepare_results.princomp <- function(obj) {
     percent <- round(obj$sdev^2 / sum(obj$sdev^2) *100, 2)
     names(axes) <- paste("Axis", axes, paste0("(", percent,"%)"))
     ## Eigenvalues
-    eig <- data.frame(dim = 1:length(obj$sdev), percent = percent)
+    eig <- data.frame(dim = seq_len(length(obj$sdev)), percent = percent)
     
     ## Variables data coordinates
     vars$varname <- rownames(vars)

@@ -16,7 +16,7 @@ prepare_results.MCA <- function(obj) {
     axes <- seq_len(ncol(obj$var$coord))
     names(axes) <- paste("Axis", axes, paste0("(", head(round(obj$eig[, 2], 2), length(axes)), "%)"))
     ## Eigenvalues
-    eig <- data.frame(dim = 1:nrow(obj$eig), percent = obj$eig[, 2])
+    eig <- data.frame(dim = seq_len(nrow(obj$eig)), percent = obj$eig[, 2])
 
     ## Variables coordinates
     varnames <- sapply(obj$call$X[, obj$call$quali, drop = FALSE], nlevels)

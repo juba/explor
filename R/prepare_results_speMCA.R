@@ -25,7 +25,7 @@ prepare_results.speMCA <- function(obj) {
     axes <- seq_len(ncol(obj$var$coord))
     names(axes) <- paste("Axis", axes, paste0("(", head(round(obj$eig$rate, 2), length(axes)),"%)"))
     ## Eigenvalues
-    eig <- data.frame(dim = 1:length(obj$eig$rate), percent = obj$eig$rate)
+    eig <- data.frame(dim = seq_len(length(obj$eig$rate)), percent = obj$eig$rate)
 
     ## Variables coordinates
     varnames <- sapply(obj$call$X[,obj$call$quali, drop = FALSE], nlevels)

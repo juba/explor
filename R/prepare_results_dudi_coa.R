@@ -20,7 +20,7 @@ prepare_results.coa <- function(obj) {
     eig <- obj$eig / sum(obj$eig) * 100
     names(axes) <- paste("Axis", axes, paste0("(", head(round(eig, 2), length(axes)),"%)"))
     ## Eigenvalues
-    eig <- data.frame(dim = 1:length(eig), percent = eig)
+    eig <- data.frame(dim = seq_len(length(eig)), percent = eig)
     ## Inertia
     inertia <- ade4::inertia.dudi(obj, row.inertia = TRUE, col.inertia = TRUE)
     

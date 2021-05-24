@@ -15,7 +15,7 @@ prepare_results.CA <- function(obj) {
     axes <- seq_len(ncol(obj$col$coord))
     names(axes) <- paste("Axis", axes, paste0("(", head(round(obj$eig[, 2], 2), length(axes)),"%)"))
     ## Eigenvalues
-    eig <- data.frame(dim = 1:nrow(obj$eig), percent = obj$eig[,2])
+    eig <- data.frame(dim = seq_len(nrow(obj$eig)), percent = obj$eig[,2])
     
     ## Variables coordinates
 
