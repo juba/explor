@@ -18,7 +18,7 @@ test_that("Variables results are equal", {
                res$vars[res$vars$Type == "Active" & res$vars$Axis == "2", "Cos2"])
   expect_equal(as.vector(round(mca$var$contrib[,3],3)),
                res$vars[res$vars$Type == "Active" & res$vars$Axis == "3", "Contrib"])
-  expect_equal(as.vector(format(mca$var$eta2[,5], scientific = FALSE, nsmall = 3, digits = 0)),
+  expect_equal(as.vector(format(mca$var$eta2[,5], scientific = FALSE, nsmall = 3, digits = 1)),
                data.frame(res$vareta2)[res$vareta2$Type == "Active" & 
                                          res$vareta2$Axis == "5", "eta2", drop = TRUE])
 })
@@ -33,7 +33,7 @@ test_that("Qualitative supplementary variables results are equal", {
   expect_equal(as.vector(round(mca$quali.sup$v.test[,3],2)),
                res$vars[res$vars$Type == "Supplementary" & 
                           res$vars$Class == "Qualitative" & res$vars$Axis == "3", "V.test"])
-  expect_equal(as.vector(format(mca$quali.sup$eta2[,2], scientific = FALSE, nsmall = 3, digits = 0)),
+  expect_equal(as.vector(format(mca$quali.sup$eta2[,2], scientific = FALSE, nsmall = 3, digits = 1)),
                data.frame(res$vareta2)[res$vareta2$Type == "Supplementary" & 
                                          res$vareta2$Class == "Qualitative" &
                                          res$vareta2$Axis == "2", "eta2", drop = TRUE])

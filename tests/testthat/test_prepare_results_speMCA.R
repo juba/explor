@@ -19,7 +19,7 @@ test_that("Variables results are equal", {
                res$vars[res$vars$Type == "Active" & res$vars$Axis == "2", "Cos2"])
   expect_equal(as.vector(round(mca$var$contrib[,3],3)),
                res$vars[res$vars$Type == "Active" & res$vars$Axis == "3", "Contrib"])
-  expect_equal(as.vector(format(mca$var$eta2[,5], scientific = FALSE, nsmall = 3, digits = 0)),
+  expect_equal(as.vector(format(mca$var$eta2[,5], scientific = FALSE, nsmall = 3, digits = 1)),
                data.frame(res$vareta2)[res$vareta2$Type == "Active" & 
                                          res$vareta2$Axis == "5", "eta2", drop = TRUE])
 })
