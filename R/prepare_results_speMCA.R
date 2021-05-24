@@ -91,7 +91,6 @@ prepare_results.speMCA <- function(obj) {
     vareta2 <- vareta2 %>%
         pivot_longer(names_to = "Axis", values_to = "eta2", starts_with("dim.")) %>%
         mutate(Axis = gsub("dim.", "", Axis, fixed = TRUE))
-    vareta2$eta2 <- format(vareta2$eta2, scientific = FALSE, nsmall = 3, digits = 1)
 
     ## Individuals coordinates
     ind <- data.frame(obj$ind$coord)

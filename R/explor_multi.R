@@ -585,7 +585,8 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
         if (settings()$has_var_eta2) {
             res()$vareta2 %>% filter(Type == "Active", Axis == input$vardim) %>%
                     select(all_of(settings()$vareta2_columns)) %>%
-                    arrange(eta2)
+                    arrange(eta2) %>%
+                    mutate(eta2 = format(eta2, scientific = FALSE, nsmall = 3, digits = 1))
         }
     })
     output$vartableeta2 <- DT::renderDT(
@@ -598,7 +599,8 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
                                      Class == "Qualitative",
                                      Axis == input$vardim) %>%
                     select(all_of(settings()$varsupeta2_columns)) %>%
-                    arrange(eta2)
+                    arrange(eta2) %>%
+                    mutate(eta2 = format(eta2, scientific = FALSE, nsmall = 3, digits = 1))
         }
     })
     output$vartablesupeta2 <- DT::renderDT(
