@@ -2,7 +2,7 @@
 ^_pkgdown\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-example*.R
+example.*\.R
 ggcrosstab.R
 resources
 ^\.travis\.yml$
