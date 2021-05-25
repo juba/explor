@@ -1,5 +1,9 @@
 # Changelog
 
+## explor 0.3.9
+
+-
+
 ## explor 0.3.8
 
 - Add `speMCA_varsup` function and support for supplementary variables in `GDAtools::speMCA` results
