@@ -66,9 +66,9 @@ test_that("Supplementary variables results are equal", {
 })
 
 test_that("Qualitative data are equal", {
-  ids <- c("4198", "3704", "2557", "104", "1206")
+  ids <- c("4731", "31", "2489", "4125", "280")
   expect_equal(
-    as.character(res$quali_data$FrenchPop[rownames(res$quali_data) %in% ids]),
+    as.character(res$quali_data[ids, "FrenchPop"]),
     as.character(Music[ids, "FrenchPop"])
   )
 })
