@@ -2,7 +2,7 @@
 
 ## explor 0.3.9
 
--
+- Compatibility with GDAtools 1.7
 
 ## explor 0.3.8
 
