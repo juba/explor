@@ -27,7 +27,10 @@ speMCA_varsup <- function(mca, df) {
     Reduce(function(acc, cur) {
         for (name in names(acc)) {
             if (name == "weight") next
-            acc[[name]] <- dplyr::bind_rows(acc[[name]], cur[[name]])
+            acc[[name]] <- dplyr::bind_rows(
+                data.frame(acc[[name]]),
+                data.frame(cur[[name]])
+            )
         }
         acc
     }, res)
