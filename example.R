@@ -150,6 +150,15 @@ mca$supi <- indsup(mca, Music[1:2, 1:4])
 mca$supv <- speMCA_varsup(mca, Music[3:nrow(Music), 5, drop = FALSE])
 explor(mca)
 
+## speMCA with varsup with missing values
+library(questionr)
+library(GDAtools)
+library(explor)
+data(hdv2003)
+acm <- speMCA(hdv2003[, c("sexe", "relig", "occup", "hard.rock")])
+GDAtools::varsup(acm, hdv2003$qualif)
+speMCA_varsup(acm, hdv2003[,c("qualif", "bricol")])
+
 
 ## MASS examples ---------------------------------------------
 
