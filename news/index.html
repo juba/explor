@@ -137,6 +137,149 @@
       <small>Source: <a href='https://github.com/juba/explor/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="explor-0310" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.10">
+<a href="#explor-0310" class="anchor"></a>explor 0.3.10<small> Unreleased </small>
+</h1>
+<ul><li>
+</li></ul>
+</div>
+    <div id="explor-039" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.9">
+<a href="#explor-039" class="anchor"></a>explor 0.3.9<small> 2021-06-01 </small>
+</h1>
+<ul>
+<li>Compatibility with GDAtools 1.7</li>
+</ul>
+</div>
+    <div id="explor-038" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.8">
+<a href="#explor-038" class="anchor"></a>explor 0.3.8<small> 2021-05-24 </small>
+</h1>
+<ul>
+<li>Add <code>speMCA_varsup</code> function and support for supplementary variables in <code><a href="https://nicolas-robette.github.io/GDAtools//reference/speMCA.html">GDAtools::speMCA</a></code> results</li>
+<li>Fix supplementary variables not showing in MCA biplot</li>
+</ul>
+</div>
+    <div id="explor-037" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.7">
+<a href="#explor-037" class="anchor"></a>explor 0.3.7<small> 2020-12-09 </small>
+</h1>
+<ul>
+<li>Fix percentage of variance computation for prcomp() and princomp() (thanks <a href='https://github.com/zenn1989'>@zenn1989</a>)</li>
+<li>Fix conditional use of suggested packages</li>
+</ul>
+</div>
+    <div id="explor-036" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.6">
+<a href="#explor-036" class="anchor"></a>explor 0.3.6<small> 2020-05-02 </small>
+</h1>
+<ul>
+<li>Add support for textmodel_ca</li>
+<li>Fix supplementary elements in dudi.coa</li>
+<li>Change supplementary variables / individuals handling in dudi.* functions. You now have to supply the entire suprow() ou supcol() result instead if sub-elements <code>$cosup</code> and <code>$lisup</code>.</li>
+<li>Fix individual plot point coloration by supplementary variable in dudi.mca</li>
+<li>Add ability to select which supplementary variable to display</li>
+<li>Add support for qualitative supplementary variables in FactoMineR::CA</li>
+<li>Fix error when color on “None” in MCA biplot</li>
+<li>Add ability to prepend variable name to labels in MCA variable plot (thanks <a href='https://github.com/larmarange'>@larmarange</a>)</li>
+</ul>
+</div>
+    <div id="explor-035" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.5">
+<a href="#explor-035" class="anchor"></a>explor 0.3.5<small> 2019-04-17 </small>
+</h1>
+<ul>
+<li>Upgrade to scatterD3 0.9</li>
+<li>Add automatic labels positioning</li>
+<li>Add biplot to MCA interface</li>
+</ul>
+</div>
+    <div id="explor-034" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.4">
+<a href="#explor-034" class="anchor"></a>explor 0.3.4<small> 2018-09-13 </small>
+</h1>
+<ul>
+<li>Fix improper computation in levels number in FactoMineR::PCA (thanks <a href='https://github.com/Bhavanight'>@Bhavanight</a>)</li>
+<li>Fox compatibility with ade4 1.7-13</li>
+</ul>
+</div>
+    <div id="explor-033" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.3">
+<a href="#explor-033" class="anchor"></a>explor 0.3.3<small> 2017-10-10 </small>
+</h1>
+<ul>
+<li>Fix CRAN tests</li>
+</ul>
+</div>
+    <div id="explor-032" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.2">
+<a href="#explor-032" class="anchor"></a>explor 0.3.2<small> 2017-06-22 </small>
+</h1>
+<ul>
+<li>Compatibility with dplyr 0.7</li>
+<li>Add eigenvalues table beside barplot</li>
+<li>Change points opacity according to contrib or cos2 in PCA/MCA individual plots (suggestion by <a href='https://github.com/ginolhac'>@ginolhac</a>)</li>
+<li>Add ability to hide individuals points labels based on contribution value (suggestion by <a href='https://github.com/ginolhac'>@ginolhac</a>)</li>
+</ul>
+</div>
+    <div id="explor-031" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.1">
+<a href="#explor-031" class="anchor"></a>explor 0.3.1<small> 2016-12-15 </small>
+</h1>
+<ul>
+<li>Compatibility with ade4 1.7-5</li>
+</ul>
+</div>
+    <div id="explor-030" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.0">
+<a href="#explor-030" class="anchor"></a>explor 0.3.0<small> 2016-11-21 </small>
+</h1>
+<ul>
+<li>Add a “Get R code” button which allows to get the R code to reproduce the displayed plot (minus custom labels positions)</li>
+<li>Add support for <code>princomp</code> and <code>prcomp</code>
+</li>
+<li>Add support for <code><a href="https://rdrr.io/pkg/MASS/man/mca.html">MASS::mca</a></code>
+</li>
+<li>Add support for <code><a href="https://nicolas-robette.github.io/GDAtools//reference/speMCA.html">GDAtools::speMCA</a></code>
+</li>
+<li>Qualitative supplementary variables are now displayed with <code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html">FactoMineR::PCA</a></code> results</li>
+<li>
+<code>explor.MCA</code> now works if MCA has been called with an <code>excl</code> argument</li>
+<li>Code refactoring</li>
+</ul>
+</div>
+    <div id="explor-021" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.1">
+<a href="#explor-021" class="anchor"></a>explor 0.2.1<small> 2016-03-24 </small>
+</h1>
+<ul>
+<li>Bugfix : core dump in explor.MCA when only one supplementary qualitative variable</li>
+<li>Bugfix : No variable plot when missing <code>scale</code> argument in <code>dudi.pca</code>
+</li>
+<li>Fix test failing with next <code>testthat</code> version</li>
+</ul>
+</div>
+    <div id="explor-02" class="section level1">
+<h1 class="page-header" data-toc-text="0.2">
+<a href="#explor-02" class="anchor"></a>explor 0.2<small> 2016-03-03 </small>
+</h1>
+<ul>
+<li>Add ability to select points with lasso</li>
+<li>Add ellipses to color mapping variables</li>
+<li>Add ability to color individual points according to one of the qualitative variables in MCA</li>
+<li>Add control to hide Rows or Columns in CA plot and tables</li>
+<li>Add the ability to change point size and sizes range in variables plots for CA and MCA.</li>
+</ul>
+</div>
+    <div id="explor-01" class="section level1">
+<h1 class="page-header" data-toc-text="0.1">
+<a href="#explor-01" class="anchor"></a>explor 0.1<small> 2015-12-15 </small>
+</h1>
+<ul>
+<li>First version</li>
+</ul>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
