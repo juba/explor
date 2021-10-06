@@ -1,6 +1,5 @@
-# explor 0.3.10
+# explor (development version)
 
--
 
 # explor 0.3.9
 
