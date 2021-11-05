@@ -1,5 +1,6 @@
 # explor (development version)
 
+- Fix warnings in Font Awesome icon names (#39, thanks @jl5000)
 
 # explor 0.3.9
 

@@ -126,7 +126,7 @@ explor_multi_sidebar_footer <- function(type = "var") {
                           label = gettext("Get R code"))),
         tags$p(tags$a(id = paste0("explor-", type, "-svg-export"),
                           class = "btn btn-default",
-                          HTML(paste(icon("file-image-o"), gettext("Export as SVG"))))))
+                          HTML(paste(icon("file-image"), gettext("Export as SVG"))))))
                
 }
 
