@@ -38,7 +38,7 @@ prepare_results.speMCA <- function(obj) {
     if (!is.null(obj$supv)) {
         tmp_sup <- data.frame(obj$supv$coord)
         tmp_sup$varname <- extract_var(tmp_sup)
-        tmp_sup$modname <- extract_mod(tmp_sup)
+        tmp_sup$modname <- paste(extract_var(tmp_sup), extract_mod(tmp_sup), sep = ".")
         tmp_sup$Type <- "Supplementary"
         tmp_sup$Class <- "Qualitative"
         vars <- vars %>% bind_rows(tmp_sup)
@@ -64,7 +64,7 @@ prepare_results.speMCA <- function(obj) {
     tmp$Class <- "Qualitative"
     if (!is.null(obj$supv)) {
         tmp_sup <- data.frame(obj$supv$cos2)
-        tmp_sup$modname <- extract_mod(tmp_sup)
+        tmp_sup$modname <- paste(extract_var(tmp_sup), extract_mod(tmp_sup), sep = ".")
         tmp_sup$Type <- "Supplementary"
         tmp_sup$Class <- "Qualitative"
         tmp <- tmp %>% bind_rows(tmp_sup)
