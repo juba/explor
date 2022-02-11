@@ -2,6 +2,7 @@
 
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-ago/explor)](https://cran.r-project.org/package=explor)
+[![DOI](https://zenodo.org/badge/29341839.svg)](https://zenodo.org/badge/latestdoi/29341839)
 ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/last-month/explor) 
 [![R build status](https://github.com/juba/explor/workflows/R-CMD-check/badge.svg)](https://github.com/juba/explor/actions?query=workflow%3AR-CMD-check)
 
