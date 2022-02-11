@@ -1,11 +1,11 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   introduction_en: introduction_en.html
   introduction_fr: introduction_fr.html
-last_built: 2021-11-12T11:24Z
+last_built: 2022-02-11T17:04Z
 urls:
-  reference: https://juba.github.io/explor//reference
-  article: https://juba.github.io/explor//articles
+  reference: https://juba.github.io/explor/reference
+  article: https://juba.github.io/explor/articles
 

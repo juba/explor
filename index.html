@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,18 +40,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">explor</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.9.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.9.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -74,7 +70,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/juba/explor/">
+  <a href="https://github.com/juba/explor/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -91,9 +87,8 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="explor-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#explor-" class="anchor"></a>explor <img src="reference/figures/logo.png" width="180" align="right">
+<div class="section level1">
+<div class="page-header"><h1 id="explor-">explor <img src="reference/figures/logo.png" width="180" align="right"><a class="anchor" aria-label="anchor" href="#explor-"></a>
 </h1></div>
 
 <p><code>explor</code> is an R package to allow interactive exploration of multivariate analysis results.</p>
@@ -115,49 +110,49 @@
 <tr class="odd">
 <td>Principal Component Analysis</td>
 <td>PCA</td>
-<td><a href="http://factominer.free.fr/">FactoMineR</a></td>
+<td><a href="http://factominer.free.fr/" class="external-link">FactoMineR</a></td>
 <td>-</td>
 </tr>
 <tr class="even">
 <td>Correspondance Analysis</td>
 <td>CA</td>
-<td><a href="http://factominer.free.fr/">FactoMineR</a></td>
+<td><a href="http://factominer.free.fr/" class="external-link">FactoMineR</a></td>
 <td>-</td>
 </tr>
 <tr class="odd">
 <td>Multiple Correspondence Analysis</td>
 <td>MCA</td>
-<td><a href="http://factominer.free.fr/">FactoMineR</a></td>
+<td><a href="http://factominer.free.fr/" class="external-link">FactoMineR</a></td>
 <td>-</td>
 </tr>
 <tr class="even">
 <td>Principal Component Analysis</td>
 <td>dudi.pca</td>
-<td><a href="https://cran.r-project.org/package=ade4">ade4</a></td>
+<td><a href="https://cran.r-project.org/package=ade4" class="external-link">ade4</a></td>
 <td>Qualitative supplementary variables are ignored</td>
 </tr>
 <tr class="odd">
 <td>Correspondance Analysis</td>
 <td>dudi.coa</td>
-<td><a href="https://cran.r-project.org/package=ade4">ade4</a></td>
+<td><a href="https://cran.r-project.org/package=ade4" class="external-link">ade4</a></td>
 <td>-</td>
 </tr>
 <tr class="even">
 <td>Multiple Correspondence Analysis</td>
 <td>dudi.acm</td>
-<td><a href="https://cran.r-project.org/package=ade4">ade4</a></td>
+<td><a href="https://cran.r-project.org/package=ade4" class="external-link">ade4</a></td>
 <td>Quantitative supplementary variables are ignored</td>
 </tr>
 <tr class="odd">
 <td>Specific Multiple Correspondance Analysis</td>
 <td>speMCA</td>
-<td><a href="https://cran.r-project.org/package=GDAtools">GDAtools</a></td>
+<td><a href="https://cran.r-project.org/package=GDAtools" class="external-link">GDAtools</a></td>
 <td>-</td>
 </tr>
 <tr class="even">
 <td>Multiple Correspondance Analysis</td>
 <td>mca</td>
-<td><a href="https://cran.r-project.org/package=MASS">MASS</a></td>
+<td><a href="https://cran.r-project.org/package=MASS" class="external-link">MASS</a></td>
 <td>Quantitative supplementary variables are not supported</td>
 </tr>
 <tr class="odd">
@@ -175,51 +170,53 @@
 <tr class="odd">
 <td>Correspondance Analysis</td>
 <td>textmodel_ca</td>
-<td><a href="https://cran.r-project.org/package=quanteda.textmodels">quanteda.textmodels</a></td>
+<td><a href="https://cran.r-project.org/package=quanteda.textmodels" class="external-link">quanteda.textmodels</a></td>
 <td>Only coordinates are available</td>
 </tr>
 </tbody>
 </table>
-<div id="features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#features" class="anchor"></a>Features</h2>
-<p>For each type of analysis, <code>explor</code> launches a <code>shiny</code> interactive Web interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the <code>DT</code> package) and interactive graphics thanks to the <a href="https://github.com/juba/scatterD3">scatterD3</a> package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file or get the R code to reproduce it later in a script or document.</p>
+<div class="section level2">
+<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+</h2>
+<p>For each type of analysis, <code>explor</code> launches a <code>shiny</code> interactive Web interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the <code>DT</code> package) and interactive graphics thanks to the <a href="https://github.com/juba/scatterD3" class="external-link">scatterD3</a> package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file or get the R code to reproduce it later in a script or document.</p>
 <p>Here is a preview of what you will get. Note that the interface is available both in english and french, depending on your locale :</p>
-<p><img src="https://raw.github.com/juba/explor/master/resources/screencast_0.3.gif" alt="example"></p>
+<div class="figure">
+<img src="https://raw.github.com/juba/explor/master/resources/screencast_0.3.gif" alt=""><p class="caption">example</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>To get the stable version from CRAN :</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"explor"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"explor"</span><span class="op">)</span></code></pre></div>
 <p>To install the latest dev version from GitHub :</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>  <span class="co"># If necessary</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>  <span class="co"># If necessary</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"juba/scatterD3"</span><span class="op">)</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"juba/explor"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
 <p>Usage is very simple : you just apply the <code>explor</code> function to the result of one of the supported analysis functions.</p>
-<p>Example with a principal correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html">FactoMineR::PCA</a></code> :</p>
+<p>Example with a principal correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html" class="external-link">FactoMineR::PCA</a></code> :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr">FactoMineR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://juba.github.io/explor/">explor</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr" class="external-link">FactoMineR</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://juba.github.io/explor/">explor</a></span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">decathlon</span><span class="op">)</span>
-<span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html">PCA</a></span><span class="op">(</span><span class="va">decathlon</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span>, quanti.sup <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">12</span>, graph <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">decathlon</span><span class="op">)</span>
+<span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html" class="external-link">PCA</a></span><span class="op">(</span><span class="va">decathlon</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span>, quanti.sup <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">12</span>, graph <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></code></pre></div>
-<p>Example with a multiple correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html">FactoMineR::MCA</a></code>:</p>
+<p>Example with a multiple correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html" class="external-link">FactoMineR::MCA</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">hobbies</span><span class="op">)</span>
-<span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html">MCA</a></span><span class="op">(</span><span class="va">hobbies</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>,<span class="fl">21</span><span class="op">:</span><span class="fl">23</span><span class="op">)</span><span class="op">]</span>,quali.sup <span class="op">=</span> <span class="fl">9</span><span class="op">:</span><span class="fl">10</span>, quanti.sup <span class="op">=</span> <span class="fl">11</span>, ind.sup <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hobbies</span><span class="op">)</span>
+<span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html" class="external-link">MCA</a></span><span class="op">(</span><span class="va">hobbies</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>,<span class="fl">21</span><span class="op">:</span><span class="fl">23</span><span class="op">)</span><span class="op">]</span>,quali.sup <span class="op">=</span> <span class="fl">9</span><span class="op">:</span><span class="fl">10</span>, quanti.sup <span class="op">=</span> <span class="fl">11</span>, ind.sup <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>
 <span class="fu"><a href="reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="documentation-and-localization" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation-and-localization" class="anchor"></a>Documentation and localization</h2>
+<div class="section level2">
+<h2 id="documentation-and-localization">Documentation and localization<a class="anchor" aria-label="anchor" href="#documentation-and-localization"></a>
+</h2>
 <p>Two vignettes are provided for more detailed documentation :</p>
 <ul>
 <li><a href="https://juba.github.io/explor/articles/introduction_en.html">English introduction vignette</a></li>
@@ -232,46 +229,57 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=explor">https://​cloud.r-project.org/​package=explor</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/juba/explor/">https://​github.com/​juba/​explor/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/juba/explor/issues">https://​github.com/​juba/​explor/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=explor" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/juba/explor/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/juba/explor/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>GPL (&gt;= 3)</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing explor</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Julien Barnier <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=explor"><img src="https://www.r-pkg.org/badges/version-ago/explor" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://github.com/juba/explor/actions?query=workflow%3AR-CMD-check"><img src="https://github.com/juba/explor/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://cran.r-project.org/package=explor" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/explor" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://zenodo.org/badge/latestdoi/29341839" class="external-link"><img src="https://zenodo.org/badge/29341839.svg" alt="DOI"></a></li>
+<li><a href="https://github.com/juba/explor/actions?query=workflow%3AR-CMD-check" class="external-link"><img src="https://github.com/juba/explor/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Julien Barnier.</p>
+  <p></p>
+<p>Developed by Julien Barnier.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -279,6 +287,8 @@
 
   
 
+
+  
 
   </body>
 </html>
