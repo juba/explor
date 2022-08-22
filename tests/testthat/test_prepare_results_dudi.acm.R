@@ -72,9 +72,11 @@ test_that("Supplementary individuals results are equal", {
 })
 
 test_that("Qualitative data are equal", {
-  ids <- c(11, 20, 45, 87, 89, 99, 100)
+  ids <- c("11", "20", "45", "87", "89", "99", "100")
+  tmp <- res$quali_data
+  rownames(tmp) <- tmp$Name
   expect_equal(
-    as.character(res$quali_data$duree[res$quali_data$Name %in% ids]),
+    as.character(tmp[ids, "duree"]),
     as.character(banque[ids, "duree"])
   )
 })
