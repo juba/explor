@@ -24,7 +24,7 @@ speMCA_varsup <- function(mca, df) {
         })
         l
     })
-    Reduce(function(acc, cur) {
+    res <- Reduce(function(acc, cur) {
         for (name in names(acc)) {
             if (name == "weight") next
             acc[[name]] <- dplyr::bind_rows(
@@ -34,4 +34,8 @@ speMCA_varsup <- function(mca, df) {
         }
         acc
     }, res)
+
+    res$tab <- df
+
+    res
 }

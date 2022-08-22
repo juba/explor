@@ -2,6 +2,7 @@
 
 - Fix duplicated level names in supplementary variables in speMCA
 - Fix warnings in Font Awesome icon names (#39, thanks @jl5000)
+- Fix supplementary variables not displayed in individual plot for speMCA (thanks @419kfj)
 
 # explor 0.3.9
 

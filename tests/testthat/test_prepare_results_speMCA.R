@@ -67,8 +67,10 @@ test_that("Supplementary variables results are equal", {
 
 test_that("Qualitative data are equal", {
   ids <- c("4731", "31", "2489", "4125", "280")
+  tmp <- res$quali_data
+  rownames(tmp) <- tmp$Name
   expect_equal(
-    as.character(res$quali_data[ids, "FrenchPop"]),
+    as.character(tmp[ids, "FrenchPop"]),
     as.character(Music[ids, "FrenchPop"])
   )
 })
