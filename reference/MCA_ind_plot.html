@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,54 +66,81 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">MCA_ind_plot</span><span class="op">(</span>
-  <span class="va">res</span>,
-  xax <span class="op">=</span> <span class="fl">1</span>,
-  yax <span class="op">=</span> <span class="fl">2</span>,
-  ind_sup <span class="op">=</span> <span class="cn">TRUE</span>,
-  ind_lab_min_contrib <span class="op">=</span> <span class="fl">0</span>,
-  lab_var <span class="op">=</span> <span class="cn">NULL</span>,
-  col_var <span class="op">=</span> <span class="cn">NULL</span>,
-  symbol_var <span class="op">=</span> <span class="cn">NULL</span>,
-  opacity_var <span class="op">=</span> <span class="cn">NULL</span>,
-  size_var <span class="op">=</span> <span class="cn">NULL</span>,
-  size_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">300</span><span class="op">)</span>,
-  zoom_callback <span class="op">=</span> <span class="cn">NULL</span>,
-  in_explor <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">MCA_ind_plot</span><span class="op">(</span></span>
+<span>  <span class="va">res</span>,</span>
+<span>  xax <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  yax <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  ind_sup <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ind_lab_min_contrib <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  lab_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  symbol_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  opacity_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  size_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  size_range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">300</span><span class="op">)</span>,</span>
+<span>  zoom_callback <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  in_explor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>res</dt>
 <dd><p>Result of prepare_results() call</p></dd>
+
+
 <dt>xax</dt>
 <dd><p>Horizontal axis number</p></dd>
+
+
 <dt>yax</dt>
 <dd><p>Vertical axis number</p></dd>
+
+
 <dt>ind_sup</dt>
 <dd><p>TRUE to display supplementary individuals</p></dd>
+
+
 <dt>ind_lab_min_contrib</dt>
 <dd><p>Contribution threshold to display points labels</p></dd>
+
+
 <dt>lab_var</dt>
 <dd><p>variable to be used for points names</p></dd>
+
+
 <dt>col_var</dt>
 <dd><p>variable to be used for points color</p></dd>
+
+
 <dt>symbol_var</dt>
 <dd><p>name of the variable for points symbol</p></dd>
+
+
 <dt>opacity_var</dt>
 <dd><p>name of the variable for points opacity</p></dd>
+
+
 <dt>size_var</dt>
 <dd><p>name of the variable for points size</p></dd>
+
+
 <dt>size_range</dt>
 <dd><p>points size range with format c(minimum, maximum)</p></dd>
+
+
 <dt>zoom_callback</dt>
 <dd><p>scatterD3 zoom callback JavaScript body</p></dd>
+
+
 <dt>in_explor</dt>
 <dd><p>wether the plot is to be displayed in the <code>explor</code> interface</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed to scatterD3</p></dd>
+
 </dl></div>
 
   </div>
@@ -128,7 +155,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

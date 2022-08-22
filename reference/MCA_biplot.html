@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,60 +66,91 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">MCA_biplot</span><span class="op">(</span>
-  <span class="va">res</span>,
-  xax <span class="op">=</span> <span class="fl">1</span>,
-  yax <span class="op">=</span> <span class="fl">2</span>,
-  <span class="va">col_var</span>,
-  ind_sup <span class="op">=</span> <span class="cn">TRUE</span>,
-  var_sup <span class="op">=</span> <span class="cn">TRUE</span>,
-  bi_lab_min_contrib <span class="op">=</span> <span class="fl">0</span>,
-  symbol_var <span class="op">=</span> <span class="cn">NULL</span>,
-  ind_point_size <span class="op">=</span> <span class="fl">16</span>,
-  var_point_size <span class="op">=</span> <span class="fl">96</span>,
-  ind_opacity <span class="op">=</span> <span class="fl">0.5</span>,
-  ind_opacity_var <span class="op">=</span> <span class="cn">NULL</span>,
-  ind_labels <span class="op">=</span> <span class="cn">FALSE</span>,
-  zoom_callback <span class="op">=</span> <span class="cn">NULL</span>,
-  in_explor <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">MCA_biplot</span><span class="op">(</span></span>
+<span>  <span class="va">res</span>,</span>
+<span>  xax <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  yax <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  <span class="va">col_var</span>,</span>
+<span>  ind_sup <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  var_sup <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bi_lab_min_contrib <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  symbol_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ind_point_size <span class="op">=</span> <span class="fl">16</span>,</span>
+<span>  var_point_size <span class="op">=</span> <span class="fl">96</span>,</span>
+<span>  ind_opacity <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  ind_opacity_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ind_labels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  zoom_callback <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  in_explor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>res</dt>
 <dd><p>Result of prepare_results() call</p></dd>
+
+
 <dt>xax</dt>
 <dd><p>Horizontal axis number</p></dd>
+
+
 <dt>yax</dt>
 <dd><p>Vertical axis number</p></dd>
+
+
 <dt>col_var</dt>
 <dd><p>name of the variable for points color</p></dd>
+
+
 <dt>ind_sup</dt>
 <dd><p>TRUE to display supplementary individuals</p></dd>
+
+
 <dt>var_sup</dt>
 <dd><p>TRUE to display supplementary variables</p></dd>
+
+
 <dt>bi_lab_min_contrib</dt>
 <dd><p>Contribution threshold to display points labels</p></dd>
+
+
 <dt>symbol_var</dt>
 <dd><p>name of the variable for points symbol</p></dd>
+
+
 <dt>ind_point_size</dt>
 <dd><p>base point size for individuals</p></dd>
+
+
 <dt>var_point_size</dt>
 <dd><p>base point size for variable levels</p></dd>
+
+
 <dt>ind_opacity</dt>
 <dd><p>individuals point opacity (constant)</p></dd>
+
+
 <dt>ind_opacity_var</dt>
 <dd><p>individuals point opacity (variable)</p></dd>
+
+
 <dt>ind_labels</dt>
 <dd><p>TRUE to display individuals labels</p></dd>
+
+
 <dt>zoom_callback</dt>
 <dd><p>scatterD3 zoom callback JavaScript body</p></dd>
+
+
 <dt>in_explor</dt>
 <dd><p>wether the plot is to be displayed in the <code>explor</code> interface</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed to scatterD3</p></dd>
+
 </dl></div>
 
   </div>
@@ -134,7 +165,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
