@@ -85,14 +85,16 @@
 
       
 
-      </header><script src="introduction_fr_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Exploration interactive de résultats d’ACP/ACM avec <code>explor</code>
+      <h1 data-toc-skip>Exploration interactive de résultats d’ACP/ACM
+avec <code>explor</code>
 </h1>
-                        <h4 data-toc-skip class="author">Julien Barnier</h4>
+                        <h4 data-toc-skip class="author">Julien
+Barnier</h4>
             
-            <h4 data-toc-skip class="date">2022-08-22</h4>
+            <h4 data-toc-skip class="date">2023-01-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/juba/explor/blob/HEAD/vignettes/introduction_fr.Rmd" class="external-link"><code>vignettes/introduction_fr.Rmd</code></a></small>
       <div class="hidden name"><code>introduction_fr.Rmd</code></div>
@@ -104,8 +106,11 @@
 <div class="section level2">
 <h2 id="explor">explor<a class="anchor" aria-label="anchor" href="#explor"></a>
 </h2>
-<p><code>explor</code> est un package R qui permet l’exploration “interactive” des résultats d’une analyse exploratoire multidimensionnelle.</p>
-<p>Pour le moment il est utilisable avec les types d’analyses suivants :</p>
+<p><code>explor</code> est un package R qui permet l’exploration
+“interactive” des résultats d’une analyse exploratoire
+multidimensionnelle.</p>
+<p>Pour le moment il est utilisable avec les types d’analyses suivants
+:</p>
 <table class="table">
 <colgroup>
 <col width="29%">
@@ -142,7 +147,8 @@
 <td>Analyse en composantes principales</td>
 <td>dudi.pca</td>
 <td><a href="https://cran.r-project.org/package=ade4" class="external-link">ade4</a></td>
-<td>Les variables supplémentaires qualitatives ne sont pas prises en charge</td>
+<td>Les variables supplémentaires qualitatives ne sont pas prises en
+charge</td>
 </tr>
 <tr class="odd">
 <td>Analyse des correspondances</td>
@@ -154,7 +160,8 @@
 <td>Analyse des correspondances multiples</td>
 <td>dudi.acm</td>
 <td><a href="https://cran.r-project.org/package=ade4" class="external-link">ade4</a></td>
-<td>Les variables supplémentaires quantitatives ne sont pas prises en charge</td>
+<td>Les variables supplémentaires quantitatives ne sont pas prises en
+charge</td>
 </tr>
 <tr class="odd">
 <td>Analyse des correspondances multiples spécifique</td>
@@ -188,46 +195,74 @@
 </tr>
 </tbody>
 </table>
-<p>La philosophie d’<code>explor</code> est de n’être qu’une interface de visualisation, et de ne rien “exécuter” par elle-même. Les analyses et calculs se font dans votre script R, et <code>explor</code> vous aide seulement à visualiser leurs résultats. L’idée est de conserver l’ensemble des commandes dans les scripts et de ne pas risquer d’être un obstacle à la reproductibilité des analyses.</p>
+<p>La philosophie d’<code>explor</code> est de n’être qu’une interface
+de visualisation, et de ne rien “exécuter” par elle-même. Les analyses
+et calculs se font dans votre script R, et <code>explor</code> vous aide
+seulement à visualiser leurs résultats. L’idée est de conserver
+l’ensemble des commandes dans les scripts et de ne pas risquer d’être un
+obstacle à la reproductibilité des analyses.</p>
 </div>
 <div class="section level2">
 <h2 id="fonctionnalités">Fonctionnalités<a class="anchor" aria-label="anchor" href="#fonctionnalit%C3%A9s"></a>
 </h2>
-<p>Pour chaque méthode, <code>explor</code> lance une interface Web interactive qui s’affiche soit directement dans RStudio, soit dans votre navigateur. Cette interface comprend une série d’onglets présentant différents tableaux et graphiques. Ceux-ci sont, autant que possible, “interactifs” : les résultats numériques sont affichés sous forme de tableaux dynamiques triables et filtrables (grâce au package <code>DT</code>), et les graphiques, générés pour la plupart par le package <code>scatterD3</code>, ont les fonctionnalités suivantes :</p>
+<p>Pour chaque méthode, <code>explor</code> lance une interface Web
+interactive qui s’affiche soit directement dans RStudio, soit dans votre
+navigateur. Cette interface comprend une série d’onglets présentant
+différents tableaux et graphiques. Ceux-ci sont, autant que possible,
+“interactifs” : les résultats numériques sont affichés sous forme de
+tableaux dynamiques triables et filtrables (grâce au package
+<code>DT</code>), et les graphiques, générés pour la plupart par le
+package <code>scatterD3</code>, ont les fonctionnalités suivantes :</p>
 <ul>
 <li>zoom avec la molette de la souris</li>
 <li>déplacement avec la souris</li>
 <li>affichage de <em>tooltips</em> au survol des points</li>
-<li>mise en valeur des données correspondantes au survol des items de légendes</li>
+<li>mise en valeur des données correspondantes au survol des items de
+légendes</li>
 <li>étiquettes déplaçables</li>
 <li>sélection de points à l’aide d’un outil de type “lasso”</li>
 <li>possibilité d’export du graphique actuel au format SVG</li>
-<li>possibilité de récupérer le code R permettant de reproduire le graphique actuel dans un script ou un document</li>
-<li>les modifications du graphique se font sous la forme de transitions animées</li>
+<li>possibilité de récupérer le code R permettant de reproduire le
+graphique actuel dans un script ou un document</li>
+<li>les modifications du graphique se font sous la forme de transitions
+animées</li>
 </ul>
 <p>À noter que les interfaces sont traduites en français.</p>
 </div>
 <div class="section level2">
 <h2 id="utilisation">Utilisation<a class="anchor" aria-label="anchor" href="#utilisation"></a>
 </h2>
-<p>L’utilisation du package est très simple : il suffit d’appliquer la fonction <code><a href="../reference/explor.html">explor()</a></code> à l’objet résultant d’une méthode prise en charge.</p>
+<p>L’utilisation du package est très simple : il suffit d’appliquer la
+fonction <code><a href="../reference/explor.html">explor()</a></code> à l’objet résultant d’une méthode prise
+en charge.</p>
 <div class="section level3">
 <h3 id="prcomp-princomp-et-massmca">
-<code>prcomp</code>, <code>princomp</code> et <code>MASS::mca</code><a class="anchor" aria-label="anchor" href="#prcomp-princomp-et-massmca"></a>
+<code>prcomp</code>, <code>princomp</code> et
+<code>MASS::mca</code><a class="anchor" aria-label="anchor" href="#prcomp-princomp-et-massmca"></a>
 </h3>
-<p>Pour visualiser les résultats de ces fonctions, il suffit de passer l’objet résultat à <code><a href="../reference/explor.html">explor()</a></code>.</p>
-<p>Voici un exemple avec une ACP réalisée avec <code>princomp</code> :</p>
+<p>Pour visualiser les résultats de ces fonctions, il suffit de passer
+l’objet résultat à <code><a href="../reference/explor.html">explor()</a></code>.</p>
+<p>Voici un exemple avec une ACP réalisée avec <code>princomp</code>
+:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">USArrests</span><span class="op">)</span></span>
 <span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/princomp.html" class="external-link">princomp</a></span><span class="op">(</span><span class="va">USArrests</span>, cor <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></span></code></pre></div>
-<p><code>explor</code> permet de visualiser des individus supplémentaires dont les coordonnées ont été calculées avec <code>predict</code>. Il suffit de les ajouter comme un élément nommé <code>supi</code> de l’objet résultat.</p>
+<p><code>explor</code> permet de visualiser des individus
+supplémentaires dont les coordonnées ont été calculées avec
+<code>predict</code>. Il suffit de les ajouter comme un élément nommé
+<code>supi</code> de l’objet résultat.</p>
 <p>Voici un exemple avec <code>prcomp</code> :</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/prcomp.html" class="external-link">prcomp</a></span><span class="op">(</span><span class="va">USArrests</span><span class="op">[</span><span class="fl">6</span><span class="op">:</span><span class="fl">50</span>,<span class="op">]</span>, scale. <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">pca</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">pca</span>, <span class="va">USArrests</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></span></code></pre></div>
-<p>Pour <code><a href="https://rdrr.io/pkg/MASS/man/mca.html" class="external-link">MASS::mca</a></code>, <code><a href="../reference/explor.html">explor()</a></code> permet également la visualisation de variables qualitatives supplémentaires. Leurs coordonnées doivent être ajoutées comme un élément nommé <code>supv</code> de l’objet résultat. À noter qu’il est également préférable d’ajouter manuellement les noms de lignes à l’élément <code>supi</code> car <code>predict</code> ne les conserve pas :</p>
+<p>Pour <code><a href="https://rdrr.io/pkg/MASS/man/mca.html" class="external-link">MASS::mca</a></code>, <code><a href="../reference/explor.html">explor()</a></code> permet également
+la visualisation de variables qualitatives supplémentaires. Leurs
+coordonnées doivent être ajoutées comme un élément nommé
+<code>supv</code> de l’objet résultat. À noter qu’il est également
+préférable d’ajouter manuellement les noms de lignes à l’élément
+<code>supi</code> car <code>predict</code> ne les conserve pas :</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/" class="external-link">MASS</a></span><span class="op">)</span></span>
 <span><span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/mca.html" class="external-link">mca</a></span><span class="op">(</span><span class="va">farms</span><span class="op">[</span><span class="fl">4</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, nf <span class="op">=</span> <span class="fl">11</span><span class="op">)</span></span>
@@ -237,24 +272,31 @@
 <span><span class="va">mca</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="va">supi</span></span>
 <span><span class="va">mca</span><span class="op">$</span><span class="va">supv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">mca</span>, <span class="va">farms</span><span class="op">[</span><span class="fl">4</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">1</span>, drop<span class="op">=</span><span class="cn">FALSE</span><span class="op">]</span>, type<span class="op">=</span><span class="st">"factor"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></span></code></pre></div>
-<p>À noter que les réultats de ces trois fonctions sont assez limités, elles ne fournissent que les coordonnées des variables et des individus, pas de contributions ou de cosinus carrés par exemple.</p>
+<p>À noter que les réultats de ces trois fonctions sont assez limités,
+elles ne fournissent que les coordonnées des variables et des individus,
+pas de contributions ou de cosinus carrés par exemple.</p>
 </div>
 <div class="section level3">
 <h3 id="fonctions-de-factominer">Fonctions de <code>FactoMineR</code><a class="anchor" aria-label="anchor" href="#fonctions-de-factominer"></a>
 </h3>
-<p>Pour les fonctions de <code>FactoMineR</code> prises en charge, il suffit de passer l’objet contenant les résultats directement à<code><a href="../reference/explor.html">explor()</a></code>.</p>
-<p>Exemple d’analyse en composantes principales avec <code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html" class="external-link">FactoMineR::PCA</a></code> :</p>
+<p>Pour les fonctions de <code>FactoMineR</code> prises en charge, il
+suffit de passer l’objet contenant les résultats directement
+à<code><a href="../reference/explor.html">explor()</a></code>.</p>
+<p>Exemple d’analyse en composantes principales avec
+<code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html" class="external-link">FactoMineR::PCA</a></code> :</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr" class="external-link">FactoMineR</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">decathlon</span><span class="op">)</span></span>
 <span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html" class="external-link">PCA</a></span><span class="op">(</span><span class="va">decathlon</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span>, quanti.sup <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></span></code></pre></div>
-<p>Exemple d’analyse des correspondances simples avec <code>FactoMiner::CA</code> :</p>
+<p>Exemple d’analyse des correspondances simples avec
+<code>FactoMiner::CA</code> :</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">children</span><span class="op">)</span></span>
 <span><span class="va">res.ca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FactoMineR/man/CA.html" class="external-link">CA</a></span><span class="op">(</span><span class="va">children</span>, row.sup <span class="op">=</span> <span class="fl">15</span><span class="op">:</span><span class="fl">18</span>, col.sup <span class="op">=</span> <span class="fl">6</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">res.ca</span><span class="op">)</span></span></code></pre></div>
-<p>Exemple d’analyse des correspondances multiples avec <code><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html" class="external-link">FactoMineR::MCA</a></code> :</p>
+<p>Exemple d’analyse des correspondances multiples avec
+<code><a href="https://rdrr.io/pkg/FactoMineR/man/MCA.html" class="external-link">FactoMineR::MCA</a></code> :</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr" class="external-link">FactoMineR</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hobbies</span><span class="op">)</span></span>
@@ -265,14 +307,21 @@
 <div class="section level3">
 <h3 id="fonctions-dade4">Fonctions d’<code>ade4</code><a class="anchor" aria-label="anchor" href="#fonctions-dade4"></a>
 </h3>
-<p>Les résultats des fonctions d’<code>ade4</code> prises en charge peuvent également être directement passées à <code><a href="../reference/explor.html">explor()</a></code>.</p>
+<p>Les résultats des fonctions d’<code>ade4</code> prises en charge
+peuvent également être directement passées à <code><a href="../reference/explor.html">explor()</a></code>.</p>
 <p>Par exemple, pour visualiser les résultats d’une ACP :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://pbil.univ-lyon1.fr/ADE-4/" class="external-link">ade4</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">deug</span><span class="op">)</span></span>
 <span><span class="va">pca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/dudi.pca.html" class="external-link">dudi.pca</a></span><span class="op">(</span><span class="va">deug</span><span class="op">$</span><span class="va">tab</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>, scannf <span class="op">=</span> <span class="cn">FALSE</span>, nf <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></span></code></pre></div>
-<p>Des étapes supplémentaires sont nécessaires si on souhaite ajouter des éléments supplémentaires, car <code>ade4</code> ne les inclut pas directement dans l’objet résultat. Il faut donc calculer les coordonnées de ces éléments avec <code>suprow</code> ou <code>supcol</code>, et les ajouter comme éléments <code>supi</code> (pour les individus supplémentaires) ou <code>supv</code> (pour les variables supplémentaires) de l’objet résultat.</p>
+<p>Des étapes supplémentaires sont nécessaires si on souhaite ajouter
+des éléments supplémentaires, car <code>ade4</code> ne les inclut pas
+directement dans l’objet résultat. Il faut donc calculer les coordonnées
+de ces éléments avec <code>suprow</code> ou <code>supcol</code>, et les
+ajouter comme éléments <code>supi</code> (pour les individus
+supplémentaires) ou <code>supv</code> (pour les variables
+supplémentaires) de l’objet résultat.</p>
 <p>Voici un exemple de comment faire tout cela pour une ACP :</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">deug</span><span class="op">)</span></span>
@@ -285,7 +334,8 @@
 <span><span class="co">## Variables supplémentaires</span></span>
 <span><span class="va">pca</span><span class="op">$</span><span class="va">supv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/supcol.html" class="external-link">supcol</a></span><span class="op">(</span><span class="va">pca</span>, <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/dudi.pca.html" class="external-link">dudi.pca</a></span><span class="op">(</span><span class="va">sup_var</span>, scale <span class="op">=</span> <span class="cn">TRUE</span>, scannf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">$</span><span class="va">tab</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">pca</span><span class="op">)</span></span></code></pre></div>
-<p>Il est nécessaire de faire la même chose en cas d’éléments supplémentaires pour une analyse des correspondances multiples :</p>
+<p>Il est nécessaire de faire la même chose en cas d’éléments
+supplémentaires pour une analyse des correspondances multiples :</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">banque</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">banque</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>,<span class="op">-</span><span class="op">(</span><span class="fl">19</span><span class="op">:</span><span class="fl">21</span><span class="op">)</span><span class="op">]</span></span>
@@ -297,7 +347,9 @@
 <span><span class="co">## Individus supplémentaires</span></span>
 <span><span class="va">acm</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ade4/man/suprow.html" class="external-link">suprow</a></span><span class="op">(</span><span class="va">acm</span>, <span class="va">ind_sup</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">acm</span><span class="op">)</span></span></code></pre></div>
-<p>Pour une analyse des correspondances simples, on peut afficher des lignes ou colonnes supplémentaires en ajoutant leurs coordonnées à des éléments nommés <code>supr</code> ou <code>supc</code> :</p>
+<p>Pour une analyse des correspondances simples, on peut afficher des
+lignes ou colonnes supplémentaires en ajoutant leurs coordonnées à des
+éléments nommés <code>supr</code> ou <code>supc</code> :</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">bordeaux</span><span class="op">)</span></span>
 <span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="va">bordeaux</span></span>
@@ -311,18 +363,25 @@
 <div class="section level3">
 <h3 id="fonctions-de-gdatools">Fonctions de <code>GDAtools</code><a class="anchor" aria-label="anchor" href="#fonctions-de-gdatools"></a>
 </h3>
-<p>Les résultats des fonctions de <code>GDAtools</code> prises en charge peuvent également être directement passées à <code><a href="../reference/explor.html">explor()</a></code>.</p>
+<p>Les résultats des fonctions de <code>GDAtools</code> prises en charge
+peuvent également être directement passées à <code><a href="../reference/explor.html">explor()</a></code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nicolas-robette/GDAtools" class="external-link">GDAtools</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Music</span><span class="op">)</span></span>
 <span><span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nicolas-robette.github.io/GDAtools/reference/speMCA.html" class="external-link">speMCA</a></span><span class="op">(</span><span class="va">Music</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, excl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></span></code></pre></div>
-<p>Pour ajouter des individus supplémentaires, il est nécessaire de calculer leurs données associées à l’aide de la fonction <code>indsup</code>, puis de les ajouter manuellement comme un élément nommé <code>supi</code> de l’objet résultat :</p>
+<p>Pour ajouter des individus supplémentaires, il est nécessaire de
+calculer leurs données associées à l’aide de la fonction
+<code>indsup</code>, puis de les ajouter manuellement comme un élément
+nommé <code>supi</code> de l’objet résultat :</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nicolas-robette.github.io/GDAtools/reference/speMCA.html" class="external-link">speMCA</a></span><span class="op">(</span><span class="va">Music</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">Music</span><span class="op">)</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, excl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mca</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nicolas-robette.github.io/GDAtools/reference/indsup.html" class="external-link">indsup</a></span><span class="op">(</span><span class="va">mca</span>, <span class="va">Music</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/explor.html">explor</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></span></code></pre></div>
-<p>Pour ajouter des variables supplémentaires, il faut calculer leurs données associées à l’aide de la fonction <code>speMCA_varsup</code>, et je les ajouter manuellement comme un élément <code>supv</code> de l’objet résultat :</p>
+<p>Pour ajouter des variables supplémentaires, il faut calculer leurs
+données associées à l’aide de la fonction <code>speMCA_varsup</code>, et
+je les ajouter manuellement comme un élément <code>supv</code> de
+l’objet résultat :</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nicolas-robette.github.io/GDAtools/reference/speMCA.html" class="external-link">speMCA</a></span><span class="op">(</span><span class="va">Music</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">Music</span><span class="op">)</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, excl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mca</span><span class="op">$</span><span class="va">supi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nicolas-robette.github.io/GDAtools/reference/indsup.html" class="external-link">indsup</a></span><span class="op">(</span><span class="va">mca</span>, <span class="va">Music</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span></span>
@@ -333,20 +392,38 @@
 <div class="section level2">
 <h2 id="export-des-graphiques">Export des graphiques<a class="anchor" aria-label="anchor" href="#export-des-graphiques"></a>
 </h2>
-<p><code>explor</code> offre deux possibilités pour exporter les graphiques affichés dans l’interface.</p>
+<p><code>explor</code> offre deux possibilités pour exporter les
+graphiques affichés dans l’interface.</p>
 <div class="section level3">
 <h3 id="export-svg">Export SVG<a class="anchor" aria-label="anchor" href="#export-svg"></a>
 </h3>
-<p>Pour exporter le graphique actuellement affiché au format SVG, cliquez sur le bouton <em>Exporter en SVG</em> (icône en bas de la barre latérale gauche), ou choisissez l’entrée <em>Export to SVG</em> du menu “engrenage” du graphique.</p>
-<p>Le SVG est un format de dessin vectoriel, éditable et redimensionnable sans perte à l’aide d’un logiciel comme <a href="https://inkscape.org/" class="external-link">Inkscape</a>.</p>
-<p>La fonction d’export SVG peut rencontrer des problèmes quand elle est effectuée depuis RStudio. Si c’est le cas, ouvrez d’abord <code>explor</code> dans un navigateur en cliquant sur <em>Open in Browser</em>, avant d’exporter.</p>
+<p>Pour exporter le graphique actuellement affiché au format SVG,
+cliquez sur le bouton <em>Exporter en SVG</em> (icône en bas de la barre
+latérale gauche), ou choisissez l’entrée <em>Export to SVG</em> du menu
+“engrenage” du graphique.</p>
+<p>Le SVG est un format de dessin vectoriel, éditable et
+redimensionnable sans perte à l’aide d’un logiciel comme <a href="https://inkscape.org/" class="external-link">Inkscape</a>.</p>
+<p>La fonction d’export SVG peut rencontrer des problèmes quand elle est
+effectuée depuis RStudio. Si c’est le cas, ouvrez d’abord
+<code>explor</code> dans un navigateur en cliquant sur <em>Open in
+Browser</em>, avant d’exporter.</p>
 </div>
 <div class="section level3">
 <h3 id="récupérer-le-code-r">Récupérer le code R<a class="anchor" aria-label="anchor" href="#r%C3%A9cup%C3%A9rer-le-code-r"></a>
 </h3>
-<p>L’autre possibilité est de récupérer le code R permettant de générer le graphique actuellement affiché, ce qui permet de le reproduire ensuite dans un script ou un document <em>Rmarkdown</em>.</p>
-<p>Pour cela, cliquez sur le bouton <em>Obtenir le code R</em> en bas de la barre latérale. Une boîte de dialogue s’affiche, vous n’avez plus qu’à copier/coller le code R qui s’y trouve.</p>
-<p>À noter que ce code R respecte le zoom effectué sur le graphique au moment de l’export, mais pas les positions des labels. Si vous souhaitez conserver celles-ci, il faut d’abord les enregistrer dans un fichier CSV avec l’entrée <em>Export labels positions</em> du menu “Engrenage”. Ensuite, dans votre script, chargez ce fichier CSV dans un objet à l’aide de <code>read.csv</code> puis passez cet objet à l’argument <code>export_labels_positions</code> dans le code généré :</p>
+<p>L’autre possibilité est de récupérer le code R permettant de générer
+le graphique actuellement affiché, ce qui permet de le reproduire
+ensuite dans un script ou un document <em>Rmarkdown</em>.</p>
+<p>Pour cela, cliquez sur le bouton <em>Obtenir le code R</em> en bas de
+la barre latérale. Une boîte de dialogue s’affiche, vous n’avez plus
+qu’à copier/coller le code R qui s’y trouve.</p>
+<p>À noter que ce code R respecte le zoom effectué sur le graphique au
+moment de l’export, mais pas les positions des labels. Si vous souhaitez
+conserver celles-ci, il faut d’abord les enregistrer dans un fichier CSV
+avec l’entrée <em>Export labels positions</em> du menu “Engrenage”.
+Ensuite, dans votre script, chargez ce fichier CSV dans un objet à
+l’aide de <code>read.csv</code> puis passez cet objet à l’argument
+<code>export_labels_positions</code> dans le code généré :</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"position_labels.csv"</span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">explor</span><span class="fu">::</span><span class="fu"><a href="../reference/prepare_results.html">prepare_results</a></span><span class="op">(</span><span class="va">mca</span><span class="op">)</span></span>
@@ -361,7 +438,10 @@
 <div class="section level2">
 <h2 id="bugs-et-commentaires">Bugs et commentaires<a class="anchor" aria-label="anchor" href="#bugs-et-commentaires"></a>
 </h2>
-<p><code>explor</code> est un package très récent, qui comporte donc certainement des bugs et autres problèmes. N’hésitez pas à les signaler par mail ou en créant une <a href="https://github.com/juba/explor/issues" class="external-link"><em>issue</em> sur GitHub</a>.</p>
+<p><code>explor</code> est un package très récent, qui comporte donc
+certainement des bugs et autres problèmes. N’hésitez pas à les signaler
+par mail ou en créant une <a href="https://github.com/juba/explor/issues" class="external-link"><em>issue</em> sur
+GitHub</a>.</p>
 </div>
   </div>
 
@@ -382,7 +462,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
