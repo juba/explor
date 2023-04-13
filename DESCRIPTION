@@ -25,7 +25,7 @@ Imports:
 Suggests: 
     FactoMineR,
     ade4 (>= 1.7-13),
-    GDAtools,
+    GDAtools (>= 2.0),
     MASS,
     quanteda,
     quanteda.textmodels,
