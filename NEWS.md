@@ -1,4 +1,4 @@
-# explor (development version)
+# explor 0.3.10
 
 - Fix varsup and indsup functions renamed to supvar and supind in GDAtools
 - Fix duplicated level names in supplementary variables in speMCA
