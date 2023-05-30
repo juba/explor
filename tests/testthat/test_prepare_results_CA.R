@@ -8,6 +8,13 @@ ca <- FactoMineR::CA(children[, 1:5],
 )
 res <- prepare_results(ca)
 
+test_that("error if not at least three rows or cols", {
+  tmp <- FactoMineR::CA(children[, 1:2])
+  expect_error(prepare_results(tmp))
+  tmp <- FactoMineR::CA(children[1:2, ])
+  expect_error(prepare_results(tmp))
+})
+
 test_that("Eigenvalues are equals", {
   expect_equal(unname(ca$eig[, "percentage of variance"]), res$eig$percent)
 })

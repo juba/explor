@@ -10,6 +10,7 @@
 prepare_results.coa <- function(obj) {
     
     if (!inherits(obj, "coa")) stop("obj must be of class coa")
+    if ((ncol(obj$li) < 2) || (ncol(obj$co) < 2)) stop("obj must have at least two dimensions on rows or columns")
 
     if (!requireNamespace("ade4", quietly = TRUE)) {
         stop("the ade4 package is needed for this function to work.")

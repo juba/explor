@@ -1,3 +1,7 @@
+# explor (development version)
+
+- Add more explicit error messages when data from a correspondance analysis had only two rows or two columns (#45)
+
 # explor 0.3.10
 
 - Fix varsup and indsup functions renamed to supvar and supind in GDAtools

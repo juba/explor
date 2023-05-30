@@ -10,6 +10,7 @@
 prepare_results.CA <- function(obj) {
     
     if (!inherits(obj, "CA")) stop("obj must be of class CA")
+    if (!is.array(obj$row$coord) || !is.array(obj$col$coord)) stop("obj must have at least two dimensions on rows or columns")
 
     ## Axes names and inertia
     axes <- seq_len(ncol(obj$col$coord))

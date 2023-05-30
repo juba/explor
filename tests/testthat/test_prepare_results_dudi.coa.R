@@ -11,6 +11,13 @@ coa$supc <- ade4::supcol(coa, col_sup)
 iner <- ade4::inertia.dudi(coa, row.inertia = TRUE, col.inertia = TRUE)
 res <- prepare_results(coa)
 
+test_that("error if not at least three rows or cols", {
+  tmp <- dudi.coa(tab[, 1:2], nf = 5, scannf = FALSE)
+  expect_error(prepare_results(tmp))
+  tmp <- dudi.coa(tab[1:2, ], nf = 5, scannf = FALSE)
+  expect_error(prepare_results(tmp))
+})
+
 test_that("Eigenvalues are equals", {
   expect_equal(coa$eig / sum(coa$eig) * 100, res$eig$percent)
 })
