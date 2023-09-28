@@ -9,7 +9,7 @@
 
 `explor` is an R package to allow interactive exploration of multivariate analysis results.
 
-For now on, it is usable the following types of analyses :
+For now on, it is usable with the following function results:
 
 Analysis | Function  | Package | Notes
 ------------- | ------------- | ---------- | --------
@@ -27,7 +27,7 @@ Correspondance Analysis  | textmodel_ca  | [quanteda.textmodels](https://cran.r-
 
 ## Features
 
-For each type of analysis, `explor` launches a `shiny` interactive Web interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the `DT` package) and interactive graphics thanks to the [scatterD3](https://github.com/juba/scatterD3) package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file or get the R code to reproduce it later in a script or document.
+For each type of analysis, `explor` launches a `shiny` interactive interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the `DT` package) and interactive graphics thanks to the [scatterD3](https://github.com/juba/scatterD3) package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file or get the R code to reproduce it later in a script or document.
 
 Here is a preview of what you will get. Note that the interface is available both in english and french, depending on your locale :
 
@@ -36,13 +36,13 @@ Here is a preview of what you will get. Note that the interface is available bot
 
 ## Installation
 
-To get the stable version from CRAN :
+To get the stable version from CRAN:
 
 ```r
 install.packages("explor")
 ```
 
-To install the latest dev version from GitHub :
+To install the latest dev version from GitHub:
 
 ```r
 install.packages("remotes")  # If necessary
@@ -54,7 +54,7 @@ remotes::install_github("juba/explor")
 
 Usage is very simple : you just apply the `explor` function to the result of one of the supported analysis functions.
 
-Example with a principal correspondence analysis from `FactoMineR::PCA` :
+Example with a principal correspondence analysis from `FactoMineR::PCA`:
 
 ```r
 library(FactoMineR)
@@ -75,7 +75,7 @@ explor(mca)
 
 ## Documentation and localization
 
-Two vignettes are provided for more detailed documentation :
+Two vignettes are provided for more detailed documentation:
 
 - [English introduction vignette](https://juba.github.io/explor/articles/introduction_en.html)
 - [French introduction vignette](https://juba.github.io/explor/articles/introduction_fr.html)
