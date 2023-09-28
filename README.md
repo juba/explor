@@ -31,7 +31,7 @@ For each type of analysis, `explor` launches a `shiny` interactive Web interface
 
 Here is a preview of what you will get. Note that the interface is available both in english and french, depending on your locale :
 
-![example](https://raw.github.com/juba/explor/master/resources/screencast_0.3.gif) 
+![](https://raw.github.com/juba/explor/master/resources/screencast_0.3.gif) 
 
 
 ## Installation
