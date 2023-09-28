@@ -92,7 +92,7 @@
 </h1></div>
 <p><a href="https://cran.r-project.org/package=explor" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/explor" alt="CRAN_Status_Badge"></a> <a href="https://zenodo.org/badge/latestdoi/29341839" class="external-link"><img src="https://zenodo.org/badge/29341839.svg" alt="DOI"></a> <img src="https://cranlogs.r-pkg.org/badges/last-month/explor" alt="CRAN Downloads"><a href="https://github.com/juba/explor/actions?query=workflow%3AR-CMD-check" class="external-link"><img src="https://github.com/juba/explor/workflows/R-CMD-check/badge.svg" alt="R build status"></a></p>
 <p><code>explor</code> is an R package to allow interactive exploration of multivariate analysis results.</p>
-<p>For now on, it is usable the following types of analyses :</p>
+<p>For now on, it is usable with the following function results:</p>
 <table class="table">
 <colgroup>
 <col width="29%">
@@ -178,17 +178,17 @@
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
-<p>For each type of analysis, <code>explor</code> launches a <code>shiny</code> interactive Web interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the <code>DT</code> package) and interactive graphics thanks to the <a href="https://github.com/juba/scatterD3" class="external-link">scatterD3</a> package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file or get the R code to reproduce it later in a script or document.</p>
+<p>For each type of analysis, <code>explor</code> launches a <code>shiny</code> interactive interface which is displayed inside RStudio or in your system Web browser. This interface provides both numerical results as dynamic tables (sortable and searchable thanks to the <code>DT</code> package) and interactive graphics thanks to the <a href="https://github.com/juba/scatterD3" class="external-link">scatterD3</a> package. You can zoom, drag labels, hover points to display tooltips, hover legend items to highlights points, and the graphics are fully updatable with animations which can give some visual clues. You can also export the current plot as an SVG file or get the R code to reproduce it later in a script or document.</p>
 <p>Here is a preview of what you will get. Note that the interface is available both in english and french, depending on your locale :</p>
 <p><img src="https://raw.github.com/juba/explor/master/resources/screencast_0.3.gif"></p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>To get the stable version from CRAN :</p>
+<p>To get the stable version from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"explor"</span><span class="op">)</span></span></code></pre></div>
-<p>To install the latest dev version from GitHub :</p>
+<p>To install the latest dev version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>  <span class="co"># If necessary</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"juba/scatterD3"</span><span class="op">)</span></span>
@@ -198,7 +198,7 @@
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>Usage is very simple : you just apply the <code>explor</code> function to the result of one of the supported analysis functions.</p>
-<p>Example with a principal correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html" class="external-link">FactoMineR::PCA</a></code> :</p>
+<p>Example with a principal correspondence analysis from <code><a href="https://rdrr.io/pkg/FactoMineR/man/PCA.html" class="external-link">FactoMineR::PCA</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr" class="external-link">FactoMineR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://juba.github.io/explor/">explor</a></span><span class="op">)</span></span>
@@ -215,7 +215,7 @@
 <div class="section level2">
 <h2 id="documentation-and-localization">Documentation and localization<a class="anchor" aria-label="anchor" href="#documentation-and-localization"></a>
 </h2>
-<p>Two vignettes are provided for more detailed documentation :</p>
+<p>Two vignettes are provided for more detailed documentation:</p>
 <ul>
 <li><a href="https://juba.github.io/explor/articles/introduction_en.html">English introduction vignette</a></li>
 <li><a href="https://juba.github.io/explor/articles/introduction_fr.html">French introduction vignette</a></li>
