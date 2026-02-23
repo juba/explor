@@ -10,5 +10,6 @@
 *.Rproj
 *~
 .vscode
+.zed
 docs/
 example_*.R
