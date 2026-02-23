@@ -240,9 +240,11 @@ explor_multi_pca <- function(res, settings) {
             tabPanel(gettext("Individuals data"),
                 explor_multi_ind_dataUI("ind_data", settings, res$axes))
         ),
-        
-        server = function(input, output) {
-            
+
+        server = function(input, output, session) {
+
+            session$onSessionEnded(function() { stopApp() })
+
             ## Eigenvalues
             callModule(explor_multi_eigen,
                 "eigen",

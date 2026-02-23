@@ -364,7 +364,10 @@ explor_multi_mca <- function(res, settings) {
                 ))
         ),
 
-        server = function(input, output) {
+        server = function(input, output, session) {
+
+            session$onSessionEnded(function() { stopApp() })
+
             ## Eigenvalues
             callModule(explor_multi_eigen,
                 "eigen",

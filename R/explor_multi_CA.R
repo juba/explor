@@ -170,9 +170,11 @@ explor_multi_ca <- function(res, settings) {
             tabPanel(gettext("Data"),
                 explor_multi_var_dataUI("var_data", settings, res$axes))
         ),
-        
-        server = function(input, output) {
-            
+
+        server = function(input, output, session) {
+
+            session$onSessionEnded(function() { stopApp() })
+
             ## Eigenvalues
             callModule(explor_multi_eigen,
                 "eigen",
