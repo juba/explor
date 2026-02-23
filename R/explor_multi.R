@@ -1,8 +1,8 @@
-if (getRversion() >= "2.15.1")  
-  utils::globalVariables(c("Type", "Contrib.x", "Contrib.y", "Cos2.x", "Cos2.y", 
-                           "Level", "Variable", "Coord.x", "Coord.y", "Name", 
-                           "P.value", "Class", "Cor", "Cor.x", "Cor.y", "Coord", 
-                           "starts_with", "Contrib", "Cos2", "varname", "modname", 
+if (getRversion() >= "2.15.1")
+  utils::globalVariables(c("Type", "Contrib.x", "Contrib.y", "Cos2.x", "Cos2.y",
+                           "Level", "Variable", "Coord.x", "Coord.y", "Name",
+                           "P.value", "Class", "Cor", "Cor.x", "Cor.y", "Coord",
+                           "starts_with", "Contrib", "Cos2", "varname", "modname",
                            "V.test", "eta2", "con.tra", "name", "pos", "Axis", "Count"))
 
 
@@ -12,11 +12,11 @@ code_modal <- function(obj, plot_code, zoom_code) {
   code <- paste0("res <- explor::prepare_results(", obj, ")\n")
   code <- paste0(code, plot_code)
   code <- paste0(code, zoom_code, ")")
-  
-  code <- formatR::tidy_source(text = code, 
-    width.cutoff = 75, 
+
+  code <- formatR::tidy_source(text = code,
+    width.cutoff = 75,
     output = FALSE)$text.tidy
-  
+
   modalDialog(
     title = gettext("Export R code"),
     size = "l",
@@ -32,9 +32,9 @@ code_modal <- function(obj, plot_code, zoom_code) {
 
 explor_multi_css <- function() {
   shiny::HTML("
-  .well label, 
-  .well input, 
-  .well select, 
+  .well label,
+  .well input,
+  .well select,
   .well option,
   .well button,
   .well a,
@@ -56,18 +56,18 @@ explor_multi_css <- function() {
   .well #var_sup_choice .checkbox {
     margin-top: 0px;
     margin-bottom: 0px;
-  } 
-  .dataTable th, 
+  }
+  .dataTable th,
   .dataTable td {
       font-size: 11px !important;
-      padding: 3px 5px !important; 
+      padding: 3px 5px !important;
   }
   .dataTable th { padding-right: 18px !important }
   .dataTables_wrapper {
     max-width: 850px;
     margin-bottom: 2em;
   }
-  .dataTables_info, .dataTables_length, 
+  .dataTables_info, .dataTables_length,
   .dataTables_filter, .dataTables_paginate {
       font-size: 11px !important;
   }
@@ -94,7 +94,7 @@ explor_multi_css <- function() {
 explor_multi_lasso_callback <- function() {
     "function(sel) {
         var selected = sel.data().map(function(d) {return d.key_var});
-        var values = selected.join('<br />');       
+        var values = selected.join('<br />');
         var r_code = 'c(\"' + selected.join('\", \"') + '\")';
         var out = '<h4>IDs</h4><p><pre>'+values+'</pre></p>';
         out += '<h4>R vector</h4>';
@@ -113,7 +113,7 @@ explor_multi_zoom_callback <- function(type = "var") {
 
 explor_multi_sidebar_footer <- function(type = "var") {
     list(
-        checkboxInput(paste0(type, "_transitions"), 
+        checkboxInput(paste0(type, "_transitions"),
                       HTML(gettext("Animations")),
                       value = TRUE),
         if (type != "bi") {
@@ -127,7 +127,7 @@ explor_multi_sidebar_footer <- function(type = "var") {
         tags$p(tags$a(id = paste0("explor-", type, "-svg-export"),
                           class = "btn btn-default",
                           HTML(paste(icon("file-image"), gettext("Export as SVG"))))))
-               
+
 }
 
 
@@ -181,7 +181,7 @@ explor_multi_ind_dataUI <- function(id, settings, axes) {
     fluidRow(
         column(2,
                wellPanel(
-                   selectInput(ns("inddim"), 
+                   selectInput(ns("inddim"),
                                gettext("Dimension"),
                                choices = axes, selected = "Axis 1"))),
         column(10,
@@ -225,11 +225,11 @@ explor_multi_ind_data <- function(input, output, session, res, settings) {
 
 ## Axes inputs
 explor_multi_axes_input <- function(res, type) {
-    x_input <- selectInput(paste0(type, "_x"), 
-                            gettext("X axis"), 
+    x_input <- selectInput(paste0(type, "_x"),
+                            gettext("X axis"),
                             choices = res$axes, selected = "1")
-    y_input <- selectInput(paste0(type, "_y"), 
-                            gettext("Y axis"), 
+    y_input <- selectInput(paste0(type, "_y"),
+                            gettext("Y axis"),
                             choices = res$axes, selected = "2")
     return(list(x_input, y_input))
 }
@@ -252,7 +252,7 @@ explor_multi_var_size_input <- function(settings) {
     }
     names(var_size_choices) <- names
     var_size_input <- if (length(var_size_choices) > 1) {
-        selectInput("var_size", 
+        selectInput("var_size",
                     gettext("Points size :"),
                     choices = var_size_choices,
                     selected = "None")
@@ -291,7 +291,7 @@ explor_multi_var_col_input <- function(settings) {
     names(choices)[choices == "Variable"] <- gettext("Variable name")
     names(choices)[choices == "Type"] <- gettext("Variable type")
     names(choices)[choices == "Position"] <- gettext("Variable position")
-    
+
     selectInput("var_col", gettext("Points color :"),
                 choices = choices,  selected = selected)
 }
@@ -320,7 +320,7 @@ explor_multi_var_symbol_input <- function(settings) {
     names(choices)[choices == "Position"] <- gettext("Variable position")
 
     selectInput("var_symbol", gettext("Points symbol :"),
-                choices = choices, selected = selected)   
+                choices = choices, selected = selected)
 }
 
 ## Individual color input
@@ -331,7 +331,7 @@ explor_multi_ind_col_input <- function(settings, res) {
     ind_col_choices <- c(ind_col_choices, names(res$quali_data))
     ind_col_choices <- setdiff(ind_col_choices, "Name")
 
-    selectInput("ind_col", 
+    selectInput("ind_col",
                 gettext("Points color :"),
                 choices = ind_col_choices,
                 selected = "None")
@@ -351,7 +351,7 @@ explor_multi_ind_opacity_input <- function(settings) {
   }
   names(ind_opacity_choices) <- names
   ind_opacity_input <- if (length(ind_opacity_choices) > 1) {
-    selectInput("ind_opacity_var", 
+    selectInput("ind_opacity_var",
                 gettext("Points opacity :"),
                 choices = ind_opacity_choices,
                 selected = "Fixed")
@@ -372,16 +372,16 @@ explor_multi_auto_labels_input <- function(data, type) {
 ## Supplementary variables choice input
 explor_multi_var_sup_choice_input <-function(data, settings) {
   if (settings$type == "CA") {
-    vnames <- data %>% 
-      filter(Type == "Supplementary variable") %>% 
-      select(.data$Level) %>% 
-      distinct() %>% 
+    vnames <- data %>%
+      filter(Type == "Supplementary variable") %>%
+      select(.data$Level) %>%
+      distinct() %>%
       pull(.data$Level)
   } else {
-    vnames <- data %>% 
-      filter(Type == "Supplementary") %>% 
-      select(.data$Variable) %>% 
-      distinct() %>% 
+    vnames <- data %>%
+      filter(Type == "Supplementary") %>%
+      select(.data$Variable) %>%
+      distinct() %>%
       pull(.data$Variable)
   }
   checkboxGroupInput(
@@ -421,7 +421,7 @@ explor_multi_bi_symbol_input <- function(settings) {
     names(choices)[choices == "Nature"] <- gettext("Variable level / Individual")
 
     selectInput("bi_symbol", gettext("Points symbol :"),
-                choices = choices, selected = selected)   
+                choices = choices, selected = selected)
 }
 
 ## Biplot color input
@@ -438,7 +438,7 @@ explor_multi_bi_col_input <- function(settings) {
     names(choices)[choices == "Variable"] <- gettext("Variable name")
     names(choices)[choices == "Type"] <- gettext("Active / Supplementary")
     names(choices)[choices == "Nature"] <- gettext("Variable level / Individual")
-    
+
     selectInput("bi_col", gettext("Points color :"),
                 choices = choices,  selected = selected)
 }
@@ -457,7 +457,7 @@ explor_multi_bi_ind_opacity_input <- function(settings) {
   }
   names(bi_opacity_choices) <- names
   bi_opacity_input <- if (length(bi_opacity_choices) > 1) {
-    selectInput("bi_opacity_var", 
+    selectInput("bi_opacity_var",
                 gettext("Points opacity :"),
                 choices = bi_opacity_choices,
                 selected = "Fixed")
@@ -484,18 +484,18 @@ explor_multi_var_dataUI <- function(id, settings, axes) {
     fluidRow(
         column(2,
                wellPanel(
-                   selectInput(ns("vardim"), 
+                   selectInput(ns("vardim"),
                                gettext("Dimension"),
                                choices = axes, selected = "1"),
                    if (settings$type == "CA") {
-                       selectInput(ns("var_tab_hide"), 
+                       selectInput(ns("var_tab_hide"),
                                    gettext("Hide :"),
                                    choices = explor_multi_hide_choices(),
                                    selected = "None")
                    }
                )),
         column(10,
-               h4(if(settings$type == "CA") gettext("Active levels")                   
+               h4(if(settings$type == "CA") gettext("Active levels")
                   else gettext("Active variables")),
                DT::DTOutput(ns("vartable")),
                if (settings$has_sup_vars || (settings$type == "CA" && settings$has_sup_levels)) {
@@ -532,7 +532,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
                           autoWidth = FALSE, searching = TRUE)
     ## Active variables
     varTable <- reactive({
-        tmp <- res()$vars %>% 
+        tmp <- res()$vars %>%
                    filter(Type == "Active", Axis == input$vardim) %>%
                    select(all_of(settings()$var_columns))
         ## CA data hide option
@@ -549,7 +549,7 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
 
     ## Supplementary variables
     varTableSup <- reactive({
-        tmp <- res()$vars %>% 
+        tmp <- res()$vars %>%
                    filter(grepl("Supplementary", Type), Axis == input$vardim) %>%
                    mutate(Level = ifelse(Class == "Quantitative", "-", Level))
         ## CA data hide option
@@ -563,14 +563,14 @@ explor_multi_var_data <- function(input, output, session, res, settings) {
         tmp <- tmp %>% select(all_of(settings()$varsup_columns))
         data.frame(tmp)
     })
-    
+
     output$vartablesup <- DT::renderDT(
                                   explor_multi_table(varTableSup(), table_options, "Coord"))
 
     ## PCA qualitative supplementary variable
     varTableQualiSup <- reactive({
         if (settings()$type == "PCA" && settings()$has_quali_sup_vars) {
-            tmp <- res()$vars %>% 
+            tmp <- res()$vars %>%
                        filter(Type == "Supplementary", Class == "Qualitative",
                               Axis == input$vardim) %>%
                        select(all_of(settings()$varsup_quali_columns))
@@ -616,9 +616,9 @@ explor_multi_eigenUI <- function(id, eig) {
     ns <- NS(id)
     fluidRow(
         column(2,
-               wellPanel(numericInput(ns("eig_nb"), 
-                                      gettext("Dimensions to plot"), 
-                                      min = 2, max = max(eig$dim), value = max(eig$dim), 
+               wellPanel(numericInput(ns("eig_nb"),
+                                      gettext("Dimensions to plot"),
+                                      min = 2, max = max(eig$dim), value = max(eig$dim),
                                       step = 1))),
         column(5,
                h4(gettext("Eigenvalues histogram")),
@@ -636,7 +636,7 @@ explor_multi_eigen <- function(input, output, session, eig) {
         tmp <- eig()[1:nb(),]
         tmp$dim <- factor(tmp$dim)
         ggplot(data = tmp) +
-          geom_bar(aes_string(x = "dim", y = "percent"), stat = "identity") +
+          geom_bar(aes(x = .data[["dim"]], y = .data[["percent"]]), stat = "identity") +
           scale_x_discrete(gettext("Axis")) +
           scale_y_continuous(gettext("Percentage of inertia"))
     })
@@ -650,5 +650,3 @@ explor_multi_eigen <- function(input, output, session, eig) {
         dt %>% DT::formatRound(c("%", "Cum. %"), digits = 1)
     })
 }
-
-
