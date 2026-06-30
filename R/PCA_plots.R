@@ -2,12 +2,12 @@
 
 ## Variables plot reactive data
 ## Not exported
-PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, 
+PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE,
     var_sup_choice = NULL, var_lab_min_contrib = 0) {
-    tmp_x <- res$vars %>% 
+    tmp_x <- res$vars %>%
         filter(Axis == xax) %>%
         select("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
-    tmp_y <- res$vars %>% 
+    tmp_y <- res$vars %>%
         filter(Axis == yax) %>%
         select("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2")
     if (!(var_sup) || is.null(var_sup_choice)) {
@@ -41,9 +41,9 @@ PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE,
                                              gettext("Contribution:", domain = "R-explor"),
                                              "</strong> ", Contrib, "<br />"))),
                Level = ifelse(Class == "Qualitative", Level, Variable),
-               Variable = if_else(Class == "Qualitative", Variable, "-"),
-               Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) | 
-                            (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Level, ""))
+               Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) |
+                            (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0) | Variable %in% var_sup_choice, Level, ""),
+               Variable = if_else(Class == "Qualitative", Variable, "-"))
     data.frame(tmp)
 }
 
@@ -68,7 +68,7 @@ PCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE,
 ##' @param ... Other arguments passed to scatterD3
 ##'
 ##' @export
-PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE, 
+PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE,
                          var_sup_choice = NULL,
                          var_lab_min_contrib = 0,
                          scale_unit = FALSE,
@@ -80,19 +80,19 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE,
 
     has_quali_sup_vars <- any("Supplementary" %in% res$vars$Type &
                               "Qualitative" %in% res$vars$Class)
-    
+
     ## Settings changed if not run in explor
     html_id <- if(in_explor) "explor_var" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-var-svg-export" else NULL
-    dom_id_lasso_toggle <- if(in_explor) "explor-var-lasso-toggle" else NULL    
-    lasso <- if(in_explor) TRUE else FALSE 
+    dom_id_lasso_toggle <- if(in_explor) "explor-var-lasso-toggle" else NULL
+    lasso <- if(in_explor) TRUE else FALSE
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
     if (is.null(xlim) && scale_unit && !has_quali_sup_vars) xlim <- c(-1.1, 1.1)
     if (is.null(ylim) && scale_unit && !has_quali_sup_vars) ylim <- c(-1.1, 1.1)
-    
+
     var_data <- PCA_var_data(res, xax, yax, var_sup, var_sup_choice, var_lab_min_contrib)
-    
+
     scatterD3::scatterD3(
                    x = var_data[, "Coord.x"],
                    y = var_data[, "Coord.y"],
@@ -115,15 +115,15 @@ PCA_var_plot <- function(res, xax = 1, yax = 2, var_sup = TRUE,
                    zoom_callback = zoom_callback,
                    xlim = xlim, ylim = ylim,
                    ...
-               )  
+               )
 }
 
 ## PCA individuals plot data
 PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, opacity_var = NULL, ind_lab_min_contrib = 0) {
-    tmp_x <- res$ind %>% 
+    tmp_x <- res$ind %>%
         filter(Axis == xax) %>%
         select(Name, Type, Coord, Contrib, Cos2)
-    tmp_y <- res$ind %>% 
+    tmp_y <- res$ind %>%
         filter(Axis == yax) %>%
         select(Name, Type, Coord, Contrib, Cos2)
     if (!ind_sup) {
@@ -145,7 +145,7 @@ PCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup = TRUE, col_var = NULL, 
                                   paste0("<strong>",
                                          gettext("Contribution:", domain = "R-explor"),
                                          "</strong> ", Contrib, "<br />"))),
-               Lab = ifelse(Contrib >= as.numeric(ind_lab_min_contrib) | 
+               Lab = ifelse(Contrib >= as.numeric(ind_lab_min_contrib) |
                               (is.na(Contrib) & as.numeric(ind_lab_min_contrib) == 0), Name, ""))
     if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
         tmp_data <- res$quali_data %>% select("Name", col_var)
@@ -189,10 +189,10 @@ PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_cont
     html_id <- if(in_explor) "explor_ind" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-ind-svg-export" else NULL
     dom_id_lasso_toggle <- if(in_explor) "explor-ind-lasso-toggle" else NULL
-    lasso <- if(in_explor) TRUE else FALSE 
+    lasso <- if(in_explor) TRUE else FALSE
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "ind") else NULL
-    
+
     ind_data <- PCA_ind_data(res, xax, yax, ind_sup, col_var, opacity_var, ind_lab_min_contrib)
 
     scatterD3::scatterD3(
@@ -209,11 +209,10 @@ PCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_cont
                    fixed = TRUE,
                    html_id = html_id,
                    dom_id_svg_export = dom_id_svg_export,
-                   dom_id_lasso_toggle = dom_id_lasso_toggle,                   
+                   dom_id_lasso_toggle = dom_id_lasso_toggle,
                    lasso = lasso,
                    lasso_callback = lasso_callback,
                    zoom_callback = zoom_callback,
                    ...)
 
 }
-

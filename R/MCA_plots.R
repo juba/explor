@@ -4,12 +4,12 @@
 ## Not exported
 MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_sup_choice = NULL,
     var_lab_min_contrib = 0, labels_prepend_var = FALSE) {
-    
+
     tmp_x <- res$vars %>%
         arrange(Axis, Type, Variable) %>%
         filter(Axis == xax) %>%
         select("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
-    tmp_y <- res$vars %>% 
+    tmp_y <- res$vars %>%
         filter(Axis == yax) %>%
         select("Variable", "Level", "Type", "Class", "Coord", "Contrib", "Cos2", "Count")
     if (!(var_sup) || is.null(var_sup_choice)) {
@@ -46,9 +46,10 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_sup_choice =
                                       paste0("<strong>",
                                              gettext("Count:", domain = "R-explor"),
                                              "</strong> ", Count))),
-               Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) | 
-                            (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0), Level, ""))
-    data.frame(tmp)
+               Lab = ifelse(Contrib >= as.numeric(var_lab_min_contrib) |
+                            (is.na(Contrib) & as.numeric(var_lab_min_contrib) == 0) | Variable %in% var_sup_choice, Level, ""))
+
+      data.frame(tmp)
 }
 
 
@@ -73,8 +74,8 @@ MCA_var_data <- function(res, xax = 1, yax = 2, var_sup = TRUE, var_sup_choice =
 ##' @param ... Other arguments passed to scatterD3
 ##'
 ##' @export
-MCA_var_plot <- function(res, xax = 1, yax = 2, 
-                         var_sup = TRUE, 
+MCA_var_plot <- function(res, xax = 1, yax = 2,
+                         var_sup = TRUE,
                          var_sup_choice = NULL,
                          var_lab_min_contrib = 0,
                          point_size = 64,
@@ -90,12 +91,12 @@ MCA_var_plot <- function(res, xax = 1, yax = 2,
     html_id <- if(in_explor) "explor_var" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-var-svg-export" else NULL
     dom_id_lasso_toggle <- if(in_explor) "explor-var-lasso-toggle" else NULL
-    lasso <- if(in_explor) TRUE else FALSE 
+    lasso <- if(in_explor) TRUE else FALSE
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "var") else NULL
-    
+
     var_data <- MCA_var_data(res, xax, yax, var_sup, var_sup_choice, var_lab_min_contrib, labels_prepend_var)
-    
+
     scatterD3::scatterD3(
                    x = var_data[, "Coord.x"],
                    y = var_data[, "Coord.y"],
@@ -123,17 +124,17 @@ MCA_var_plot <- function(res, xax = 1, yax = 2,
                    lasso_callback = lasso_callback,
                    zoom_callback = zoom_callback,
                    ...
-               )  
+               )
 }
 
 ## MCA individuals plot data
 MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity_var = NULL, ind_lab_min_contrib = 0) {
-    tmp_x <- res$ind %>% 
+    tmp_x <- res$ind %>%
         filter(Axis == xax) %>%
         select(Name, Type, Coord, Contrib, Cos2)
     if (!ind_sup)
         tmp_x <- tmp_x %>% filter(Type == "Active")
-    tmp_y <- res$ind %>% 
+    tmp_y <- res$ind %>%
         filter(Axis == yax) %>%
         select(Name, Type, Coord, Contrib, Cos2)
     if (!ind_sup)
@@ -153,7 +154,7 @@ MCA_ind_data <- function(res, xax = 1, yax = 2, ind_sup, col_var = NULL, opacity
                                   paste0("<strong>",
                                          gettext("Contribution:", domain = "R-explor"),
                                          "</strong> ", Contrib, "<br />"))),
-               Lab = ifelse(Contrib >= as.numeric(ind_lab_min_contrib) | 
+               Lab = ifelse(Contrib >= as.numeric(ind_lab_min_contrib) |
                               (is.na(Contrib) & as.numeric(ind_lab_min_contrib) == 0), Name, ""))
     if (!(is.null(col_var) || col_var %in% c("None", "Type"))) {
         tmp_data <- res$quali_data %>% select("Name", col_var)
@@ -197,12 +198,12 @@ MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_cont
     html_id <- if(in_explor) "explor_ind" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-ind-svg-export" else NULL
     dom_id_lasso_toggle <- if(in_explor) "explor-ind-lasso-toggle" else NULL
-    lasso <- if(in_explor) TRUE else FALSE 
+    lasso <- if(in_explor) TRUE else FALSE
     lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "ind") else NULL
-    
+
     ind_data <- MCA_ind_data(res, xax, yax, ind_sup, col_var, opacity_var, ind_lab_min_contrib)
-    
+
     scatterD3::scatterD3(
                    x = ind_data[, "Coord.x"],
                    y = ind_data[, "Coord.y"],
@@ -230,29 +231,29 @@ MCA_ind_plot <- function(res, xax = 1, yax = 2, ind_sup = TRUE, ind_lab_min_cont
 MCA_bi_data <- function(res, settings) {
 
     # Compute ind data
-    ind_data <- MCA_ind_data(res, settings$xax, settings$yax, ind_sup = settings$ind_sup, 
-        ind_lab_min_contrib = settings$bi_lab_min_contrib) 
+    ind_data <- MCA_ind_data(res, settings$xax, settings$yax, ind_sup = settings$ind_sup,
+        ind_lab_min_contrib = settings$bi_lab_min_contrib)
     ind_data$source <- "ind"
     ind_data$key <- ind_data$Name
     # Compute var data
-    var_sup_choice <- res$vars %>% 
+    var_sup_choice <- res$vars %>%
         filter(Type == "Supplementary") %>%
         pull("Variable") %>%
         unique()
     var_data <- MCA_var_data(
-        res, settings$xax, settings$yax, 
-        var_sup = settings$var_sup, 
+        res, settings$xax, settings$yax,
+        var_sup = settings$var_sup,
         var_sup_choice = var_sup_choice,
         var_lab_min_contrib = settings$bi_lab_min_contrib
     )
     var_data$source <- "var"
     var_data$key <- paste(var_data$Variable, var_data$Level, sep = "-")
-    
+
     # Bind ind and var
     bi_data <- bind_rows(ind_data, var_data)
     bi_data$key <- paste0(bi_data$source, bi_data$key)
     ind <- bi_data$source == "ind"
-    
+
     # Point or arrow
     bi_data$type <- ifelse(bi_data$Class == "Quantitative", "arrow", "point")
     bi_data$type[ind] <- "point"
@@ -263,14 +264,14 @@ MCA_bi_data <- function(res, settings) {
     if (!settings$ind_labels) bi_data$Lab[ind] <- ""
     bi_data$Lab[is.na(bi_data$Lab)] <- ""
     bi_data$Contrib[!ind] <- NA
-    
+
     # Colors
     if (!is.null(settings$col_var) && settings$col_var == "Variable") {
         bi_data$color <- bi_data$Variable
         bi_data$color[ind] <- ""
     } else {
         if(is.null(settings$col_var)) {
-            bi_data$color <- NULL   
+            bi_data$color <- NULL
         } else {
             bi_data$color <- bi_data[,settings$col_var]
         }
@@ -304,7 +305,7 @@ MCA_bi_data <- function(res, settings) {
 ##' @export
 ##' @importFrom RColorBrewer brewer.pal
 
-MCA_biplot <- function(res, xax = 1, yax = 2, 
+MCA_biplot <- function(res, xax = 1, yax = 2,
     col_var, ind_sup = TRUE, var_sup = TRUE, bi_lab_min_contrib = 0,
     symbol_var = NULL,
     ind_point_size = 16,
@@ -314,22 +315,22 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
     ind_labels = FALSE,
     zoom_callback = NULL,
     in_explor = FALSE, ...) {
-    
+
     ## Settings changed if not run in explor
     html_id <- if(in_explor) "explor_bi" else  NULL
     dom_id_svg_export <- if(in_explor) "explor-bi-svg-export" else NULL
     #dom_id_lasso_toggle <- if(in_explor) "explor-bi-lasso-toggle" else NULL
-    #lasso <- if(in_explor) TRUE else FALSE 
+    #lasso <- if(in_explor) TRUE else FALSE
     #lasso_callback <- if(in_explor) explor_multi_lasso_callback() else NULL
     zoom_callback <- if(in_explor) explor_multi_zoom_callback(type = "bi") else NULL
-    
+
     settings <- list(xax = xax, yax = yax, ind_sup = ind_sup, var_sup = var_sup,
         col_var = col_var, bi_lab_min_contrib = bi_lab_min_contrib,
         ind_opacity = ind_opacity, ind_opacity_var = ind_opacity_var, ind_labels = ind_labels,
         ind_point_size = ind_point_size, var_point_size = var_point_size)
-        
+
     bi_data <- MCA_bi_data(res, settings)
-    
+
     colors <- NULL
     if (!is.null(col_var) && col_var == "Variable") {
         n_colors <- nlevels(bi_data$color)
@@ -340,7 +341,7 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         }
         colors <- c("#666666", colors)
     }
-    
+
     if (is.null(ind_opacity_var)) {
         opacity_var <- bi_data$source
         opacities <- c("ind" = ind_opacity, "var" = 1)
@@ -350,7 +351,7 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         opacities <- NULL
     }
     sizes <- c("ind" = ind_point_size, "var" = var_point_size)
-    
+
     scatterD3::scatterD3(
         x = bi_data[, "Coord.x"],
         y = bi_data[, "Coord.y"],
@@ -379,7 +380,5 @@ MCA_biplot <- function(res, xax = 1, yax = 2,
         lasso_callback = NULL,
         zoom_callback = zoom_callback,
         ...
-    )  
+    )
 }
-
-
