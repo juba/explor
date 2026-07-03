@@ -1,8 +1,8 @@
 Package: explor
 Type: Package
 Title: Interactive Interfaces for Results Exploration
-Version: 0.3.10.9000
-Date: 2023-05-30
+Version: 0.3.11
+Date: 2026-07-03
 Authors@R: c(person("Julien", "Barnier", email="julien.barnier@cnrs.fr",
     role=c("aut","cre")))
 Maintainer: Julien Barnier <julien.barnier@cnrs.fr>
@@ -12,7 +12,7 @@ VignetteBuilder: knitr
 URL: https://juba.github.io/explor/
 BugReports: https://github.com/juba/explor/issues
 Encoding: UTF-8
-Imports: 
+Imports:
     shiny (>= 1.0),
     DT,
     dplyr (>= 1.0),
@@ -20,9 +20,9 @@ Imports:
     ggplot2,
     highr,
     formatR,
-    scatterD3 (>= 1.0.0),
+    scatterD3 (>= 1.0.2),
     RColorBrewer
-Suggests: 
+Suggests:
     FactoMineR,
     ade4 (>= 1.7-13),
     GDAtools (>= 2.0),
