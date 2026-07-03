@@ -1,3 +1,5 @@
+## explor (development version)
+
 ## explor 0.3.11
 
 - Don't hide supplementary variable labels when filtering on contrib (#48)
